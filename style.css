@@ -1,0 +1,207 @@
+:root {
+	font-family: 'Helvetica Neue', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', 'Meiryo', sans-serif;
+	background-color: var(--background-color);
+	color: var(--color);
+	--background-color: #FFF;
+	--color: #000;
+	--border-color: #000;
+	--footer-color: #777;
+	--border-width: 1px;
+	--header-height: 50px;
+	--drawer-width: 240px;
+}
+
+@media (prefers-contrast: more) {
+	:root {
+		--footer-color: #444;
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--background-color: #000;
+		--color: #FFF;
+		--border-color: #2F3336;
+		--footer-color: #888;
+	}
+
+	@media (prefers-contrast: more) {
+		:root {
+			--border-color: #FFF;
+			--footer-color: #BBB;
+		}
+	}
+}
+
+[hidden] {
+	display: none !important;
+}
+
+body {
+	overflow: scroll;
+	height: 100%;
+	margin: 0;
+}
+
+h1 {
+	font-size: initial;
+	margin: initial;
+}
+
+menu {
+	padding: 0;
+}
+
+menu li::marker {
+	content: "";
+}
+
+body > header {
+	height: var(--header-height);
+	border-top: solid var(--border-width) var(--border-color);
+	border-bottom: solid var(--border-width) var(--border-color);
+}
+
+body > header > h1 {
+	text-align: center;
+}
+
+/* `<input>` is difficult to style, so hide it and style the preceding `<label>` instead. */
+.hamburger-checkbox, .filter-checkbox {
+	display: none;
+}
+
+.hamburger-label {
+	position: absolute;
+	z-index: 2; /* Put it above `.drawer`. */
+	display: inline-block;
+	width: var(--header-height);
+	height: var(--header-height);
+	margin: calc(-1 * var(--border-width));
+	border: var(--border-width) solid var(--border-color);
+	cursor: pointer;
+	background-color: var(--background-color);
+	stroke: var(--border-color);
+}
+
+.hamburger-checkbox:checked ~ .hamburger-label {
+	position: fixed;
+}
+
+@media print {
+	.hamburger-label {
+		visibility: hidden;
+	}
+}
+
+.drawer {
+	display: grid;
+	position: fixed;
+	z-index: 1; /* Put it above the main content. */
+	padding-top: calc(var(--header-height) + var(--border-width));
+	width: var(--drawer-width);
+	height: calc(100% - var(--header-height) - 2 * var(--border-width));
+	border-right: solid var(--border-width) var(--border-color);
+	overflow: scroll;
+	background-color: var(--background-color);
+	/* Hide the drawer visually, but not from screen readers, since the whole point of a drawer
+	 * widget is to save display space, which is irrelevant to screen reader users. */
+	left: calc(-1 * var(--drawer-width) - var(--border-width));
+	transition: left .3s;
+	/* XXX: Should we include `user-select: none` here? That would improve experience for sighted
+	 * users a bit, but might be confusing for screen reader users. */
+}
+
+.hamburger-checkbox:checked ~ .drawer, .drawer:focus-within {
+	left: 0;
+}
+
+@media (prefers-reduced-motion) {
+	/* Use a dessolving animation. */
+	/* FIXME: This works when turning the drawer on, but not when turning it off, because changes to
+	 * `left` property takes effect immediately. Simply setting `left: 0` here won't work since the
+	 * drawer is interactive even when `opacity: 0`, preventing user interactions with background
+	 * elements. */
+	.drawer {
+		opacity: 0;
+		transition-property: opacity;
+	}
+
+	.hamburger-checkbox:checked ~ .drawer, .drawer:focus-within {
+		opacity: 1;
+	}
+}
+
+.filter-checkbox:not(:checked) ~ .avatar {
+	filter: opacity(.2);
+}
+
+.drawer > footer {
+	align-self: end;
+	border-top: solid var(--border-width) var(--border-color);
+	text-align: center;
+}
+
+.date-heading {
+	position: sticky;
+	top: 0;
+	width: 100%;
+	text-align: center;
+	background-color: var(--background-color);
+	border-bottom: solid var(--border-width) var(--border-color);
+	break-after: avoid-page;
+}
+
+.event {
+	display: inline-block;
+	width: 280px;
+	border: solid var(--border-width) var(--border-color);
+	break-inside: avoid;
+}
+
+.timeline li::marker {
+	content: "";
+}
+
+.event-header-grid {
+	display: grid;
+}
+
+.event-thumbnail {
+	display: block;
+	order: -1;
+	max-width: 260px;
+	height: 120px;
+}
+
+.event-members {
+	padding-left: 0;
+	overflow: scroll;
+}
+
+.event-members > li {
+	display: inline;
+	padding-left: 0;
+}
+
+.avatar {
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+}
+
+footer, footer a {
+	color: var(--footer-color);
+}
+
+.icon {
+	display: inline-block;
+	fill: currentColor;
+	width: 30px;
+	height: 30px;
+}
+
+.error-log {
+	background-color: red;
+	color: white;
+}

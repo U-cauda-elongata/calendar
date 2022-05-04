@@ -1,0 +1,6 @@
+[*]
+indent_style = tab
+indent_size = 4
+
+[{*.elm,elm.json}]
+indent_style = space
