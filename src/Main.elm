@@ -28,10 +28,23 @@ main =
 type alias Model =
     { search : String
     , timeZone : Time.Zone
-    , feeds : Dict String ( Feed, List Event )
+    , feeds : Dict String FeedState
     , errors : List String
-    , busy : Bool
     }
+
+
+type alias FeedState =
+    { feed : Feed
+    , events : List Event
+    , retrieving : FeedRetrievalState
+    , checked : Bool
+    }
+
+
+type FeedRetrievalState
+    = Retrieving
+    | Success
+    | Failure
 
 
 type Msg
@@ -50,7 +63,11 @@ type Msg
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( Model "" Time.utc (Feeds.preset |> Dict.map (\_ -> \e -> ( e, [] ))) [] True
+    ( Model
+        ""
+        Time.utc
+        (Feeds.preset |> Dict.map (\_ -> \feed -> FeedState feed [] Retrieving True))
+        []
     , Cmd.batch
         (Task.perform SetTimeZone Time.here
             :: (Feeds.preset
@@ -80,9 +97,7 @@ update msg model =
         FeedFilter url checked ->
             ( { model
                 | feeds =
-                    model.feeds
-                        |> Dict.update url
-                            (Maybe.map (\( f, es ) -> ( { f | checked = checked }, es )))
+                    model.feeds |> Dict.update url (Maybe.map (\fs -> { fs | checked = checked }))
               }
             , Cmd.none
             )
@@ -109,8 +124,11 @@ update msg model =
                 Ok events ->
                     ( { model
                         | feeds =
-                            model.feeds |> Dict.update url (Maybe.map (\( f, _ ) -> ( f, events )))
-                        , busy = False -- TODO
+                            model.feeds
+                                |> Dict.update url
+                                    (Maybe.map
+                                        (\fs -> { fs | events = events, retrieving = Success })
+                                    )
                       }
                     , Cmd.none
                     )
@@ -120,7 +138,10 @@ update msg model =
                         | errors =
                             model.errors
                                 ++ [ "Error retrieving <" ++ url ++ ">: " ++ httpErrorToString err ]
-                        , busy = False
+                        , feeds =
+                            model.feeds
+                                |> Dict.update url
+                                    (Maybe.map (\fs -> { fs | retrieving = Failure }))
                       }
                     , Cmd.none
                     )
@@ -254,18 +275,19 @@ feedFilterView model =
             (model.feeds
                 |> Dict.toList
                 |> List.map
-                    (\( url, ( feed, _ ) ) ->
+                    (\( url, fs ) ->
                         li []
                             [ label []
                                 [ input
                                     [ class "filter-checkbox"
                                     , type_ "checkbox"
                                     , onCheck (FeedFilter url)
-                                    , checked feed.checked
+                                    , checked fs.checked
+                                    , disabled (fs.retrieving /= Success)
                                     ]
                                     []
-                                , img [ class "avatar", src feed.icon, alt feed.title ] []
-                                , p [] [ text feed.title ]
+                                , img [ class "avatar", src fs.feed.icon, alt fs.feed.title ] []
+                                , p [] [ text fs.feed.title ]
                                 ]
                             ]
                     )
@@ -275,10 +297,16 @@ feedFilterView model =
 
 mainView : Model -> Html Msg
 mainView model =
-    main_ []
+    main_
+        [ ariaLive "polite"
+        , ariaBusy
+            (model.feeds
+                |> Dict.foldl (\_ -> \fs -> \acc -> acc || fs.retrieving == Retrieving) False
+            )
+        ]
         (model.feeds
             |> Dict.values
-            |> List.concatMap (\( feed, events ) -> events |> List.map (\e -> ( feed, e )))
+            |> List.concatMap (\fs -> fs.events |> List.map (\e -> ( fs, e )))
             |> List.sortWith
                 (\( _, e1 ) ->
                     \( _, e2 ) ->
@@ -296,8 +324,8 @@ mainView model =
         )
 
 
-eventView : Model -> Feed -> Event -> Html Msg
-eventView model feed event =
+eventView : Model -> FeedState -> Event -> Html Msg
+eventView model fs event =
     let
         eventHeader =
             let
@@ -329,13 +357,13 @@ eventView model feed event =
                     header [ class "event-header-grid" ] headerContent
     in
     li
-        [ class "event", hidden (not (feed.checked && searchMatches model event)) ]
+        [ class "event", hidden (not (fs.checked && searchMatches model event)) ]
         [ intlTime event.updated
         , eventHeader
         , ul [ class "event-members" ]
             [ li [ class "event-member" ]
-                [ a [ href feed.alternate ]
-                    [ img [ class "avatar", src feed.icon, alt feed.title ] [] ]
+                [ a [ href fs.feed.alternate ]
+                    [ img [ class "avatar", src fs.feed.icon, alt fs.feed.title ] [] ]
                 ]
             ]
         ]

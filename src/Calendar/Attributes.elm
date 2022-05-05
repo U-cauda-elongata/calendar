@@ -1,5 +1,6 @@
 module Calendar.Attributes exposing
-    ( ariaHidden
+    ( ariaBusy
+    , ariaHidden
     , ariaLabel
     , ariaLabelledby
     , ariaLive
@@ -13,15 +14,25 @@ import Html.Attributes exposing (attribute, property)
 import Json.Encode as Json
 
 
-ariaHidden : Bool -> Attribute msg
-ariaHidden value =
-    attribute "aria-hidden"
+boolStringAttribute : String -> Bool -> Attribute msg
+boolStringAttribute name value =
+    attribute name
         (if value then
             "true"
 
          else
             "false"
         )
+
+
+ariaBusy : Bool -> Attribute msg
+ariaBusy =
+    boolStringAttribute "aria-busy"
+
+
+ariaHidden : Bool -> Attribute msg
+ariaHidden =
+    boolStringAttribute "aria-hidden"
 
 
 ariaLabel : String -> Attribute msg

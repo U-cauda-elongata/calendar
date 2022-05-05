@@ -132,7 +132,7 @@ body > header > h1 {
 	}
 }
 
-.filter-checkbox:not(:checked) ~ .avatar {
+.filter-checkbox:not(:checked) ~ .avatar, .filter-checkbox:disabled ~ .avatar {
 	filter: opacity(.2);
 }
 
