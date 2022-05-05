@@ -1,0 +1,26 @@
+name: Build `app.js`
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.elm'
+      - elm.json
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build
+        run: |
+          rm app.js || true
+          make app.js
+          git add app.js
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Build `app.js`
+      - uses: benc-uk/workflow-dispatch@v1.1
+        with:
+          workflow: 3609993
+          repo: U-cauda-elongata/u-cauda-elongata.github.io
+          token: ${{ secrets.PERSONAL_TOKEN }}
