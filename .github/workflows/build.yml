@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Setup Elm
+        uses: mpizenberg/elm-tooling-action@e8d4d23a71ba5993d67ca18531438991e3b4e28d
+        with:
+          cache-key: elm-home-${{ hashFiles('elm.json') }}
       - name: Build
         run: |
           rm app.js || true
