@@ -1,0 +1,11 @@
+Copyright (c) 2022 Yu 'The Long-tailed Bear' Onaga
+
+This project is primarily licensed under the terms and conditions of the GNU General Public License,
+version 3 (<LICENSE>).
+
+You can obtain an unminified source distribution of the project at
+<https://github.com/U-cauda-elongata/calendar>.
+
+Additionally, the minified source distribution `app.js` includes thirdparty libraries with the
+following license terms:
+
