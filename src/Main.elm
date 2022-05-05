@@ -359,12 +359,12 @@ eventView model fs event =
                     header [ class "event-header-grid" ] headerContent
     in
     li
-        [ class "event", hidden (not (fs.checked && searchMatches model event)) ]
+        [ class "event", role "article", hidden (not (fs.checked && searchMatches model event)) ]
         [ intlTime event.updated
         , eventHeader
         , ul [ class "event-members" ]
             [ li [ class "event-member" ]
-                [ a [ href fs.feed.alternate ]
+                [ a [ href fs.feed.alternate, rel "author" ]
                     [ img [ class "avatar", src fs.feed.icon, alt fs.feed.title ] [] ]
                 ]
             ]
