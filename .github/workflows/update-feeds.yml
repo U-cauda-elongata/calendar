@@ -5,7 +5,7 @@ on:
     - cron: '5 * * * *'
 
 jobs:
-  dispatch:
+  fetch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -27,3 +27,9 @@ jobs:
         with:
           commit_message: Update feeds
           commit_author: GitHub Actions <actions@github.com>
+      - name: Update GitHub Pages
+        uses: benc-uk/workflow-dispatch@v1.1
+        with:
+          workflow: 3609993
+          repo: U-cauda-elongata/u-cauda-elongata.github.io
+          token: ${{ secrets.PERSONAL_TOKEN }}
