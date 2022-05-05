@@ -263,7 +263,9 @@ searchView : Model -> Html Msg
 searchView model =
     li []
         [ label []
-            [ text "検索", input [ id "search", value model.search, onInput SearchInput ] [] ]
+            [ text "検索"
+            , input [ id "search", type_ "search", value model.search, onInput SearchInput ] []
+            ]
         ]
 
 
