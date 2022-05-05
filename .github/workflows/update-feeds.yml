@@ -1,0 +1,29 @@
+name: Update feeds
+
+on:
+  schedule:
+    - cron: '5 * * * *'
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Fetch feeds
+        run: |
+          for ytc in \
+            UCEcMIuGR8WO2TwL9XIpjKtw \
+            UCmYO-WfY7Tasry4D1YB4LJw \
+            UCMpw36mXEu3SLsqdrJxUKNA \
+            UCabMjG8p6G5xLkPJgEoTnDg \
+            UCdNBhcAohYjXlUVYsz8X2KQ
+          do
+            curl -fLSs "https://www.youtube.com/feeds/videos.xml?channel_id=$ytc" -o "$ytc.xml"
+            git add "$ytc.xml"
+          done
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update feeds
+          commit_author: GitHub Actions <actions@github.com>
