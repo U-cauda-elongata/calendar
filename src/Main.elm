@@ -404,11 +404,27 @@ eventView model fs event =
                     header [ class "event-header-grid" ] headerContent
     in
     li
-        [ class "event", role "article", hidden (not (fs.checked && searchMatches model event)) ]
+        [ class "event", role "article", hidden (not (eventIsShown model fs event)) ]
         [ intlTime event.updated
         , eventHeader
         , ul [ class "event-members" ] (eventMemberView True fs.feed :: (event.members |> List.map (eventMemberView False)))
         ]
+
+
+eventIsShown : Model -> FeedState -> Event -> Bool
+eventIsShown model fs event =
+    (fs.checked
+        || (-- Check that any of the members' feed is checked (TODO: Refactor this).
+            event.members
+                |> List.any
+                    (\feed ->
+                        model.feeds
+                            |> Dict.foldl (\_ -> \s -> \acc -> acc || (s.checked && s.feed == feed))
+                                False
+                    )
+           )
+    )
+        && searchMatches model event
 
 
 eventMemberView : Bool -> Feed -> Html Msg
