@@ -72,9 +72,9 @@ init _ =
     , Cmd.batch
         (Task.perform SetTimeZone Time.here
             :: (Feeds.preset
-                    |> Dict.toList
+                    |> Dict.keys
                     |> List.map
-                        (\( url, _ ) ->
+                        (\url ->
                             Http.get
                                 { url = url
                                 , expect = Http.Xml.expectXml (GotFeed url) (feedDecoder url)
