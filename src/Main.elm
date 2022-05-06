@@ -362,7 +362,14 @@ mainView model =
             |> Util.groupBy (\( _, event ) -> Util.toNaiveDate model.timeZone event.updated)
             |> List.map
                 (\( date, events ) ->
-                    section []
+                    section
+                        [ hidden
+                            (not
+                                (events
+                                    |> List.any (\( feed, event ) -> eventIsShown model feed event)
+                                )
+                            )
+                        ]
                         [ header [ class "date-heading" ] [ intlDate date ]
                         , ul [ class "timeline" ]
                             (events |> List.map (\( feed, event ) -> eventView model feed event))
