@@ -54,11 +54,8 @@ ul, menu {
 }
 
 li {
+	display: block;
 	padding: initial;
-}
-
-li::marker {
-	content: "";
 }
 
 body > header {
