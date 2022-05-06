@@ -8,7 +8,7 @@ import Calendar.Elements exposing (intlDate, intlTime)
 import Calendar.Event exposing (Event, feedDecoder)
 import Calendar.Feeds as Feeds exposing (Feed)
 import Calendar.Icon as Icon
-import Calendar.Util exposing (toNaiveDate)
+import Calendar.Util as Util
 import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -16,6 +16,7 @@ import Html.Events exposing (onCheck, onInput)
 import Http
 import Http.Xml
 import Json.Decode as D
+import Regex
 import Task
 import Time
 
@@ -262,9 +263,56 @@ searchView model =
     li []
         [ label []
             [ text "検索"
-            , input [ id "search", type_ "search", value model.search, onInput SearchInput ] []
+            , input
+                [ id "search"
+                , type_ "search"
+                , value model.search
+                , list "searchlist"
+                , onInput SearchInput
+                ]
+                []
             ]
+        , datalist [ id "searchlist" ]
+            (model.feeds
+                |> Dict.values
+                |> List.concatMap (\fs -> fs.events)
+                |> List.concatMap (\event -> searchTags event.name)
+                |> Util.cardinalities
+                |> Dict.toList
+                |> List.sortBy (\( _, n ) -> -n)
+                |> List.map (\( tag, _ ) -> option [ value tag ] [])
+            )
         ]
+
+
+tagRe : Regex.Regex
+tagRe =
+    Regex.fromString "【([^】]*)】" |> Maybe.withDefault Regex.never
+
+
+slashesRe : Regex.Regex
+slashesRe =
+    Regex.fromString "[/／]" |> Maybe.withDefault Regex.never
+
+
+searchTags : String -> List String
+searchTags string =
+    Regex.find tagRe string
+        |> List.filterMap (\match -> List.head match.submatches |> Maybe.andThen identity)
+        |> List.concatMap (Regex.split slashesRe)
+        |> List.map String.trim
+        |> List.map
+            (\s ->
+                case String.uncons s of
+                    Just ( '#', tag ) ->
+                        tag
+
+                    Just ( '＃', tag ) ->
+                        tag
+
+                    _ ->
+                        s
+            )
 
 
 feedFilterView : Model -> Html Msg
@@ -311,7 +359,7 @@ mainView model =
                     \( _, e2 ) ->
                         compare (Time.posixToMillis e2.updated) (Time.posixToMillis e1.updated)
                 )
-            |> groupBy (\( _, event ) -> toNaiveDate model.timeZone event.updated)
+            |> Util.groupBy (\( _, event ) -> Util.toNaiveDate model.timeZone event.updated)
             |> List.map
                 (\( date, events ) ->
                     section []
@@ -384,27 +432,3 @@ errorView model =
 searchMatches : Model -> Event -> Bool
 searchMatches model event =
     String.isEmpty model.search || String.contains model.search event.name
-
-
-groupBy : (a -> b) -> List a -> List ( b, List a )
-groupBy pred list =
-    list
-        |> List.foldr
-            (\a ->
-                \groups ->
-                    let
-                        b =
-                            pred a
-                    in
-                    case groups of
-                        ( bhead, as_ ) :: tail ->
-                            if bhead == b then
-                                ( bhead, a :: as_ ) :: tail
-
-                            else
-                                ( b, [ a ] ) :: groups
-
-                        _ ->
-                            [ ( b, [ a ] ) ]
-            )
-            []

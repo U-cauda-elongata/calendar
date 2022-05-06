@@ -1,6 +1,46 @@
-module Calendar.Util exposing (NaiveDate, toNaiveDate)
+module Calendar.Util exposing (NaiveDate, cardinalities, groupBy, toNaiveDate)
 
+import Dict exposing (Dict)
 import Time
+
+
+
+-- LIST
+
+
+cardinalities : List comparable -> Dict comparable Int
+cardinalities list =
+    list
+        |> List.foldl (\v -> Dict.update v (\n -> Just (1 + Maybe.withDefault 0 n)))
+            Dict.empty
+
+
+groupBy : (a -> b) -> List a -> List ( b, List a )
+groupBy pred list =
+    list
+        |> List.foldr
+            (\a ->
+                \groups ->
+                    let
+                        b =
+                            pred a
+                    in
+                    case groups of
+                        ( bhead, as_ ) :: tail ->
+                            if bhead == b then
+                                ( bhead, a :: as_ ) :: tail
+
+                            else
+                                ( b, [ a ] ) :: groups
+
+                        _ ->
+                            [ ( b, [ a ] ) ]
+            )
+            []
+
+
+
+-- NAIVEDATE
 
 
 type alias NaiveDate =
