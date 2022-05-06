@@ -6,6 +6,7 @@
 	--color: #000;
 	--border-color: #000;
 	--footer-color: #777;
+	--margin-unit: 8px;
 	--border-width: 1px;
 	--header-height: 50px;
 	--drawer-width: 240px;
@@ -38,21 +39,25 @@
 }
 
 body {
-	overflow: scroll;
-	height: 100%;
 	margin: 0;
 }
 
-h1 {
+/* We are going to use the elements for semantics, so reset the default styles. */
+h1, h2, h3, h4, h5, h6 {
 	font-size: initial;
 	margin: initial;
 }
 
-menu {
-	padding: 0;
+ul, menu {
+	margin: initial;
+	padding: initial;
 }
 
-menu li::marker {
+li {
+	padding: initial;
+}
+
+li::marker {
 	content: "";
 }
 
@@ -72,12 +77,11 @@ body > header > h1 {
 }
 
 .hamburger-label {
+	display: none;
 	position: absolute;
 	z-index: 2; /* Put it above `.drawer`. */
-	display: inline-block;
 	width: var(--header-height);
 	height: var(--header-height);
-	margin: calc(-1 * var(--border-width));
 	border: var(--border-width) solid var(--border-color);
 	cursor: pointer;
 	background-color: var(--background-color);
@@ -96,40 +100,14 @@ body > header > h1 {
 
 .drawer {
 	display: grid;
-	position: fixed;
-	z-index: 1; /* Put it above the main content. */
-	padding-top: calc(var(--header-height) + var(--border-width));
+	position: sticky;
+	top: 0;
+	padding: calc(var(--margin-unit));
 	width: var(--drawer-width);
-	height: calc(100% - var(--header-height) - 2 * var(--border-width));
+	height: 100vh;
 	border-right: solid var(--border-width) var(--border-color);
 	overflow: scroll;
 	background-color: var(--background-color);
-	/* Hide the drawer visually, but not from screen readers, since the whole point of a drawer
-	 * widget is to save display space, which is irrelevant to screen reader users. */
-	left: calc(-1 * var(--drawer-width) - var(--border-width));
-	transition: left .3s;
-	/* XXX: Should we include `user-select: none` here? That would improve experience for sighted
-	 * users a bit, but might be confusing for screen reader users. */
-}
-
-.hamburger-checkbox:checked ~ .drawer, .drawer:focus-within {
-	left: 0;
-}
-
-@media (prefers-reduced-motion) {
-	/* Use a dessolving animation. */
-	/* FIXME: This works when turning the drawer on, but not when turning it off, because changes to
-	 * `left` property takes effect immediately. Simply setting `left: 0` here won't work since the
-	 * drawer is interactive even when `opacity: 0`, preventing user interactions with background
-	 * elements. */
-	.drawer {
-		opacity: 0;
-		transition-property: opacity;
-	}
-
-	.hamburger-checkbox:checked ~ .drawer, .drawer:focus-within {
-		opacity: 1;
-	}
 }
 
 .filter-checkbox:not(:checked) ~ .avatar, .filter-checkbox:disabled ~ .avatar {
@@ -140,6 +118,11 @@ body > header > h1 {
 	align-self: end;
 	border-top: solid var(--border-width) var(--border-color);
 	text-align: center;
+}
+
+body > main {
+	margin-top: calc(-100vh - var(--margin-unit));
+	margin-left: calc(var(--drawer-width) + var(--border-width) + 2 * var(--margin-unit));
 }
 
 .date-heading {
@@ -154,13 +137,11 @@ body > header > h1 {
 
 .event {
 	display: inline-block;
+	margin: calc(2 * var(--margin-unit));
+	padding: calc(var(--margin-unit));
 	width: 280px;
 	border: solid var(--border-width) var(--border-color);
 	break-inside: avoid;
-}
-
-.timeline li::marker {
-	content: "";
 }
 
 .event-header-grid {
@@ -175,13 +156,11 @@ body > header > h1 {
 }
 
 .event-members {
-	padding-left: 0;
 	overflow: scroll;
 }
 
 .event-members > li {
 	display: inline;
-	padding-left: 0;
 }
 
 .avatar {
@@ -204,4 +183,73 @@ footer, footer a {
 .error-log {
 	background-color: red;
 	color: white;
+}
+
+@media (max-width: 600px) {
+	.hamburger-label {
+		display: inline-block;
+	}
+
+	.drawer {
+		position: fixed;
+		z-index: 1; /* Put it above the main content. */
+		--padding-top: calc(var(--header-height) + var(--border-width) + var(--margin-unit));
+		padding-top: var(--padding-top);
+		height: calc(100% - var(--padding-top));
+		/* Hide the drawer visually, but not from screen readers, since the whole point of a drawer
+		 * widget is to save display space, which is irrelevant to screen reader users. */
+		left: calc(-1 * var(--drawer-width) - var(--border-width) - 2 * var(--margin-unit));
+		transition: left .3s;
+		/* XXX: Should we include `user-select: none` here? That would improve experience for
+		 * sighted users a bit, but might be confusing for screen reader users. */
+	}
+
+	.hamburger-checkbox:checked ~ .drawer, .drawer:focus-within {
+		left: 0;
+	}
+
+	@media (prefers-reduced-motion) {
+		/* Use a dessolving animation. */
+		/* FIXME: This works when turning the drawer on, but not when turning it off, because
+		 * changes to `left` property takes effect immediately. Simply setting `left: 0` here won't
+		 * work since the drawer is interactive even when `opacity: 0`, preventing user interactions
+		 * with background elements. */
+		.drawer {
+			opacity: 0;
+			transition-property: opacity;
+		}
+
+		.hamburger-checkbox:checked ~ .drawer, .drawer:focus-within {
+			opacity: 1;
+		}
+	}
+
+	body > main {
+		margin-top: 0;
+		margin-left: 0;
+	}
+
+	.event {
+		width: 240px;
+	}
+}
+
+@media(max-width: 480px) {
+	:root {
+		--drawer-width: 100%;
+	}
+
+   body > main	{
+		padding-top: calc(var(--margin-unit));
+	}
+
+	.event {
+		display: block;
+		width: calc(100% - 2 * var(--margin-unit));
+		margin: 0;
+		margin-top: calc(var(--margin-unit));
+		margin-bottom: calc(var(--margin-unit));
+		border-left: none;
+		border-right: none;
+	}
 }

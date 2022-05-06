@@ -232,30 +232,29 @@ modifierDecoder field repr =
 view : Model -> Document Msg
 view model =
     { title = "けもフレ配信カレンダー"
-    , body = [ headerView model, mainView model, errorView model ]
+    , body =
+        [ input [ id "hamburger", class "hamburger-checkbox", type_ "checkbox", role "switch" ] []
+        , label [ class "hamburger-label", for "hamburger", ariaHidden True ] [ Icon.hamburger ]
+        , header [] [ h1 [] [ text "けもフレ配信カレンダー" ] ]
+        , drawerView model
+        , mainView model
+        , errorView model
+        ]
     }
 
 
-headerView : Model -> Html Msg
-headerView model =
-    header []
-        [ div []
-            [ input [ id "hamburger", class "hamburger-checkbox", type_ "checkbox", role "switch" ]
-                []
-            , label [ class "hamburger-label", for "hamburger", ariaHidden True ] [ Icon.hamburger ]
-            , div [ class "drawer" ]
-                [ menu [] [ searchView model, feedFilterView model ]
-                , footer []
-                    [ a
-                        [ class "icon"
-                        , href "https://github.com/U-cauda-elongata/calendar"
-                        , rel "external"
-                        ]
-                        [ Icon.gitHub ]
-                    ]
+drawerView : Model -> Html Msg
+drawerView model =
+    div [ class "drawer" ]
+        [ menu [] [ searchView model, feedFilterView model ]
+        , footer []
+            [ a
+                [ class "icon"
+                , href "https://github.com/U-cauda-elongata/calendar"
+                , rel "external"
                 ]
+                [ Icon.gitHub ]
             ]
-        , h1 [] [ text "けもフレ配信カレンダー" ]
         ]
 
 
