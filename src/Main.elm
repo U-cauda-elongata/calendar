@@ -237,8 +237,7 @@ view model =
         , label [ class "hamburger-label", for "hamburger", ariaHidden True ] [ Icon.hamburger ]
         , header [] [ h1 [] [ text "けもフレ配信カレンダー" ] ]
         , drawerView model
-        , mainView model
-        , errorView model
+        , div [ class "drawer-right" ] [ mainView model, errorView model ]
         ]
     }
 

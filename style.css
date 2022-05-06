@@ -117,7 +117,7 @@ body > header > h1 {
 	text-align: center;
 }
 
-body > main {
+.drawer-right {
 	margin-top: calc(-100vh - var(--margin-unit));
 	margin-left: calc(var(--drawer-width) + var(--border-width) + 2 * var(--margin-unit));
 }
@@ -178,8 +178,18 @@ footer, footer a {
 }
 
 .error-log {
+	position: sticky;
+	bottom: 0;
+	max-height: calc(100vh - 260px);
+	min-height: 2em;
+	overflow: scroll;
 	background-color: red;
 	color: white;
+}
+
+.error-log > p {
+	margin-top: var(--margin-unit);
+	margin-bottom: var(--margin-unit);
 }
 
 @media (max-width: 600px) {
@@ -221,7 +231,7 @@ footer, footer a {
 		}
 	}
 
-	body > main {
+	.drawer-right {
 		margin-top: 0;
 		margin-left: 0;
 	}
@@ -236,7 +246,7 @@ footer, footer a {
 		--drawer-width: 100%;
 	}
 
-   body > main	{
+	.drawer-right {
 		padding-top: calc(var(--margin-unit));
 	}
 
