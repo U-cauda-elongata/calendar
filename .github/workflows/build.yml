@@ -23,7 +23,7 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Build `app.js`
-      - uses: benc-uk/workflow-dispatch@v1.1
+      - uses: benc-uk/workflow-dispatch@4c044c1613fabbe5250deadc65452d54c4ad4fc7
         with:
           workflow: 3609993
           repo: U-cauda-elongata/u-cauda-elongata.github.io
