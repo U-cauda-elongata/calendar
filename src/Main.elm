@@ -77,7 +77,7 @@ init _ =
                         (\url ->
                             Http.get
                                 { url = url
-                                , expect = Http.Xml.expectXml (GotFeed url) (feedDecoder url)
+                                , expect = Http.Xml.expectXml (GotFeed url) (feedDecoder Feeds.preset)
                                 }
                         )
                )
@@ -407,12 +407,23 @@ eventView model fs event =
         [ class "event", role "article", hidden (not (fs.checked && searchMatches model event)) ]
         [ intlTime event.updated
         , eventHeader
-        , ul [ class "event-members" ]
-            [ li [ class "event-member" ]
-                [ a [ href fs.feed.alternate, rel "author" ]
-                    [ img [ class "avatar", src fs.feed.icon, alt fs.feed.title ] [] ]
-                ]
-            ]
+        , ul [ class "event-members" ] (eventMemberView True fs.feed :: (event.members |> List.map (eventMemberView False)))
+        ]
+
+
+eventMemberView : Bool -> Feed -> Html Msg
+eventMemberView isAuthor feed =
+    li [ class "event-member" ]
+        [ a
+            (href feed.alternate
+                :: (if isAuthor then
+                        [ rel "author" ]
+
+                    else
+                        []
+                   )
+            )
+            [ img [ class "avatar", src feed.icon, alt feed.title ] [] ]
         ]
 
 

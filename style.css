@@ -157,7 +157,7 @@ body > header > h1 {
 }
 
 .event-members > li {
-	display: inline;
+	display: inline-block;
 }
 
 .avatar {
