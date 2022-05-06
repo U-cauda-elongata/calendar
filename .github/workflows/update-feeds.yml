@@ -32,4 +32,5 @@ jobs:
         with:
           workflow: 3609993
           repo: U-cauda-elongata/u-cauda-elongata.github.io
+          ref: refs/heads/master
           token: ${{ secrets.PERSONAL_TOKEN }}
