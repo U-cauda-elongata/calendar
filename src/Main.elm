@@ -306,8 +306,7 @@ mainView model =
             )
         ]
         (model.feeds
-            |> Dict.values
-            |> List.concatMap (\fs -> fs.events |> List.map (\e -> ( fs, e )))
+            |> Dict.foldl (\_ -> \fs -> \acc -> acc ++ (fs.events |> List.map (\e -> ( fs, e )))) []
             |> List.sortWith
                 (\( _, e1 ) ->
                     \( _, e2 ) ->
