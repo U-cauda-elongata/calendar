@@ -13,7 +13,12 @@ type alias Feed =
 preset : Dict String Feed
 preset =
     Dict.fromList
-        [ ( "UCEcMIuGR8WO2TwL9XIpjKtw.xml"
+        [ ( "UCEOugXOAfa-HRmRjKbH8z3Q.xml"
+          , Feed "けものフレンズプロジェクト公式"
+                "https://www.youtube.com/channel/UCEOugXOAfa-HRmRjKbH8z3Q"
+                "https://yt3.ggpht.com/ryEtopDlUPjueM1j3UufZ3UrGCpuYxc5tdeX5-pTlkjygXqbw7j29bFIPu8uCy4NzHAM1EetmLM=s60"
+          )
+        , ( "UCEcMIuGR8WO2TwL9XIpjKtw.xml"
           , Feed "ケープペンギン / African Penguin"
                 "https://www.youtube.com/channel/UCEcMIuGR8WO2TwL9XIpjKtw"
                 "https://yt3.ggpht.com/ytc/AKedOLSiSzCCyj5TBipvNgNcz0NrPZbvJZmZQU9JUFE-=s60"

@@ -14,6 +14,7 @@ jobs:
       - name: Fetch feeds
         run: |
           for ytc in \
+            UCEOugXOAfa-HRmRjKbH8z3Q \
             UCEcMIuGR8WO2TwL9XIpjKtw \
             UCmYO-WfY7Tasry4D1YB4LJw \
             UCMpw36mXEu3SLsqdrJxUKNA \
