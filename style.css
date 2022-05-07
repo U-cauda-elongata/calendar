@@ -234,6 +234,7 @@ footer, footer a {
 	.drawer-right {
 		margin-top: 0;
 		margin-left: 0;
+		padding-top: calc(var(--margin-unit));
 	}
 
 	.event {
@@ -244,10 +245,6 @@ footer, footer a {
 @media(max-width: 480px) {
 	:root {
 		--drawer-width: 100%;
-	}
-
-	.drawer-right {
-		padding-top: calc(var(--margin-unit));
 	}
 
 	.event {
