@@ -107,7 +107,11 @@ body > header > h1 {
 	background-color: var(--background-color);
 }
 
-.filter-checkbox:not(:checked) ~ .avatar, .filter-checkbox:disabled ~ .avatar {
+label > .filter-checkbox:not(:disabled) ~ * {
+	cursor: pointer;
+}
+
+label > .filter-checkbox:not(:checked) ~ *, label > .filter-checkbox:disabled ~ * {
 	filter: opacity(.2);
 }
 

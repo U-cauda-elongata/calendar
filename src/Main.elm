@@ -247,7 +247,7 @@ view model =
 drawerView : Model -> Html Msg
 drawerView model =
     div [ class "drawer" ]
-        [ menu [] [ searchView model, feedFilterView model ]
+        [ menu [ ariaLabel "フィルターツール" ] [ searchView model, feedFilterView model ]
         , footer []
             [ a
                 [ class "icon"
@@ -263,7 +263,7 @@ searchView : Model -> Html Msg
 searchView model =
     li []
         [ label []
-            [ text "検索"
+            [ h2 [] [ text "検索" ]
             , input
                 [ id "calendar-search"
                 , type_ "search"
@@ -306,27 +306,33 @@ searchTags string =
 
 feedFilterView : Model -> Html Msg
 feedFilterView model =
-    li [ ariaLabelledby "feed-filter-header" ]
-        [ header [ id "feed-filter-header" ] [ h2 [] [ text "チャンネル" ] ]
+    li [ ariaLabelledby "feed-filter-heading" ]
+        [ h2 [ id "feed-filter-heading" ] [ text "チャンネル" ]
         , ul []
             (model.feeds
                 |> Dict.toList
-                |> List.map
-                    (\( url, fs ) ->
-                        li []
-                            [ label []
-                                [ input
-                                    [ class "filter-checkbox"
-                                    , type_ "checkbox"
-                                    , onCheck (FeedFilter url)
-                                    , checked fs.checked
-                                    , disabled (fs.retrieving /= Success)
+                |> List.indexedMap
+                    (\i ->
+                        \( url, fs ) ->
+                            let
+                                pId =
+                                    "feed-" ++ String.fromInt i
+                            in
+                            li []
+                                [ label [ role "switch", ariaLabelledby pId ]
+                                    [ input
+                                        [ class "filter-checkbox"
+                                        , type_ "checkbox"
+                                        , onCheck (FeedFilter url)
+                                        , checked fs.checked
+                                        , disabled (fs.retrieving /= Success)
+                                        ]
+                                        []
+                                    , img [ class "avatar", src fs.feed.icon, alt "アイコン画像" ]
+                                        []
+                                    , p [ id pId ] [ text fs.feed.title ]
                                     ]
-                                    []
-                                , img [ class "avatar", src fs.feed.icon, alt fs.feed.title ] []
-                                , p [] [ text fs.feed.title ]
                                 ]
-                            ]
                     )
             )
         ]
