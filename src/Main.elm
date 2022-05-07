@@ -392,9 +392,9 @@ eventView model fs event =
                             [ heading
                             , img
                                 [ class "event-thumbnail"
+                                , loading "lazy"
                                 , src thumb
                                 , alt "サムネイル画像"
-                                , loading "lazy"
                                 ]
                                 []
                             ]
