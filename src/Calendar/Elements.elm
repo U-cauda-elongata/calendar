@@ -1,6 +1,6 @@
 module Calendar.Elements exposing (intlDate, intlTime)
 
-import Calendar.Util exposing (NaiveDate)
+import Calendar.Util.NaiveDate exposing (NaiveDate)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Time

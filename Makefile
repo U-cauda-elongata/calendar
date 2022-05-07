@@ -1,6 +1,6 @@
 all: app.js COPYING
 
-build/elm.js: src/*.elm src/*/*.elm
+build/elm.js: src/*.elm src/*/*.elm src/*/*/*.elm
 	elm make --optimize --output=build/elm.js src/Main.elm
 
 app.js: build/elm.js customElements.js src/notice.js

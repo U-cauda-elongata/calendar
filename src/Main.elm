@@ -9,6 +9,7 @@ import Calendar.Event exposing (Event, feedDecoder)
 import Calendar.Feeds as Feeds exposing (Feed)
 import Calendar.Icon as Icon
 import Calendar.Util as Util
+import Calendar.Util.NaiveDate as NaiveDate exposing (NaiveDate)
 import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -359,7 +360,7 @@ mainView model =
                     \( _, e2 ) ->
                         compare (Time.posixToMillis e2.updated) (Time.posixToMillis e1.updated)
                 )
-            |> Util.groupBy (\( _, event ) -> Util.toNaiveDate model.timeZone event.updated)
+            |> Util.groupBy (\( _, event ) -> NaiveDate.fromPosix model.timeZone event.updated)
             |> List.map
                 (\( date, events ) ->
                     section
@@ -372,19 +373,25 @@ mainView model =
                         ]
                         [ header [ class "date-heading" ] [ intlDate date ]
                         , ul [ class "timeline" ]
-                            (events |> List.map (\( feed, event ) -> eventView model feed event))
+                            (events
+                                |> List.indexedMap
+                                    (\i -> \( feed, event ) -> eventView model date i feed event)
+                            )
                         ]
                 )
         )
 
 
-eventView : Model -> FeedState -> Event -> Html Msg
-eventView model fs event =
+eventView : Model -> NaiveDate -> Int -> FeedState -> Event -> Html Msg
+eventView model date i fs event =
     let
+        headingId =
+            "event-" ++ NaiveDate.toIso8601 date ++ "-" ++ String.fromInt i
+
         eventHeader =
             let
                 heading =
-                    h3 [] [ text event.name ]
+                    h3 [ id headingId ] [ text event.name ]
 
                 headerContent =
                     case event.thumbnail of
@@ -411,7 +418,11 @@ eventView model fs event =
                     header [ class "event-header-grid" ] headerContent
     in
     li
-        [ class "event", role "article", hidden (not (eventIsShown model fs event)) ]
+        [ class "event"
+        , role "article"
+        , ariaLabelledby headingId
+        , hidden (not (eventIsShown model fs event))
+        ]
         [ intlTime event.updated
         , eventHeader
         , ul [ class "event-members" ] (eventMemberView True fs.feed :: (event.members |> List.map (eventMemberView False)))
