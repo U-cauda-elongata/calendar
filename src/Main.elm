@@ -302,18 +302,6 @@ searchTags string =
         |> List.filterMap (\match -> List.head match.submatches |> Maybe.andThen identity)
         |> List.concatMap (Regex.split slashesRe)
         |> List.map String.trim
-        |> List.map
-            (\s ->
-                case String.uncons s of
-                    Just ( '#', tag ) ->
-                        tag
-
-                    Just ( '＃', tag ) ->
-                        tag
-
-                    _ ->
-                        s
-            )
 
 
 feedFilterView : Model -> Html Msg
