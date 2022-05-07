@@ -78,7 +78,9 @@ init _ =
                         (\url ->
                             Http.get
                                 { url = url
-                                , expect = Http.Xml.expectXml (GotFeed url) (feedDecoder Feeds.preset)
+                                , expect =
+                                    Http.Xml.expectXml (GotFeed url)
+                                        (feedDecoder Feeds.preset)
                                 }
                         )
                )
@@ -249,11 +251,7 @@ drawerView model =
     div [ class "drawer" ]
         [ menu [ ariaLabel "フィルターツール" ] [ searchView model, feedFilterView model ]
         , footer []
-            [ a
-                [ class "icon"
-                , href "https://github.com/U-cauda-elongata/calendar"
-                , rel "external"
-                ]
+            [ a [ class "icon", href "https://github.com/U-cauda-elongata/calendar" ]
                 [ Icon.gitHub ]
             ]
         ]
@@ -419,7 +417,8 @@ eventView model date i fs event =
         ]
         [ intlTime event.updated
         , eventHeader
-        , ul [ class "event-members" ] (eventMemberView True fs.feed :: (event.members |> List.map (eventMemberView False)))
+        , ul [ class "event-members" ]
+            (eventMemberView True fs.feed :: (event.members |> List.map (eventMemberView False)))
         ]
 
 
@@ -437,6 +436,11 @@ eventIsShown model fs event =
            )
     )
         && searchMatches model event
+
+
+searchMatches : Model -> Event -> Bool
+searchMatches model event =
+    String.isEmpty model.search || String.contains model.search event.name
 
 
 eventMemberView : Bool -> Feed -> Html Msg
@@ -466,8 +470,3 @@ errorView model =
         , hidden (List.isEmpty model.errors)
         ]
         (List.map (\msg -> p [] [ text msg ]) model.errors)
-
-
-searchMatches : Model -> Event -> Bool
-searchMatches model event =
-    String.isEmpty model.search || String.contains model.search event.name
