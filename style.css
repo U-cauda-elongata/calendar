@@ -113,6 +113,10 @@ body > header > h1 {
 
 .drawer > footer {
 	align-self: end;
+	margin-left: calc(-1 * var(--margin-unit));
+	margin-right: calc(-1 * var(--margin-unit));
+	padding-left: var(--margin-unit);
+	padding-right: var(--margin-unit);
 	border-top: solid var(--border-width) var(--border-color);
 	text-align: center;
 }
