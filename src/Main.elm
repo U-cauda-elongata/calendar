@@ -178,12 +178,12 @@ httpErrorToString err =
 
 focusSearch : Cmd Msg
 focusSearch =
-    Task.attempt handleDomResult (Dom.focus "search")
+    Task.attempt handleDomResult (Dom.focus "calendar-search")
 
 
 blurSearch : Cmd Msg
 blurSearch =
-    Task.attempt handleDomResult (Dom.blur "search")
+    Task.attempt handleDomResult (Dom.blur "calendar-search")
 
 
 handleDomResult : Result Dom.Error value -> Msg
@@ -265,7 +265,7 @@ searchView model =
         [ label []
             [ text "検索"
             , input
-                [ id "search"
+                [ id "calendar-search"
                 , type_ "search"
                 , value model.search
                 , list "searchlist"
