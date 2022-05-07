@@ -366,7 +366,7 @@ mainView model =
                             )
                         ]
                         [ header [ class "date-heading" ] [ intlDate date ]
-                        , ul [ class "timeline" ]
+                        , ul []
                             (events
                                 |> List.indexedMap
                                     (\i -> \( feed, event ) -> eventView model date i feed event)
