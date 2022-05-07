@@ -138,6 +138,7 @@ body > header > h1 {
 
 .event {
 	display: inline-block;
+	vertical-align: top;
 	margin: calc(2 * var(--margin-unit));
 	padding: calc(var(--margin-unit));
 	width: 280px;
