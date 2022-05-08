@@ -71,19 +71,16 @@ init _ =
         (Feeds.preset |> Dict.map (\_ feed -> FeedState feed [] Retrieving True))
         []
     , Cmd.batch
-        (Task.perform SetTimeZone Time.here
-            :: (Feeds.preset
-                    |> Dict.keys
-                    |> List.map
-                        (\url ->
-                            Http.get
-                                { url = url
-                                , expect =
-                                    Http.Xml.expectXml (GotFeed url)
-                                        (feedDecoder Feeds.preset)
-                                }
-                        )
-               )
+        (Feeds.preset
+            |> Dict.foldl
+                (\url feed acc ->
+                    Http.get
+                        { url = url
+                        , expect = Http.Xml.expectXml (GotFeed url) (feedDecoder Feeds.preset feed)
+                        }
+                        :: acc
+                )
+                [ Task.perform SetTimeZone Time.here ]
         )
     )
 

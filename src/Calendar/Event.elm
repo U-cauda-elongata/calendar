@@ -17,13 +17,13 @@ type alias Event =
     }
 
 
-feedDecoder : Dict String Feed -> XD.Decoder (List Event)
-feedDecoder feeds =
-    XD.path [ "entry" ] (XD.list (entryDecoder feeds))
+feedDecoder : Dict String Feed -> Feed -> XD.Decoder (List Event)
+feedDecoder feeds feed =
+    XD.path [ "entry" ] (XD.list (entryDecoder feeds feed))
 
 
-entryDecoder : Dict String Feed -> XD.Decoder Event
-entryDecoder feeds =
+entryDecoder : Dict String Feed -> Feed -> XD.Decoder Event
+entryDecoder feeds feed =
     XD.map5 Event
         (XD.path [ "title" ] (XD.single XD.string))
         (XD.path [ "updated" ] (XD.single XD.string)
@@ -44,16 +44,16 @@ entryDecoder feeds =
         )
         (XD.possiblePath [ "media:group", "media:description" ]
             (XD.single XD.string)
-            (XD.succeed (\v -> v |> Maybe.map (extractMembers feeds) |> Maybe.withDefault []))
+            (XD.succeed (\v -> v |> Maybe.map (extractMembers feeds feed) |> Maybe.withDefault []))
         )
 
 
-extractMembers : Dict String Feed -> String -> List Feed
-extractMembers feeds description =
+extractMembers : Dict String Feed -> Feed -> String -> List Feed
+extractMembers feeds thisFeed description =
     feeds
         |> Dict.foldr
             (\_ feed members ->
-                if String.contains ("@" ++ feed.title) description then
+                if feed /= thisFeed && String.contains ("@" ++ feed.title) description then
                     feed :: members
 
                 else
