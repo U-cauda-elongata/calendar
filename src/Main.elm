@@ -68,7 +68,7 @@ init _ =
     ( Model
         ""
         Time.utc
-        (Feeds.preset |> Dict.map (\_ -> \feed -> FeedState feed [] Retrieving True))
+        (Feeds.preset |> Dict.map (\_ feed -> FeedState feed [] Retrieving True))
         []
     , Cmd.batch
         (Task.perform SetTimeZone Time.here
@@ -209,7 +209,7 @@ subscriptions _ =
 
 keyDecoder : D.Decoder Msg
 keyDecoder =
-    D.map4 (\a -> \c -> \m -> \k -> KeyDown (a ++ c ++ m ++ k))
+    D.map4 (\a c m k -> KeyDown (a ++ c ++ m ++ k))
         (modifierDecoder "altKey" "A-")
         (modifierDecoder "ctrlKey" "C-")
         (modifierDecoder "metaKey" "M-")
@@ -310,27 +310,25 @@ feedFilterView model =
             (model.feeds
                 |> Dict.toList
                 |> List.indexedMap
-                    (\i ->
-                        \( url, fs ) ->
-                            let
-                                pId =
-                                    "feed-" ++ String.fromInt i
-                            in
-                            li []
-                                [ label [ role "switch", ariaLabelledby pId ]
-                                    [ input
-                                        [ class "filter-checkbox"
-                                        , type_ "checkbox"
-                                        , onCheck (FeedFilter url)
-                                        , checked fs.checked
-                                        , disabled (fs.retrieving /= Success)
-                                        ]
-                                        []
-                                    , img [ class "avatar", src fs.feed.icon, alt "アイコン画像" ]
-                                        []
-                                    , p [ id pId ] [ text fs.feed.title ]
+                    (\i ( url, fs ) ->
+                        let
+                            pId =
+                                "feed-" ++ String.fromInt i
+                        in
+                        li []
+                            [ label [ role "switch", ariaLabelledby pId ]
+                                [ input
+                                    [ class "filter-checkbox"
+                                    , type_ "checkbox"
+                                    , onCheck (FeedFilter url)
+                                    , checked fs.checked
+                                    , disabled (fs.retrieving /= Success)
                                     ]
+                                    []
+                                , img [ class "avatar", src fs.feed.icon, alt "アイコン画像" ] []
+                                , p [ id pId ] [ text fs.feed.title ]
                                 ]
+                            ]
                     )
             )
         ]
@@ -342,15 +340,14 @@ mainView model =
         [ ariaLive "polite"
         , ariaBusy
             (model.feeds
-                |> Dict.foldl (\_ -> \fs -> \acc -> acc || fs.retrieving == Retrieving) False
+                |> Dict.foldl (\_ fs acc -> acc || fs.retrieving == Retrieving) False
             )
         ]
         (model.feeds
-            |> Dict.foldl (\_ -> \fs -> \acc -> acc ++ (fs.events |> List.map (\e -> ( fs, e )))) []
+            |> Dict.foldl (\_ fs acc -> acc ++ (fs.events |> List.map (\e -> ( fs, e )))) []
             |> List.sortWith
-                (\( _, e1 ) ->
-                    \( _, e2 ) ->
-                        compare (Time.posixToMillis e2.updated) (Time.posixToMillis e1.updated)
+                (\( _, e1 ) ( _, e2 ) ->
+                    compare (Time.posixToMillis e2.updated) (Time.posixToMillis e1.updated)
                 )
             |> Util.groupBy (\( _, event ) -> NaiveDate.fromPosix model.timeZone event.updated)
             |> List.map
@@ -367,7 +364,7 @@ mainView model =
                         , ul []
                             (events
                                 |> List.indexedMap
-                                    (\i -> \( feed, event ) -> eventView model date i feed event)
+                                    (\i ( feed, event ) -> eventView model date i feed event)
                             )
                         ]
                 )
@@ -430,8 +427,7 @@ eventIsShown model fs event =
                 |> List.any
                     (\feed ->
                         model.feeds
-                            |> Dict.foldl (\_ -> \s -> \acc -> acc || (s.checked && s.feed == feed))
-                                False
+                            |> Dict.foldl (\_ s acc -> acc || (s.checked && s.feed == feed)) False
                     )
            )
     )

@@ -52,13 +52,11 @@ extractMembers : Dict String Feed -> String -> List Feed
 extractMembers feeds description =
     feeds
         |> Dict.foldr
-            (\_ ->
-                \feed ->
-                    \members ->
-                        if String.contains ("@" ++ feed.title) description then
-                            feed :: members
+            (\_ feed members ->
+                if String.contains ("@" ++ feed.title) description then
+                    feed :: members
 
-                        else
-                            members
+                else
+                    members
             )
             []

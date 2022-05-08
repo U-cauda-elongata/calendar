@@ -18,21 +18,20 @@ groupBy : (a -> b) -> List a -> List ( b, List a )
 groupBy pred list =
     list
         |> List.foldr
-            (\a ->
-                \groups ->
-                    let
-                        b =
-                            pred a
-                    in
-                    case groups of
-                        ( bhead, as_ ) :: tail ->
-                            if bhead == b then
-                                ( bhead, a :: as_ ) :: tail
+            (\a groups ->
+                let
+                    b =
+                        pred a
+                in
+                case groups of
+                    ( bhead, as_ ) :: tail ->
+                        if bhead == b then
+                            ( bhead, a :: as_ ) :: tail
 
-                            else
-                                ( b, [ a ] ) :: groups
+                        else
+                            ( b, [ a ] ) :: groups
 
-                        _ ->
-                            [ ( b, [ a ] ) ]
+                    _ ->
+                        [ ( b, [ a ] ) ]
             )
             []
