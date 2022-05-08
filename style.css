@@ -6,6 +6,10 @@
 	--color: #000;
 	--border-color: #000;
 	--footer-color: #777;
+	--active-filter-background-color: #0FF;
+	--active-filter-border-color: #008080;
+	--disabled-button-color: #6d6d6d;
+	--disabled-button-background-color: #c0c0c0;
 	--margin-unit: 8px;
 	--border-width: 1px;
 	--header-height: 50px;
@@ -15,6 +19,7 @@
 @media (prefers-contrast: more) {
 	:root {
 		--footer-color: #444;
+		--disabled-button-color: #000;
 	}
 }
 
@@ -24,6 +29,10 @@
 		--color: #FFF;
 		--border-color: #2F3336;
 		--footer-color: #888;
+		/* --active-filter-background-color: TODO; */
+		/* --active-filter-border-color: TODO; */
+		--disabled-button-color: #c0c0c0;
+		--disabled-button-background-color: #404040;
 	}
 
 	@media (prefers-contrast: more) {
@@ -85,6 +94,10 @@ body > header > h1 {
 	stroke: var(--border-color);
 }
 
+.hamburger-label.filter-active {
+	background-color: var(--active-filter-background-color);
+}
+
 .hamburger-checkbox:checked ~ .hamburger-label {
 	position: fixed;
 }
@@ -105,6 +118,19 @@ body > header > h1 {
 	border-right: solid var(--border-width) var(--border-color);
 	overflow: scroll;
 	background-color: var(--background-color);
+}
+
+.filter-clear-button {
+	appearance: none;
+	background-color: var(--active-filter-background-color);
+	border: solid var(--border-width) var(--active-filter-border-color);
+	border-radius: 5px;
+}
+
+.filter-clear-button:disabled {
+	color: var(--disabled-button-color);
+	background-color: var(--disabled-button-background-color);
+	border: none;
 }
 
 label > .filter-checkbox:not(:disabled) ~ * {

@@ -13,7 +13,7 @@ import Calendar.Util.NaiveDate as NaiveDate exposing (NaiveDate)
 import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onCheck, onInput)
+import Html.Events exposing (onCheck, onClick, onInput)
 import Http
 import Http.Xml
 import Json.Decode as D
@@ -50,7 +50,8 @@ type FeedRetrievalState
 
 
 type Msg
-    = SearchInput String
+    = ClearFilter
+    | SearchInput String
     | FeedFilter String Bool
     | KeyDown String
     | SetTimeZone Time.Zone
@@ -92,6 +93,14 @@ init _ =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        ClearFilter ->
+            ( { model
+                | search = ""
+                , feeds = model.feeds |> Dict.map (\_ fs -> { fs | checked = True })
+              }
+            , Cmd.none
+            )
+
         SearchInput search ->
             ( { model | search = search }, Cmd.none )
 
@@ -235,7 +244,15 @@ view model =
     { title = "けもフレ配信カレンダー"
     , body =
         [ input [ id "hamburger", class "hamburger-checkbox", type_ "checkbox", role "switch" ] []
-        , label [ class "hamburger-label", for "hamburger", ariaHidden True ] [ Icon.hamburger ]
+        , label
+            [ classList
+                [ ( "hamburger-label", True )
+                , ( "filter-active", filterApplied model )
+                ]
+            , for "hamburger"
+            , ariaHidden True
+            ]
+            [ Icon.hamburger ]
         , header [] [ h1 [] [ text "けもフレ配信カレンダー" ] ]
         , drawerView model
         , div [ class "drawer-right" ] [ mainView model, errorView model ]
@@ -246,12 +263,26 @@ view model =
 drawerView : Model -> Html Msg
 drawerView model =
     div [ class "drawer" ]
-        [ menu [ ariaLabel "フィルターツール" ] [ searchView model, feedFilterView model ]
+        [ menu [ ariaLabel "フィルターツール" ]
+            [ button
+                [ class "filter-clear-button"
+                , disabled (not (filterApplied model))
+                , onClick ClearFilter
+                ]
+                [ text "フィルターをクリアー" ]
+            , searchView model
+            , feedFilterView model
+            ]
         , footer []
             [ a [ class "icon", href "https://github.com/U-cauda-elongata/calendar" ]
                 [ Icon.gitHub ]
             ]
         ]
+
+
+filterApplied : Model -> Bool
+filterApplied model =
+    model.search /= "" || (model.feeds |> Dict.foldl (\_ fs acc -> acc || not fs.checked) False)
 
 
 searchView : Model -> Html Msg
