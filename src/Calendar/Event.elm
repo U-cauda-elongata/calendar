@@ -10,7 +10,7 @@ import Xml.Decode as XD
 
 type alias Event =
     { name : String
-    , updated : Time.Posix
+    , time : Time.Posix
     , link : Maybe String
     , thumbnail : Maybe String
     , members : List Feed
@@ -26,7 +26,7 @@ entryDecoder : Dict String Feed -> Feed -> XD.Decoder Event
 entryDecoder feeds feed =
     XD.map5 Event
         (XD.path [ "title" ] (XD.single XD.string))
-        (XD.path [ "updated" ] (XD.single XD.string)
+        (XD.path [ "published" ] (XD.single XD.string)
             |> XD.andThen
                 (\date ->
                     case Iso8601.toTime date of

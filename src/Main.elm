@@ -375,9 +375,9 @@ mainView model =
             |> Dict.foldl (\_ fs acc -> acc ++ (fs.events |> List.map (\e -> ( fs, e )))) []
             |> List.sortWith
                 (\( _, e1 ) ( _, e2 ) ->
-                    compare (Time.posixToMillis e2.updated) (Time.posixToMillis e1.updated)
+                    compare (Time.posixToMillis e2.time) (Time.posixToMillis e1.time)
                 )
-            |> Util.groupBy (\( _, event ) -> NaiveDate.fromPosix model.timeZone event.updated)
+            |> Util.groupBy (\( _, event ) -> NaiveDate.fromPosix model.timeZone event.time)
             |> List.map
                 (\( date, events ) ->
                     section
@@ -388,7 +388,7 @@ mainView model =
                                 )
                             )
                         ]
-                        [ header [ class "date-heading" ] [ intlDate date ]
+                        [ header [ class "date-heading" ] [ intlDate [] date ]
                         , ul []
                             (events
                                 |> List.indexedMap
@@ -440,7 +440,7 @@ eventView model date i fs event =
         , ariaLabelledby headingId
         , hidden (not (eventIsShown model fs event))
         ]
-        [ intlTime event.updated
+        [ intlTime [ class "event-time" ] event.time
         , eventHeader
         , ul [ class "event-members" ]
             (eventMemberView True fs.feed :: (event.members |> List.map (eventMemberView False)))
