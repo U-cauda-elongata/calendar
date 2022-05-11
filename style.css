@@ -252,16 +252,16 @@ footer, footer a {
 
 	@media (prefers-reduced-motion) {
 		/* Use a dessolving animation. */
-		/* FIXME: This works when turning the drawer on, but not when turning it off, because
-		 * changes to `left` property takes effect immediately. Simply setting `left: 0` here won't
-		 * work since the drawer is interactive even when `opacity: 0`, preventing user interactions
-		 * with background elements. */
+		/* XXX: This causes a discontinuity as `z-index` crosses `0`. */
 		.drawer {
+			z-index: -1;
+			left: 0;
 			opacity: 0;
-			transition-property: opacity;
+			transition-property: z-index,opacity;
 		}
 
 		.hamburger-checkbox:checked ~ .drawer, .drawer:focus-within {
+			z-index: 1;
 			opacity: 1;
 		}
 	}
