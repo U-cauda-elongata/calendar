@@ -450,13 +450,11 @@ eventView model date i fs event =
 eventIsShown : Model -> FeedState -> Event -> Bool
 eventIsShown model fs event =
     (fs.checked
-        || (-- Check that any of the members' feed is checked (TODO: Refactor this).
-            event.members
-                |> List.any
-                    (\feed ->
-                        model.feeds
-                            |> Dict.foldl (\_ s acc -> acc || (s.checked && s.feed == feed)) False
-                    )
+        || -- Check that any of the members' feed is checked.
+           (model.feeds
+                |> Dict.foldl
+                    (\_ s acc -> acc || (s.checked && (event.members |> List.member s.feed)))
+                    False
            )
     )
         && searchMatches model event
