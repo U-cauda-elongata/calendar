@@ -9,11 +9,12 @@ import Calendar.Event exposing (Event, feedDecoder)
 import Calendar.Feeds as Feeds
 import Calendar.Icon as Icon
 import Calendar.Util as Util
-import Calendar.Util.NaiveDate as NaiveDate exposing (NaiveDate)
+import Calendar.Util.NaiveDate as NaiveDate
 import Dict
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onCheck, onClick, onInput)
+import Html.Keyed as Keyed
 import Http
 import Http.Xml
 import Json.Decode as D
@@ -370,43 +371,58 @@ viewFeedFilter model =
 
 viewMain : Model -> Html Msg
 viewMain model =
-    main_
+    Keyed.node "main"
         [ ariaLive "polite"
         , ariaBusy (model.feeds |> List.any (\feed -> feed.retrieving == Retrieving))
         ]
         (model.feeds
-            |> List.concatMap (\feed -> feed.events |> List.map (\e -> ( feed, e )))
+            |> List.indexedMap Tuple.pair
+            |> List.concatMap
+                (\( feedIdx, feed ) ->
+                    feed.events |> List.indexedMap (\i e -> ( ( feedIdx, i ), feed, e ))
+                )
             |> List.sortWith
-                (\( _, e1 ) ( _, e2 ) ->
+                (\( _, _, e1 ) ( _, _, e2 ) ->
                     compare (Time.posixToMillis e2.time) (Time.posixToMillis e1.time)
                 )
-            |> Util.groupBy (\( _, event ) -> NaiveDate.fromPosix model.timeZone event.time)
+            |> Util.groupBy (\( _, _, event ) -> NaiveDate.fromPosix model.timeZone event.time)
             |> List.map
                 (\( date, events ) ->
-                    section
+                    ( NaiveDate.toIso8601 date
+                    , section
                         [ hidden
                             (not
                                 (events
-                                    |> List.any (\( feed, event ) -> eventIsShown model feed event)
+                                    |> List.any (\( _, feed, event ) -> eventIsShown model feed event)
                                 )
                             )
                         ]
                         [ header [ class "date-heading" ] [ intlDate [] date ]
-                        , ul []
+                        , Keyed.ul []
                             (events
-                                |> List.indexedMap
-                                    (\i ( feed, event ) -> viewEvent model date i feed event)
+                                |> List.map
+                                    (\( id, feed, event ) -> viewKeyedEvent model id feed event)
                             )
                         ]
+                    )
                 )
         )
 
 
-viewEvent : Model -> NaiveDate -> Int -> Feed -> Event -> Html Msg
-viewEvent model date i feed event =
+viewKeyedEvent : Model -> ( Int, Int ) -> Feed -> Event -> ( String, Html Msg )
+viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
+    let
+        eventId =
+            "event-" ++ String.fromInt feedIdx ++ "-" ++ String.fromInt eventIdx
+    in
+    ( eventId, viewEvent model eventId feed event )
+
+
+viewEvent : Model -> String -> Feed -> Event -> Html Msg
+viewEvent model eventId feed event =
     let
         headingId =
-            "event-" ++ NaiveDate.toIso8601 date ++ "-" ++ String.fromInt i
+            eventId ++ "-heading"
 
         eventHeader =
             let
