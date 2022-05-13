@@ -1,8 +1,8 @@
 module Calendar.Event exposing (Event, feedDecoder)
 
-import Calendar.Feeds exposing (Feed)
-import Dict exposing (Dict)
+import Calendar.Feeds as Feeds
 import Iso8601
+import List.Extra
 import Parser
 import Time
 import Xml.Decode as XD
@@ -13,17 +13,17 @@ type alias Event =
     , time : Time.Posix
     , link : Maybe String
     , thumbnail : Maybe String
-    , members : List Feed
+    , members : List Int
     }
 
 
-feedDecoder : Dict String Feed -> Feed -> XD.Decoder (List Event)
+feedDecoder : List Feeds.Metadata -> Feeds.Metadata -> XD.Decoder (List Event)
 feedDecoder feeds feed =
     XD.path [ "entry" ] (XD.list (entryDecoder feeds feed))
 
 
-entryDecoder : Dict String Feed -> Feed -> XD.Decoder Event
-entryDecoder feeds feed =
+entryDecoder : List Feeds.Metadata -> Feeds.Metadata -> XD.Decoder Event
+entryDecoder feeds meta =
     XD.map5 Event
         (XD.path [ "title" ] (XD.single XD.string))
         (XD.path [ "published" ] (XD.single XD.string)
@@ -44,17 +44,17 @@ entryDecoder feeds feed =
         )
         (XD.possiblePath [ "media:group", "media:description" ]
             (XD.single XD.string)
-            (XD.succeed (\v -> v |> Maybe.map (extractMembers feeds feed) |> Maybe.withDefault []))
+            (XD.succeed (\v -> v |> Maybe.map (extractMembers feeds meta) |> Maybe.withDefault []))
         )
 
 
-extractMembers : Dict String Feed -> Feed -> String -> List Feed
+extractMembers : List Feeds.Metadata -> Feeds.Metadata -> String -> List Int
 extractMembers feeds thisFeed description =
     feeds
-        |> Dict.foldr
-            (\_ feed members ->
+        |> List.Extra.indexedFoldr
+            (\i feed members ->
                 if feed /= thisFeed && String.contains ("@" ++ feed.title) description then
-                    feed :: members
+                    i :: members
 
                 else
                     members

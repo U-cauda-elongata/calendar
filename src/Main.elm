@@ -6,17 +6,18 @@ import Browser.Events exposing (onKeyDown)
 import Calendar.Attributes exposing (..)
 import Calendar.Elements exposing (intlDate, intlTime)
 import Calendar.Event exposing (Event, feedDecoder)
-import Calendar.Feeds as Feeds exposing (Feed)
+import Calendar.Feeds as Feeds
 import Calendar.Icon as Icon
 import Calendar.Util as Util
 import Calendar.Util.NaiveDate as NaiveDate exposing (NaiveDate)
-import Dict exposing (Dict)
+import Dict
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onCheck, onClick, onInput)
 import Http
 import Http.Xml
 import Json.Decode as D
+import List.Extra
 import Regex
 import Task
 import Time
@@ -30,13 +31,13 @@ main =
 type alias Model =
     { search : String
     , timeZone : Time.Zone
-    , feeds : Dict String FeedState
+    , feeds : List Feed
     , errors : List String
     }
 
 
-type alias FeedState =
-    { feed : Feed
+type alias Feed =
+    { meta : Feeds.Metadata
     , events : List Event
     , retrieving : FeedRetrievalState
     , checked : Bool
@@ -52,10 +53,10 @@ type FeedRetrievalState
 type Msg
     = ClearFilter
     | SearchInput String
-    | FeedFilter String Bool
+    | FeedFilter Int Bool
     | KeyDown String
     | SetTimeZone Time.Zone
-    | GotFeed String (Result Http.Error (List Event))
+    | GotFeed Int (Result Http.Error (List Event))
     | NoOp
     | Unexpected String
 
@@ -69,19 +70,21 @@ init _ =
     ( Model
         ""
         Time.utc
-        (Feeds.preset |> Dict.map (\_ feed -> FeedState feed [] Retrieving True))
+        (Feeds.preset |> List.map (\feed -> Feed feed [] Retrieving True))
         []
     , Cmd.batch
-        (Feeds.preset
-            |> Dict.foldl
-                (\url feed acc ->
-                    Http.get
-                        { url = url
-                        , expect = Http.Xml.expectXml (GotFeed url) (feedDecoder Feeds.preset feed)
-                        }
-                        :: acc
-                )
-                [ Task.perform SetTimeZone Time.here ]
+        (Task.perform SetTimeZone Time.here
+            :: (Feeds.preset
+                    |> List.indexedMap
+                        (\i feed ->
+                            Http.get
+                                { url = feed.url
+                                , expect =
+                                    Http.Xml.expectXml (GotFeed i)
+                                        (feedDecoder Feeds.preset feed)
+                                }
+                        )
+               )
         )
     )
 
@@ -96,7 +99,7 @@ update msg model =
         ClearFilter ->
             ( { model
                 | search = ""
-                , feeds = model.feeds |> Dict.map (\_ fs -> { fs | checked = True })
+                , feeds = model.feeds |> List.map (\feed -> { feed | checked = True })
               }
             , Cmd.none
             )
@@ -104,10 +107,10 @@ update msg model =
         SearchInput search ->
             ( { model | search = search }, Cmd.none )
 
-        FeedFilter url checked ->
+        FeedFilter i checked ->
             ( { model
                 | feeds =
-                    model.feeds |> Dict.update url (Maybe.map (\fs -> { fs | checked = checked }))
+                    model.feeds |> List.Extra.updateAt i (\feed -> { feed | checked = checked })
               }
             , Cmd.none
             )
@@ -129,16 +132,14 @@ update msg model =
                 _ ->
                     ( model, Cmd.none )
 
-        GotFeed url result ->
+        GotFeed i result ->
             case result of
                 Ok events ->
                     ( { model
                         | feeds =
                             model.feeds
-                                |> Dict.update url
-                                    (Maybe.map
-                                        (\fs -> { fs | events = events, retrieving = Success })
-                                    )
+                                |> List.Extra.updateAt i
+                                    (\feed -> { feed | events = events, retrieving = Success })
                       }
                     , Cmd.none
                     )
@@ -146,12 +147,19 @@ update msg model =
                 Err err ->
                     ( { model
                         | errors =
+                            let
+                                url =
+                                    model.feeds
+                                        |> List.Extra.getAt i
+                                        |> Maybe.map (\feed -> "<" ++ feed.meta.url ++ ">")
+                                        -- This should never happen though.
+                                        |> Maybe.withDefault "a feed"
+                            in
                             model.errors
                                 ++ [ "Error retrieving <" ++ url ++ ">: " ++ httpErrorToString err ]
                         , feeds =
                             model.feeds
-                                |> Dict.update url
-                                    (Maybe.map (\fs -> { fs | retrieving = Failure }))
+                                |> List.Extra.updateAt i (\feed -> { feed | retrieving = Failure })
                       }
                     , Cmd.none
                     )
@@ -282,7 +290,7 @@ drawerView model =
 
 filterApplied : Model -> Bool
 filterApplied model =
-    model.search /= "" || (model.feeds |> Dict.foldl (\_ fs acc -> acc || not fs.checked) False)
+    model.search /= "" || not (model.feeds |> List.all .checked)
 
 
 searchView : Model -> Html Msg
@@ -301,8 +309,7 @@ searchView model =
             ]
         , datalist [ id "searchlist" ]
             (model.feeds
-                |> Dict.values
-                |> List.concatMap (\fs -> fs.events)
+                |> List.concatMap .events
                 |> List.concatMap (\event -> searchTags event.name)
                 |> Util.cardinalities
                 |> Dict.toList
@@ -336,9 +343,8 @@ feedFilterView model =
         [ h2 [ id "feed-filter-heading" ] [ text "チャンネル" ]
         , ul []
             (model.feeds
-                |> Dict.toList
                 |> List.indexedMap
-                    (\i ( url, fs ) ->
+                    (\i feed ->
                         let
                             pId =
                                 "feed-" ++ String.fromInt i
@@ -348,13 +354,13 @@ feedFilterView model =
                                 [ input
                                     [ class "filter-checkbox"
                                     , type_ "checkbox"
-                                    , onCheck (FeedFilter url)
-                                    , checked fs.checked
-                                    , disabled (fs.retrieving /= Success)
+                                    , onCheck (FeedFilter i)
+                                    , checked feed.checked
+                                    , disabled (feed.retrieving /= Success)
                                     ]
                                     []
-                                , img [ class "avatar", src fs.feed.icon, alt "アイコン画像" ] []
-                                , p [ id pId ] [ text fs.feed.title ]
+                                , img [ class "avatar", src feed.meta.icon, alt "アイコン画像" ] []
+                                , p [ id pId ] [ text feed.meta.title ]
                                 ]
                             ]
                     )
@@ -366,13 +372,10 @@ mainView : Model -> Html Msg
 mainView model =
     main_
         [ ariaLive "polite"
-        , ariaBusy
-            (model.feeds
-                |> Dict.foldl (\_ fs acc -> acc || fs.retrieving == Retrieving) False
-            )
+        , ariaBusy (model.feeds |> List.any (\feed -> feed.retrieving == Retrieving))
         ]
         (model.feeds
-            |> Dict.foldl (\_ fs acc -> acc ++ (fs.events |> List.map (\e -> ( fs, e )))) []
+            |> List.concatMap (\feed -> feed.events |> List.map (\e -> ( feed, e )))
             |> List.sortWith
                 (\( _, e1 ) ( _, e2 ) ->
                     compare (Time.posixToMillis e2.time) (Time.posixToMillis e1.time)
@@ -399,8 +402,8 @@ mainView model =
         )
 
 
-eventView : Model -> NaiveDate -> Int -> FeedState -> Event -> Html Msg
-eventView model date i fs event =
+eventView : Model -> NaiveDate -> Int -> Feed -> Event -> Html Msg
+eventView model date i feed event =
     let
         headingId =
             "event-" ++ NaiveDate.toIso8601 date ++ "-" ++ String.fromInt i
@@ -438,22 +441,27 @@ eventView model date i fs event =
         [ class "event"
         , role "article"
         , ariaLabelledby headingId
-        , hidden (not (eventIsShown model fs event))
+        , hidden (not (eventIsShown model feed event))
         ]
         [ intlTime [ class "event-time" ] event.time
         , eventHeader
         , ul [ class "event-members" ]
-            (eventMemberView True fs.feed :: (event.members |> List.map (eventMemberView False)))
+            (eventMemberView True feed
+                :: (event.members
+                        |> List.filterMap (\memberIdx -> model.feeds |> List.Extra.getAt memberIdx)
+                        |> List.map (eventMemberView False)
+                   )
+            )
         ]
 
 
-eventIsShown : Model -> FeedState -> Event -> Bool
-eventIsShown model fs event =
-    (fs.checked
+eventIsShown : Model -> Feed -> Event -> Bool
+eventIsShown model feed event =
+    (feed.checked
         || -- Check that any of the members' feed is checked.
            (model.feeds
-                |> Dict.foldl
-                    (\_ s acc -> acc || (s.checked && (event.members |> List.member s.feed)))
+                |> List.Extra.indexedFoldl
+                    (\i f any -> any || (f.checked && (event.members |> List.member i)))
                     False
            )
     )
@@ -469,7 +477,7 @@ eventMemberView : Bool -> Feed -> Html Msg
 eventMemberView isAuthor feed =
     li [ class "event-member" ]
         [ a
-            (href feed.alternate
+            (href feed.meta.alternate
                 :: (if isAuthor then
                         [ rel "author" ]
 
@@ -477,7 +485,7 @@ eventMemberView isAuthor feed =
                         []
                    )
             )
-            [ img [ class "avatar", src feed.icon, alt feed.title ] [] ]
+            [ img [ class "avatar", src feed.meta.icon, alt feed.meta.title ] [] ]
         ]
 
 
