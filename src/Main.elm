@@ -262,14 +262,14 @@ view model =
             ]
             [ Icon.hamburger ]
         , header [] [ h1 [] [ text "けもフレ配信カレンダー" ] ]
-        , drawerView model
-        , div [ class "drawer-right" ] [ mainView model, errorView model ]
+        , viewDrawer model
+        , div [ class "drawer-right" ] [ viewMain model, viewError model ]
         ]
     }
 
 
-drawerView : Model -> Html Msg
-drawerView model =
+viewDrawer : Model -> Html Msg
+viewDrawer model =
     div [ class "drawer" ]
         [ menu [ ariaLabel "フィルターツール" ]
             [ button
@@ -278,8 +278,8 @@ drawerView model =
                 , onClick ClearFilter
                 ]
                 [ text "フィルターをクリアー" ]
-            , searchView model
-            , feedFilterView model
+            , viewSearch model
+            , viewFeedFilter model
             ]
         , footer []
             [ a [ class "icon", href "https://github.com/U-cauda-elongata/calendar" ]
@@ -293,8 +293,8 @@ filterApplied model =
     model.search /= "" || not (model.feeds |> List.all .checked)
 
 
-searchView : Model -> Html Msg
-searchView model =
+viewSearch : Model -> Html Msg
+viewSearch model =
     li []
         [ label []
             [ h2 [] [ text "検索" ]
@@ -337,8 +337,8 @@ searchTags string =
         |> List.map String.trim
 
 
-feedFilterView : Model -> Html Msg
-feedFilterView model =
+viewFeedFilter : Model -> Html Msg
+viewFeedFilter model =
     li [ ariaLabelledby "feed-filter-heading" ]
         [ h2 [ id "feed-filter-heading" ] [ text "チャンネル" ]
         , ul []
@@ -368,8 +368,8 @@ feedFilterView model =
         ]
 
 
-mainView : Model -> Html Msg
-mainView model =
+viewMain : Model -> Html Msg
+viewMain model =
     main_
         [ ariaLive "polite"
         , ariaBusy (model.feeds |> List.any (\feed -> feed.retrieving == Retrieving))
@@ -395,15 +395,15 @@ mainView model =
                         , ul []
                             (events
                                 |> List.indexedMap
-                                    (\i ( feed, event ) -> eventView model date i feed event)
+                                    (\i ( feed, event ) -> viewEvent model date i feed event)
                             )
                         ]
                 )
         )
 
 
-eventView : Model -> NaiveDate -> Int -> Feed -> Event -> Html Msg
-eventView model date i feed event =
+viewEvent : Model -> NaiveDate -> Int -> Feed -> Event -> Html Msg
+viewEvent model date i feed event =
     let
         headingId =
             "event-" ++ NaiveDate.toIso8601 date ++ "-" ++ String.fromInt i
@@ -446,10 +446,10 @@ eventView model date i feed event =
         [ intlTime [ class "event-time" ] event.time
         , eventHeader
         , ul [ class "event-members" ]
-            (eventMemberView True feed
+            (viewEventMember True feed
                 :: (event.members
                         |> List.filterMap (\memberIdx -> model.feeds |> List.Extra.getAt memberIdx)
-                        |> List.map (eventMemberView False)
+                        |> List.map (viewEventMember False)
                    )
             )
         ]
@@ -473,8 +473,8 @@ searchMatches model event =
     String.isEmpty model.search || String.contains model.search event.name
 
 
-eventMemberView : Bool -> Feed -> Html Msg
-eventMemberView isAuthor feed =
+viewEventMember : Bool -> Feed -> Html Msg
+viewEventMember isAuthor feed =
     li [ class "event-member" ]
         [ a
             (href feed.meta.alternate
@@ -489,8 +489,8 @@ eventMemberView isAuthor feed =
         ]
 
 
-errorView : Model -> Html Msg
-errorView model =
+viewError : Model -> Html Msg
+viewError model =
     div
         [ class "error-log"
         , role "log"
