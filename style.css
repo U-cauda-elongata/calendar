@@ -141,11 +141,16 @@ body > header > h1 {
 	border: none;
 }
 
-label > .filter-checkbox:not(:disabled) ~ * {
+.filter-button {
+	text-align: left;
+	font-size: inherit;
+}
+
+.filter-button:not(:disabled) {
 	cursor: pointer;
 }
 
-label > .filter-checkbox:not(:checked) ~ *, label > .filter-checkbox:disabled ~ * {
+.filter-button[aria-checked="false"], .filter-button:disabled {
 	filter: opacity(.2);
 }
 

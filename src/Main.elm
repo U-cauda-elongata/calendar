@@ -13,7 +13,7 @@ import Calendar.Util.NaiveDate as NaiveDate
 import Dict
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onCheck, onClick, onInput)
+import Html.Events exposing (onClick, onInput)
 import Html.Keyed as Keyed
 import Html.Lazy exposing (lazy5)
 import Http
@@ -63,7 +63,7 @@ type FeedRetrievalState
 type Msg
     = ClearFilter
     | SearchInput String
-    | FeedFilter Int Bool
+    | ToggleFeedFilter Int Bool
     | KeyDown String
     | OpenPopup ( Int, Int )
     | ClosePopup
@@ -143,7 +143,7 @@ update msg model =
         SearchInput search ->
             ( { model | search = search }, Cmd.none )
 
-        FeedFilter i checked ->
+        ToggleFeedFilter i checked ->
             ( { model
                 | feeds =
                     model.feeds |> List.Extra.updateAt i (\feed -> { feed | checked = checked })
@@ -304,7 +304,7 @@ view : Model -> Document Msg
 view model =
     { title = "けもフレ配信カレンダー"
     , body =
-        [ input [ id "hamburger", class "hamburger-checkbox", type_ "checkbox", role "switch" ] []
+        [ input [ id "hamburger", class "hamburger-checkbox", type_ "checkbox" ] []
         , label
             [ classList
                 [ ( "hamburger-label", True )
@@ -403,16 +403,16 @@ viewFeedFilter model =
                                 "feed-" ++ String.fromInt i
                         in
                         li []
-                            [ label [ role "switch", ariaLabelledby pId ]
-                                [ input
-                                    [ class "filter-checkbox"
-                                    , type_ "checkbox"
-                                    , onCheck (FeedFilter i)
-                                    , checked feed.checked
-                                    , disabled (feed.retrieving /= Success)
-                                    ]
-                                    []
-                                , img [ class "avatar", src feed.meta.icon, alt "アイコン画像" ] []
+                            [ button
+                                [ class "filter-button"
+                                , role "switch"
+                                , onClick (ToggleFeedFilter i (not feed.checked))
+                                , checked feed.checked
+                                , disabled (feed.retrieving /= Success)
+                                , ariaChecked feed.checked
+                                , ariaLabelledby pId
+                                ]
+                                [ img [ class "avatar", src feed.meta.icon, alt "アイコン画像" ] []
                                 , p [ id pId ] [ text feed.meta.title ]
                                 ]
                             ]

@@ -1,5 +1,6 @@
 module Calendar.Attributes exposing
     ( ariaBusy
+    , ariaChecked
     , ariaControls
     , ariaExpanded
     , ariaHaspopup
@@ -31,6 +32,12 @@ boolStringAttribute name value =
 ariaBusy : Bool -> Attribute msg
 ariaBusy =
     boolStringAttribute "aria-busy"
+
+
+ariaChecked : Bool -> Attribute msg
+ariaChecked =
+    -- We are not using the `mixed` value now so let's ignore it.
+    boolStringAttribute "aria-checked"
 
 
 ariaControls : String -> Attribute msg
