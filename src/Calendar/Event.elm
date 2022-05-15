@@ -1,11 +1,9 @@
 module Calendar.Event exposing (Event, feedDecoder)
 
 import Calendar.Feeds as Feeds
-import Iso8601
-import List.Extra
-import Parser
+import Dict exposing (Dict)
+import Json.Decode as D
 import Time
-import Xml.Decode as XD
 
 
 type alias Event =
@@ -13,48 +11,54 @@ type alias Event =
     , time : Time.Posix
     , link : Maybe String
     , thumbnail : Maybe String
-    , members : List Int
+    , members : List String
     }
 
 
-feedDecoder : List Feeds.Metadata -> Feeds.Metadata -> XD.Decoder (List Event)
-feedDecoder feeds feed =
-    XD.path [ "entry" ] (XD.list (entryDecoder feeds feed))
+type alias Entry =
+    { name : String
+    , time : Int
+    , link : Maybe String
+    , thumbnail : Maybe String
+    , description : Maybe String
+    }
 
 
-entryDecoder : List Feeds.Metadata -> Feeds.Metadata -> XD.Decoder Event
-entryDecoder feeds meta =
-    XD.map5 Event
-        (XD.path [ "title" ] (XD.single XD.string))
-        (XD.path [ "published" ] (XD.single XD.string)
-            |> XD.andThen
-                (\date ->
-                    case Iso8601.toTime date of
-                        Ok time ->
-                            XD.succeed time
+feedDecoder : Dict String Feeds.Metadata -> D.Decoder (Dict String (List Event))
+feedDecoder feeds =
+    D.dict (D.field "entries" (D.list entryDecoder))
+        |> D.map (Dict.map (\k -> List.map (eventFromEntry feeds k)))
 
-                        Err deadEnds ->
-                            XD.fail (Parser.deadEndsToString deadEnds)
-                )
+
+entryDecoder : D.Decoder Entry
+entryDecoder =
+    D.map5 Entry
+        (D.field "name" D.string)
+        (D.field "time" D.int)
+        (D.field "link" (D.maybe D.string))
+        (D.field "thumbnail" (D.maybe D.string))
+        (D.field "description" (D.maybe D.string))
+
+
+eventFromEntry : Dict String Feeds.Metadata -> String -> Entry -> Event
+eventFromEntry feeds key entry =
+    Event entry.name
+        (Time.millisToPosix (entry.time * 1000))
+        entry.link
+        entry.thumbnail
+        (entry.description
+            |> Maybe.map (extractMembers feeds key)
+            |> Maybe.withDefault []
         )
-        (XD.possiblePath [ "link" ] (XD.single (XD.stringAttr "href")) (XD.succeed identity))
-        (XD.possiblePath [ "media:group", "media:thumbnail" ]
-            (XD.single (XD.stringAttr "url"))
-            (XD.succeed identity)
-        )
-        (XD.possiblePath [ "media:group", "media:description" ]
-            (XD.single XD.string)
-            (XD.succeed (\v -> v |> Maybe.map (extractMembers feeds meta) |> Maybe.withDefault []))
-        )
 
 
-extractMembers : List Feeds.Metadata -> Feeds.Metadata -> String -> List Int
-extractMembers feeds thisFeed description =
+extractMembers : Dict String Feeds.Metadata -> String -> String -> List String
+extractMembers feeds myKey description =
     feeds
-        |> List.Extra.indexedFoldr
-            (\i feed members ->
-                if feed /= thisFeed && String.contains ("@" ++ feed.title) description then
-                    i :: members
+        |> Dict.foldr
+            (\key { title } members ->
+                if key /= myKey && String.contains ("@" ++ title) description then
+                    key :: members
 
                 else
                     members

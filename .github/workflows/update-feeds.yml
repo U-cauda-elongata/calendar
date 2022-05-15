@@ -13,17 +13,16 @@ jobs:
           ref: ${{ github.head_ref }}
       - name: Fetch feeds
         run: |
-          for ytc in \
-            UCEOugXOAfa-HRmRjKbH8z3Q \
-            UCEcMIuGR8WO2TwL9XIpjKtw \
-            UCmYO-WfY7Tasry4D1YB4LJw \
-            UCMpw36mXEu3SLsqdrJxUKNA \
-            UCabMjG8p6G5xLkPJgEoTnDg \
+          channels=(
+            UCEOugXOAfa-HRmRjKbH8z3Q
+            UCEcMIuGR8WO2TwL9XIpjKtw
+            UCmYO-WfY7Tasry4D1YB4LJw
+            UCMpw36mXEu3SLsqdrJxUKNA
+            UCabMjG8p6G5xLkPJgEoTnDg
             UCdNBhcAohYjXlUVYsz8X2KQ
-          do
-            curl -fLSs "https://www.youtube.com/feeds/videos.xml?channel_id=$ytc" -o "$ytc.xml"
-            git add "$ytc.xml"
-          done
+          )
+          ./scripts/sync_yt.rb "${channels[@]}" <<< '${{ secrets.YT_API_KEY }}' > feeds.json
+          git add feeds.json
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Update feeds
