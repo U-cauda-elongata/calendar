@@ -3,6 +3,7 @@ name: Update feeds
 on:
   schedule:
     - cron: '15 * * * *'
+  workflow_dispatch: {}
 
 jobs:
   fetch:
