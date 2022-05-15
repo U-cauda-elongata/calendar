@@ -1,4 +1,4 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 import Browser exposing (Document)
 import Browser.Dom as Dom
@@ -15,6 +15,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onCheck, onClick, onInput)
 import Html.Keyed as Keyed
+import Html.Lazy exposing (lazy5)
 import Http
 import Http.Xml
 import Json.Decode as D
@@ -24,16 +25,24 @@ import Task
 import Time
 
 
-main : Program () Model Msg
+main : Program Flags Model Msg
 main =
     Browser.document { init = init, update = update, view = view, subscriptions = subscriptions }
 
 
 type alias Model =
-    { search : String
+    { features : Features
+    , search : String
     , timeZone : Time.Zone
     , feeds : List Feed
+    , activePopup : Maybe ( Int, Int )
     , errors : List String
+    }
+
+
+type alias Features =
+    { copy : Bool
+    , share : Bool
     }
 
 
@@ -56,22 +65,48 @@ type Msg
     | SearchInput String
     | FeedFilter Int Bool
     | KeyDown String
+    | OpenPopup ( Int, Int )
+    | ClosePopup
     | SetTimeZone Time.Zone
     | GotFeed Int (Result Http.Error (List Event))
+    | Copy String
+    | Share String (Maybe String)
     | NoOp
     | Unexpected String
+
+
+
+-- PORTS
+
+
+port copy : String -> Cmd msg
+
+
+port share : ShareData -> Cmd msg
+
+
+type alias ShareData =
+    { title : String
+    , url : Maybe String
+    }
 
 
 
 -- INIT
 
 
-init : () -> ( Model, Cmd Msg )
-init _ =
+type alias Flags =
+    { features : Features }
+
+
+init : Flags -> ( Model, Cmd Msg )
+init flags =
     ( Model
+        flags.features
         ""
         Time.utc
         (Feeds.preset |> List.map (\feed -> Feed feed [] Retrieving True))
+        Nothing
         []
     , Cmd.batch
         (Task.perform SetTimeZone Time.here
@@ -133,6 +168,12 @@ update msg model =
                 _ ->
                     ( model, Cmd.none )
 
+        OpenPopup idx ->
+            ( { model | activePopup = Just idx }, Cmd.none )
+
+        ClosePopup ->
+            ( { model | activePopup = Nothing }, Cmd.none )
+
         GotFeed i result ->
             case result of
                 Ok events ->
@@ -164,6 +205,12 @@ update msg model =
                       }
                     , Cmd.none
                     )
+
+        Copy text ->
+            ( model, copy text )
+
+        Share title url ->
+            ( model, share (ShareData title url) )
 
         NoOp ->
             ( model, Cmd.none )
@@ -218,8 +265,13 @@ handleDomResult result =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions _ =
-    onKeyDown keyDecoder
+subscriptions model =
+    Sub.batch
+        [ onKeyDown keyDecoder
+        , model.activePopup
+            |> Maybe.map (always (Browser.Events.onClick (D.succeed ClosePopup)))
+            |> Maybe.withDefault Sub.none
+        ]
 
 
 keyDecoder : D.Decoder Msg
@@ -414,13 +466,7 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
     let
         eventId =
             "event-" ++ String.fromInt feedIdx ++ "-" ++ String.fromInt eventIdx
-    in
-    ( eventId, viewEvent model eventId feed event )
 
-
-viewEvent : Model -> String -> Feed -> Event -> Html Msg
-viewEvent model eventId feed event =
-    let
         headingId =
             eventId ++ "-heading"
 
@@ -453,19 +499,99 @@ viewEvent model eventId feed event =
                 Nothing ->
                     header [ class "event-header-grid" ] headerContent
     in
-    li
+    ( eventId
+    , li
         [ class "event"
         , role "article"
         , ariaLabelledby headingId
         , hidden (not (eventIsShown model feed event))
         ]
-        [ intlTime [ class "event-time" ] event.time
-        , eventHeader
-        , ul [ class "event-members" ]
+        ([ intlTime [ class "event-time" ] event.time
+         , eventHeader
+         , ul [ class "event-members" ]
             (viewEventMember True feed
                 :: (event.members
                         |> List.filterMap (\memberIdx -> model.feeds |> List.Extra.getAt memberIdx)
                         |> List.map (viewEventMember False)
+                   )
+            )
+         ]
+            ++ (if model.features.copy || model.features.share then
+                    [ lazy5 viewEventPopup
+                        model.features
+                        ( feedIdx, eventIdx )
+                        eventId
+                        (model.activePopup == Just ( feedIdx, eventIdx ))
+                        event
+                    ]
+
+                else
+                    []
+               )
+        )
+    )
+
+
+viewEventPopup : Features -> ( Int, Int ) -> String -> Bool -> Event -> Html Msg
+viewEventPopup features idx key expanded event =
+    let
+        popupId =
+            key ++ "-popup"
+    in
+    div
+        [ class "popup-container" ]
+        [ button
+            [ class "popup-toggle"
+            , ariaHaspopup "menu"
+            , ariaControls popupId
+            , ariaExpanded expanded
+            , -- Call `stopPropagation` to prevent `ClosePopup` message to be sent.
+              Html.Events.stopPropagationOn "click"
+                (D.succeed
+                    ( if expanded then
+                        ClosePopup
+
+                      else
+                        OpenPopup idx
+                    , True
+                    )
+                )
+            , ariaLabel "共有"
+            ]
+            -- TODO: Add an icon.
+            [ text "…" ]
+        , menu
+            [ id popupId
+            , classList [ ( "popup", True ), ( "expanded", expanded ) ]
+            , ariaLabel "共有"
+            ]
+            ((if features.copy then
+                let
+                    copyText =
+                        event.link
+                            |> Maybe.map (\link -> event.name ++ "\n" ++ link)
+                            |> Maybe.withDefault event.name
+                in
+                [ li [] [ button [ onClick (Copy copyText) ] [ text "タイトルとURLをコピー" ] ]
+                , li []
+                    [ button
+                        [ onClick (Copy (String.fromInt (Time.posixToMillis event.time // 1000))) ]
+                        [ text "タイムスタンプをコピー" ]
+                    ]
+                ]
+
+              else
+                []
+             )
+                ++ (if features.share then
+                        [ li []
+                            [ button [ onClick (Share event.name event.link) ]
+                                [ text "その他の方法で共有…" ]
+                            ]
+                        ]
+
+                    else
+                        []
                    )
             )
         ]

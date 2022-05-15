@@ -67,6 +67,14 @@ li {
 	padding: initial;
 }
 
+button {
+	appearance: none;
+	border: none;
+	color: inherit;
+	background: inherit;
+	font-family: inherit;
+}
+
 body > header {
 	height: var(--header-height);
 	border-top: solid var(--border-width) var(--border-color);
@@ -167,13 +175,23 @@ label > .filter-checkbox:not(:checked) ~ *, label > .filter-checkbox:disabled ~ 
 }
 
 .event {
-	display: inline-block;
+	display: grid inline;
 	vertical-align: top;
 	margin: calc(2 * var(--margin-unit));
 	padding: calc(var(--margin-unit));
 	width: 280px;
 	border: solid var(--border-width) var(--border-color);
 	break-inside: avoid;
+}
+
+.event > * {
+	/* FIXME: The elements still do not extend to the second column. */
+	grid-column: 1/2;
+}
+
+.event-time {
+	grid-row: 1;
+	grid-column: 1;
 }
 
 .event-header-grid {
@@ -193,6 +211,29 @@ label > .filter-checkbox:not(:checked) ~ *, label > .filter-checkbox:disabled ~ 
 
 .event-members > li {
 	display: inline-block;
+}
+
+.popup-container {
+	grid-column: 2;
+	grid-row: 1;
+}
+
+.popup-toggle {
+	cursor: pointer;
+}
+
+.popup {
+	position: absolute;
+	background-color: var(--background-color);
+	border: solid var(--border-width) var(--border-color);
+}
+
+.popup-toggle[aria-expanded="false"] ~ .popup {
+	display: none;
+}
+
+.popup button {
+	cursor: pointer;
 }
 
 .avatar {

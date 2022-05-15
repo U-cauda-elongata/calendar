@@ -1,5 +1,8 @@
 module Calendar.Attributes exposing
     ( ariaBusy
+    , ariaControls
+    , ariaExpanded
+    , ariaHaspopup
     , ariaHidden
     , ariaLabel
     , ariaLabelledby
@@ -28,6 +31,21 @@ boolStringAttribute name value =
 ariaBusy : Bool -> Attribute msg
 ariaBusy =
     boolStringAttribute "aria-busy"
+
+
+ariaControls : String -> Attribute msg
+ariaControls =
+    attribute "aria-controls"
+
+
+ariaExpanded : Bool -> Attribute msg
+ariaExpanded =
+    boolStringAttribute "aria-expanded"
+
+
+ariaHaspopup : String -> Attribute msg
+ariaHaspopup =
+    attribute "aria-haspopup"
 
 
 ariaHidden : Bool -> Attribute msg

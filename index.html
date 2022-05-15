@@ -17,5 +17,20 @@
 </head>
 <body>
 	<noscript>このページの内容を表示するには JavaScript を有効にする必要があります。</noscript>
-	<script>var app = Elm.Main.init();</script>
+	<script>
+		var app = Elm.Main.init({
+			flags: {
+				features: {
+					copy: !!navigator.clipboard,
+					share: !!navigator.share
+				}
+			}
+		});
+		app.ports.copy.subscribe(text => {
+			navigator.clipboard.writeText(text);
+		});
+		app.ports.share.subscribe(data => {
+			navigator.share(data).catch(() => {})
+		});
+	</script>
 </body>
