@@ -402,7 +402,7 @@ viewFeedFilter model =
                                 , ariaLabelledby pId
                                 ]
                                 [ img [ class "avatar", src feed.meta.icon, alt "アイコン画像" ] []
-                                , p [ id pId ] [ text feed.meta.title ]
+                                , p [ id pId, class "filter-label" ] [ text feed.meta.title ]
                                 ]
                             ]
                     )
