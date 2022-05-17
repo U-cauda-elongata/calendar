@@ -338,6 +338,7 @@ viewDrawer model =
                     [ Icon.clear ]
                 ]
             , viewSearch model
+            , hr [] []
             , viewFeedFilter model
             ]
         , footer []
@@ -410,7 +411,7 @@ viewFeedFilter model =
                             pId =
                                 "feed-" ++ key
                         in
-                        li []
+                        li [ class "filter-item" ]
                             [ button
                                 [ class "filter-button"
                                 , role "switch"

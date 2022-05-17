@@ -14,6 +14,7 @@
 	--border-width: 1px;
 	--hamburger-length: 50px;
 	--drawer-width: 100vw;
+	--icon-length: 30px;
 }
 
 @media (prefers-contrast: more) {
@@ -83,6 +84,11 @@ body > header {
 
 body > header > h1 {
 	text-align: center;
+}
+
+hr {
+	border: none;
+	border-top: solid var(--border-width) var(--border-color);
 }
 
 /* `<input>` is difficult to style, so hide it and style the preceding `<label>` instead. */
@@ -161,7 +167,7 @@ body > header > h1 {
 	background-color: var(--background-color);
 }
 
-.drawer > menu > li {
+.drawer > menu > li, .filter-item {
 	margin-top: var(--margin-unit);
 	margin-bottom: var(--margin-unit);
 }
@@ -226,8 +232,9 @@ body > header > h1 {
 .drawer > footer {
 	align-self: end;
 	border-top: solid var(--border-width) var(--border-color);
-	width: 100%;
-	text-align: center;
+	padding-top: var(--margin-unit);
+	padding-left: calc((var(--hamburger-length) - var(--icon-length)) / 2);
+	text-align: left;
 }
 
 .date-heading {
@@ -320,8 +327,8 @@ footer, footer a {
 .icon {
 	display: inline-block;
 	fill: currentColor;
-	width: 30px;
-	height: 30px;
+	width: var(--icon-length);
+	height: var(--icon-length);
 }
 
 .error-log {
@@ -368,16 +375,6 @@ footer, footer a {
 		width: var(--drawer-width);
 	}
 
-	.drawer > footer {
-		width: var(--hamburger-length);
-		transition: width .3s;
-	}
-
-	.hamburger-checkbox:checked ~ .drawer-container footer,
-	.search-focused ~ .drawer-container footer {
-		width: 100%;
-	}
-
 	.drawer-right {
 		margin-left: calc(var(--hamburger-length) + var(--border-width));
 		border-left: solid var(--border-width) var(--border-color);
@@ -400,10 +397,6 @@ footer, footer a {
 		}
 
 		.drawer-right {
-			transition: none;
-		}
-
-		.drawer > footer {
 			transition: none;
 		}
 	}
