@@ -12,8 +12,8 @@
 	--disabled-button-background-color: #c0c0c0;
 	--margin-unit: 8px;
 	--border-width: 1px;
-	--header-height: 50px;
-	--drawer-width: 240px;
+	--hamburger-length: 50px;
+	--drawer-width: 100vw;
 }
 
 @media (prefers-contrast: more) {
@@ -76,7 +76,7 @@ button {
 }
 
 body > header {
-	height: var(--header-height);
+	height: var(--hamburger-length);
 	border-top: solid var(--border-width) var(--border-color);
 	border-bottom: solid var(--border-width) var(--border-color);
 }
@@ -90,12 +90,13 @@ body > header > h1 {
 	display: none;
 }
 
+/* Drawer widget */
+
 .hamburger-label {
-	display: none;
-	position: absolute;
-	z-index: 2; /* Put it above `.drawer`. */
-	width: var(--header-height);
-	height: var(--header-height);
+	position: fixed;
+	z-index: 2; /* Put it above `.drawer-container`. */
+	width: var(--hamburger-length);
+	height: var(--hamburger-length);
 	border: var(--border-width) solid var(--border-color);
 	cursor: pointer;
 	background-color: var(--background-color);
@@ -116,33 +117,86 @@ body > header > h1 {
 	}
 }
 
-.drawer {
-	display: grid;
-	position: sticky;
+.drawer-container {
+	position: fixed;
+	z-index: 1; /* Put it above the main content. */
 	top: 0;
-	padding: calc(var(--margin-unit));
+	border-right: solid var(--border-width) var(--border-color);
 	width: var(--drawer-width);
 	height: 100vh;
-	border-right: solid var(--border-width) var(--border-color);
+	/* Hide the drawer visually, but not from screen readers, since the whole point of a drawer
+	 * widget is to save display space, which is irrelevant to screen reader users. */
+	left: calc(-1 * var(--drawer-width) - var(--border-width) - 2 * var(--margin-unit));
+	transition: left .3s;
+	/* XXX: Should we include `user-select: none` here? That would improve experience for
+	 * sighted users a bit, but might be confusing for screen reader users. */
+}
+
+.hamburger-checkbox:checked ~ .drawer-container, .drawer-container:focus-within {
+	left: 0;
+}
+
+@media (prefers-reduced-motion) {
+	/* Use a dissolving animation. */
+	/* XXX: This causes a discontinuity as `z-index` crosses `0`. */
+	.drawer-container {
+		left: 0;
+		z-index: -1;
+		opacity: 0;
+		transition-property: z-index,opacity;
+	}
+
+	.hamburger-checkbox:checked ~ .drawer-container, .drawer-container:focus-within {
+		z-index: 1;
+		opacity: 1;
+	}
+}
+
+.drawer {
+	display: grid;
+	padding-top: var(--hamburger-length);
+	width: var(--drawer-width);
+	height: calc(100% - var(--hamburger-length));
 	overflow: scroll;
 	background-color: var(--background-color);
 }
 
+.drawer > menu > li {
+	margin-top: var(--margin-unit);
+	margin-bottom: var(--margin-unit);
+}
+
 .filter-clear-button {
 	appearance: none;
-	background-color: var(--active-filter-background-color);
-	border: solid var(--border-width) var(--active-filter-border-color);
-	border-radius: 5px;
+	cursor: pointer;
+	width: var(--hamburger-length);
+	fill: var(--active-filter-background-color);
+	stroke: currentColor;
 }
 
 .filter-clear-button:disabled {
-	color: var(--disabled-button-color);
-	background-color: var(--disabled-button-background-color);
+	cursor: default;
 	border: none;
+	fill: var(--disabled-button-background-color);
+	stroke: var(--disabled-button-color);
+}
+
+.search-label > svg {
+	cursor: pointer;
+	width: var(--hamburger-length);
+	height: var(--hamburger-length);
+	overflow: visible; /* TODO: Fix the SVG and remove this. */
+	stroke: currentColor;
+}
+
+.search-label > input {
+	margin-left: var(--margin-unit);
 }
 
 .filter-button {
 	display: grid;
+	padding: 0;
+	height: var(--hamburger-length);
 	text-align: left;
 	font-size: inherit;
 }
@@ -157,30 +211,29 @@ body > header > h1 {
 
 .filter-button > .avatar {
 	grid-column: 1;
+	width: calc(var(--hamburger-length));
+	height: calc(var(--hamburger-length));
 }
 
 .filter-button > .filter-label {
 	grid-column: 2;
+	margin: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .drawer > footer {
 	align-self: end;
-	margin-left: calc(-1 * var(--margin-unit));
-	margin-right: calc(-1 * var(--margin-unit));
-	padding-left: var(--margin-unit);
-	padding-right: var(--margin-unit);
 	border-top: solid var(--border-width) var(--border-color);
+	width: 100%;
 	text-align: center;
-}
-
-.drawer-right {
-	margin-top: calc(-100vh - var(--margin-unit));
-	margin-left: calc(var(--drawer-width) + var(--border-width) + 2 * var(--margin-unit));
 }
 
 .date-heading {
 	position: sticky;
 	top: 0;
+	left: var(--drawer-width);
 	width: 100%;
 	text-align: center;
 	background-color: var(--background-color);
@@ -190,11 +243,13 @@ body > header > h1 {
 
 .event {
 	display: grid inline;
-	vertical-align: top;
-	margin: calc(2 * var(--margin-unit));
-	padding: calc(var(--margin-unit));
-	width: 280px;
+	width: calc(100% - 2 * var(--margin-unit));
+	margin: 0;
+	margin-top: calc(-1 * var(--border-width));
 	border: solid var(--border-width) var(--border-color);
+	border-left: none;
+	border-right: none;
+	padding: calc(var(--margin-unit));
 	break-inside: avoid;
 }
 
@@ -282,67 +337,79 @@ footer, footer a {
 	margin-bottom: var(--margin-unit);
 }
 
-@media (max-width: 600px) {
-	.hamburger-label {
-		display: inline-block;
+@media(min-width: 480px) {
+	:root {
+		--drawer-width: 240px;
 	}
 
-	.drawer {
-		position: fixed;
-		z-index: 1; /* Put it above the main content. */
-		--padding-top: calc(var(--header-height) + var(--border-width) + var(--margin-unit));
-		padding-top: var(--padding-top);
-		height: calc(100% - var(--padding-top));
-		/* Hide the drawer visually, but not from screen readers, since the whole point of a drawer
-		 * widget is to save display space, which is irrelevant to screen reader users. */
-		left: calc(-1 * var(--drawer-width) - var(--border-width) - 2 * var(--margin-unit));
-		transition: left .3s;
-		/* XXX: Should we include `user-select: none` here? That would improve experience for
-		 * sighted users a bit, but might be confusing for screen reader users. */
+	.hamburger-label.filter-active {
+		background-color: var(--background-color);
 	}
 
-	.hamburger-checkbox:checked ~ .drawer, .drawer:focus-within {
-		left: 0;
+	.drawer-container {
+		/* Use `initial` rather than `0` to prevent `transition` animation to trigger when shrinking
+		 * the viewport width. */
+		/* XXX: The animation of `.drawer-right` still triggers. */
+		left: initial;
+		/* Visually hide labels and the search input in `.drawer` by default. */
+		width: calc(var(--hamburger-length) + var(--border-width));
+		overflow: hidden;
+		transition: width .3s;
 	}
 
-	@media (prefers-reduced-motion) {
-		/* Use a dessolving animation. */
-		/* XXX: This causes a discontinuity as `z-index` crosses `0`. */
-		.drawer {
-			z-index: -1;
-			left: 0;
-			opacity: 0;
-			transition-property: z-index,opacity;
-		}
+	.hamburger-checkbox:checked ~ .drawer-container,
+	/* We want the drawer to open when the search input is focused, but using `:focus-within` here
+	 * would cause the drawer to open when a feed filter button is clicked too.
+	 * So we are using `.search-focused` class, which is set by Elm when the input is focused. */
+	.search-focused ~ .drawer-container {
+		/* Show the labels and input. */
+		width: var(--drawer-width);
+	}
 
-		.hamburger-checkbox:checked ~ .drawer, .drawer:focus-within {
-			z-index: 1;
-			opacity: 1;
-		}
+	.drawer > footer {
+		width: var(--hamburger-length);
+		transition: width .3s;
+	}
+
+	.hamburger-checkbox:checked ~ .drawer-container footer,
+	.search-focused ~ .drawer-container footer {
+		width: 100%;
 	}
 
 	.drawer-right {
-		margin-top: 0;
-		margin-left: 0;
-		padding-top: calc(var(--margin-unit));
+		margin-left: calc(var(--hamburger-length) + var(--border-width));
+		border-left: solid var(--border-width) var(--border-color);
+		/* This is fine since overflow should only occur when the drawer is expanded. */
+		overflow-x: hidden;
+		transition: margin-left .3s;
+	}
+
+	.hamburger-checkbox:checked ~ .drawer-right, .search-focused ~ .drawer-right {
+		margin-left: var(--drawer-width);
+	}
+
+	@media (prefers-reduced-motion) {
+		/* TODO: Find a better animation. */
+		.drawer-container {
+			transition: none;
+			/* Revert the previous rule. */
+			z-index: 1;
+			opacity: 1;
+		}
+
+		.drawer-right {
+			transition: none;
+		}
+
+		.drawer > footer {
+			transition: none;
+		}
 	}
 
 	.event {
-		width: 240px;
-	}
-}
-
-@media(max-width: 480px) {
-	:root {
-		--drawer-width: 100%;
-	}
-
-	.event {
-		display: block;
-		width: calc(100% - 2 * var(--margin-unit));
-		margin: 0;
-		margin-top: calc(-1 * var(--border-width));
-		border-left: none;
-		border-right: none;
+		vertical-align: top;
+		margin: calc(2 * var(--margin-unit));
+		border: solid var(--border-width) var(--border-color);
+		width: 280px;
 	}
 }

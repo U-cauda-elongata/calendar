@@ -13,7 +13,7 @@ import Calendar.Util.NaiveDate as NaiveDate
 import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick, onInput)
+import Html.Events exposing (onBlur, onClick, onFocus, onInput)
 import Html.Keyed as Keyed
 import Html.Lazy exposing (lazy5)
 import Http
@@ -33,6 +33,7 @@ type alias Model =
     , search : String
     , timeZone : Time.Zone
     , feeds : Dict String Feed
+    , searchFocused : Bool
     , activePopup : Maybe ( String, Int )
     , retrieving : FeedRetrievalState
     , errors : List String
@@ -63,6 +64,7 @@ type Msg
     | SearchInput String
     | ToggleFeedFilter String Bool
     | KeyDown String
+    | SearchFocus Bool
     | OpenPopup ( String, Int )
     | ClosePopup
     | SetTimeZone Time.Zone
@@ -104,6 +106,7 @@ init flags =
         ""
         Time.utc
         (Feeds.preset |> Dict.map (\_ feed -> Feed feed [] True))
+        False
         Nothing
         Retrieving
         []
@@ -159,6 +162,9 @@ update msg model =
 
                 _ ->
                     ( model, Cmd.none )
+
+        SearchFocus value ->
+            ( { model | searchFocused = value }, Cmd.none )
 
         OpenPopup idx ->
             ( { model | activePopup = Just idx }, Cmd.none )
@@ -292,7 +298,16 @@ view : Model -> Document Msg
 view model =
     { title = "けもフレ配信カレンダー"
     , body =
-        [ input [ id "hamburger", class "hamburger-checkbox", type_ "checkbox" ] []
+        [ input
+            [ id "hamburger"
+            , classList
+                [ ( "hamburger-checkbox", True )
+                , -- XXX: Maybe this should be set to `<body>` ideally?
+                  ( "search-focused", model.searchFocused )
+                ]
+            , type_ "checkbox"
+            ]
+            []
         , label
             [ classList
                 [ ( "hamburger-label", True )
@@ -302,8 +317,8 @@ view model =
             , ariaHidden True
             ]
             [ Icon.hamburger ]
-        , header [] [ h1 [] [ text "けもフレ配信カレンダー" ] ]
-        , viewDrawer model
+        , header [ class "drawer-right" ] [ h1 [] [ text "けもフレ配信カレンダー" ] ]
+        , div [ class "drawer-container" ] [ viewDrawer model ]
         , div [ class "drawer-right" ] [ viewMain model, viewError model ]
         ]
     }
@@ -313,12 +328,15 @@ viewDrawer : Model -> Html Msg
 viewDrawer model =
     div [ class "drawer" ]
         [ menu [ ariaLabel "フィルターツール" ]
-            [ button
-                [ class "filter-clear-button"
-                , disabled (not (filterApplied model))
-                , onClick ClearFilter
+            [ li []
+                [ button
+                    [ class "filter-clear-button"
+                    , disabled (not (filterApplied model))
+                    , onClick ClearFilter
+                    , ariaLabel "フィルターをクリアー"
+                    ]
+                    [ Icon.clear ]
                 ]
-                [ text "フィルターをクリアー" ]
             , viewSearch model
             , viewFeedFilter model
             ]
@@ -337,14 +355,16 @@ filterApplied model =
 viewSearch : Model -> Html Msg
 viewSearch model =
     li []
-        [ label []
-            [ h2 [] [ text "検索" ]
+        [ label [ class "search-label" ]
+            [ Icon.search
             , input
                 [ id "calendar-search"
                 , type_ "search"
                 , value model.search
                 , list "searchlist"
                 , onInput SearchInput
+                , onFocus (SearchFocus True)
+                , onBlur (SearchFocus False)
                 ]
                 []
             ]
@@ -381,9 +401,8 @@ searchTags string =
 
 viewFeedFilter : Model -> Html Msg
 viewFeedFilter model =
-    li [ ariaLabelledby "feed-filter-heading" ]
-        [ h2 [ id "feed-filter-heading" ] [ text "チャンネル" ]
-        , ul []
+    li [ ariaLabel "チャンネル" ]
+        [ ul []
             (model.feeds
                 |> Dict.map
                     (\key feed ->
@@ -395,6 +414,7 @@ viewFeedFilter model =
                             [ button
                                 [ class "filter-button"
                                 , role "switch"
+                                , title feed.meta.title
                                 , onClick (ToggleFeedFilter key (not feed.checked))
                                 , checked feed.checked
                                 , disabled (model.retrieving /= Success)
