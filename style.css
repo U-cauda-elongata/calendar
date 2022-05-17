@@ -293,6 +293,7 @@ body > header > h1 {
 
 .popup {
 	position: absolute;
+	right: 0;
 	background-color: var(--background-color);
 	border: solid var(--border-width) var(--border-color);
 }
@@ -411,5 +412,10 @@ footer, footer a {
 		margin: calc(2 * var(--margin-unit));
 		border: solid var(--border-width) var(--border-color);
 		width: 280px;
+	}
+
+	.popup {
+		/* TODO: Prevent the popup to shrink when the ellipsis is on far right of the viewport. */
+		right: auto;
 	}
 }
