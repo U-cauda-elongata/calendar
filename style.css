@@ -282,11 +282,18 @@ hr {
 }
 
 .event-members {
-	overflow: scroll;
+	margin-top: var(--margin-unit);
+	overflow-x: scroll;
+	white-space: nowrap;
 }
 
-.event-members > li {
+.event-member {
 	display: inline-block;
+	margin-left: var(--margin-unit);
+}
+
+.event-member:first-child {
+	margin-left: 0;
 }
 
 .popup-container {
