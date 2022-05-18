@@ -461,7 +461,7 @@ viewMain model =
                             )
                         ]
                         [ header [ class "date-heading" ] [ intlDate [] date ]
-                        , Keyed.ul []
+                        , Keyed.ul [ class "timeline" ]
                             (events
                                 |> List.map
                                     (\( id, feed, event ) -> viewKeyedEvent model id feed event)

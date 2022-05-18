@@ -385,8 +385,6 @@ footer, footer a {
 	.drawer-right {
 		margin-left: calc(var(--hamburger-length) + var(--border-width));
 		border-left: solid var(--border-width) var(--border-color);
-		/* This is fine since overflow should only occur when the drawer is expanded. */
-		overflow-x: hidden;
 		transition: margin-left .3s;
 	}
 
@@ -406,6 +404,11 @@ footer, footer a {
 		.drawer-right {
 			transition: none;
 		}
+	}
+
+	.timeline {
+		/* This is fine since overflow should only occur when the drawer is expanded. */
+		overflow-x: hidden;
 	}
 
 	.event {
