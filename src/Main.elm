@@ -372,7 +372,8 @@ viewSearch model =
         , datalist [ id "searchlist" ]
             (model.feeds
                 |> Dict.values
-                |> List.concatMap .events
+                |> List.concatMap
+                    (\feed -> feed.events |> List.filter (eventIsShown model feed.checked))
                 |> List.concatMap (\event -> searchTags event.name)
                 |> Util.cardinalities
                 |> Dict.toList
@@ -456,7 +457,10 @@ viewMain model =
                         [ hidden
                             (not
                                 (events
-                                    |> List.any (\( _, feed, event ) -> eventIsShown model feed event)
+                                    |> List.any
+                                        (\( _, feed, event ) ->
+                                            eventIsShown model feed.checked event
+                                        )
                                 )
                             )
                         ]
@@ -515,7 +519,7 @@ viewKeyedEvent model ( feedKey, eventIdx ) feed event =
         [ class "event"
         , role "article"
         , ariaLabelledby headingId
-        , hidden (not (eventIsShown model feed event))
+        , hidden (not (eventIsShown model feed.checked event))
         ]
         ([ intlTime [ class "event-time" ] event.time
          , eventHeader
@@ -608,9 +612,9 @@ viewEventPopup features idx key expanded event =
         ]
 
 
-eventIsShown : Model -> Feed -> Event -> Bool
-eventIsShown model feed event =
-    (feed.checked
+eventIsShown : Model -> Bool -> Event -> Bool
+eventIsShown model feedChecked event =
+    (feedChecked
         || -- Check that any of the members' feed is checked.
            (model.feeds
                 |> Dict.foldl
