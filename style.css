@@ -319,6 +319,8 @@ hr {
 
 .popup button {
 	cursor: pointer;
+	padding-top: var(--margin-unit);
+	padding-bottom: var(--margin-unit);
 }
 
 .avatar {

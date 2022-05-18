@@ -580,6 +580,7 @@ viewEventPopup features idx key expanded event =
             , classList [ ( "popup", True ), ( "expanded", expanded ) ]
             , ariaLabel "共有"
             ]
+            -- TODO: Add icons to list items too.
             ((if features.copy then
                 let
                     copyText =
