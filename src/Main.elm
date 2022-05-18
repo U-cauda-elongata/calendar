@@ -270,23 +270,23 @@ subscriptions model =
 
 keyDecoder : D.Decoder Msg
 keyDecoder =
-    D.map4 (\a c m k -> KeyDown (a ++ c ++ m ++ k))
-        (modifierDecoder "altKey" "A-")
-        (modifierDecoder "ctrlKey" "C-")
-        (modifierDecoder "metaKey" "M-")
-        (D.field "key" D.string)
+    D.field "key" D.string
+        |> D.andThen (appendModifier "metaKey" "M-")
+        |> D.andThen (appendModifier "ctrlKey" "C-")
+        |> D.andThen (appendModifier "altKey" "A-")
+        |> D.map KeyDown
 
 
-modifierDecoder : String -> String -> D.Decoder String
-modifierDecoder field repr =
+appendModifier : String -> String -> String -> D.Decoder String
+appendModifier field prefix key =
     D.oneOf [ D.field field D.bool, D.succeed False ]
         |> D.map
             (\value ->
                 if value then
-                    repr ++ "-"
+                    prefix ++ key
 
                 else
-                    ""
+                    key
             )
 
 
@@ -506,13 +506,12 @@ viewKeyedEvent model ( feedKey, eventIdx ) feed event =
                         Nothing ->
                             [ heading ]
             in
-            case event.link of
-                Just link ->
-                    header []
-                        [ a [ class "event-header-grid", href link ] headerContent ]
-
-                Nothing ->
-                    header [ class "event-header-grid" ] headerContent
+            event.link
+                |> Maybe.map
+                    (\link ->
+                        header [] [ a [ class "event-header-grid", href link ] headerContent ]
+                    )
+                |> Maybe.withDefault (header [ class "event-header-grid" ] headerContent)
     in
     ( eventId
     , li

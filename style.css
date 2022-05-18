@@ -14,6 +14,7 @@
 	--border-width: 1px;
 	--hamburger-length: 50px;
 	--drawer-width: 100vw;
+	--event-width: 280px;
 	--icon-length: 30px;
 }
 
@@ -217,8 +218,8 @@ hr {
 
 .filter-button > .avatar {
 	grid-column: 1;
-	width: calc(var(--hamburger-length));
-	height: calc(var(--hamburger-length));
+	width: var(--hamburger-length);
+	height: var(--hamburger-length);
 }
 
 .filter-button > .filter-label {
@@ -256,7 +257,7 @@ hr {
 	border: solid var(--border-width) var(--border-color);
 	border-left: none;
 	border-right: none;
-	padding: calc(var(--margin-unit));
+	padding: var(--margin-unit);
 	break-inside: avoid;
 }
 
@@ -277,7 +278,7 @@ hr {
 .event-thumbnail {
 	display: block;
 	order: -1;
-	max-width: 260px;
+	max-width: calc(var(--event-width) - 2 * var(--margin-unit));
 	height: 120px;
 }
 
@@ -417,7 +418,7 @@ footer, footer a {
 		vertical-align: top;
 		margin: calc(2 * var(--margin-unit));
 		border: solid var(--border-width) var(--border-color);
-		width: 280px;
+		width: var(--event-width);
 	}
 
 	.popup {
