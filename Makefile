@@ -1,6 +1,9 @@
 all: app.js COPYING
 
-build/elm.js: src/*.elm src/*/*.elm src/*/*/*.elm
+src/Translations.elm: translations/en.json
+	npx elm-i18next-gen --source translations/en.json --target src/ --type both --overwrite
+
+build/elm.js: src/Translations.elm src/*.elm src/*/*.elm src/*/*/*.elm
 	elm make --optimize --output=build/elm.js src/Main.elm
 
 app.js: elm.json build/elm.js customElements.js src/notice.js

@@ -5,6 +5,7 @@
     "postinstall": "elm-tooling install"
   },
   "devDependencies": {
+    "elm-i18next-gen": "^1.1.0",
     "elm-tooling": "^1.8.0"
   }
 }

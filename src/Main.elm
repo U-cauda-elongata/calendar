@@ -15,12 +15,17 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onBlur, onClick, onFocus, onInput)
 import Html.Keyed as Keyed
-import Html.Lazy exposing (lazy, lazy5)
+import Html.Lazy exposing (lazy, lazy2, lazy6)
 import Http
+import I18Next exposing (Translations, translationsDecoder)
 import Json.Decode as D
+import Json.Encode as E
 import Regex
 import Task
 import Time
+import Translations as T
+import Translations.Error as TError
+import Translations.Share as TShare
 
 
 main : Program Flags Model Msg
@@ -30,6 +35,7 @@ main =
 
 type alias Model =
     { features : Features
+    , translations : Translations
     , search : String
     , timeZone : Time.Zone
     , feeds : Dict String Feed
@@ -73,6 +79,7 @@ type Msg
     | OpenPopup ( String, Int )
     | ClosePopup
     | SetTimeZone Time.Zone
+    | GotTranslations String (Result Http.Error Translations)
     | GotFeeds (Result Http.Error (Dict String (List Event)))
     | Copy String
     | Share String (Maybe String)
@@ -82,6 +89,9 @@ type Msg
 
 
 -- PORTS
+
+
+port setLang : String -> Cmd msg
 
 
 port copy : String -> Cmd msg
@@ -101,13 +111,16 @@ type alias ShareData =
 
 
 type alias Flags =
-    { features : Features }
+    { features : Features
+    , languages : List String
+    }
 
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
     ( Model
         flags.features
+        I18Next.initialTranslations
         ""
         Time.utc
         (Feeds.preset |> Dict.map (\_ feed -> Feed feed [] True))
@@ -117,12 +130,42 @@ init flags =
         []
     , Cmd.batch
         [ Task.perform SetTimeZone Time.here
+        , let
+            lang =
+                selectLanguage flags.languages
+          in
+          Http.get
+            { url = translationsUrl lang
+            , expect = Http.expectJson (GotTranslations lang) translationsDecoder
+            }
         , Http.get
             { url = "feeds.json"
             , expect = Http.expectJson GotFeeds (feedDecoder Feeds.preset)
             }
         ]
     )
+
+
+selectLanguage : List String -> String
+selectLanguage languages =
+    case languages of
+        [] ->
+            "en"
+
+        lang :: rest ->
+            if lang == "en" || (lang |> String.startsWith "en-") then
+                "en"
+
+            else if lang == "ja" || (lang |> String.startsWith "ja-") then
+                "ja"
+
+            else
+                selectLanguage rest
+
+
+translationsUrl : String -> String
+translationsUrl lang =
+    "translations/" ++ lang ++ ".json"
 
 
 
@@ -153,6 +196,14 @@ update msg model =
 
         SetTimeZone timeZone ->
             ( { model | timeZone = timeZone }, Cmd.none )
+
+        GotTranslations lang result ->
+            case result of
+                Ok translations ->
+                    ( { model | translations = translations }, setLang lang )
+
+                Err err ->
+                    update (ReportError (HttpError (translationsUrl lang) err)) model
 
         KeyDown key ->
             case key of
@@ -275,7 +326,7 @@ appendModifier field prefix key =
 
 view : Model -> Document Msg
 view model =
-    { title = "けもフレ配信カレンダー"
+    { title = T.title model.translations
     , body =
         [ input
             [ id "hamburger"
@@ -296,9 +347,9 @@ view model =
             , ariaHidden True
             ]
             [ Icon.hamburger ]
-        , header [ class "drawer-right" ] [ h1 [] [ text "けもフレ配信カレンダー" ] ]
+        , header [ class "drawer-right" ] [ h1 [] [ text (T.title model.translations) ] ]
         , div [ class "drawer-container" ] [ viewDrawer model ]
-        , div [ class "drawer-right" ] [ viewMain model, lazy viewErrorLog model.errors ]
+        , div [ class "drawer-right" ] [ viewMain model, lazy2 viewErrorLog model.translations model.errors ]
         ]
     }
 
@@ -306,13 +357,13 @@ view model =
 viewDrawer : Model -> Html Msg
 viewDrawer model =
     div [ class "drawer" ]
-        [ menu [ ariaLabel "フィルターツール" ]
+        [ menu [ ariaLabel (T.filterMenuLabel model.translations) ]
             [ li []
                 [ button
                     [ class "filter-clear-button"
                     , disabled (not (filterApplied model))
                     , onClick ClearFilter
-                    , ariaLabel "フィルターをクリアー"
+                    , ariaLabel (T.clearFilter model.translations)
                     ]
                     [ Icon.clear ]
                 ]
@@ -336,7 +387,7 @@ viewSearch : Model -> Html Msg
 viewSearch model =
     li []
         [ label [ class "search-label" ]
-            [ Icon.search
+            [ lazy Icon.search model.translations
             , input
                 [ id "calendar-search"
                 , type_ "search"
@@ -382,7 +433,7 @@ searchTags string =
 
 viewFeedFilter : Model -> Html Msg
 viewFeedFilter model =
-    li [ ariaLabel "チャンネル" ]
+    li [ ariaLabel (T.feedFilterLabel model.translations) ]
         [ ul []
             (model.feeds
                 |> Dict.map
@@ -402,7 +453,12 @@ viewFeedFilter model =
                                 , ariaChecked feed.checked
                                 , ariaLabelledby pId
                                 ]
-                                [ img [ class "avatar", src feed.meta.icon, alt "アイコン画像" ] []
+                                [ img
+                                    [ class "avatar"
+                                    , src feed.meta.icon
+                                    , alt (T.avatarAlt model.translations)
+                                    ]
+                                    []
                                 , p [ id pId, class "filter-label" ] [ text feed.meta.title ]
                                 ]
                             ]
@@ -477,7 +533,7 @@ viewKeyedEvent model ( feedKey, eventIdx ) feed event =
                                 [ class "event-thumbnail"
                                 , loading "lazy"
                                 , src thumb
-                                , alt "サムネイル画像"
+                                , alt (T.thumbnailAlt model.translations)
                                 ]
                                 []
                             ]
@@ -510,8 +566,9 @@ viewKeyedEvent model ( feedKey, eventIdx ) feed event =
             )
          ]
             ++ (if model.features.copy || model.features.share then
-                    [ lazy5 viewEventPopup
+                    [ lazy6 viewEventPopup
                         model.features
+                        model.translations
                         ( feedKey, eventIdx )
                         eventId
                         (model.activePopup == Just ( feedKey, eventIdx ))
@@ -525,8 +582,8 @@ viewKeyedEvent model ( feedKey, eventIdx ) feed event =
     )
 
 
-viewEventPopup : Features -> ( String, Int ) -> String -> Bool -> Event -> Html Msg
-viewEventPopup features idx key expanded event =
+viewEventPopup : Features -> Translations -> ( String, Int ) -> String -> Bool -> Event -> Html Msg
+viewEventPopup features translations idx key expanded event =
     let
         popupId =
             key ++ "-popup"
@@ -566,11 +623,15 @@ viewEventPopup features idx key expanded event =
                             |> Maybe.map (\link -> event.name ++ "\n" ++ link)
                             |> Maybe.withDefault event.name
                 in
-                [ li [] [ button [ onClick (Copy copyText) ] [ text "タイトルとURLをコピー" ] ]
+                [ li []
+                    [ button
+                        [ onClick (Copy copyText) ]
+                        [ text (TShare.copyTitleAndUrl translations) ]
+                    ]
                 , li []
                     [ button
                         [ onClick (Copy (String.fromInt (Time.posixToMillis event.time // 1000))) ]
-                        [ text "タイムスタンプをコピー" ]
+                        [ text (TShare.copyTimestamp translations) ]
                     ]
                 ]
 
@@ -580,7 +641,7 @@ viewEventPopup features idx key expanded event =
                 ++ (if features.share then
                         [ li []
                             [ button [ onClick (Share event.name event.link) ]
-                                [ text "その他の方法で共有…" ]
+                                [ text (TShare.shareVia translations) ]
                             ]
                         ]
 
@@ -625,32 +686,31 @@ viewEventMember isAuthor feed =
         ]
 
 
-viewErrorLog : List Error -> Html Msg
-viewErrorLog errors =
+viewErrorLog : Translations -> List Error -> Html Msg
+viewErrorLog translations errors =
     div
         [ class "error-log"
         , role "log"
         , ariaLive "assertive"
         , ariaLabel "Error"
-        , lang "en"
         , hidden (List.isEmpty errors)
         ]
-        (errors |> List.foldl (\err acc -> p [] (viewError err) :: acc) [])
+        (errors |> List.foldl (\err acc -> p [] (viewError translations err) :: acc) [])
 
 
-viewError : Error -> List (Html msg)
-viewError err =
+viewError : Translations -> Error -> List (Html msg)
+viewError translations err =
     case err of
         HttpError url e ->
-            [ text "Error retrieving <"
-            , a [ href url ] [ text url ]
-            , text (">: " ++ httpErrorToString e)
-            ]
+            TError.httpCustom translations
+                text
+                (a [ href url ] [ text url ])
+                (text (httpErrorToString e))
 
         Unexpected msg ->
             -- I'd prefer the application to simply crash in the event of a programming error which
             -- cannot be caught by the compiler like this, but Elm doesn't allow it.
-            [ text ("Unexpected error: " ++ msg) ]
+            [ text (TError.unexpected translations msg) ]
 
 
 httpErrorToString : Http.Error -> String

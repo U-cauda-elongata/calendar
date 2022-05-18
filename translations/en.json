@@ -1,0 +1,18 @@
+{
+	"title": "KF Live Streaming Calendar",
+	"filterMenuLabel": "Filter tools",
+	"clearFilter": "Clear filters",
+	"search": "Search",
+	"feedFilterLabel": "Channels",
+	"avatarAlt": "Icon",
+	"thumbnailAlt": "Thumbnail image",
+	"share": {
+		"copyTitleAndUrl": "Copy title and URL",
+		"copyTimestamp": "Copy timestamp",
+		"shareVia": "Share via…"
+	},
+	"error": {
+		"http": "Error retrieving <{{url}}>: {{msg}}",
+		"unexpected": "Unexpected error: {{msg}}"
+	}
+}

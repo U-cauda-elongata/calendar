@@ -1,0 +1,19 @@
+
+{
+	"title": "けもフレ配信カレンダー",
+	"filterMenuLabel": "フィルターツール",
+	"clearFilter": "フィルターをクリアー",
+	"search": "検索",
+	"feedFilterLabel": "チャンネル",
+	"avatarAlt": "アイコン",
+	"thumbnailAlt": "サムネイル",
+	"share": {
+		"copyTitleAndUrl": "タイトルとURLをコピー",
+		"copyTimestamp": "タイムスタンプをコピー",
+		"shareVia": "その他の方法で共有…"
+	},
+	"error": {
+		"http": "<{{url}}> の取得中にエラー: {{msg}}",
+		"unexpected": "予期せぬエラー: {{msg}}"
+	}
+}

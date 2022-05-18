@@ -24,8 +24,12 @@
 				features: {
 					copy: !!navigator.clipboard,
 					share: !!navigator.share
-				}
+				},
+				languages: navigator.languages
 			}
+		});
+		app.ports.setLang.subscribe(lang => {
+			document.documentElement.lang = lang;
 		});
 		app.ports.copy.subscribe(text => {
 			navigator.clipboard.writeText(text);
