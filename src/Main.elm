@@ -15,7 +15,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onBlur, onClick, onFocus, onInput)
 import Html.Keyed as Keyed
-import Html.Lazy exposing (lazy5)
+import Html.Lazy exposing (lazy, lazy5)
 import Http
 import Json.Decode as D
 import Regex
@@ -36,7 +36,7 @@ type alias Model =
     , searchFocused : Bool
     , activePopup : Maybe ( String, Int )
     , retrieving : FeedRetrievalState
-    , errors : List String
+    , errors : List Error
     }
 
 
@@ -59,6 +59,11 @@ type FeedRetrievalState
     | Failure
 
 
+type Error
+    = HttpError String Http.Error
+    | Unexpected String
+
+
 type Msg
     = ClearFilter
     | SearchInput String
@@ -72,7 +77,7 @@ type Msg
     | Copy String
     | Share String (Maybe String)
     | NoOp
-    | Unexpected String
+    | ReportError Error
 
 
 
@@ -191,14 +196,9 @@ update msg model =
                     )
 
                 Err err ->
-                    ( { model
-                        | errors =
-                            model.errors
-                                ++ [ "Error retrieving <feeds.json>: " ++ httpErrorToString err ]
-                        , retrieving = Failure
-                      }
-                    , Cmd.none
-                    )
+                    update
+                        (ReportError (HttpError "feeds.json" err))
+                        { model | retrieving = Failure }
 
         Copy text ->
             ( model, copy text )
@@ -209,29 +209,8 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
-        Unexpected err ->
-            -- I'd prefer the application to simply crash in the event of a programming error which
-            -- cannot be caught by the compiler like this, but Elm doesn't allow it.
-            ( { model | errors = model.errors ++ [ "Unexpected error: " ++ err ] }, Cmd.none )
-
-
-httpErrorToString : Http.Error -> String
-httpErrorToString err =
-    case err of
-        Http.BadUrl _ ->
-            "BadUrl"
-
-        Http.Timeout ->
-            "Timeout"
-
-        Http.NetworkError ->
-            "NetworkError"
-
-        Http.BadStatus s ->
-            "BadStatus " ++ String.fromInt s
-
-        Http.BadBody e ->
-            "BadBody: " ++ e
+        ReportError err ->
+            ( { model | errors = err :: model.errors }, Cmd.none )
 
 
 focusSearch : Cmd Msg
@@ -251,7 +230,7 @@ handleDomResult result =
             NoOp
 
         Err (Dom.NotFound id) ->
-            Unexpected ("Node not found: " ++ id)
+            ReportError (Unexpected ("Node not found: " ++ id))
 
 
 
@@ -319,7 +298,7 @@ view model =
             [ Icon.hamburger ]
         , header [ class "drawer-right" ] [ h1 [] [ text "けもフレ配信カレンダー" ] ]
         , div [ class "drawer-container" ] [ viewDrawer model ]
-        , div [ class "drawer-right" ] [ viewMain model, viewError model ]
+        , div [ class "drawer-right" ] [ viewMain model, lazy viewErrorLog model.errors ]
         ]
     }
 
@@ -646,14 +625,48 @@ viewEventMember isAuthor feed =
         ]
 
 
-viewError : Model -> Html Msg
-viewError model =
+viewErrorLog : List Error -> Html Msg
+viewErrorLog errors =
     div
         [ class "error-log"
         , role "log"
         , ariaLive "assertive"
         , ariaLabel "Error"
         , lang "en"
-        , hidden (List.isEmpty model.errors)
+        , hidden (List.isEmpty errors)
         ]
-        (List.map (\msg -> p [] [ text msg ]) model.errors)
+        (errors |> List.foldl (\err acc -> p [] (viewError err) :: acc) [])
+
+
+viewError : Error -> List (Html msg)
+viewError err =
+    case err of
+        HttpError url e ->
+            [ text "Error retrieving <"
+            , a [ href url ] [ text url ]
+            , text (">: " ++ httpErrorToString e)
+            ]
+
+        Unexpected msg ->
+            -- I'd prefer the application to simply crash in the event of a programming error which
+            -- cannot be caught by the compiler like this, but Elm doesn't allow it.
+            [ text ("Unexpected error: " ++ msg) ]
+
+
+httpErrorToString : Http.Error -> String
+httpErrorToString err =
+    case err of
+        Http.BadUrl _ ->
+            "BadUrl"
+
+        Http.Timeout ->
+            "Timeout"
+
+        Http.NetworkError ->
+            "NetworkError"
+
+        Http.BadStatus s ->
+            "BadStatus " ++ String.fromInt s
+
+        Http.BadBody e ->
+            "BadBody: " ++ e

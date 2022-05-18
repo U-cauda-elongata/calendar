@@ -356,6 +356,10 @@ footer, footer a {
 	margin-bottom: var(--margin-unit);
 }
 
+.error-log a {
+	color: #0FF;
+}
+
 @media(min-width: 480px) {
 	:root {
 		--drawer-width: 240px;
