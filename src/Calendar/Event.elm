@@ -3,6 +3,7 @@ module Calendar.Event exposing (Event, feedDecoder)
 import Calendar.Feeds as Feeds
 import Dict exposing (Dict)
 import Json.Decode as D
+import List.Extra
 import Time
 
 
@@ -11,7 +12,7 @@ type alias Event =
     , time : Time.Posix
     , link : Maybe String
     , thumbnail : Maybe String
-    , members : List String
+    , members : List Int
     }
 
 
@@ -24,10 +25,10 @@ type alias Entry =
     }
 
 
-feedDecoder : Dict String Feeds.Metadata -> D.Decoder (Dict String (List Event))
+feedDecoder : List Feeds.Metadata -> D.Decoder (List Event)
 feedDecoder feeds =
-    D.dict (D.field "entries" (D.list entryDecoder))
-        |> D.map (Dict.map (\k -> List.map (eventFromEntry feeds k)))
+    D.field "entries" (D.list entryDecoder)
+        |> D.map (\entries -> entries |> List.map (eventFromEntry feeds))
 
 
 entryDecoder : D.Decoder Entry
@@ -40,25 +41,25 @@ entryDecoder =
         (D.field "description" (D.maybe D.string))
 
 
-eventFromEntry : Dict String Feeds.Metadata -> String -> Entry -> Event
-eventFromEntry feeds key entry =
+eventFromEntry : List Feeds.Metadata -> Entry -> Event
+eventFromEntry feeds entry =
     Event entry.name
         (Time.millisToPosix (entry.time * 1000))
         entry.link
         entry.thumbnail
         (entry.description
-            |> Maybe.map (extractMembers feeds key)
+            |> Maybe.map (extractMembers feeds)
             |> Maybe.withDefault []
         )
 
 
-extractMembers : Dict String Feeds.Metadata -> String -> String -> List String
-extractMembers feeds myKey description =
+extractMembers : List Feeds.Metadata -> String -> List Int
+extractMembers feeds description =
     feeds
-        |> Dict.foldr
-            (\key { title } members ->
-                if key /= myKey && String.contains ("@" ++ title) description then
-                    key :: members
+        |> List.Extra.indexedFoldr
+            (\i { title } members ->
+                if description |> String.contains ("@" ++ title) then
+                    i :: members
 
                 else
                     members

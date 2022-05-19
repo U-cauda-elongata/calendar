@@ -128,4 +128,8 @@ items.each do |video|
   end
 end
 
-JSON.dump(channels.zip(feeds).to_h, STDOUT)
+channels.zip(feeds).map do |(channel, feed)|
+  open("#{channel}.json", 'w') do |out|
+    JSON.dump(feed, out)
+  end
+end

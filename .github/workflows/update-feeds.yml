@@ -22,8 +22,10 @@ jobs:
             UCabMjG8p6G5xLkPJgEoTnDg
             UCdNBhcAohYjXlUVYsz8X2KQ
           )
-          ./scripts/sync_yt.rb "${channels[@]}" <<< '${{ secrets.YT_API_KEY }}' > feeds.json
-          git add feeds.json
+          ./scripts/sync_yt.rb "${channels[@]}" <<< '${{ secrets.YT_API_KEY }}'
+          for channel in "${channels[@]}"; do
+            git add "$channel.json"
+          done
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Update feeds
