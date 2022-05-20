@@ -228,7 +228,10 @@ update msg model =
                     ( model, Cmd.none )
 
         SearchFocus value ->
-            ( { model | searchFocused = value }, Cmd.none )
+            ( { model | searchFocused = value }
+            , -- Prevent `.drawer` to scroll into the search input before the transition completes.
+              Dom.setViewportOf "drawer" 0 0 |> Task.attempt handleDomResult
+            )
 
         OpenPopup idx ->
             ( { model | activePopup = Just idx }, Cmd.none )
@@ -355,7 +358,7 @@ view model =
             ]
             [ Icon.hamburger ]
         , header [ class "drawer-right" ] [ h1 [] [ text (T.title model.translations) ] ]
-        , div [ class "drawer-container" ] [ viewDrawer model ]
+        , div [ id "drawer", class "drawer-container" ] [ viewDrawer model ]
         , div [ class "drawer-right" ] [ viewMain model, lazy2 viewErrorLog model.translations model.errors ]
         ]
     }
