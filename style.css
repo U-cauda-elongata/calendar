@@ -131,6 +131,9 @@ hr {
 	border-right: solid var(--border-width) var(--border-color);
 	width: var(--drawer-width);
 	height: 100vh;
+	/* XXX: On desktop, the user agent may _always_ render the scroll bar, covering a portion of the
+	 * drawer content when it is collapsed. */
+	overflow-y: scroll;
 	/* Hide the drawer visually, but not from screen readers, since the whole point of a drawer
 	 * widget is to save display space, which is irrelevant to screen reader users. */
 	left: calc(-1 * var(--drawer-width) - var(--border-width) - 2 * var(--margin-unit));
@@ -163,8 +166,6 @@ hr {
 	display: grid;
 	padding-top: var(--hamburger-length);
 	width: var(--drawer-width);
-	height: calc(100% - var(--hamburger-length));
-	overflow: scroll;
 	background-color: var(--background-color);
 }
 
@@ -376,7 +377,7 @@ footer, footer a {
 		left: initial;
 		/* Visually hide labels and the search input in `.drawer` by default. */
 		width: calc(var(--hamburger-length) + var(--border-width));
-		overflow: hidden;
+		overflow-x: hidden;
 		transition: width .3s;
 	}
 
