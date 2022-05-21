@@ -20,13 +20,12 @@ import Json.Encode as Json
 
 boolStringAttribute : String -> Bool -> Attribute msg
 boolStringAttribute name value =
-    attribute name
-        (if value then
+    attribute name <|
+        if value then
             "true"
 
-         else
+        else
             "false"
-        )
 
 
 ariaBusy : Bool -> Attribute msg

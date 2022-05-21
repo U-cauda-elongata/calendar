@@ -10,7 +10,7 @@ import Dict exposing (Dict)
 cardinalities : List comparable -> Dict comparable Int
 cardinalities list =
     list
-        |> List.foldl (\v -> Dict.update v (\n -> Just (1 + Maybe.withDefault 0 n)))
+        |> List.foldl (\v -> Dict.update v (\n -> Just <| 1 + Maybe.withDefault 0 n))
             Dict.empty
 
 

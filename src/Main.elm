@@ -135,7 +135,7 @@ init flags =
         Nothing
         []
     , Cmd.batch
-        (Task.perform SetTimeZone Time.here
+        ((Time.here |> Task.perform SetTimeZone)
             :: (let
                     lang =
                         selectLanguage flags.languages
@@ -152,8 +152,7 @@ init flags =
                             Http.get
                                 { url = feed.url
                                 , expect =
-                                    Http.expectJson (GotFeed i feed.url)
-                                        (feedDecoder Feeds.preset)
+                                    Http.expectJson (GotFeed i feed.url) (feedDecoder Feeds.preset)
                                 }
                         )
                )
@@ -221,7 +220,7 @@ update msg model =
                     ( { model | translations = translations }, setLang lang )
 
                 Err err ->
-                    update (ReportError (HttpError (translationsUrl lang) err)) model
+                    model |> update (ReportError (HttpError (translationsUrl lang) err))
 
         KeyDown key ->
             case key of
@@ -279,7 +278,7 @@ update msg model =
             ( model, copy text )
 
         Share title url ->
-            ( model, share (ShareData title url) )
+            ( model, share <| ShareData title url )
 
         NoOp ->
             ( model, Cmd.none )
@@ -290,12 +289,12 @@ update msg model =
 
 focusSearch : Cmd Msg
 focusSearch =
-    Task.attempt handleDomResult (Dom.focus "calendar-search")
+    Dom.focus "calendar-search" |> Task.attempt handleDomResult
 
 
 blurSearch : Cmd Msg
 blurSearch =
-    Task.attempt handleDomResult (Dom.blur "calendar-search")
+    Dom.blur "calendar-search" |> Task.attempt handleDomResult
 
 
 handleDomResult : Result Dom.Error value -> Msg
@@ -305,7 +304,7 @@ handleDomResult result =
             NoOp
 
         Err (Dom.NotFound id) ->
-            ReportError (Unexpected ("Node not found: " ++ id))
+            ReportError <| Unexpected ("Node not found: " ++ id)
 
 
 
@@ -317,7 +316,7 @@ subscriptions model =
     Sub.batch
         [ onKeyDown keyDecoder
         , model.activePopup
-            |> Maybe.map (always (Browser.Events.onClick (D.succeed ClosePopup)))
+            |> Maybe.map (always <| Browser.Events.onClick (D.succeed ClosePopup))
             |> Maybe.withDefault Sub.none
         ]
 
@@ -373,7 +372,10 @@ view model =
             [ Icon.hamburger ]
         , header [ class "drawer-right" ] [ h1 [] [ text (T.title model.translations) ] ]
         , div [ id "drawer", class "drawer-container" ] [ viewDrawer model ]
-        , div [ class "drawer-right" ] [ viewMain model, lazy2 viewErrorLog model.translations model.errors ]
+        , div [ class "drawer-right" ]
+            [ viewMain model
+            , lazy2 viewErrorLog model.translations model.errors
+            ]
         ]
     }
 
@@ -385,9 +387,9 @@ viewDrawer model =
             [ li []
                 [ button
                     [ class "filter-clear-button"
-                    , disabled (not (filterApplied model))
+                    , disabled <| not (filterApplied model)
                     , onClick ClearFilter
-                    , ariaLabel (T.clearFilter model.translations)
+                    , ariaLabel <| T.clearFilter model.translations
                     ]
                     [ Icon.clear ]
                 ]
@@ -544,8 +546,8 @@ viewKeyedDateSection model date items =
 viewDateSection : Model -> NaiveDate -> List TimelineItem -> Html Msg
 viewDateSection model date items =
     section
-        [ hidden
-            (not
+        [ hidden <|
+            not
                 (items
                     |> List.any
                         (\item ->
@@ -557,7 +559,6 @@ viewDateSection model date items =
                                     True
                         )
                 )
-            )
         ]
         [ header [ class "date-heading" ] [ intlDate [] date ]
         , Keyed.ul [ class "timeline" ]
@@ -571,11 +572,10 @@ viewDateSection model date items =
                             Now ->
                                 ( "now"
                                 , div [ id "now", class "now-separator" ]
-                                    [ p []
-                                        (T.nowSeparatorCustom model.translations
+                                    [ p [] <|
+                                        T.nowSeparatorCustom model.translations
                                             text
                                             (intlTime [] model.now)
-                                        )
                                     ]
                                 )
                     )
@@ -625,36 +625,35 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
         [ class "event"
         , role "article"
         , ariaLabelledby headingId
-        , hidden (not (eventIsShown model feed.checked event))
+        , hidden <| not (eventIsShown model feed.checked event)
         ]
-        ([ intlTime [ class "event-time" ] event.time
-         , eventHeader
-         , ul [ class "event-members" ]
-            (viewEventMember True feed
-                :: (event.members
-                        |> List.filterMap
-                            (\memberIdx ->
-                                if feedIdx == memberIdx then
-                                    -- Exclude the author.
-                                    Nothing
+        (intlTime [ class "event-time" ] event.time
+            :: eventHeader
+            :: ul [ class "event-members" ]
+                (viewEventMember True feed
+                    :: (event.members
+                            |> List.filterMap
+                                (\memberIdx ->
+                                    if feedIdx == memberIdx then
+                                        -- Exclude the author.
+                                        Nothing
 
-                                else
-                                    model.feeds
-                                        |> List.Extra.getAt memberIdx
-                                        |> Maybe.map (viewEventMember False)
-                            )
-                   )
-            )
-         ]
-            ++ (if model.features.copy || model.features.share then
-                    [ lazy6 viewEventPopup
-                        model.features
-                        model.translations
-                        ( feedIdx, eventIdx )
-                        eventId
-                        (model.activePopup == Just ( feedIdx, eventIdx ))
-                        event
-                    ]
+                                    else
+                                        model.feeds
+                                            |> List.Extra.getAt memberIdx
+                                            |> Maybe.map (viewEventMember False)
+                                )
+                       )
+                )
+            :: (if model.features.copy || model.features.share then
+                    List.singleton <|
+                        lazy6 viewEventPopup
+                            model.features
+                            model.translations
+                            ( feedIdx, eventIdx )
+                            eventId
+                            (model.activePopup == Just ( feedIdx, eventIdx ))
+                            event
 
                 else
                     []
@@ -677,8 +676,8 @@ viewEventPopup features translations idx key expanded event =
             , ariaControls popupId
             , ariaExpanded expanded
             , -- Call `stopPropagation` to prevent `ClosePopup` message to be sent.
-              Html.Events.stopPropagationOn "click"
-                (D.succeed
+              Html.Events.stopPropagationOn "click" <|
+                D.succeed
                     ( if expanded then
                         ClosePopup
 
@@ -686,7 +685,6 @@ viewEventPopup features translations idx key expanded event =
                         OpenPopup idx
                     , True
                     )
-                )
             , ariaLabel "共有"
             ]
             -- TODO: Add an icon.
@@ -697,39 +695,61 @@ viewEventPopup features translations idx key expanded event =
             , ariaLabel "共有"
             ]
             -- TODO: Add icons to list items too.
-            ((if features.copy then
-                let
-                    copyText =
-                        event.link
-                            |> Maybe.map (\link -> event.name ++ "\n" ++ link)
-                            |> Maybe.withDefault event.name
-                in
-                [ li []
-                    [ button
-                        [ onClick (Copy copyText) ]
-                        [ text (TShare.copyTitleAndUrl translations) ]
-                    ]
-                , li []
-                    [ button
-                        [ onClick (Copy (String.fromInt (Time.posixToMillis event.time // 1000))) ]
-                        [ text (TShare.copyTimestamp translations) ]
-                    ]
-                ]
+            (let
+                items =
+                    []
 
-              else
-                []
-             )
-                ++ (if features.share then
-                        [ li []
-                            [ button [ onClick (Share event.name event.link) ]
-                                [ text (TShare.shareVia translations) ]
-                            ]
-                        ]
+                items2 =
+                    if features.share then
+                        viewShareEvent translations event :: items
 
                     else
-                        []
-                   )
+                        items
+
+                items3 =
+                    if features.copy then
+                        viewCopyEventTimestamp translations event
+                            :: viewCopyEvent translations event
+                            :: items2
+
+                    else
+                        items2
+             in
+             items3
             )
+        ]
+
+
+viewCopyEvent : Translations -> Event -> Html Msg
+viewCopyEvent translations event =
+    let
+        copyText =
+            event.link
+                |> Maybe.map (\link -> event.name ++ "\n" ++ link)
+                |> Maybe.withDefault event.name
+    in
+    li []
+        [ button
+            [ onClick <| Copy copyText ]
+            [ text <| TShare.copyTitleAndUrl translations ]
+        ]
+
+
+viewCopyEventTimestamp : Translations -> Event -> Html Msg
+viewCopyEventTimestamp translations event =
+    li []
+        [ button
+            [ onClick <| Copy (String.fromInt (Time.posixToMillis event.time // 1000)) ]
+            [ text <| TShare.copyTimestamp translations ]
+        ]
+
+
+viewShareEvent : Translations -> Event -> Html Msg
+viewShareEvent translations event =
+    li []
+        [ button
+            [ onClick <| Share event.name event.link ]
+            [ text <| TShare.shareVia translations ]
         ]
 
 
@@ -786,12 +806,12 @@ viewError translations err =
             TError.httpCustom translations
                 text
                 (a [ href url ] [ text url ])
-                (text (httpErrorToString e))
+                (text <| httpErrorToString e)
 
         Unexpected msg ->
             -- I'd prefer the application to simply crash in the event of a programming error which
             -- cannot be caught by the compiler like this, but Elm doesn't allow it.
-            [ text (TError.unexpected translations msg) ]
+            [ text <| TError.unexpected translations msg ]
 
 
 httpErrorToString : Http.Error -> String
