@@ -634,7 +634,7 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
                 :: (event.members
                         |> List.filterMap
                             (\memberIdx ->
-                                if feedIdx /= memberIdx then
+                                if feedIdx == memberIdx then
                                     -- Exclude the author.
                                     Nothing
 
