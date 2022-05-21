@@ -263,7 +263,13 @@ update msg model =
                             }
 
                         Err err ->
-                            { model | errors = HttpError url err :: model.errors }
+                            { model
+                                | feeds =
+                                    model.feeds
+                                        |> List.Extra.updateAt i
+                                            (\feed -> { feed | retrieving = Failure })
+                                , errors = HttpError url err :: model.errors
+                            }
             in
             ( model2
             , if model2.feeds |> List.all (\feed -> feed.retrieving /= Retrieving) then
