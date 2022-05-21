@@ -21,6 +21,7 @@ jobs:
             UCMpw36mXEu3SLsqdrJxUKNA
             UCabMjG8p6G5xLkPJgEoTnDg
             UCdNBhcAohYjXlUVYsz8X2KQ
+            UCxm7yNjJsSvyvcG96-Cvmpw
           )
           ./scripts/sync_yt.rb "${channels[@]}" <<< '${{ secrets.YT_API_KEY }}'
           for channel in "${channels[@]}"; do

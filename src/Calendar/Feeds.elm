@@ -35,4 +35,8 @@ preset =
         "ダイアウルフ / Dire Wolf"
         "https://www.youtube.com/channel/UCdNBhcAohYjXlUVYsz8X2KQ"
         "https://yt3.ggpht.com/yJUytRAl-MwBrGmIXMdctRgcNuAborghz1SGt2o6KDewrB1aP6saZLdX9HWBPdF5JEutZ6aBKNY=s60"
+    , Metadata "UCxm7yNjJsSvyvcG96-Cvmpw.json"
+        "カラカル / Caracal"
+        "https://www.youtube.com/channel/UCxm7yNjJsSvyvcG96-Cvmpw"
+        "https://yt3.ggpht.com/PfYRtTGfYRkpluFsqAjYgSERbvu7wQ-pNpRARUeSTvka1pa-t3rFgb4DhxNuhDikmz-BP8WLgw=s60"
     ]
