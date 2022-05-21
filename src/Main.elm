@@ -97,6 +97,9 @@ type Msg
 port setLang : String -> Cmd msg
 
 
+port slideViewportInto : String -> Cmd msg
+
+
 port copy : String -> Cmd msg
 
 
@@ -247,26 +250,30 @@ update msg model =
             ( { model | activePopup = Nothing }, Cmd.none )
 
         GotFeed i url result ->
-            case result of
-                Ok events ->
-                    ( { model
-                        | feeds =
-                            model.feeds
-                                |> List.Extra.updateAt i
-                                    (\feed -> { feed | events = events, retrieving = Success })
-                      }
-                    , Cmd.none
-                    )
+            -- XXX: #lm prohibits shadowing.
+            let
+                model2 =
+                    case result of
+                        Ok events ->
+                            { model
+                                | feeds =
+                                    model.feeds
+                                        |> List.Extra.updateAt i
+                                            (\feed ->
+                                                { feed | events = events, retrieving = Success }
+                                            )
+                            }
 
-                Err err ->
-                    update
-                        (ReportError (HttpError url err))
-                        { model
-                            | feeds =
-                                model.feeds
-                                    |> List.Extra.updateAt i
-                                        (\feed -> { feed | retrieving = Failure })
-                        }
+                        Err err ->
+                            { model | errors = HttpError url err :: model.errors }
+            in
+            ( model2
+            , if model2.feeds |> List.all (\feed -> feed.retrieving /= Retrieving) then
+                slideViewportInto "now"
+
+              else
+                Cmd.none
+            )
 
         Copy text ->
             ( model, copy text )
@@ -563,7 +570,7 @@ viewDateSection model date items =
 
                             Now ->
                                 ( "now"
-                                , div [ class "now-separator" ]
+                                , div [ id "now", class "now-separator" ]
                                     [ p []
                                         (T.nowSeparatorCustom model.translations
                                             text

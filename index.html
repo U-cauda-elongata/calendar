@@ -31,6 +31,14 @@
 		app.ports.setLang.subscribe(lang => {
 			document.documentElement.lang = lang;
 		});
+		app.ports.slideViewportInto.subscribe(id => {
+			var node = document.getElementById(id);
+			if (node) {
+				requestAnimationFrame(() => {
+					node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				});
+			}
+		});
 		app.ports.copy.subscribe(text => {
 			navigator.clipboard.writeText(text);
 		});
