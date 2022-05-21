@@ -59,6 +59,10 @@ h1, h2, h3, h4, h5, h6 {
 	margin: initial;
 }
 
+p {
+	margin: initial;
+}
+
 ul, menu {
 	margin: initial;
 	padding: initial;
@@ -225,7 +229,6 @@ hr {
 
 .filter-button > .filter-label {
 	grid-column: 2;
-	margin: 0;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -248,6 +251,14 @@ hr {
 	background-color: var(--background-color);
 	border-bottom: solid var(--border-width) var(--border-color);
 	break-after: avoid-page;
+}
+
+.now-separator {
+	margin-top: var(--margin-unit);
+	margin-bottom: var(--margin-unit);
+	border-top: solid var(--border-width) var(--border-color);
+	border-bottom: solid var(--border-width) var(--border-color);
+	text-align: center;
 }
 
 .event {

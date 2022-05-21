@@ -67,6 +67,16 @@ avatarAltCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "avatarAlt" []
 
 
+nowSeparator : Translations -> String -> String
+nowSeparator translations time =
+    tr translations Curly "nowSeparator" [ ( "time", time ) ]
+
+
+nowSeparatorCustom : Translations -> (String -> a) -> a -> List a
+nowSeparatorCustom translations nonPlaceholderLift time =
+    customTr translations Curly nonPlaceholderLift "nowSeparator" [ ( "time", time ) ]
+
+
 thumbnailAlt : Translations -> String
 thumbnailAlt translations =
     t translations "thumbnailAlt"

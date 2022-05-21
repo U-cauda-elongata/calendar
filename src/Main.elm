@@ -9,7 +9,7 @@ import Calendar.Event exposing (Event, feedDecoder)
 import Calendar.Feeds as Feeds
 import Calendar.Icon as Icon
 import Calendar.Util as Util
-import Calendar.Util.NaiveDate as NaiveDate
+import Calendar.Util.NaiveDate as NaiveDate exposing (NaiveDate)
 import Dict
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -38,6 +38,7 @@ type alias Model =
     { features : Features
     , translations : Translations
     , search : String
+    , now : Time.Posix
     , timeZone : Time.Zone
     , feeds : List Feed
     , searchFocused : Bool
@@ -80,6 +81,7 @@ type Msg
     | OpenPopup ( Int, Int )
     | ClosePopup
     | SetTimeZone Time.Zone
+    | GotCurrentTime Time.Posix
     | GotTranslations String (Result Http.Error Translations)
     | GotFeed Int String (Result Http.Error (List Event))
     | Copy String
@@ -123,6 +125,7 @@ init flags =
         flags.features
         I18Next.initialTranslations
         ""
+        (Time.millisToPosix 0)
         Time.utc
         (Feeds.preset |> List.map (\feed -> Feed feed [] Retrieving True))
         False
@@ -139,6 +142,7 @@ init flags =
                     , expect = Http.expectJson (GotTranslations lang) translationsDecoder
                     }
                )
+            :: (Time.now |> Task.perform GotCurrentTime)
             :: (Feeds.preset
                     |> List.indexedMap
                         (\i feed ->
@@ -204,6 +208,9 @@ update msg model =
 
         SetTimeZone timeZone ->
             ( { model | timeZone = timeZone }, Cmd.none )
+
+        GotCurrentTime now ->
+            ( { model | now = now }, Cmd.none )
 
         GotTranslations lang result ->
             case result of
@@ -475,47 +482,98 @@ viewFeedFilter model =
         ]
 
 
+type TimelineItem
+    = TimelineEvent ( ( Int, Int ), Feed, Event )
+    | Now
+
+
 viewMain : Model -> Html Msg
 viewMain model =
     Keyed.node "main"
         [ ariaLive "polite"
         , ariaBusy (model.feeds |> List.any (\feed -> feed.retrieving == Retrieving))
         ]
-        (model.feeds
-            |> List.indexedMap Tuple.pair
-            |> List.concatMap
-                (\( feedIdx, feed ) ->
-                    feed.events |> List.indexedMap (\i e -> ( ( feedIdx, i ), feed, e ))
+        (let
+            events =
+                model.feeds
+                    |> List.indexedMap Tuple.pair
+                    |> List.concatMap
+                        (\( feedIdx, feed ) ->
+                            feed.events |> List.indexedMap (\i e -> ( ( feedIdx, i ), feed, e ))
+                        )
+                    |> List.sortWith
+                        (\( _, _, e1 ) ( _, _, e2 ) ->
+                            compare (Time.posixToMillis e2.time) (Time.posixToMillis e1.time)
+                        )
+
+            ( upcoming, past ) =
+                events
+                    |> List.Extra.splitWhen
+                        (\( _, _, event ) ->
+                            Time.posixToMillis event.time <= Time.posixToMillis model.now
+                        )
+                    |> Maybe.withDefault ( events, [] )
+                    |> Tuple.mapBoth (List.map TimelineEvent) (List.map TimelineEvent)
+         in
+         (upcoming ++ (Now :: past))
+            |> Util.groupBy
+                (\item ->
+                    case item of
+                        TimelineEvent ( _, _, event ) ->
+                            NaiveDate.fromPosix model.timeZone event.time
+
+                        Now ->
+                            NaiveDate.fromPosix model.timeZone model.now
                 )
-            |> List.sortWith
-                (\( _, _, e1 ) ( _, _, e2 ) ->
-                    compare (Time.posixToMillis e2.time) (Time.posixToMillis e1.time)
-                )
-            |> Util.groupBy (\( _, _, event ) -> NaiveDate.fromPosix model.timeZone event.time)
-            |> List.map
-                (\( date, events ) ->
-                    ( NaiveDate.toIso8601 date
-                    , section
-                        [ hidden
-                            (not
-                                (events
-                                    |> List.any
-                                        (\( _, feed, event ) ->
-                                            eventIsShown model feed.checked event
-                                        )
-                                )
-                            )
-                        ]
-                        [ header [ class "date-heading" ] [ intlDate [] date ]
-                        , Keyed.ul [ class "timeline" ]
-                            (events
-                                |> List.map
-                                    (\( id, feed, event ) -> viewKeyedEvent model id feed event)
-                            )
-                        ]
-                    )
-                )
+            |> List.map (\( date, items ) -> viewKeyedDateSection model date items)
         )
+
+
+viewKeyedDateSection : Model -> NaiveDate -> List TimelineItem -> ( String, Html Msg )
+viewKeyedDateSection model date items =
+    ( NaiveDate.toIso8601 date, viewDateSection model date items )
+
+
+viewDateSection : Model -> NaiveDate -> List TimelineItem -> Html Msg
+viewDateSection model date items =
+    section
+        [ hidden
+            (not
+                (items
+                    |> List.any
+                        (\item ->
+                            case item of
+                                TimelineEvent ( _, feed, event ) ->
+                                    eventIsShown model feed.checked event
+
+                                Now ->
+                                    True
+                        )
+                )
+            )
+        ]
+        [ header [ class "date-heading" ] [ intlDate [] date ]
+        , Keyed.ul [ class "timeline" ]
+            (items
+                |> List.map
+                    (\item ->
+                        case item of
+                            TimelineEvent ( id, feed, event ) ->
+                                viewKeyedEvent model id feed event
+
+                            Now ->
+                                ( "now"
+                                , div [ class "now-separator" ]
+                                    [ p []
+                                        (T.nowSeparatorCustom model.translations
+                                            text
+                                            (intlTime [] model.now)
+                                        )
+                                    ]
+                                )
+                    )
+            )
+        ]
 
 
 viewKeyedEvent : Model -> ( Int, Int ) -> Feed -> Event -> ( String, Html Msg )

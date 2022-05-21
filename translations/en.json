@@ -5,6 +5,7 @@
 	"search": "Search",
 	"feedFilterLabel": "Channels",
 	"avatarAlt": "Icon",
+	"nowSeparator": "Now: {{time}}",
 	"thumbnailAlt": "Thumbnail image",
 	"share": {
 		"copyTitleAndUrl": "Copy title and URL",

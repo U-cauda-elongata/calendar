@@ -6,6 +6,7 @@
 	"search": "検索",
 	"feedFilterLabel": "チャンネル",
 	"avatarAlt": "アイコン",
+	"nowSeparator": "現在時刻：{{time}}",
 	"thumbnailAlt": "サムネイル",
 	"share": {
 		"copyTitleAndUrl": "タイトルとURLをコピー",
