@@ -1,6 +1,9 @@
 [*]
-indent_style = tab
+indent_style = space
 indent_size = 4
 
-[{*.elm,elm.json}]
-indent_style = space
+[{*.css,*.html,*.js,*.json}]
+indent_style = tab
+
+[*.rb]
+indent_size = 2
