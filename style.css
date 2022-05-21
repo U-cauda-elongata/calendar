@@ -342,6 +342,14 @@ hr {
 	border-radius: 50%;
 }
 
+.empty-result {
+	text-align: center;
+}
+
+.empty-result > p {
+	margin: var(--margin-unit);
+}
+
 footer, footer a {
 	color: var(--footer-color);
 }

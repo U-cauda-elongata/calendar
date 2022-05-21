@@ -85,3 +85,33 @@ thumbnailAlt translations =
 thumbnailAltCustom : Translations -> (String -> a) -> List a
 thumbnailAltCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "thumbnailAlt" []
+
+
+emptyResultPre : Translations -> String
+emptyResultPre translations =
+    t translations "emptyResultPre"
+
+
+emptyResultPreCustom : Translations -> (String -> a) -> List a
+emptyResultPreCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "emptyResultPre" []
+
+
+emptyResultKidding : Translations -> String
+emptyResultKidding translations =
+    t translations "emptyResultKidding"
+
+
+emptyResultKiddingCustom : Translations -> (String -> a) -> List a
+emptyResultKiddingCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "emptyResultKidding" []
+
+
+emptyResultPost : Translations -> String
+emptyResultPost translations =
+    t translations "emptyResultPost"
+
+
+emptyResultPostCustom : Translations -> (String -> a) -> List a
+emptyResultPostCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "emptyResultPost" []

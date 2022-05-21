@@ -13,6 +13,9 @@
 		"copyTimestamp": "タイムスタンプをコピー",
 		"shareVia": "その他の方法で共有…"
 	},
+	"emptyResultPre": "表示できるアイテムがありません。",
+	"emptyResultKidding": "これから思い出が増えていくよ！",
+	"emptyResultPost": "メニューから検索条件を変えてみましょう。",
 	"error": {
 		"http": "<{{url}}> の取得中にエラー: {{msg}}",
 		"unexpected": "予期せぬエラー: {{msg}}"

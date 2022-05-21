@@ -12,6 +12,9 @@
 		"copyTimestamp": "Copy timestamp",
 		"shareVia": "Share via…"
 	},
+	"emptyResultPre": "No items to show.",
+	"emptyResultKidding": "",
+	"emptyResultPost": "Try changing search terms in the menu.",
 	"error": {
 		"http": "Error retrieving <{{url}}>: {{msg}}",
 		"unexpected": "Unexpected error: {{msg}}"

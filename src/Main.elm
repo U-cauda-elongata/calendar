@@ -498,11 +498,19 @@ type TimelineItem
 
 viewMain : Model -> Html Msg
 viewMain model =
+    let
+        busy =
+            model.feeds |> List.any (\feed -> feed.retrieving == Retrieving)
+    in
     Keyed.node "main"
         [ ariaLive "polite"
-        , ariaBusy (model.feeds |> List.any (\feed -> feed.retrieving == Retrieving))
+        , ariaBusy busy
         ]
         (let
+            anyEventIsShown =
+                model.feeds
+                    |> List.any (\feed -> feed.events |> List.any (eventIsShown model feed.checked))
+
             events =
                 model.feeds
                     |> List.indexedMap Tuple.pair
@@ -524,7 +532,7 @@ viewMain model =
                     |> Maybe.withDefault ( events, [] )
                     |> Tuple.mapBoth (List.map TimelineEvent) (List.map TimelineEvent)
          in
-         (upcoming ++ (Now :: past))
+         ((upcoming ++ (Now :: past))
             |> Util.groupBy
                 (\item ->
                     case item of
@@ -535,6 +543,25 @@ viewMain model =
                             NaiveDate.fromPosix model.timeZone model.now
                 )
             |> List.map (\( date, items ) -> viewKeyedDateSection model date items)
+         )
+            ++ [ ( "empty"
+                 , div [ class "empty-result", hidden <| busy || anyEventIsShown ]
+                    (let
+                        pre =
+                            p [] [ text <| T.emptyResultPre model.translations ]
+
+                        post =
+                            p [] [ text <| T.emptyResultPost model.translations ]
+                     in
+                     case T.emptyResultKidding model.translations of
+                        "" ->
+                            [ pre, post ]
+
+                        mid ->
+                            [ pre, p [] [ del [] [ text mid ] ], post ]
+                    )
+                 )
+               ]
         )
 
 
