@@ -1,7 +1,6 @@
 module Calendar.Event exposing (Event, feedDecoder)
 
 import Calendar.Feeds as Feeds
-import Dict exposing (Dict)
 import Json.Decode as D
 import List.Extra
 import Time

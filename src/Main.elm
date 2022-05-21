@@ -19,7 +19,6 @@ import Html.Lazy exposing (lazy, lazy2, lazy6)
 import Http
 import I18Next exposing (Translations, translationsDecoder)
 import Json.Decode as D
-import Json.Encode as E
 import List.Extra
 import Regex
 import Task
