@@ -18,6 +18,7 @@
 	"emptyResultPost": "メニューから検索条件を変えてみましょう。",
 	"error": {
 		"http": "<{{url}}> の取得中にエラー: {{msg}}",
+		"retry": "再試行",
 		"unexpected": "予期せぬエラー: {{msg}}"
 	}
 }

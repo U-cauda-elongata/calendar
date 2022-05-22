@@ -15,7 +15,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onBlur, onClick, onFocus, onInput)
 import Html.Keyed as Keyed
-import Html.Lazy exposing (lazy, lazy2, lazy6)
+import Html.Lazy exposing (lazy, lazy6)
 import Http
 import I18Next exposing (Translations, translationsDecoder)
 import Json.Decode as D
@@ -39,6 +39,9 @@ type alias Model =
     , search : String
     , now : Time.Posix
     , timeZone : Time.Zone
+    , -- Set this to `True` once all the feed requests are done in order to prevent retried requests
+      -- from causing `slideViewportInto` to be called again.
+      initialized : Bool
     , feeds : List Feed
     , searchFocused : Bool
     , activePopup : Maybe ( Int, Int )
@@ -67,7 +70,8 @@ type FeedRetrievalState
 
 
 type Error
-    = HttpError String Http.Error
+    = FeedHttpError Int Http.Error
+    | TranslationsHttpError String Http.Error
     | Unexpected String
 
 
@@ -82,7 +86,9 @@ type Msg
     | SetTimeZone Time.Zone
     | GotCurrentTime Time.Posix
     | GotTranslations String (Result Http.Error Translations)
-    | GotFeed Int String (Result Http.Error (List Event))
+    | GotFeed Int (Result Http.Error (List Event))
+    | RetryGetTranslations String Int
+    | RetryGetFeed Int Int
     | Copy String
     | Share String (Maybe String)
     | NoOp
@@ -129,21 +135,14 @@ init flags =
         ""
         (Time.millisToPosix 0)
         Time.utc
+        False
         (Feeds.preset |> List.map (\feed -> Feed feed [] Retrieving True))
         False
         Nothing
         []
     , Cmd.batch
         ((Time.here |> Task.perform SetTimeZone)
-            :: (let
-                    lang =
-                        selectLanguage flags.languages
-                in
-                Http.get
-                    { url = translationsUrl lang
-                    , expect = Http.expectJson (GotTranslations lang) translationsDecoder
-                    }
-               )
+            :: (getTranslations <| selectLanguage flags.languages)
             :: (Time.now |> Task.perform GotCurrentTime)
             :: (Feeds.preset
                     |> List.indexedMap
@@ -151,7 +150,7 @@ init flags =
                             Http.get
                                 { url = feed.url
                                 , expect =
-                                    Http.expectJson (GotFeed i feed.url) (feedDecoder Feeds.preset)
+                                    Http.expectJson (GotFeed i) (feedDecoder Feeds.preset)
                                 }
                         )
                )
@@ -187,6 +186,14 @@ selectLanguage languages =
 translationsUrl : String -> String
 translationsUrl lang =
     "translations/" ++ lang ++ ".json"
+
+
+getTranslations : String -> Cmd Msg
+getTranslations lang =
+    Http.get
+        { url = translationsUrl lang
+        , expect = Http.expectJson (GotTranslations lang) translationsDecoder
+        }
 
 
 
@@ -227,7 +234,29 @@ update msg model =
                     ( { model | translations = translations }, setLang lang )
 
                 Err err ->
-                    model |> update (ReportError (HttpError (translationsUrl lang) err))
+                    model |> update (ReportError (TranslationsHttpError lang err))
+
+        RetryGetTranslations lang errIdx ->
+            ( { model | errors = model.errors |> List.Extra.removeAt errIdx }
+            , getTranslations lang
+            )
+
+        RetryGetFeed feedIdx errIdx ->
+            ( { model | errors = model.errors |> List.Extra.removeAt errIdx }
+            , model.feeds
+                |> List.Extra.getAt feedIdx
+                |> Maybe.map
+                    (\feed ->
+                        Http.get
+                            { url = feed.meta.url
+                            , expect =
+                                Http.expectJson
+                                    (GotFeed feedIdx)
+                                    (feedDecoder Feeds.preset)
+                            }
+                    )
+                |> Maybe.withDefault Cmd.none
+            )
 
         KeyDown key ->
             case key of
@@ -255,7 +284,7 @@ update msg model =
         ClosePopup ->
             ( { model | activePopup = Nothing }, Cmd.none )
 
-        GotFeed i url result ->
+        GotFeed i result ->
             -- XXX: #lm prohibits shadowing.
             let
                 model2 =
@@ -276,16 +305,17 @@ update msg model =
                                     model.feeds
                                         |> List.Extra.updateAt i
                                             (\feed -> { feed | retrieving = Failure })
-                                , errors = HttpError url err :: model.errors
+                                , errors = FeedHttpError i err :: model.errors
                             }
             in
-            ( model2
-            , if model2.feeds |> List.all (\feed -> feed.retrieving /= Retrieving) then
-                slideViewportInto "now"
+            if
+                not model2.initialized
+                    && (model2.feeds |> List.all (\feed -> feed.retrieving /= Retrieving))
+            then
+                ( { model2 | initialized = True }, slideViewportInto "now" )
 
-              else
-                Cmd.none
-            )
+            else
+                ( model2, Cmd.none )
 
         Copy text ->
             ( model, copy text )
@@ -386,10 +416,7 @@ view model =
         , header [ class "drawer-right" ]
             [ h1 [ class "title-heading" ] [ text (T.title model.translations) ] ]
         , div [ id "drawer", class "drawer-container" ] [ viewDrawer model ]
-        , div [ class "drawer-right" ]
-            [ viewMain model
-            , lazy2 viewErrorLog model.translations model.errors
-            ]
+        , div [ class "drawer-right" ] [ viewMain model, viewErrorLog model ]
         ]
     }
 
@@ -834,31 +861,55 @@ viewEventMember isAuthor feed =
         ]
 
 
-viewErrorLog : Translations -> List Error -> Html Msg
-viewErrorLog translations errors =
+viewErrorLog : Model -> Html Msg
+viewErrorLog model =
     div
         [ class "error-log"
         , role "log"
         , ariaLive "assertive"
         , ariaLabel "Error"
-        , hidden (List.isEmpty errors)
+        , hidden (List.isEmpty model.errors)
         ]
-        (errors |> List.foldl (\err acc -> p [] (viewError translations err) :: acc) [])
+        (model.errors
+            |> List.Extra.indexedFoldl
+                (\i err acc -> p [] (viewError model i err) :: acc)
+                []
+        )
 
 
-viewError : Translations -> Error -> List (Html msg)
-viewError translations err =
+viewError : Model -> Int -> Error -> List (Html Msg)
+viewError model errIdx err =
     case err of
-        HttpError url e ->
-            TError.httpCustom translations
+        TranslationsHttpError lang e ->
+            let
+                url =
+                    translationsUrl lang
+            in
+            [ text "Error retrieving <"
+            , a [ href url ] [ text url ]
+            , text <| ">: " ++ httpErrorToString e
+            , button [ class "dismiss-error", onClick <| RetryGetTranslations lang errIdx ]
+                [ text "Retry" ]
+            ]
+
+        FeedHttpError feedIdx e ->
+            TError.httpCustom model.translations
                 text
-                (a [ href url ] [ text url ])
+                (model.feeds
+                    |> List.Extra.getAt feedIdx
+                    |> Maybe.map (\feed -> a [ href feed.meta.url ] [ text feed.meta.url ])
+                    -- This should never happen though.
+                    |> Maybe.withDefault (text "a feed")
+                )
                 (text <| httpErrorToString e)
+                ++ [ button [ class "dismiss-error", onClick <| RetryGetFeed feedIdx errIdx ]
+                        [ text <| TError.retry model.translations ]
+                   ]
 
         Unexpected msg ->
             -- I'd prefer the application to simply crash in the event of a programming error which
             -- cannot be caught by the compiler like this, but Elm doesn't allow it.
-            [ text <| TError.unexpected translations msg ]
+            [ text <| TError.unexpected model.translations msg ]
 
 
 httpErrorToString : Http.Error -> String

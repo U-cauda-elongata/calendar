@@ -17,6 +17,16 @@ httpCustom translations nonPlaceholderLift url msg =
     customTr translations Curly nonPlaceholderLift "error.http" [ ( "url", url ), ( "msg", msg ) ]
 
 
+retry : Translations -> String
+retry translations =
+    t translations "error.retry"
+
+
+retryCustom : Translations -> (String -> a) -> List a
+retryCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "error.retry" []
+
+
 unexpected : Translations -> String -> String
 unexpected translations msg =
     tr translations Curly "error.unexpected" [ ( "msg", msg ) ]

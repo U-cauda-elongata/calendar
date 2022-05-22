@@ -17,6 +17,7 @@
 	"emptyResultPost": "Try changing search terms in the menu.",
 	"error": {
 		"http": "Error retrieving <{{url}}>: {{msg}}",
+		"retry": "Retry",
 		"unexpected": "Unexpected error: {{msg}}"
 	}
 }
