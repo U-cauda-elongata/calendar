@@ -201,19 +201,42 @@ hr {
 	margin-bottom: var(--margin-unit);
 }
 
+.drawer-labeled-button {
+	display: grid;
+	padding: 0;
+	height: var(--hamburger-length);
+	text-align: left;
+	font-size: inherit;
+}
+
+.drawer-labeled-button > img, .drawer-labeled-button > svg {
+	grid-column: 1;
+	width: var(--hamburger-length);
+	height: var(--hamburger-length);
+}
+
+.drawer-labeled-button > p {
+	grid-column: 2;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
 .filter-clear-button {
 	appearance: none;
 	cursor: pointer;
-	width: var(--hamburger-length);
 	fill: var(--active-filter-background-color);
 	stroke: currentColor;
 }
 
 .filter-clear-button:disabled {
 	cursor: default;
-	border: none;
 	fill: var(--disabled-button-background-color);
 	stroke: var(--disabled-button-color);
+}
+
+.filter-clear-button:disabled > p {
+	opacity: .2;
 }
 
 .search-label > svg {
@@ -228,33 +251,12 @@ hr {
 	margin-left: var(--margin-unit);
 }
 
-.filter-button {
-	display: grid;
-	padding: 0;
-	height: var(--hamburger-length);
-	text-align: left;
-	font-size: inherit;
-}
-
 .filter-button:not(:disabled) {
 	cursor: pointer;
 }
 
 .filter-button[aria-checked="false"], .filter-button:disabled {
-	filter: opacity(.2);
-}
-
-.filter-button > .avatar {
-	grid-column: 1;
-	width: var(--hamburger-length);
-	height: var(--hamburger-length);
-}
-
-.filter-button > .filter-label {
-	grid-column: 2;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+	opacity: .2;
 }
 
 .drawer > footer {

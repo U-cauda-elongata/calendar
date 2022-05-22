@@ -400,12 +400,17 @@ viewDrawer model =
         [ menu [ ariaLabel (T.filterMenuLabel model.translations) ]
             [ li []
                 [ button
-                    [ class "filter-clear-button"
+                    [ class "drawer-labeled-button"
+                    , class "filter-clear-button"
+                    , title <| T.clearFilter model.translations
                     , disabled <| not (filterApplied model)
                     , onClick ClearFilter
-                    , ariaLabel <| T.clearFilter model.translations
+                    , ariaLabelledby "filter-clear-button-label"
                     ]
-                    [ Icon.clear ]
+                    [ Icon.clear
+                    , p [ id "filter-clear-button-label" ]
+                        [ text <| T.clearFilter model.translations ]
+                    ]
                 ]
             , viewSearch model
             , hr [] []
@@ -482,7 +487,8 @@ viewFeedFilter model =
                         in
                         li [ class "filter-item" ]
                             [ button
-                                [ class "filter-button"
+                                [ class "drawer-labeled-button"
+                                , class "filter-button"
                                 , role "switch"
                                 , title feed.meta.title
                                 , onClick (ToggleFeedFilter i (not feed.checked))
@@ -497,7 +503,7 @@ viewFeedFilter model =
                                     , alt (T.avatarAlt model.translations)
                                     ]
                                     []
-                                , p [ id pId, class "filter-label" ] [ text feed.meta.title ]
+                                , p [ id pId ] [ text feed.meta.title ]
                                 ]
                             ]
                     )
