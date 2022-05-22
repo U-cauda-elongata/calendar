@@ -47,7 +47,11 @@ class Feed
     {
       'alternate' => @alternate,
       'title' => @title,
-      'entries' => @entries.values,
+      'entries' => @entries.map do |id, entry|
+        entry = entry.clone
+        entry['id'] = id
+        entry
+      end,
     }.to_json(*args)
   end
 end
@@ -71,6 +75,21 @@ else
   key = STDIN.gets.chomp
 end
 
+cached = channels.each_with_object({}) do |channel, feeds|
+  feeds[channel] = begin
+    open("#{channel}.json") do |f|
+      feed = JSON.load(f)
+      feed['entries'].filter_map do |entry|
+        if entry['id'] and (not entry['live'] or entry['duration']) # Videos or ended livestreams.
+          [entry.delete('id'), entry]
+        end
+      end.to_h
+    end
+  rescue Errno::ENOENT
+    {}
+  end
+end
+
 http = Net::HTTP.new('www.youtube.com', Net::HTTP.https_default_port)
 http.use_ssl = true
 feeds = http.start do
@@ -82,35 +101,44 @@ feeds = http.start do
     })
     log_http_response(res)
     res.value
-    res.body
+    [channel, res.body]
   end
-end.map do |xml|
-  Feed.parse(xml)
+end.map do |(channel, xml)|
+  [channel, Feed.parse(xml)]
+end.to_h
+
+ids = feeds.flat_map {|_, feed| feed.entries.keys } - cached.flat_map {|_, entries| entries.keys }
+items = if ids.empty?
+  []
+else
+  uri = URI('https://youtube.googleapis.com/youtube/v3/videos')
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = uri.scheme == 'https'
+  http.start do
+    ids.each_slice(50).with_object([]) do |slice, acc|
+      uri.query = URI.encode_www_form([
+        ['part', 'liveStreamingDetails'],
+        ['id', slice.join(',')],
+        ['key', key],
+      ])
+      STDERR.puts "> GET #{uri.to_s.gsub(URI.encode_www_form_component(key), '[API KEY]')}"
+      res = http.get(uri.request_uri, {
+        'Accept' => 'application/json',
+      })
+      log_http_response(res)
+      res.value
+      json = JSON.parse(res.body)
+      acc.concat(json['items'])
+    end
+  end
 end
 
-ids = feeds.flat_map {|feed| feed.entries.keys }
-uri = URI('https://youtube.googleapis.com/youtube/v3/videos')
-http = Net::HTTP.new(uri.host, uri.port)
-http.use_ssl = uri.scheme == 'https'
-items = http.start do
-  ids.each_slice(50).with_object([]) do |slice, acc|
-    uri.query = URI.encode_www_form([
-      ['part', 'liveStreamingDetails'],
-	  ['id', slice.join(',')],
-      ['key', key],
-    ])
-    STDERR.puts "> GET #{uri.to_s.gsub(URI.encode_www_form_component(key), '[API KEY]')}"
-    res = http.get(uri.request_uri, {
-      'Accept' => 'application/json',
-    })
-    log_http_response(res)
-    res.value
-    json = JSON.parse(res.body)
-    acc.concat(json['items'])
-  end
+# Include cached entries in the output.
+feeds.each do |channel, feed|
+  feed.entries.merge!(cached[channel])
 end
 
-entries = feeds.each_with_object({}) do |feed, acc|
+entries = feeds.each_with_object({}) do |(_, feed), acc|
   acc.merge!(feed.entries)
 end
 
@@ -118,17 +146,23 @@ items.each do |video|
   live = video['liveStreamingDetails']
   if live
     entry = entries[video['id']]
-    actual = live['actualStartTime']
-    if actual
-      entry[:time] = Time.iso8601(actual).to_i
+    entry['live'] = true
+    start_time = live['actualStartTime']
+    if start_time
+      time = Time.iso8601(start_time)
+      entry['time'] = time.to_i
+      end_time = live['actualEndTime']
+      if end_time
+        entry['duration'] = (Time.iso8601(end_time) - time).to_i
+      end
     else
-      entry[:upcoming] = true
-      entry[:time] = Time.iso8601(live['scheduledStartTime']).to_i
+      entry['upcoming'] = true
+      entry['time'] = Time.iso8601(live['scheduledStartTime']).to_i
     end
   end
 end
 
-channels.zip(feeds).map do |(channel, feed)|
+feeds.map do |channel, feed|
   open("#{channel}.json", 'w') do |out|
     JSON.dump(feed, out)
   end
