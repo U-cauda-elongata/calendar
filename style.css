@@ -48,6 +48,10 @@
 		--disabled-button-background-color: #404040;
 	}
 
+	a {
+		color: #0FF;
+	}
+
 	@media (prefers-contrast: more) {
 		:root {
 			--border-color: #FFF;
