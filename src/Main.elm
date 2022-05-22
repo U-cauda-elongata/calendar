@@ -125,7 +125,7 @@ init : Flags -> ( Model, Cmd Msg )
 init flags =
     ( Model
         flags.features
-        I18Next.initialTranslations
+        initialTranslations
         ""
         (Time.millisToPosix 0)
         Time.utc
@@ -157,6 +157,14 @@ init flags =
                )
         )
     )
+
+
+initialTranslations : Translations
+initialTranslations =
+    I18Next.fromTree
+        [ ( "title", I18Next.string "" )
+        , ( "nowSeparator", I18Next.string "{{time}}" )
+        ]
 
 
 selectLanguage : List String -> String
