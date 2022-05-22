@@ -375,7 +375,8 @@ view model =
             , ariaHidden True
             ]
             [ Icon.hamburger ]
-        , header [ class "drawer-right" ] [ h1 [] [ text (T.title model.translations) ] ]
+        , header [ class "drawer-right" ]
+            [ h1 [ class "title-heading" ] [ text (T.title model.translations) ] ]
         , div [ id "drawer", class "drawer-container" ] [ viewDrawer model ]
         , div [ class "drawer-right" ]
             [ viewMain model

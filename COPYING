@@ -6,6 +6,34 @@ version 3 (<LICENSE>).
 You can obtain an unminified source distribution of the project at
 <https://github.com/U-cauda-elongata/calendar>.
 
+This project contains a thirdparty font file `07にくまるフォント.woff2`, derived from
+<https://www.fontna.com/blog/1651/>.
+
+Copyright (C) 2002-2014 M+ FONTS PROJECT
+Copyright (C) 2014 Fontna.com
+Copyright (C) 2014 Kato Masashi
+
+にくまるフォント is licensed under the following terms (M+ License):
+
+M+ FONTS                                Copyright (C) 2002-2014 M+ FONTS PROJECT
+
+-
+
+LICENSE_E
+
+
+
+
+These fonts are free software.
+Unlimited permission is granted to use, copy, and distribute them, with
+or without modification, either commercially or noncommercially.
+THESE FONTS ARE PROVIDED "AS IS" WITHOUT WARRANTY.
+
+
+http://mplus-fonts.sourceforge.jp/mplus-outline-fonts/
+
+(END LICENSE TERMS)
+
 Additionally, the minified source distribution `app.js` includes thirdparty libraries with the
 following license terms:
 

@@ -1,5 +1,16 @@
 :root {
-	font-family: 'Helvetica Neue', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', 'Meiryo', sans-serif;
+	font-family:
+		'ヒラギノ丸ゴ ProN W4',
+		'Arial Rounded MT Bold',
+		ui-rounded,
+		'Helvetica Neue',
+		Helvetica,
+		Arial,
+		'ヒラギノ角ゴ Pro W4',
+		'Hiragino Kaku Gothic Pro',
+		'メイリオ',
+		'Meiryo',
+		sans-serif;
 	background-color: var(--background-color);
 	color: var(--color);
 	--background-color: #FFF;
@@ -43,6 +54,14 @@
 			--footer-color: #BBB;
 		}
 	}
+}
+
+@font-face {
+	/* Same font as the header of KemoV's official website. */
+	font-family: NikumaruFont;
+	src:
+		local('07にくまるフォント'),
+		url('07にくまるフォント.woff2') format('woff2');
 }
 
 [hidden] {
@@ -99,6 +118,10 @@ hr {
 /* `<input>` is difficult to style, so hide it and style the preceding `<label>` instead. */
 .hamburger-checkbox, .filter-checkbox {
 	display: none;
+}
+
+.title-heading {
+	font-family: NikumaruFont, sans-serif;
 }
 
 /* Drawer widget */
@@ -369,6 +392,13 @@ footer, footer a {
 	overflow: scroll;
 	background-color: red;
 	color: white;
+	font-family:
+		'Helvetica Neue',
+		'ヒラギノ角ゴ Pro W4',
+		'Hiragino Kaku Gothic Pro',
+		'メイリオ',
+		'Meiryo',
+		sans-serif;
 }
 
 .error-log > p {
