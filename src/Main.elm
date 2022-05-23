@@ -15,7 +15,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onBlur, onClick, onFocus, onInput)
 import Html.Keyed as Keyed
-import Html.Lazy exposing (lazy, lazy6)
+import Html.Lazy exposing (lazy6)
 import Http
 import I18Next exposing (Translations, translationsDecoder)
 import Json.Decode as D
@@ -459,7 +459,7 @@ viewSearch : Model -> Html Msg
 viewSearch model =
     li []
         [ label [ class "search-label" ]
-            [ lazy Icon.search model.translations
+            [ Icon.search
             , input
                 [ id "calendar-search"
                 , type_ "search"
