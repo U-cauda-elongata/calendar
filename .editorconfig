@@ -2,7 +2,7 @@
 indent_style = space
 indent_size = 4
 
-[{*.css,*.html,*.js,*.json}]
+[{*.css,*.html,*.js,*.json,Makefile,*.sh}]
 indent_style = tab
 
 [*.rb]
