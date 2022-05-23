@@ -9,6 +9,7 @@ import Calendar.Event exposing (Event, feedDecoder)
 import Calendar.Feeds as Feeds
 import Calendar.Icon as Icon
 import Calendar.Util as Util
+import Calendar.Util.Dict as DictUtil
 import Calendar.Util.NaiveDate as NaiveDate exposing (NaiveDate)
 import Dict
 import Html exposing (..)
@@ -476,7 +477,17 @@ viewSearch model =
                 |> List.concatMap .events
                 |> List.concatMap (\event -> searchTags event.name)
                 |> Util.cardinalities
-                |> Dict.toList
+                |> DictUtil.groupKeysBy normalizeSearchTerm
+                |> Dict.values
+                |> List.filterMap
+                    (\pairs ->
+                        pairs
+                            -- Use the most common form among unnormalized terms.
+                            |> List.Extra.maximumBy Tuple.second
+                            -- This should never produce `Nothing` though.
+                            |> Maybe.map
+                                (\( tag, _ ) -> ( tag, pairs |> List.map Tuple.second |> List.sum ))
+                    )
                 |> List.sortBy (\( _, n ) -> -n)
                 |> List.map (\( tag, _ ) -> option [ value tag ] [])
             )
@@ -842,7 +853,13 @@ eventIsShown model feedChecked event =
 
 searchMatches : Model -> Event -> Bool
 searchMatches model event =
-    String.isEmpty model.search || String.contains model.search event.name
+    String.isEmpty model.search
+        || (event.name |> normalizeSearchTerm |> String.contains (normalizeSearchTerm model.search))
+
+
+normalizeSearchTerm : String -> String
+normalizeSearchTerm text =
+    text |> String.toUpper |> String.replace "＃" "#"
 
 
 viewEventMember : Bool -> Feed -> Html Msg
