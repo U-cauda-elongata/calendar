@@ -1,17 +1,16 @@
 module Calendar.Icon exposing (clear, gitHub, hamburger, search)
 
 import Calendar.Attributes exposing (..)
-import I18Next exposing (Translations)
 import Svg exposing (..)
-import Svg.Attributes exposing (cx, cy, d, fill, r, stroke, strokeLinecap, viewBox, x1, x2, y1, y2)
-import Translations as T
+import Svg.Attributes exposing (class, cx, cy, d, fill, r, stroke, viewBox, x1, x2, y1, y2)
 
 
 clear : Svg msg
 clear =
     svg
         [ xmlns "http://www.w3.org/2000/svg"
-        , viewBox "0 0 15 15"
+        , viewBox "0 0 16 16"
+        , class "icon"
         , role "img"
         ]
         [ circle [ cx "50%", cy "50%", r "50%", stroke "none" ] []
@@ -35,14 +34,14 @@ search : Svg msg
 search =
     svg
         [ xmlns "http://www.w3.org/2000/svg"
-        , viewBox "0 0 15 15"
+        , viewBox "0 0 16 16"
+        , class "icon"
         , -- Hide this from assistive technologies as the icon is only for presentational purpose and
           -- the subsequent `<input>` element is already labelled.
           ariaHidden True
         ]
-        [ circle [ cx "50%", cy "50%", r "50%", fill "none" ] []
-        , circle [ cx "37.5%", cy "37.5%", r "12.5%", fill "none" ] []
-        , line [ x1 "50%", y1 "50%", x2 "75%", y2 "75%" ] []
+        [ line [ x1 "45%", y1 "45%", x2 "75%", y2 "75%" ] []
+        , circle [ cx "45%", cy "45%", r "20%" ] []
         ]
 
 
@@ -51,8 +50,8 @@ hamburger =
     svg
         [ xmlns "http://www.w3.org/2000/svg"
         , viewBox "0 0 24 24"
+        , class "icon"
         , role "img"
-        , strokeLinecap "round"
         ]
         [ line [ x1 "6", x2 "18", y1 "6", y2 "6" ] []
         , line [ x1 "6", x2 "18", y1 "12", y2 "12" ] []

@@ -26,7 +26,7 @@
 	--hamburger-length: 50px;
 	--drawer-width: 100vw;
 	--event-width: 280px;
-	--icon-length: 30px;
+	--social-icon-length: 30px;
 }
 
 @media (prefers-contrast: more) {
@@ -149,7 +149,7 @@ hr {
 	border: var(--border-width) solid var(--border-color);
 	cursor: pointer;
 	background-color: var(--background-color);
-	stroke: var(--border-color);
+	stroke: var(--color);
 }
 
 .hamburger-label.filter-active {
@@ -216,6 +216,10 @@ hr {
 	margin-bottom: var(--margin-unit);
 }
 
+.icon {
+	stroke-linecap: round;
+}
+
 .drawer-labeled-button {
 	display: grid;
 	padding: 0;
@@ -258,7 +262,7 @@ hr {
 	cursor: pointer;
 	width: var(--hamburger-length);
 	height: var(--hamburger-length);
-	overflow: visible; /* TODO: Fix the SVG and remove this. */
+	fill: var(--background-color);
 	stroke: currentColor;
 }
 
@@ -278,7 +282,7 @@ hr {
 	align-self: end;
 	border-top: solid var(--border-width) var(--border-color);
 	padding-top: var(--margin-unit);
-	padding-left: calc((var(--hamburger-length) - var(--icon-length)) / 2);
+	padding-left: calc((var(--hamburger-length) - var(--social-icon-length)) / 2);
 	text-align: left;
 }
 
@@ -394,11 +398,11 @@ footer, footer a {
 	color: var(--footer-color);
 }
 
-.icon {
+.social-icon {
 	display: inline-block;
 	fill: currentColor;
-	width: var(--icon-length);
-	height: var(--icon-length);
+	width: var(--social-icon-length);
+	height: var(--social-icon-length);
 }
 
 .error-log {

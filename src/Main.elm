@@ -444,7 +444,7 @@ viewDrawer model =
             , viewFeedFilter model
             ]
         , footer []
-            [ a [ class "icon", href "https://github.com/U-cauda-elongata/calendar" ]
+            [ a [ class "social-icon", href "https://github.com/U-cauda-elongata/calendar" ]
                 [ Icon.gitHub ]
             ]
         ]
