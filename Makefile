@@ -1,7 +1,7 @@
 ELMFLAGS ?= --optimize
 UGLIFYJS ?= uglifyjs
 
-all: app.js COPYING
+all: app.js NikumaruFont.en.woff2 COPYING
 
 src/Translations.elm: translations/en.json
 	npx elm-i18next-gen --source translations/en.json --target src/ --type both --overwrite
@@ -16,6 +16,13 @@ app.js: elm.json build/elm.js customElements.js src/notice.js
 	&& $(UGLIFYJS) src/notice.js build/elm.min.js build/customElements.min.js --comments all --output app.js \
 	|| cat src/notice.js build/elm.js customElements.js > app.js
 
+fonts: NikumaruFont.en.woff2 NikumaruFont.ja.woff2
+
+NikumaruFont.en.woff2: scripts/ftsubset.sh translations/*.json src/07にくまるフォント.otf
+	./scripts/ftsubset.sh src/07にくまるフォント.otf NikumaruFont translations
+
+NikumaruFont.ja.woff2: NikumaruFont.en.woff2
+
 COPYING: scripts/collect_licenses.sh COPYING.in elm.json
 	cp COPYING.in COPYING
 	./scripts/collect_licenses.sh >> COPYING
@@ -26,3 +33,5 @@ clean:
 	rm build/customElements.min.js || true
 	rmdir build/ || true
 	rm app.js || true
+	rm NikumaruFont.en.woff2 || true
+	rm NikumaruFont.ja.woff2 || true

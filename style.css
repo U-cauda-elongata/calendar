@@ -60,12 +60,19 @@
 	}
 }
 
+/* Same font as the header of KemoV's official website. */
 @font-face {
-	/* Same font as the header of KemoV's official website. */
-	font-family: NikumaruFont;
+	font-family: NikumaruFontEn;
 	src:
 		local('07にくまるフォント'),
-		url('07にくまるフォント.woff2') format('woff2');
+		url('NikumaruFont.en.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: NikumaruFontJa;
+	src:
+		local('07にくまるフォント'),
+		url('NikumaruFont.ja.woff2') format('woff2');
 }
 
 [hidden] {
@@ -124,8 +131,12 @@ hr {
 	display: none;
 }
 
-.title-heading {
-	font-family: NikumaruFont, sans-serif;
+.title-heading:lang(en) {
+	font-family: NikumaruFontEn, sans-serif;
+}
+
+.lang-confirmed .title-heading:lang(ja) {
+	font-family: NikumaruFontJa, sans-serif;
 }
 
 /* Drawer widget */

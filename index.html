@@ -29,7 +29,9 @@
 			}
 		});
 		app.ports.setLang.subscribe(lang => {
-			document.documentElement.lang = lang;
+			var h = document.documentElement;
+			h.lang = lang;
+			h.classList.add('lang-confirmed');
 		});
 		app.ports.slideViewportInto.subscribe(id => {
 			var node = document.getElementById(id);
