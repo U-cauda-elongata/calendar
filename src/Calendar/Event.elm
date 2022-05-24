@@ -1,6 +1,7 @@
 module Calendar.Event exposing (Event, feedDecoder)
 
 import Calendar.Feeds as Feeds
+import Calendar.Util.Duration as Duration exposing (Duration)
 import Json.Decode as D
 import List.Extra
 import Time
@@ -9,6 +10,7 @@ import Time
 type alias Event =
     { name : String
     , time : Time.Posix
+    , duration : Maybe Duration
     , link : Maybe String
     , thumbnail : Maybe String
     , members : List Int
@@ -18,6 +20,7 @@ type alias Event =
 type alias Entry =
     { name : String
     , time : Int
+    , duration : Maybe Int
     , link : Maybe String
     , thumbnail : Maybe String
     , description : Maybe String
@@ -32,18 +35,20 @@ feedDecoder feeds =
 
 entryDecoder : D.Decoder Entry
 entryDecoder =
-    D.map5 Entry
+    D.map6 Entry
         (D.field "name" D.string)
         (D.field "time" D.int)
-        (D.field "link" (D.maybe D.string))
-        (D.field "thumbnail" (D.maybe D.string))
-        (D.field "description" (D.maybe D.string))
+        (D.maybe (D.field "duration" D.int))
+        (D.maybe (D.field "link" D.string))
+        (D.maybe (D.field "thumbnail" D.string))
+        (D.maybe (D.field "description" D.string))
 
 
 eventFromEntry : List Feeds.Metadata -> Entry -> Event
 eventFromEntry feeds entry =
     Event entry.name
         (Time.millisToPosix (entry.time * 1000))
+        (entry.duration |> Maybe.map Duration.fromSeconds)
         entry.link
         entry.thumbnail
         (entry.description

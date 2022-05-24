@@ -10,6 +10,7 @@ import Calendar.Feeds as Feeds
 import Calendar.Icon as Icon
 import Calendar.Util as Util
 import Calendar.Util.Dict as DictUtil
+import Calendar.Util.Duration as Duration
 import Calendar.Util.NaiveDate as NaiveDate exposing (NaiveDate)
 import Dict
 import Html exposing (..)
@@ -686,13 +687,31 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
                     case event.thumbnail of
                         Just thumb ->
                             [ heading
-                            , img
-                                [ class "event-thumbnail"
-                                , loading "lazy"
-                                , src thumb
-                                , alt (T.thumbnailAlt model.translations)
-                                ]
-                                []
+                            , div
+                                [ class "event-thumbnail-container" ]
+                                (let
+                                    viewImg =
+                                        img
+                                            [ class "event-thumbnail"
+                                            , loading "lazy"
+                                            , src thumb
+                                            , alt <| T.thumbnailAlt model.translations
+                                            ]
+                                            []
+                                 in
+                                 case event.duration of
+                                    Just duration ->
+                                        [ viewImg
+                                        , time
+                                            [ class "event-duration"
+                                            , datetime <| Duration.toDatetime duration
+                                            ]
+                                            [ text <| Duration.format duration ]
+                                        ]
+
+                                    Nothing ->
+                                        [ viewImg ]
+                                )
                             ]
 
                         Nothing ->

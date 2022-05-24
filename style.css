@@ -288,6 +288,7 @@ hr {
 
 .date-heading {
 	position: sticky;
+	z-index: 1; /* Put it above `.event-thumbnail-container`. */
 	top: 0;
 	left: var(--drawer-width);
 	width: 100%;
@@ -331,11 +332,31 @@ hr {
 	display: grid;
 }
 
+.event-thumbnail-container {
+	position: relative;
+	height: calc((var(--event-width) - 2 * var(--margin-unit)) * 9 / 16);
+	order: -1;
+}
+
 .event-thumbnail {
 	display: block;
-	order: -1;
-	max-width: calc(var(--event-width) - 2 * var(--margin-unit));
-	height: 120px;
+	width: 100%;
+}
+
+.event-duration {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	border-top-left-radius: 5px;
+	padding-left: calc(var(--margin-unit) / 2);
+	background-color: var(--background-color);
+	color: var(--color);
+}
+
+.duration {
+	position: absolute;
+	right: 0;
+	bottom: 0;
 }
 
 .event-members {
