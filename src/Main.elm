@@ -8,6 +8,7 @@ import Calendar.Elements exposing (intlDate, intlTime)
 import Calendar.Event exposing (Event, feedDecoder)
 import Calendar.Feeds as Feeds
 import Calendar.Icon as Icon
+import Calendar.TranslationsExt as T
 import Calendar.Util as Util
 import Calendar.Util.Dict as DictUtil
 import Calendar.Util.Duration as Duration
@@ -28,6 +29,7 @@ import Task
 import Time
 import Translations as T
 import Translations.Error as TError
+import Translations.Event as TEvent
 import Translations.Share as TShare
 
 
@@ -740,7 +742,24 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
         , ariaLabelledby headingId
         , hidden <| not (eventIsShown model feed.checked event)
         ]
-        (intlTime [ class "event-time" ] event.time
+        (div []
+            (let
+                eta =
+                    (Time.posixToMillis event.time - Time.posixToMillis model.now) // 1000
+
+                viewTime =
+                    intlTime [ class "event-time" ] event.time
+             in
+             if eta > 0 then
+                TEvent.scheduledForCustom model.translations
+                    (text >> List.singleton)
+                    [ viewTime ]
+                    (T.startsIn model.translations (Duration.fromSeconds eta))
+                    |> List.concat
+
+             else
+                [ viewTime ]
+            )
             :: eventHeader
             :: ul [ class "event-members" ]
                 (viewEventMember True feed

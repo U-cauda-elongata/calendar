@@ -7,6 +7,18 @@
 	"feedFilterLabel": "チャンネル",
 	"avatarAlt": "アイコン",
 	"nowSeparator": "現在時刻：{{time}}",
+	"event": {
+		"timeAndDuration": "{{time}}（{{beginsIn}}）",
+		"startsIn": "{{duration}}後",
+		"aDay": "1日",
+		"nDays": "{{n}}日",
+		"anHour": "1時間",
+		"nHours": "{{n}}時間",
+		"aMinute": "1分",
+		"nMinutes": "{{n}}分",
+		"aSecond": "1秒",
+		"nSeconds": "{{n}}秒"
+	},
 	"thumbnailAlt": "サムネイル",
 	"share": {
 		"copyTitleAndUrl": "タイトルとURLをコピー",

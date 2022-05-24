@@ -6,6 +6,18 @@
 	"feedFilterLabel": "Channels",
 	"avatarAlt": "Icon",
 	"nowSeparator": "Now: {{time}}",
+	"event": {
+		"scheduledFor": "{{time}} ({{beginsIn}})",
+		"startsIn": "in {{duration}}",
+		"aDay": "a day",
+		"nDays": "{{n}} days",
+		"anHour": "an hour",
+		"nHours": "{{n}} hours",
+		"aMinute": "a minute",
+		"nMinutes": "{{n}} minutes",
+		"aSecond": "a second",
+		"nSeconds": "{{n}} seconds"
+	},
 	"thumbnailAlt": "Thumbnail image",
 	"share": {
 		"copyTitleAndUrl": "Copy title and URL",
