@@ -306,6 +306,29 @@ hr {
 	text-align: center;
 }
 
+/* Animate the time separator to indicate that the time is dynamically updated. */
+.now-separator .time-separator {
+	animation: 2s flash infinite;
+}
+
+@keyframes flash {
+	from {
+		visibility: visible;
+	}
+	50% {
+		visibility: hidden;
+	}
+	to {
+		visibility: hidden;
+	}
+}
+
+@media (prefers-reduced-motion) {
+	.now-separator .time-separator {
+		animation: none;
+	}
+}
+
 .event {
 	display: inline-grid;
 	width: calc(100% - 2 * var(--margin-unit));

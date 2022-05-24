@@ -22,6 +22,7 @@ import Http
 import I18Next exposing (Translations, translationsDecoder)
 import Json.Decode as D
 import List.Extra
+import Process
 import Regex
 import Task
 import Time
@@ -86,7 +87,7 @@ type Msg
     | OpenPopup ( Int, Int )
     | ClosePopup
     | SetTimeZone Time.Zone
-    | GotCurrentTime Time.Posix
+    | Tick Time.Posix
     | GotTranslations String (Result Http.Error Translations)
     | GotFeed Int (Result Http.Error (List Event))
     | RetryGetTranslations String Int
@@ -145,7 +146,7 @@ init flags =
     , Cmd.batch
         ((Time.here |> Task.perform SetTimeZone)
             :: (getTranslations <| selectLanguage flags.languages)
-            :: (Time.now |> Task.perform GotCurrentTime)
+            :: (Time.now |> Task.perform Tick)
             :: (Feeds.preset
                     |> List.indexedMap
                         (\i feed ->
@@ -227,8 +228,16 @@ update msg model =
         SetTimeZone timeZone ->
             ( { model | timeZone = timeZone }, Cmd.none )
 
-        GotCurrentTime now ->
-            ( { model | now = now }, Cmd.none )
+        Tick now ->
+            let
+                nextTick =
+                    60000 - (Time.posixToMillis now |> modBy 60000)
+            in
+            ( { model | now = now }
+            , Process.sleep (nextTick |> toFloat)
+                |> Task.andThen (\() -> Time.now)
+                |> Task.perform Tick
+            )
 
         GotTranslations lang result ->
             case result of

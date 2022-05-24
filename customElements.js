@@ -54,17 +54,24 @@ customElements.define('intl-date', class extends HTMLElement {
 customElements.define('intl-time', class extends HTMLElement {
 	constructor() {
 		super();
-		this.attachShadow({ mode: 'open' });
-		this.shadowRoot.appendChild(document.createElement('time'));
 	}
 
-	connectedCallback() { this.update(); }
+	connectedCallback() {
+		if (!this.firstChild) {
+			this.appendChild(document.createElement('time'));
+		}
+		this.update();
+	}
 
 	attributeChangedCallback() { this.update(); }
 
 	static get observedAttributes() { return ['lang', 'data-timestamp']; }
 
 	update() {
+		if (!this.isConnected) {
+			return;
+		}
+
 		const date = new Date(+this.dataset.timestamp);
 
 		const lang = this.getAttribute('lang');
@@ -73,7 +80,7 @@ customElements.define('intl-time', class extends HTMLElement {
 			minute: 'numeric',
 		});
 
-		const time = this.shadowRoot.firstChild;
+		const time = this.firstChild;
 		if (lang) {
 			time.removeAttribute('lang');
 		} else {
@@ -81,6 +88,18 @@ customElements.define('intl-time', class extends HTMLElement {
 		}
 
 		time.dateTime = date.toISOString();
-		time.textContent = fmt.format(date);
+
+		const parts = fmt.format(date).split(':');
+		const first = parts.shift();
+		if (first) {
+			time.textContent = first;
+			for (const part of parts) {
+				const separator = document.createElement('span');
+				separator.className = 'time-separator';
+				separator.textContent = ':';
+				time.appendChild(separator);
+				time.appendChild(document.createTextNode(part));
+			}
+		}
 	}
 });
