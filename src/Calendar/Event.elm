@@ -9,6 +9,7 @@ import Time
 
 type alias Event =
     { name : String
+    , live : Bool
     , time : Time.Posix
     , duration : Maybe Duration
     , link : Maybe String
@@ -19,6 +20,7 @@ type alias Event =
 
 type alias Entry =
     { name : String
+    , live : Bool
     , time : Int
     , duration : Maybe Int
     , link : Maybe String
@@ -35,8 +37,9 @@ feedDecoder feeds =
 
 entryDecoder : D.Decoder Entry
 entryDecoder =
-    D.map6 Entry
+    D.map7 Entry
         (D.field "name" D.string)
+        (D.oneOf [ D.field "live" D.bool, D.succeed False ])
         (D.field "time" D.int)
         (D.maybe (D.field "duration" D.int))
         (D.maybe (D.field "link" D.string))
@@ -47,6 +50,7 @@ entryDecoder =
 eventFromEntry : List Feeds.Metadata -> Entry -> Event
 eventFromEntry feeds entry =
     Event entry.name
+        entry.live
         (Time.millisToPosix (entry.time * 1000))
         (entry.duration |> Maybe.map Duration.fromSeconds)
         entry.link

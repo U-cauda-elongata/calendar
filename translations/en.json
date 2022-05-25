@@ -16,7 +16,9 @@
 		"aMinute": "a minute",
 		"nMinutes": "{{n}} minutes",
 		"aSecond": "a second",
-		"nSeconds": "{{n}} seconds"
+		"nSeconds": "{{n}} seconds",
+		"startedAt": "Started {{time}}",
+		"uploadedAt": "Uploaded {{time}}"
 	},
 	"thumbnailAlt": "Thumbnail image",
 	"share": {

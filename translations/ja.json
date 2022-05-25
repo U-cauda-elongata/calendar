@@ -17,7 +17,9 @@
 		"aMinute": "1分",
 		"nMinutes": "{{n}}分",
 		"aSecond": "1秒",
-		"nSeconds": "{{n}}秒"
+		"nSeconds": "{{n}}秒",
+		"startedAt": "{{time}}開始",
+		"uploadedAt": "{{time}}アップロード"
 	},
 	"thumbnailAlt": "サムネイル",
 	"share": {

@@ -105,3 +105,23 @@ nSeconds translations n =
 nSecondsCustom : Translations -> (String -> a) -> a -> List a
 nSecondsCustom translations nonPlaceholderLift n =
     customTr translations Curly nonPlaceholderLift "event.nSeconds" [ ( "n", n ) ]
+
+
+startedAt : Translations -> String -> String
+startedAt translations time =
+    tr translations Curly "event.startedAt" [ ( "time", time ) ]
+
+
+startedAtCustom : Translations -> (String -> a) -> a -> List a
+startedAtCustom translations nonPlaceholderLift time =
+    customTr translations Curly nonPlaceholderLift "event.startedAt" [ ( "time", time ) ]
+
+
+uploadedAt : Translations -> String -> String
+uploadedAt translations time =
+    tr translations Curly "event.uploadedAt" [ ( "time", time ) ]
+
+
+uploadedAtCustom : Translations -> (String -> a) -> a -> List a
+uploadedAtCustom translations nonPlaceholderLift time =
+    customTr translations Curly nonPlaceholderLift "event.uploadedAt" [ ( "time", time ) ]

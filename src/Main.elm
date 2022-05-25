@@ -750,15 +750,19 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
                 viewTime =
                     intlTime [ class "event-time" ] event.time
              in
-             if eta > 0 then
-                TEvent.scheduledForCustom model.translations
-                    (text >> List.singleton)
-                    [ viewTime ]
-                    (T.startsIn model.translations (Duration.fromSeconds eta))
-                    |> List.concat
+             if event.live then
+                if eta > 0 then
+                    TEvent.scheduledForCustom model.translations
+                        (text >> List.singleton)
+                        [ viewTime ]
+                        (T.startsIn model.translations (Duration.fromSeconds eta))
+                        |> List.concat
+
+                else
+                    TEvent.startedAtCustom model.translations text viewTime
 
              else
-                [ viewTime ]
+                TEvent.uploadedAtCustom model.translations text viewTime
             )
             :: eventHeader
             :: ul [ class "event-members" ]
