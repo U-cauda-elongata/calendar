@@ -759,7 +759,7 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
         ( viewTimeInfo, description ) =
             let
                 viewTime =
-                    intlTime [ class "event-time" ] event.time
+                    intlTime [] event.time
             in
             if event.live then
                 let
@@ -793,8 +793,7 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
         , ariaDescribedby descriptionId
         , hidden <| not (eventIsShown model feed.checked event)
         ]
-        (div []
-            viewTimeInfo
+        (div [ class "event-time" ] viewTimeInfo
             :: eventHeader
             :: ul [ class "event-members" ]
                 (viewEventMember True feed.meta :: (members |> List.map (viewEventMember False)))
