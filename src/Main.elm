@@ -689,6 +689,11 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
         headingId =
             eventId ++ "-heading"
 
+        -- Construct ARIA description as an element rather than a single text,
+        -- because the inner text of `<intl-time>` element is not accessible from Elm.
+        descriptionId =
+            eventId ++ "-description"
+
         eventHeader =
             let
                 heading =
@@ -734,53 +739,66 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
                         header [] [ a [ class "event-header-grid", href link ] headerContent ]
                     )
                 |> Maybe.withDefault (header [ class "event-header-grid" ] headerContent)
+
+        eta =
+            Duration.fromSeconds <|
+                (Time.posixToMillis event.time - Time.posixToMillis model.now)
+                    // 1000
+
+        members =
+            -- Exclude the author.
+            event.members
+                |> List.filter ((/=) feedIdx)
+                |> List.filterMap
+                    (\memberIdx ->
+                        model.feeds
+                            |> List.Extra.getAt memberIdx
+                            |> Maybe.map .meta
+                    )
+
+        ( viewTimeInfo, description ) =
+            let
+                viewTime =
+                    intlTime [ class "event-time" ] event.time
+            in
+            if event.live then
+                let
+                    viewStartsIn =
+                        T.startsIn model.translations eta
+                in
+                if Duration.toSeconds eta > 0 then
+                    ( TEvent.scheduledForCustom model.translations
+                        (text >> List.singleton)
+                        [ viewTime ]
+                        viewStartsIn
+                        |> List.concat
+                    , T.describeScheduledLive model.translations feed.meta members viewStartsIn
+                    )
+
+                else
+                    ( TEvent.startedAtCustom model.translations text viewTime
+                    , T.describeStartedLive model.translations feed.meta members viewTime
+                    )
+
+            else
+                ( TEvent.uploadedAtCustom model.translations text viewTime
+                , T.describeVideo model.translations feed.meta members viewTime
+                )
     in
     ( eventId
     , li
         [ class "event"
         , role "article"
         , ariaLabelledby headingId
+        , ariaDescribedby descriptionId
         , hidden <| not (eventIsShown model feed.checked event)
         ]
         (div []
-            (let
-                eta =
-                    (Time.posixToMillis event.time - Time.posixToMillis model.now) // 1000
-
-                viewTime =
-                    intlTime [ class "event-time" ] event.time
-             in
-             if event.live then
-                if eta > 0 then
-                    TEvent.scheduledForCustom model.translations
-                        (text >> List.singleton)
-                        [ viewTime ]
-                        (T.startsIn model.translations (Duration.fromSeconds eta))
-                        |> List.concat
-
-                else
-                    TEvent.startedAtCustom model.translations text viewTime
-
-             else
-                TEvent.uploadedAtCustom model.translations text viewTime
-            )
+            viewTimeInfo
             :: eventHeader
             :: ul [ class "event-members" ]
-                (viewEventMember True feed
-                    :: (event.members
-                            |> List.filterMap
-                                (\memberIdx ->
-                                    if feedIdx == memberIdx then
-                                        -- Exclude the author.
-                                        Nothing
-
-                                    else
-                                        model.feeds
-                                            |> List.Extra.getAt memberIdx
-                                            |> Maybe.map (viewEventMember False)
-                                )
-                       )
-                )
+                (viewEventMember True feed.meta :: (members |> List.map (viewEventMember False)))
+            :: div [ id descriptionId, hidden True ] description
             :: (if model.features.copy || model.features.share then
                     List.singleton <|
                         lazy6 viewEventPopup
@@ -913,11 +931,11 @@ normalizeSearchTerm text =
     text |> String.toUpper |> String.replace "＃" "#"
 
 
-viewEventMember : Bool -> Feed -> Html Msg
+viewEventMember : Bool -> Feeds.Metadata -> Html Msg
 viewEventMember isAuthor feed =
     li [ class "event-member" ]
         [ a
-            (href feed.meta.alternate
+            (href feed.alternate
                 :: (if isAuthor then
                         [ rel "author" ]
 
@@ -925,7 +943,7 @@ viewEventMember isAuthor feed =
                         []
                    )
             )
-            [ img [ class "avatar", src feed.meta.icon, alt feed.meta.title ] [] ]
+            [ img [ class "avatar", src feed.icon, alt feed.title ] [] ]
         ]
 
 

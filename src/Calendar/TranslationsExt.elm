@@ -1,13 +1,55 @@
 -- A dirty hack to handle plurality in i18n.
 
 
-module Calendar.TranslationsExt exposing (inDuration, startsIn)
+module Calendar.TranslationsExt exposing (describeScheduledLive, describeStartedLive, describeVideo, inDuration, startsIn)
 
+import Calendar.Feeds as Feeds
 import Calendar.Util.Duration as Duration exposing (Duration)
-import Html exposing (text, time)
+import Html exposing (Html, text, time)
 import Html.Attributes exposing (datetime)
 import I18Next exposing (Translations)
 import Translations.Event as TE
+import Translations.Event.Description as TED
+
+
+describeScheduledLive :
+    Translations
+    -> Feeds.Metadata
+    -> List Feeds.Metadata
+    -> List (Html msg)
+    -> List (Html msg)
+describeScheduledLive translations author guests beginsIn =
+    TED.scheduledLiveCustom translations
+        (text >> List.singleton)
+        (List.singleton <| text <| membersSummary translations author guests)
+        beginsIn
+        |> List.concat
+
+
+describeStartedLive :
+    Translations
+    -> Feeds.Metadata
+    -> List Feeds.Metadata
+    -> Html msg
+    -> List (Html msg)
+describeStartedLive translations author guests time =
+    TED.startedLiveCustom translations
+        text
+        (text <| membersSummary translations author guests)
+        time
+
+
+describeVideo :
+    Translations
+    -> Feeds.Metadata
+    -> List Feeds.Metadata
+    -> Html msg
+    -> List (Html msg)
+describeVideo translations author guests time =
+    TED.startedLiveCustom translations
+        text
+        (text <| membersSummary translations author guests)
+        time
 
 
 startsIn : Translations -> Duration -> List (Html.Html msg)
@@ -52,3 +94,18 @@ trPlural translations singular plural n =
 
     else
         plural translations (String.fromInt n)
+
+
+membersSummary : Translations -> Feeds.Metadata -> List Feeds.Metadata -> String
+membersSummary translations author guests =
+    case guests of
+        [] ->
+            author.title
+
+        [ member ] ->
+            TED.twoMembers translations author.title member.title
+
+        _ :: tail ->
+            TED.moreThanTwoMembers translations
+                author.title
+                (String.fromInt <| 1 + List.length tail)

@@ -7,6 +7,13 @@
 	"avatarAlt": "Icon",
 	"nowSeparator": "Now: {{time}}",
 	"event": {
+		"description": {
+			"scheduledLive": "a live streaming by {{members}}, {{beginsIn}}",
+			"startedLive": "a live streaming by {{members}}, started at {{time}}",
+			"video": "a video by {{members}}, uploaded at {{time}}",
+			"twoMembers": "{{author}} and {{member}}",
+			"moreThanTwoMembers": "{{author}} and {{n}} others"
+		},
 		"scheduledFor": "{{time}} ({{beginsIn}})",
 		"startsIn": "in {{duration}}",
 		"aDay": "a day",

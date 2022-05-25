@@ -2,6 +2,7 @@ module Calendar.Attributes exposing
     ( ariaBusy
     , ariaChecked
     , ariaControls
+    , ariaDescribedby
     , ariaExpanded
     , ariaHaspopup
     , ariaHidden
@@ -42,6 +43,11 @@ ariaChecked =
 ariaControls : String -> Attribute msg
 ariaControls =
     attribute "aria-controls"
+
+
+ariaDescribedby : String -> Attribute msg
+ariaDescribedby =
+    attribute "aria-describedby"
 
 
 ariaExpanded : Bool -> Attribute msg
