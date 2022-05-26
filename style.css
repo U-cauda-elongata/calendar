@@ -145,11 +145,15 @@ hr {
 	display: none;
 }
 
-.title-heading:lang(en) {
+.app-title {
+	margin-left: calc(var(--hamburger-length) + 2 * var(--border-width));
+}
+
+.app-title:lang(en) {
 	font-family: NikumaruFontEn, sans-serif;
 }
 
-.lang-confirmed .title-heading:lang(ja) {
+.lang-confirmed .app-title:lang(ja) {
 	font-family: NikumaruFontJa, sans-serif;
 }
 
