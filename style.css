@@ -500,7 +500,8 @@ footer, footer a {
 	background-color: #FFF;
 }
 
-@media(min-width: 480px) {
+/* Always show icons in the drawer. */
+@media (min-width: 480px) {
 	:root {
 		--drawer-width: 240px;
 	}
@@ -552,9 +553,12 @@ footer, footer a {
 			transition: none;
 		}
 	}
+}
 
+/* Accomodate multiple events in each row of `.timeline` if the viewport is capable of it. */
+@media (min-width: 712px) {
 	.timeline {
-		/* This is fine since overflow should only occur when the drawer is expanded. */
+		/* This is fine since overflow would only occur when the drawer is expanded. */
 		overflow-x: hidden;
 	}
 
