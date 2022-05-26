@@ -21,12 +21,19 @@
 	--active-filter-border-color: #008080;
 	--disabled-button-color: #6d6d6d;
 	--disabled-button-background-color: #c0c0c0;
+	--translucent-background-color: #FFF4;
 	--margin-unit: 8px;
 	--border-width: 1px;
 	--hamburger-length: 50px;
 	--drawer-width: 100vw;
 	--event-width: 280px;
 	--social-icon-length: 30px;
+}
+
+@supports not ((backdrop-filter: blur(5px)) or (-webkit-backdrop-filter: blur(5px))) {
+	:root {
+		--translucent-background-color: #FFFC;
+	}
 }
 
 @media (prefers-contrast: more) {
@@ -46,6 +53,13 @@
 		/* --active-filter-border-color: TODO; */
 		--disabled-button-color: #c0c0c0;
 		--disabled-button-background-color: #404040;
+		--translucent-background-color: #0004;
+	}
+
+	@supports not ((backdrop-filter: blur(5px)) or (-webkit-backdrop-filter: blur(5px))) {
+		:root {
+			--translucent-background-color: #000C;
+		}
 	}
 
 	a {
@@ -371,7 +385,9 @@ hr {
 	bottom: 0;
 	border-top-left-radius: 5px;
 	padding-left: calc(var(--margin-unit) / 2);
-	background-color: var(--background-color);
+	background-color: var(--translucent-background-color);
+	backdrop-filter: blur(5px);
+	-webkit-backdrop-filter: blur(5px);
 	color: var(--color);
 }
 
