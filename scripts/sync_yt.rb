@@ -80,7 +80,7 @@ cached = channels.each_with_object({}) do |channel, feeds|
     open("#{channel}.json") do |f|
       feed = JSON.load(f)
       feed['entries'].filter_map do |entry|
-        if entry['id'] and (not entry['live'] or entry['duration']) # Videos or ended livestreams.
+        if entry['id'] and entry['duration'] # Only videos or ended livestreams have duration.
           [entry.delete('id'), entry]
         end
       end.to_h
@@ -117,7 +117,8 @@ else
   http.start do
     ids.each_slice(50).with_object([]) do |slice, acc|
       uri.query = URI.encode_www_form([
-        ['part', 'liveStreamingDetails'],
+        ['part', 'contentDetails,liveStreamingDetails'],
+        ['fields', 'items(id,contentDetails/duration,liveStreamingDetails(actualStartTime,scheduledStartTime))'],
         ['id', slice.join(',')],
         ['key', key],
       ])
@@ -143,18 +144,16 @@ entries = feeds.each_with_object({}) do |(_, feed), acc|
 end
 
 items.each do |video|
+  entry = entries[video['id']]
+  if video['contentDetails']&.[]('duration')&.match(/^P(?:(\d+)D)?T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)(?:[\.,](\d{1,3}))?S)?$/)
+    entry['duration'] = ((($1.to_i * 24 + $2.to_i) * 60 + $3.to_i) * 60 + $4.to_i) * 1000 + $5&.ljust(3, '0').to_i
+  end
   live = video['liveStreamingDetails']
   if live
-    entry = entries[video['id']]
     entry['live'] = true
     start_time = live['actualStartTime']
     if start_time
-      time = Time.iso8601(start_time)
-      entry['time'] = time.to_i
-      end_time = live['actualEndTime']
-      if end_time
-        entry['duration'] = (Time.iso8601(end_time) - time).to_i
-      end
+      entry['time'] = Time.iso8601(start_time).to_i
     else
       entry['upcoming'] = true
       entry['time'] = Time.iso8601(live['scheduledStartTime']).to_i

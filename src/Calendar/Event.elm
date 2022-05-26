@@ -52,7 +52,7 @@ eventFromEntry feeds entry =
     Event entry.name
         entry.live
         (Time.millisToPosix (entry.time * 1000))
-        (entry.duration |> Maybe.map Duration.fromSeconds)
+        (entry.duration |> Maybe.map Duration.fromMillis)
         entry.link
         entry.thumbnail
         (entry.description

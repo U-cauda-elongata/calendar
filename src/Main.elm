@@ -741,9 +741,7 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
                 |> Maybe.withDefault (header [ class "event-header-grid" ] headerContent)
 
         eta =
-            Duration.fromSeconds <|
-                (Time.posixToMillis event.time - Time.posixToMillis model.now)
-                    // 1000
+            Duration.fromMillis <| Time.posixToMillis event.time - Time.posixToMillis model.now
 
         members =
             -- Exclude the author.

@@ -1,8 +1,14 @@
-module Calendar.Util.Duration exposing (Duration, format, fromSeconds, toDatetime, toSeconds, toSmh)
+module Calendar.Util.Duration exposing (Duration, format, fromMillis, fromSeconds, toDatetime, toSeconds, toSmh)
 
 
 type Duration
     = Duration Int
+
+
+fromMillis : Int -> Duration
+fromMillis millis =
+    -- Discarding the subsecond part for now. May use at some point in the future.
+    fromSeconds (millis // 1000)
 
 
 fromSeconds : Int -> Duration
