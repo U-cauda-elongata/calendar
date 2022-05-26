@@ -57,7 +57,7 @@ format duration =
                 ++ (String.fromInt s |> zeroPad2)
 
         ( s, ( m, Nothing ) ) ->
-            String.fromInt m ++ ":" ++ String.fromInt s |> zeroPad2
+            String.fromInt m ++ ":" ++ (String.fromInt s |> zeroPad2)
 
 
 {-| Formats a `Duration` as a valid `datetime` attribute value of `<time>` element.
