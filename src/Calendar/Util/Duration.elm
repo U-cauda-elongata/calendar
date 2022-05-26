@@ -77,36 +77,44 @@ format duration =
 toDatetime : Duration -> String
 toDatetime duration =
     let
+        prepend suffix n text =
+            if n == 0 then
+                text
+
+            else
+                String.fromInt n ++ suffix ++ text
+
         ( s, mhd ) =
             toSmhd duration
-
-        dt =
-            String.fromInt s
     in
     case mhd of
         Nothing ->
-            "PT" ++ dt
+            "PT" ++ String.fromInt s ++ "S"
 
         Just ( m, hd ) ->
             let
-                dt2 =
-                    String.fromInt m ++ "M" ++ dt
+                dt1 =
+                    if s == 0 then
+                        String.fromInt m ++ "M"
+
+                    else
+                        prepend "M" m (String.fromInt s ++ "S")
             in
             case hd of
                 Nothing ->
-                    "PT" ++ dt2
+                    "PT" ++ dt1
 
                 Just ( h, day ) ->
                     let
-                        dt3 =
-                            String.fromInt h ++ "H" ++ dt2
+                        dt2 =
+                            prepend "H" h dt1
                     in
                     case day of
                         Nothing ->
-                            "PT" ++ dt3
+                            "PT" ++ dt2
 
                         Just d ->
-                            "P" ++ String.fromInt d ++ "DT" ++ dt3
+                            "P" ++ prepend "DT" d dt2
 
 
 zeroPad2 : String -> String
