@@ -157,7 +157,7 @@ hr {
 
 .hamburger-label {
 	position: fixed;
-	z-index: 2; /* Put it above `.drawer-container`. */
+	z-index: 3; /* Put it above `.drawer-container`. */
 	width: var(--hamburger-length);
 	height: var(--hamburger-length);
 	border: var(--border-width) solid var(--border-color);
@@ -182,7 +182,7 @@ hr {
 
 .drawer-container {
 	position: fixed;
-	z-index: 1; /* Put it above the main content. */
+	z-index: 2; /* Put it above the main content and `.date-heading`. */
 	top: 0;
 	border-right: solid var(--border-width) var(--border-color);
 	width: var(--drawer-width);
@@ -207,13 +207,13 @@ hr {
 	/* XXX: This causes a discontinuity as `z-index` crosses `0`. */
 	.drawer-container {
 		left: 0;
-		z-index: -1;
+		z-index: -2;
 		opacity: 0;
 		transition-property: z-index,opacity;
 	}
 
 	.hamburger-checkbox:checked ~ .drawer-container, .drawer-container:focus-within {
-		z-index: 1;
+		z-index: 2;
 		opacity: 1;
 	}
 }
@@ -423,7 +423,7 @@ hr {
 
 .popup {
 	position: absolute;
-	z-index: 2; /* Put it above everything else. */
+	z-index: 3; /* Put it above everything else. */
 	right: 0;
 	background-color: var(--background-color);
 	border: solid var(--border-width) var(--border-color);
@@ -539,8 +539,8 @@ footer, footer a {
 		/* TODO: Find a better animation. */
 		.drawer-container {
 			transition: none;
-			/* Revert the previous rule. */
-			z-index: 1;
+			/* Revert rules in the previous `@media (prefers-reduced-motion)`. */
+			z-index: 2;
 			opacity: 1;
 		}
 
