@@ -17,23 +17,6 @@ toSeconds duration =
             secs
 
 
-toSmhd : Duration -> ( Int, Maybe ( Int, Maybe ( Int, Maybe Int ) ) )
-toSmhd duration =
-    case toSmh duration of
-        ( s, Just ( m, Just h ) ) ->
-            case h // 24 of
-                0 ->
-                    ( s, Just ( m, Just ( h, Nothing ) ) )
-
-                d ->
-                    ( s, Just ( m, Just ( h |> modBy 24, Just d ) ) )
-
-        ( s, mh ) ->
-            -- The `h` part is always a `Nothing : Maybe Int` here,
-            -- but we have to map it to a `Nothing : Maybe (Int, Maybe Int)`.
-            ( s, mh |> Maybe.map (Tuple.mapSecond (always Nothing)) )
-
-
 toSmh : Duration -> ( Int, Maybe ( Int, Maybe Int ) )
 toSmh duration =
     let
@@ -84,37 +67,30 @@ toDatetime duration =
             else
                 String.fromInt n ++ suffix ++ text
 
-        ( s, mhd ) =
-            toSmhd duration
+        ( s, mh ) =
+            toSmh duration
     in
-    case mhd of
-        Nothing ->
-            "PT" ++ String.fromInt s ++ "S"
-
-        Just ( m, hd ) ->
-            let
-                dt1 =
-                    if s == 0 then
-                        String.fromInt m ++ "M"
-
-                    else
-                        prepend "M" m (String.fromInt s ++ "S")
-            in
-            case hd of
+    "PT"
+        ++ (case mh of
                 Nothing ->
-                    "PT" ++ dt1
+                    String.fromInt s ++ "S"
 
-                Just ( h, day ) ->
+                Just ( m, hour ) ->
                     let
-                        dt2 =
-                            prepend "H" h dt1
-                    in
-                    case day of
-                        Nothing ->
-                            "PT" ++ dt2
+                        dt1 =
+                            if s == 0 then
+                                String.fromInt m ++ "M"
 
-                        Just d ->
-                            "P" ++ prepend "DT" d dt2
+                            else
+                                prepend "M" m (String.fromInt s ++ "S")
+                    in
+                    case hour of
+                        Nothing ->
+                            dt1
+
+                        Just h ->
+                            prepend "H" h dt1
+           )
 
 
 zeroPad2 : String -> String
