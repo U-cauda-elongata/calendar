@@ -374,7 +374,7 @@ hr {
 
 .event-thumbnail-container {
 	position: relative;
-	height: calc((var(--event-width) - 2 * var(--margin-unit)) * 9 / 16);
+	height: calc((100vw - var(--hamburger-length) - var(--border-width) - 2 * var(--margin-unit)) * 9 / 16);
 	order: -1;
 }
 
@@ -567,6 +567,10 @@ footer, footer a {
 		margin: calc(2 * var(--margin-unit));
 		border: solid var(--border-width) var(--border-color);
 		width: var(--event-width);
+	}
+
+	.event-thumbnail-container {
+		height: calc((var(--event-width) - 2 * var(--margin-unit)) * 9 / 16);
 	}
 
 	.popup {
