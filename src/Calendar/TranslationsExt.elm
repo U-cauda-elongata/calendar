@@ -3,7 +3,7 @@
 
 module Calendar.TranslationsExt exposing (describeScheduledLive, describeStartedLive, describeVideo, inDuration, startsIn)
 
-import Calendar.Feeds as Feeds
+import Calendar.Feed as Feed
 import Calendar.Util.Duration as Duration exposing (Duration)
 import Html exposing (Html, text, time)
 import Html.Attributes exposing (datetime)
@@ -14,8 +14,8 @@ import Translations.Event.Description as TED
 
 describeScheduledLive :
     Translations
-    -> Feeds.Metadata
-    -> List Feeds.Metadata
+    -> Feed.Preset
+    -> List Feed.Preset
     -> List (Html msg)
     -> List (Html msg)
 describeScheduledLive translations author guests beginsIn =
@@ -28,8 +28,8 @@ describeScheduledLive translations author guests beginsIn =
 
 describeStartedLive :
     Translations
-    -> Feeds.Metadata
-    -> List Feeds.Metadata
+    -> Feed.Preset
+    -> List Feed.Preset
     -> Html msg
     -> List (Html msg)
 describeStartedLive translations author guests time =
@@ -41,8 +41,8 @@ describeStartedLive translations author guests time =
 
 describeVideo :
     Translations
-    -> Feeds.Metadata
-    -> List Feeds.Metadata
+    -> Feed.Preset
+    -> List Feed.Preset
     -> Html msg
     -> List (Html msg)
 describeVideo translations author guests time =
@@ -96,7 +96,7 @@ trPlural translations singular plural n =
         plural translations (String.fromInt n)
 
 
-membersSummary : Translations -> Feeds.Metadata -> List Feeds.Metadata -> String
+membersSummary : Translations -> Feed.Preset -> List Feed.Preset -> String
 membersSummary translations author guests =
     case guests of
         [] ->

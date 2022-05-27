@@ -5,8 +5,7 @@ import Browser.Dom as Dom
 import Browser.Events exposing (onKeyDown)
 import Calendar.Attributes exposing (..)
 import Calendar.Elements exposing (intlDate, intlTime)
-import Calendar.Event exposing (Event, feedDecoder)
-import Calendar.Feeds as Feeds
+import Calendar.Feed as Feed exposing (Event)
 import Calendar.Icon as Icon
 import Calendar.TranslationsExt as T
 import Calendar.Util as Util
@@ -61,7 +60,8 @@ type alias Features =
 
 
 type alias Feed =
-    { meta : Feeds.Metadata
+    { meta : Feed.Preset
+    , alternate : String
     , events : List Event
     , retrieving : FeedRetrievalState
     , checked : Bool
@@ -91,7 +91,7 @@ type Msg
     | SetTimeZone Time.Zone
     | Tick Time.Posix
     | GotTranslations String (Result Http.Error Translations)
-    | GotFeed Int (Result Http.Error (List Event))
+    | GotFeed Int (Result Http.Error Feed.Feed)
     | RetryGetTranslations String Int
     | RetryGetFeed Int Int
     | Copy String
@@ -141,7 +141,7 @@ init flags =
         (Time.millisToPosix 0)
         Time.utc
         False
-        (Feeds.preset |> List.map (\feed -> Feed feed [] Retrieving True))
+        (Feed.presets |> List.map (\feed -> Feed feed "" [] Retrieving True))
         False
         Nothing
         []
@@ -149,13 +149,13 @@ init flags =
         ((Time.here |> Task.perform SetTimeZone)
             :: (getTranslations <| selectLanguage flags.languages)
             :: (Time.now |> Task.perform Tick)
-            :: (Feeds.preset
+            :: (Feed.presets
                     |> List.indexedMap
                         (\i feed ->
                             Http.get
                                 { url = feed.url
                                 , expect =
-                                    Http.expectJson (GotFeed i) (feedDecoder Feeds.preset)
+                                    Http.expectJson (GotFeed i) (Feed.decoder Feed.presets)
                                 }
                         )
                )
@@ -265,7 +265,7 @@ update msg model =
                             , expect =
                                 Http.expectJson
                                     (GotFeed feedIdx)
-                                    (feedDecoder Feeds.preset)
+                                    (Feed.decoder Feed.presets)
                             }
                     )
                 |> Maybe.withDefault Cmd.none
@@ -302,13 +302,23 @@ update msg model =
             let
                 model2 =
                     case result of
-                        Ok events ->
+                        Ok { title, alternate, events } ->
                             { model
                                 | feeds =
                                     model.feeds
                                         |> List.Extra.updateAt i
                                             (\feed ->
-                                                { feed | events = events, retrieving = Success }
+                                                let
+                                                    meta =
+                                                        feed.meta
+                                                in
+                                                { feed
+                                                    | meta =
+                                                        { meta | title = title }
+                                                    , alternate = alternate
+                                                    , events = events
+                                                    , retrieving = Success
+                                                }
                                             )
                             }
 
@@ -747,12 +757,10 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
             -- Exclude the author.
             event.members
                 |> List.filter ((/=) feedIdx)
-                |> List.filterMap
-                    (\memberIdx ->
-                        model.feeds
-                            |> List.Extra.getAt memberIdx
-                            |> Maybe.map .meta
-                    )
+                |> List.filterMap (\memberIdx -> model.feeds |> List.Extra.getAt memberIdx)
+
+        membersMeta =
+            members |> List.map .meta
 
         ( viewTimeInfo, description ) =
             let
@@ -770,17 +778,17 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
                         [ viewTime ]
                         viewStartsIn
                         |> List.concat
-                    , T.describeScheduledLive model.translations feed.meta members viewStartsIn
+                    , T.describeScheduledLive model.translations feed.meta membersMeta viewStartsIn
                     )
 
                 else
                     ( TEvent.startedAtCustom model.translations text viewTime
-                    , T.describeStartedLive model.translations feed.meta members viewTime
+                    , T.describeStartedLive model.translations feed.meta membersMeta viewTime
                     )
 
             else
                 ( TEvent.uploadedAtCustom model.translations text viewTime
-                , T.describeVideo model.translations feed.meta members viewTime
+                , T.describeVideo model.translations feed.meta membersMeta viewTime
                 )
     in
     ( eventId
@@ -794,7 +802,7 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
         (div [ class "event-time" ] viewTimeInfo
             :: eventHeader
             :: ul [ class "event-members" ]
-                (viewEventMember True feed.meta :: (members |> List.map (viewEventMember False)))
+                (viewEventMember True feed :: (members |> List.map (viewEventMember False)))
             :: div [ id descriptionId, hidden True ] description
             :: (if model.features.copy || model.features.share then
                     List.singleton <|
@@ -928,7 +936,7 @@ normalizeSearchTerm text =
     text |> String.toUpper |> String.replace "＃" "#"
 
 
-viewEventMember : Bool -> Feeds.Metadata -> Html Msg
+viewEventMember : Bool -> Feed -> Html Msg
 viewEventMember isAuthor feed =
     li [ class "event-member" ]
         [ a
@@ -940,7 +948,7 @@ viewEventMember isAuthor feed =
                         []
                    )
             )
-            [ img [ class "avatar", src feed.icon, alt feed.title ] [] ]
+            [ img [ class "avatar", src feed.meta.icon, alt feed.meta.title ] [] ]
         ]
 
 
