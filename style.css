@@ -316,7 +316,7 @@ hr {
 	break-after: avoid-page;
 }
 
-.now-separator {
+.now {
 	margin-top: var(--margin-unit);
 	margin-bottom: var(--margin-unit);
 	border-top: solid var(--border-width) var(--border-color);
@@ -325,7 +325,7 @@ hr {
 }
 
 /* Animate the time separator to indicate that the time is dynamically updated. */
-.now-separator .time-separator {
+.now .time-separator {
 	animation: 2s flash infinite;
 }
 
@@ -345,6 +345,10 @@ hr {
 	.now-separator .time-separator {
 		animation: none;
 	}
+}
+
+.ongoing {
+	background-color: #FF04;
 }
 
 .event {

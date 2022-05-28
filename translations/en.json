@@ -6,6 +6,7 @@
 	"feedFilterLabel": "Channels",
 	"avatarAlt": "Icon",
 	"nowSeparator": "Now: {{time}}",
+	"ongoing": "Live now: {{time}}",
 	"event": {
 		"description": {
 			"scheduledLive": "a live streaming by {{members}}, {{beginsIn}}",

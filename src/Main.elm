@@ -573,7 +573,7 @@ viewFeedFilter model =
 
 type TimelineItem
     = TimelineEvent ( ( Int, Int ), Feed, Event )
-    | Now
+    | Now (List ( ( Int, Int ), Feed, Event ))
 
 
 viewMain : Model -> Html Msg
@@ -603,23 +603,33 @@ viewMain model =
                             compare (Time.posixToMillis e2.time) (Time.posixToMillis e1.time)
                         )
 
-            ( upcoming, past ) =
-                events
+            ( ongoing, ( upcoming, past ) ) =
+                let
+                    ( og, other ) =
+                        events
+                            |> List.partition
+                                (\( _, _, event ) ->
+                                    not event.upcoming && Util.isNothing event.duration
+                                )
+                in
+                ( og
+                , other
                     |> List.Extra.splitWhen
                         (\( _, _, event ) ->
                             Time.posixToMillis event.time <= Time.posixToMillis model.now
                         )
                     |> Maybe.withDefault ( events, [] )
                     |> Tuple.mapBoth (List.map TimelineEvent) (List.map TimelineEvent)
+                )
          in
-         ((upcoming ++ (Now :: past))
+         ((upcoming ++ (Now ongoing :: past))
             |> Util.groupBy
                 (\item ->
                     case item of
                         TimelineEvent ( _, _, event ) ->
                             NaiveDate.fromPosix model.timeZone event.time
 
-                        Now ->
+                        Now _ ->
                             NaiveDate.fromPosix model.timeZone model.now
                 )
             |> List.map (\( date, items ) -> viewKeyedDateSection model date items)
@@ -662,7 +672,7 @@ viewDateSection model date items =
                                 TimelineEvent ( _, feed, event ) ->
                                     eventIsShown model feed.checked event
 
-                                Now ->
+                                Now _ ->
                                     True
                         )
                 )
@@ -676,14 +686,35 @@ viewDateSection model date items =
                             TimelineEvent ( id, feed, event ) ->
                                 viewKeyedEvent model id feed event
 
-                            Now ->
+                            Now ongoing_items ->
                                 ( "now"
-                                , div [ id "now", class "now-separator" ]
-                                    [ p [] <|
-                                        T.nowSeparatorCustom model.translations
-                                            text
-                                            (intlTime [] model.now)
-                                    ]
+                                , let
+                                    viewTime =
+                                        intlTime [] model.now
+                                  in
+                                  if List.isEmpty ongoing_items then
+                                    div [ id "now", class "now" ]
+                                        [ p [] <|
+                                            T.nowSeparatorCustom model.translations
+                                                text
+                                                viewTime
+                                        ]
+
+                                  else
+                                    section [ id "now", class "ongoing" ]
+                                        [ header [ class "now" ]
+                                            (T.ongoingCustom model.translations
+                                                text
+                                                viewTime
+                                            )
+                                        , Keyed.ul []
+                                            (ongoing_items
+                                                |> List.map
+                                                    (\( id, feed, event ) ->
+                                                        viewKeyedEvent model id feed event
+                                                    )
+                                            )
+                                        ]
                                 )
                     )
             )

@@ -23,6 +23,7 @@ type alias Preset =
 type alias Event =
     { name : String
     , live : Bool
+    , upcoming : Bool
     , time : Time.Posix
     , duration : Maybe Duration
     , link : Maybe String
@@ -34,6 +35,7 @@ type alias Event =
 type alias Entry =
     { name : String
     , live : Bool
+    , upcoming : Bool
     , time : Int
     , duration : Maybe Int
     , link : Maybe String
@@ -80,9 +82,10 @@ decoder meta =
 
 entryDecoder : D.Decoder Entry
 entryDecoder =
-    D.map7 Entry
+    D.map8 Entry
         (D.field "name" D.string)
         (D.oneOf [ D.field "live" D.bool, D.succeed False ])
+        (D.oneOf [ D.field "upcoming" D.bool, D.succeed False ])
         (D.field "time" D.int)
         (D.maybe (D.field "duration" D.int))
         (D.maybe (D.field "link" D.string))
@@ -94,6 +97,7 @@ eventFromEntry : List Preset -> Entry -> Event
 eventFromEntry meta entry =
     Event entry.name
         entry.live
+        entry.upcoming
         (Time.millisToPosix (entry.time * 1000))
         (entry.duration |> Maybe.map Duration.fromMillis)
         entry.link

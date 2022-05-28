@@ -7,6 +7,7 @@
 	"feedFilterLabel": "チャンネル",
 	"avatarAlt": "アイコン",
 	"nowSeparator": "現在時刻：{{time}}",
+	"ongoing": "配信中：{{time}}",
 	"event": {
 		"description": {
 			"scheduledLive": "{{members}}によるライブ配信、{{beginsIn}}に開始",
