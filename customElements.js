@@ -89,17 +89,41 @@ customElements.define('intl-time', class extends HTMLElement {
 
 		time.dateTime = date.toISOString();
 
+		// Set the inner HTML to something like `12<span class="time-separator">:</span>00 AM`.
+		// Reuse `<span>` elements from a previous `update()` call if possible, in order not to
+		// reset CSS animation of the element, which complicates the implementation a lot (meh).
 		const parts = fmt.format(date).split(':');
+		const nodes = Array.from(time.childNodes);
 		const first = parts.shift();
+		let node = nodes.shift();
 		if (first) {
-			time.textContent = first;
-			for (const part of parts) {
-				const separator = document.createElement('span');
-				separator.className = 'time-separator';
-				separator.textContent = ':';
-				time.appendChild(separator);
-				time.appendChild(document.createTextNode(part));
+			if (node) {
+				time.insertBefore(document.createTextNode(first), node);
+			} else {
+				time.append(first);
 			}
+			for (const part of parts) {
+				while (node) {
+					if (node.tagName == 'SPAN') {
+						break;
+					}
+					time.removeChild(node);
+					node = nodes.shift();
+				}
+				if (node) {
+					node.insertAdjacentText('afterend', part);
+					node = nodes.shift();
+				} else {
+					const separator = document.createElement('span');
+					separator.className = 'time-separator';
+					separator.textContent = ':';
+					time.appendChild(separator);
+					time.appendChild(document.createTextNode(part));
+				}
+			}
+		}
+		while (time.contains(node)) {
+			time.removeChild(node);
 		}
 	}
 });
