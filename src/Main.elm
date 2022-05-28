@@ -507,14 +507,16 @@ viewDrawer model =
     menu [ class "filter-menu", ariaLabel (T.filterMenuLabel model.translations) ]
         [ li []
             [ button
-                [ class "drawer-labeled-button"
+                [ class "drawer-labelled-button"
                 , class "filter-clear-button"
                 , title <| T.clearFilter model.translations
                 , disabled <| not (filterApplied model)
                 , onClick ClearFilter
                 , ariaLabelledby "filter-clear-button-label"
                 ]
-                [ Icon.clear
+                -- Using `Html.Attributes.class` function here would cause an exception
+                -- (in pure Elm, wow!) of setting getter-only property `className`.
+                [ Icon.clear [ Svg.Attributes.class "drawer-icon" ]
                 , span [ id "filter-clear-button-label", class "drawer-button-label" ]
                     [ text <| T.clearFilter model.translations ]
                 ]
@@ -526,7 +528,7 @@ viewDrawer model =
         , li []
             [ button
                 [ id "about-button"
-                , class "drawer-labeled-button"
+                , class "drawer-labelled-button"
                 , class "about-button"
                 , ariaControls "about"
                 , ariaExpanded <| model.mode == About
@@ -534,7 +536,7 @@ viewDrawer model =
                 , ariaLabelledby "about-button-label"
                 , Html.Events.stopPropagationOn "click" <| D.succeed ( SetMode About, True )
                 ]
-                [ Icon.about
+                [ Icon.about [ Svg.Attributes.class "drawer-icon" ]
                 , span [ id "about-button-label", class "drawer-button-label" ]
                     [ text <| TAbout.title model.translations ]
                 ]
@@ -552,16 +554,21 @@ viewSearch model =
     li []
         [ label [ class "search-label" ]
             [ Icon.search
-            , input
-                [ id "calendar-search"
-                , type_ "search"
-                , value model.search
-                , list "searchlist"
-                , onInput SearchInput
-                , onFocus (SearchFocus True)
-                , onBlur (SearchFocus False)
+                [ Svg.Attributes.class "drawer-icon"
+                , ariaLabel <| T.search model.translations
                 ]
-                []
+            , div [ class "search-container" ]
+                [ input
+                    [ id "calendar-search"
+                    , type_ "search"
+                    , value model.search
+                    , list "searchlist"
+                    , onInput SearchInput
+                    , onFocus (SearchFocus True)
+                    , onBlur (SearchFocus False)
+                    ]
+                    []
+                ]
             ]
         , datalist [ id "searchlist" ]
             (model.feeds
@@ -616,7 +623,7 @@ viewFeedFilter model =
                         in
                         li [ class "filter-item" ]
                             [ button
-                                [ class "drawer-labeled-button"
+                                [ class "drawer-labelled-button"
                                 , class "filter-button"
                                 , role "switch"
                                 , title feed.meta.title
@@ -628,6 +635,7 @@ viewFeedFilter model =
                                 ]
                                 [ img
                                     [ class "avatar"
+                                    , class "drawer-icon"
                                     , src feed.meta.icon
                                     , alt (T.avatarAlt model.translations)
                                     ]
@@ -1217,8 +1225,6 @@ viewAboutDialog translations =
                 , ul []
                     [ li []
                         [ a [ href "https://github.com/U-cauda-elongata/calendar" ]
-                            -- Using `Html.Attributes.class` function here would cause an exception
-                            -- (in pure Elm, wow!) of setting getter-only property `className`.
                             [ Icon.gitHub [ Svg.Attributes.class "social-icon", ariaHidden True ]
                             , text "GitHub"
                             ]

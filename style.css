@@ -120,16 +120,6 @@ button {
 	font-family: inherit;
 }
 
-.primary-window > header {
-	height: var(--hamburger-length);
-	border-top: solid var(--border-width) var(--border-color);
-	border-bottom: solid var(--border-width) var(--border-color);
-}
-
-.primary-window > header > h1 {
-	text-align: center;
-}
-
 hr {
 	border: none;
 	border-top: solid var(--border-width) var(--border-color);
@@ -141,11 +131,20 @@ hr {
 }
 
 .app-title {
+	display: flex;
+	justify-content: center;
 	margin-left: calc(var(--hamburger-length) + 2 * var(--border-width));
+	border-top: solid var(--border-width) var(--border-color);
+	border-bottom: solid var(--border-width) var(--border-color);
+	height: var(--hamburger-length);
 }
 
 .app-title:lang(en) {
 	font-family: NikumaruFontEn, sans-serif;
+}
+
+.app-title > h1 {
+	align-self: center;
 }
 
 .lang-confirmed .app-title:lang(ja) {
@@ -249,22 +248,31 @@ hr {
 	stroke-linecap: round;
 }
 
-.drawer-labeled-button {
-	display: grid;
+.drawer-labelled-button {
+	display: flex;
 	padding: 0;
-	height: var(--hamburger-length);
+	width: 100%;
+	height: calc(var(--hamburger-length) + var(--border-width));
 	text-align: left;
 	font-size: inherit;
 }
 
-.drawer-labeled-button > img, .drawer-labeled-button > svg {
-	grid-column: 1;
-	width: var(--hamburger-length);
-	height: var(--hamburger-length);
+.drawer-labelled-button > .avatar {
+	flex-shrink: 0;
+}
+
+.avatar {
+	border-radius: 50%;
+}
+
+.drawer-icon {
+	width: calc(var(--border-width) + var(--hamburger-length));
+	height: calc(var(--border-width) + var(--hamburger-length));
 }
 
 .drawer-button-label {
-	grid-column: 2;
+	align-self: center;
+	margin-left: var(--margin-unit);
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -287,15 +295,18 @@ hr {
 	opacity: .2;
 }
 
+.search-label {
+	display: flex;
+}
+
 .search-label > svg {
 	cursor: pointer;
-	width: var(--hamburger-length);
-	height: var(--hamburger-length);
 	fill: var(--background-color);
 	stroke: currentColor;
 }
 
-.search-label > input {
+.search-label > .search-container {
+	align-self: center;
 	margin-left: var(--margin-unit);
 }
 
@@ -433,6 +444,11 @@ hr {
 	margin-left: 0;
 }
 
+.event-member .avatar {
+	width: 60px;
+	height: 60px;
+}
+
 .popup-container {
 	grid-column: 2;
 	grid-row: 1;
@@ -458,12 +474,6 @@ hr {
 	cursor: pointer;
 	padding-top: var(--margin-unit);
 	padding-bottom: var(--margin-unit);
-}
-
-.avatar {
-	width: 60px;
-	height: 60px;
-	border-radius: 50%;
 }
 
 .empty-result {
