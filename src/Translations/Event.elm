@@ -7,14 +7,14 @@ module Translations.Event exposing (..)
 import I18Next exposing (Delims(..), Translations, customTr, t, tr)
 
 
-scheduledFor : Translations -> String -> String -> String
-scheduledFor translations time beginsIn =
-    tr translations Curly "event.scheduledFor" [ ( "time", time ), ( "beginsIn", beginsIn ) ]
+timeWithEta : Translations -> String -> String -> String
+timeWithEta translations time eta =
+    tr translations Curly "event.timeWithEta" [ ( "time", time ), ( "eta", eta ) ]
 
 
-scheduledForCustom : Translations -> (String -> a) -> a -> a -> List a
-scheduledForCustom translations nonPlaceholderLift time beginsIn =
-    customTr translations Curly nonPlaceholderLift "event.scheduledFor" [ ( "time", time ), ( "beginsIn", beginsIn ) ]
+timeWithEtaCustom : Translations -> (String -> a) -> a -> a -> List a
+timeWithEtaCustom translations nonPlaceholderLift time eta =
+    customTr translations Curly nonPlaceholderLift "event.timeWithEta" [ ( "time", time ), ( "eta", eta ) ]
 
 
 startsIn : Translations -> String -> String
@@ -25,6 +25,16 @@ startsIn translations duration =
 startsInCustom : Translations -> (String -> a) -> a -> List a
 startsInCustom translations nonPlaceholderLift duration =
     customTr translations Curly nonPlaceholderLift "event.startsIn" [ ( "duration", duration ) ]
+
+
+startedAgo : Translations -> String -> String
+startedAgo translations duration =
+    tr translations Curly "event.startedAgo" [ ( "duration", duration ) ]
+
+
+startedAgoCustom : Translations -> (String -> a) -> a -> List a
+startedAgoCustom translations nonPlaceholderLift duration =
+    customTr translations Curly nonPlaceholderLift "event.startedAgo" [ ( "duration", duration ) ]
 
 
 aDay : Translations -> String

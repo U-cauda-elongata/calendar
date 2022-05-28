@@ -17,24 +17,34 @@ scheduledLiveCustom translations nonPlaceholderLift members beginsIn =
     customTr translations Curly nonPlaceholderLift "event.description.scheduledLive" [ ( "members", members ), ( "beginsIn", beginsIn ) ]
 
 
-startedLive : Translations -> String -> String -> String
-startedLive translations members time =
-    tr translations Curly "event.description.startedLive" [ ( "members", members ), ( "time", time ) ]
+ongoingLive : Translations -> String -> String -> String
+ongoingLive translations members beganAgo =
+    tr translations Curly "event.description.ongoingLive" [ ( "members", members ), ( "beganAgo", beganAgo ) ]
 
 
-startedLiveCustom : Translations -> (String -> a) -> a -> a -> List a
-startedLiveCustom translations nonPlaceholderLift members time =
-    customTr translations Curly nonPlaceholderLift "event.description.startedLive" [ ( "members", members ), ( "time", time ) ]
+ongoingLiveCustom : Translations -> (String -> a) -> a -> a -> List a
+ongoingLiveCustom translations nonPlaceholderLift members beganAgo =
+    customTr translations Curly nonPlaceholderLift "event.description.ongoingLive" [ ( "members", members ), ( "beganAgo", beganAgo ) ]
 
 
-video : Translations -> String -> String -> String
-video translations members time =
-    tr translations Curly "event.description.video" [ ( "members", members ), ( "time", time ) ]
+endedLive : Translations -> String -> String -> String -> String
+endedLive translations members time duration =
+    tr translations Curly "event.description.endedLive" [ ( "members", members ), ( "time", time ), ( "duration", duration ) ]
 
 
-videoCustom : Translations -> (String -> a) -> a -> a -> List a
-videoCustom translations nonPlaceholderLift members time =
-    customTr translations Curly nonPlaceholderLift "event.description.video" [ ( "members", members ), ( "time", time ) ]
+endedLiveCustom : Translations -> (String -> a) -> a -> a -> a -> List a
+endedLiveCustom translations nonPlaceholderLift members time duration =
+    customTr translations Curly nonPlaceholderLift "event.description.endedLive" [ ( "members", members ), ( "time", time ), ( "duration", duration ) ]
+
+
+video : Translations -> String -> String -> String -> String
+video translations members time duration =
+    tr translations Curly "event.description.video" [ ( "members", members ), ( "time", time ), ( "duration", duration ) ]
+
+
+videoCustom : Translations -> (String -> a) -> a -> a -> a -> List a
+videoCustom translations nonPlaceholderLift members time duration =
+    customTr translations Curly nonPlaceholderLift "event.description.video" [ ( "members", members ), ( "time", time ), ( "duration", duration ) ]
 
 
 twoMembers : Translations -> String -> String -> String

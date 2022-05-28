@@ -1,7 +1,15 @@
 -- A dirty hack to handle plurality in i18n.
 
 
-module Calendar.TranslationsExt exposing (describeScheduledLive, describeStartedLive, describeVideo, inDuration, startsIn)
+module Calendar.TranslationsExt exposing
+    ( describeEndedLive
+    , describeOngoingLive
+    , describeScheduledLive
+    , describeVideo
+    , startedAgo
+    , startsIn
+    , trDuration
+    )
 
 import Calendar.Feed as Feed
 import Calendar.Util.Duration as Duration exposing (Duration)
@@ -26,17 +34,33 @@ describeScheduledLive translations author guests beginsIn =
         |> List.concat
 
 
-describeStartedLive :
+describeOngoingLive :
+    Translations
+    -> Feed.Preset
+    -> List Feed.Preset
+    -> List (Html msg)
+    -> List (Html msg)
+describeOngoingLive translations author guests beganAgo =
+    TED.ongoingLiveCustom translations
+        (text >> List.singleton)
+        (List.singleton <| text <| membersSummary translations author guests)
+        beganAgo
+        |> List.concat
+
+
+describeEndedLive :
     Translations
     -> Feed.Preset
     -> List Feed.Preset
     -> Html msg
+    -> Html msg
     -> List (Html msg)
-describeStartedLive translations author guests time =
-    TED.startedLiveCustom translations
+describeEndedLive translations author guests time duration =
+    TED.endedLiveCustom translations
         text
         (text <| membersSummary translations author guests)
         time
+        duration
 
 
 describeVideo :
@@ -44,12 +68,14 @@ describeVideo :
     -> Feed.Preset
     -> List Feed.Preset
     -> Html msg
+    -> Html msg
     -> List (Html msg)
-describeVideo translations author guests time =
-    TED.startedLiveCustom translations
+describeVideo translations author guests time duration =
+    TED.videoCustom translations
         text
         (text <| membersSummary translations author guests)
         time
+        duration
 
 
 startsIn : Translations -> Duration -> List (Html.Html msg)
@@ -57,12 +83,21 @@ startsIn translations duration =
     TE.startsInCustom translations
         text
         (time [ datetime <| Duration.toDatetime duration ]
-            [ text <| inDuration translations duration ]
+            [ text <| trDuration translations duration ]
         )
 
 
-inDuration : Translations -> Duration -> String
-inDuration translations duration =
+startedAgo : Translations -> Duration -> List (Html msg)
+startedAgo translations duration =
+    TE.startedAgoCustom translations
+        text
+        (time [ datetime <| Duration.toDatetime duration ]
+            [ text <| trDuration translations duration ]
+        )
+
+
+trDuration : Translations -> Duration -> String
+trDuration translations duration =
     case Duration.toSmh duration of
         ( _, Just ( _, Just h ) ) ->
             let

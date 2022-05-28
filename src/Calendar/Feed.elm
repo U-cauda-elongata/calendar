@@ -1,6 +1,7 @@
-module Calendar.Feed exposing (Event, Feed, Preset, decoder, presets)
+module Calendar.Feed exposing (Feed, Preset, decoder, presets)
 
-import Calendar.Util.Duration as Duration exposing (Duration)
+import Calendar.Event exposing (Event)
+import Calendar.Util.Duration as Duration
 import Json.Decode as D
 import List.Extra
 import Time
@@ -17,18 +18,6 @@ type alias Preset =
     { url : String
     , title : String
     , icon : String
-    }
-
-
-type alias Event =
-    { name : String
-    , live : Bool
-    , upcoming : Bool
-    , time : Time.Posix
-    , duration : Maybe Duration
-    , link : Maybe String
-    , thumbnail : Maybe String
-    , members : List Int
     }
 
 

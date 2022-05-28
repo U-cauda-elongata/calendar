@@ -5,7 +5,8 @@ import Browser.Dom as Dom
 import Browser.Events exposing (onKeyDown)
 import Calendar.Attributes exposing (..)
 import Calendar.Elements exposing (intlDate, intlTime)
-import Calendar.Feed as Feed exposing (Event)
+import Calendar.Event as Event exposing (Event)
+import Calendar.Feed as Feed
 import Calendar.Icon as Icon
 import Calendar.TranslationsExt as T
 import Calendar.Util as Util
@@ -232,8 +233,24 @@ update msg model =
 
         Tick now ->
             let
+                interval =
+                    if
+                        model.feeds
+                            |> List.any
+                                (\feed ->
+                                    (feed.retrieving == Retrieving)
+                                        || (feed.events |> List.any Event.isOngoing)
+                                )
+                    then
+                        -- An ongoing event need to show the duration elapsed since the start time
+                        -- in one-second precision.
+                        1000
+
+                    else
+                        60000
+
                 nextTick =
-                    60000 - (Time.posixToMillis now |> modBy 60000)
+                    interval - (Time.posixToMillis now |> modBy interval)
             in
             ( { model | now = now }
             , Process.sleep (nextTick |> toFloat)
@@ -608,9 +625,7 @@ viewMain model =
                     ( og, other ) =
                         events
                             |> List.partition
-                                (\( _, _, event ) ->
-                                    not event.upcoming && Util.isNothing event.duration
-                                )
+                                (\( _, _, event ) -> Event.isOngoing event)
                 in
                 ( og
                 , other
@@ -690,7 +705,7 @@ viewDateSection model date items =
                                 ( "now"
                                 , let
                                     viewTime =
-                                        intlTime [] model.now
+                                        intlTime [ class "flashing-time" ] model.now
                                   in
                                   if List.isEmpty ongoing_items then
                                     div [ id "now", class "now" ]
@@ -763,11 +778,28 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
                                             [ class "event-duration"
                                             , datetime <| Duration.toDatetime duration
                                             ]
-                                            [ text <| Duration.format duration ]
+                                            (Duration.render duration)
                                         ]
 
                                     Nothing ->
-                                        [ viewImg ]
+                                        if not event.upcoming then
+                                            let
+                                                duration =
+                                                    Duration.fromMillis <|
+                                                        Time.posixToMillis model.now
+                                                            - Time.posixToMillis event.time
+                                            in
+                                            [ viewImg
+                                            , time
+                                                [ class "event-duration"
+                                                , class "flashing-time"
+                                                , datetime <| Duration.toDatetime duration
+                                                ]
+                                                (text "<" :: Duration.render duration)
+                                            ]
+
+                                        else
+                                            [ viewImg ]
                                 )
                             ]
 
@@ -798,29 +830,63 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
                 viewTime =
                     intlTime [] event.time
             in
-            if event.live then
-                let
-                    viewStartsIn =
-                        T.startsIn model.translations eta
-                in
-                if Duration.toSeconds eta > 0 then
-                    ( TEvent.scheduledForCustom model.translations
-                        (text >> List.singleton)
-                        [ viewTime ]
-                        viewStartsIn
-                        |> List.concat
-                    , T.describeScheduledLive model.translations feed.meta membersMeta viewStartsIn
-                    )
+            case event.duration of
+                Just duration ->
+                    let
+                        viewDuration =
+                            time [ datetime <| Duration.toDatetime duration ]
+                                (Duration.render duration)
+                    in
+                    if event.live then
+                        ( TEvent.startedAtCustom model.translations text viewTime
+                        , T.describeEndedLive model.translations
+                            feed.meta
+                            membersMeta
+                            viewTime
+                            viewDuration
+                        )
 
-                else
-                    ( TEvent.startedAtCustom model.translations text viewTime
-                    , T.describeStartedLive model.translations feed.meta membersMeta viewTime
-                    )
+                    else
+                        ( TEvent.uploadedAtCustom model.translations text viewTime
+                        , T.describeVideo model.translations
+                            feed.meta
+                            membersMeta
+                            viewTime
+                            viewDuration
+                        )
 
-            else
-                ( TEvent.uploadedAtCustom model.translations text viewTime
-                , T.describeVideo model.translations feed.meta membersMeta viewTime
-                )
+                Nothing ->
+                    if event.upcoming then
+                        let
+                            viewStartsIn =
+                                T.startsIn model.translations eta
+                        in
+                        ( TEvent.timeWithEtaCustom model.translations
+                            (text >> List.singleton)
+                            [ viewTime ]
+                            viewStartsIn
+                            |> List.concat
+                        , T.describeScheduledLive model.translations
+                            feed.meta
+                            membersMeta
+                            viewStartsIn
+                        )
+
+                    else
+                        let
+                            viewStartedAgo =
+                                T.startedAgo model.translations (Duration.negate eta)
+                        in
+                        ( TEvent.timeWithEtaCustom model.translations
+                            (text >> List.singleton)
+                            [ viewTime ]
+                            viewStartedAgo
+                            |> List.concat
+                        , T.describeOngoingLive model.translations
+                            feed.meta
+                            membersMeta
+                            viewStartedAgo
+                        )
     in
     ( eventId
     , li

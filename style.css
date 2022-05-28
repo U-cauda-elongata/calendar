@@ -325,7 +325,7 @@ hr {
 }
 
 /* Animate the time separator to indicate that the time is dynamically updated. */
-.now .time-separator {
+.flashing-time .time-separator {
 	animation: 2s flash infinite;
 }
 

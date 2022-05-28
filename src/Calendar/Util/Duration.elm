@@ -1,4 +1,7 @@
-module Calendar.Util.Duration exposing (Duration, format, fromMillis, fromSeconds, toDatetime, toSeconds, toSmh)
+module Calendar.Util.Duration exposing (Duration, fromMillis, fromSeconds, negate, render, toDatetime, toSeconds, toSmh)
+
+import Html exposing (..)
+import Html.Attributes exposing (..)
 
 
 type Duration
@@ -46,18 +49,33 @@ toSmh duration =
                     ( secPart, Just ( min |> modBy 60, Just h ) )
 
 
-format : Duration -> String
-format duration =
+negate : Duration -> Duration
+negate duration =
+    case duration of
+        Duration secs ->
+            fromSeconds -secs
+
+
+render : Duration -> List (Html msg)
+render duration =
+    let
+        sep =
+            span [ class "time-separator" ] [ text ":" ]
+    in
     case toSmh duration |> Tuple.mapSecond (Maybe.withDefault ( 0, Nothing )) of
         ( s, ( m, Just h ) ) ->
-            String.fromInt h
-                ++ ":"
-                ++ (String.fromInt m |> zeroPad2)
-                ++ ":"
-                ++ (String.fromInt s |> zeroPad2)
+            [ text <| String.fromInt h
+            , sep
+            , text (String.fromInt m |> zeroPad2)
+            , sep
+            , text (String.fromInt s |> zeroPad2)
+            ]
 
         ( s, ( m, Nothing ) ) ->
-            String.fromInt m ++ ":" ++ (String.fromInt s |> zeroPad2)
+            [ text <| String.fromInt m
+            , sep
+            , text (String.fromInt s |> zeroPad2)
+            ]
 
 
 {-| Formats a `Duration` as a valid `datetime` attribute value of `<time>` element.
