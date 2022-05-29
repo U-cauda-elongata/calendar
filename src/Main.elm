@@ -475,7 +475,7 @@ viewDrawer model =
                     , ariaLabelledby "filter-clear-button-label"
                     ]
                     [ Icon.clear
-                    , p [ id "filter-clear-button-label" ]
+                    , span [ id "filter-clear-button-label", class "drawer-button-label" ]
                         [ text <| T.clearFilter model.translations ]
                     ]
                 ]
@@ -580,7 +580,8 @@ viewFeedFilter model =
                                     , alt (T.avatarAlt model.translations)
                                     ]
                                     []
-                                , p [ id pId ] [ text feed.meta.title ]
+                                , span [ id pId, class "drawer-button-label" ]
+                                    [ text feed.meta.title ]
                                 ]
                             ]
                     )
@@ -690,7 +691,7 @@ viewDateSection model date items =
                         )
                 )
         ]
-        [ header [ class "date-heading" ] [ intlDate [] date ]
+        [ header [ class "date-heading" ] [ h2 [] [ intlDate [] date ] ]
         , Keyed.ul [ class "timeline" ]
             (items
                 |> List.map
@@ -706,8 +707,8 @@ viewDateSection model date items =
                                         intlTime [ class "flashing-time" ] model.now
                                   in
                                   if List.isEmpty ongoing_items then
-                                    div [ id "now", class "now" ]
-                                        [ p [] <|
+                                    h2 [ id "now", class "now" ]
+                                        [ h2 [] <|
                                             T.nowSeparatorCustom model.translations
                                                 text
                                                 viewTime
@@ -716,10 +717,12 @@ viewDateSection model date items =
                                   else
                                     section [ id "now", class "ongoing" ]
                                         [ header [ class "now" ]
-                                            (T.ongoingCustom model.translations
-                                                text
-                                                viewTime
-                                            )
+                                            [ h2 []
+                                                (T.ongoingCustom model.translations
+                                                    text
+                                                    viewTime
+                                                )
+                                            ]
                                         , Keyed.ul []
                                             (ongoing_items
                                                 |> List.map

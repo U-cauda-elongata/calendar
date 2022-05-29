@@ -103,10 +103,6 @@ h1, h2, h3, h4, h5, h6 {
 	margin: initial;
 }
 
-p {
-	margin: initial;
-}
-
 ul, menu {
 	margin: initial;
 	padding: initial;
@@ -252,7 +248,7 @@ hr {
 	height: var(--hamburger-length);
 }
 
-.drawer-labeled-button > p {
+.drawer-button-label {
 	grid-column: 2;
 	overflow: hidden;
 	white-space: nowrap;
@@ -272,7 +268,7 @@ hr {
 	stroke: var(--disabled-button-color);
 }
 
-.filter-clear-button:disabled > p {
+.filter-clear-button:disabled > .drawer-button-label {
 	opacity: .2;
 }
 
@@ -455,10 +451,6 @@ hr {
 
 .empty-result {
 	text-align: center;
-}
-
-.empty-result > p {
-	margin: var(--margin-unit);
 }
 
 footer, footer a {
