@@ -41,6 +41,26 @@
 				});
 			}
 		});
+		app.ports.showModal.subscribe(id => {
+			var node = document.getElementById(id);
+			if (node) {
+				if (node.showModal) {
+					node.showModal();
+				} else {
+					node.toggleAttribute('open', true);
+				}
+			}
+		});
+		app.ports.close.subscribe(id => {
+			var node = document.getElementById(id);
+			if (node) {
+				if (node.close) {
+					node.close();
+				} else {
+					node.toggleAttribute('open', false);
+				}
+			}
+		});
 		app.ports.copy.subscribe(text => {
 			navigator.clipboard.writeText(text);
 		});

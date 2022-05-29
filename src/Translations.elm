@@ -125,3 +125,13 @@ emptyResultPost translations =
 emptyResultPostCustom : Translations -> (String -> a) -> List a
 emptyResultPostCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "emptyResultPost" []
+
+
+closeDialog : Translations -> String
+closeDialog translations =
+    t translations "closeDialog"
+
+
+closeDialogCustom : Translations -> (String -> a) -> List a
+closeDialogCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "closeDialog" []

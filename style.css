@@ -27,7 +27,6 @@
 	--hamburger-length: 50px;
 	--drawer-width: 100vw;
 	--event-width: 280px;
-	--social-icon-length: 30px;
 }
 
 @supports not ((backdrop-filter: blur(5px)) or (-webkit-backdrop-filter: blur(5px))) {
@@ -121,13 +120,13 @@ button {
 	font-family: inherit;
 }
 
-body > header {
+.primary-window > header {
 	height: var(--hamburger-length);
 	border-top: solid var(--border-width) var(--border-color);
 	border-bottom: solid var(--border-width) var(--border-color);
 }
 
-body > header > h1 {
+.primary-window > header > h1 {
 	text-align: center;
 }
 
@@ -157,7 +156,7 @@ hr {
 
 .hamburger-label {
 	position: fixed;
-	z-index: 3; /* Put it above `.drawer-container`. */
+	z-index: 3; /* Put it above `.drawer`. */
 	width: var(--hamburger-length);
 	height: var(--hamburger-length);
 	border: var(--border-width) solid var(--border-color);
@@ -171,6 +170,8 @@ hr {
 }
 
 .hamburger-checkbox:checked ~ .hamburger-label {
+	/* XXX: On Gecko, the `blur(...)` filter on `.primary-window` ignores fixed state of backdrop
+	 * elements. */
 	position: fixed;
 }
 
@@ -180,7 +181,7 @@ hr {
 	}
 }
 
-.drawer-container {
+.drawer {
 	position: fixed;
 	z-index: 2; /* Put it above the main content and `.date-heading`. */
 	top: 0;
@@ -198,36 +199,50 @@ hr {
 	 * sighted users a bit, but might be confusing for screen reader users. */
 }
 
-.hamburger-checkbox:checked ~ .drawer-container, .drawer-container:focus-within {
+.hamburger-checkbox:checked ~ .drawer, .drawer-container:focus-within {
 	left: 0;
 }
 
 @media (prefers-reduced-motion) {
 	/* Use a dissolving animation. */
 	/* XXX: This causes a discontinuity as `z-index` crosses `0`. */
-	.drawer-container {
+	.drawer {
 		left: 0;
 		z-index: -2;
 		opacity: 0;
 		transition-property: z-index,opacity;
 	}
 
-	.hamburger-checkbox:checked ~ .drawer-container, .drawer-container:focus-within {
+	.hamburger-checkbox:checked ~ .drawer, .drawer-container:focus-within {
 		z-index: 2;
 		opacity: 1;
 	}
 }
 
-.drawer {
-	display: grid;
-	padding-top: var(--hamburger-length);
+.filter-menu {
+	display: flex;
+	flex-direction: column;
+	padding-top: calc(2 * var(--border-width) + var(--hamburger-length));
 	width: var(--drawer-width);
+	min-height: calc(100vh - 2 * var(--border-width) - var(--hamburger-length));
 	background-color: var(--background-color);
 }
 
-.drawer > menu > li, .filter-item {
+.filter-menu > li {
+	margin-top: var(--margin-unit);
+}
+
+.filter-menu > li:last-child {
+	margin-bottom: var(--margin-unit);
+}
+
+.filter-item {
 	margin-top: var(--margin-unit);
 	margin-bottom: var(--margin-unit);
+}
+
+.filter-menu > hr {
+	width: 100%;
 }
 
 .icon {
@@ -292,12 +307,14 @@ hr {
 	opacity: .2;
 }
 
-.drawer > footer {
-	align-self: end;
-	border-top: solid var(--border-width) var(--border-color);
-	padding-top: var(--margin-unit);
-	padding-left: calc((var(--hamburger-length) - var(--social-icon-length)) / 2);
-	text-align: left;
+.feed-filter {
+	flex-grow: 1;
+}
+
+.about-button {
+	cursor: pointer;
+	fill: var(--background-color);
+	stroke: currentColor;
 }
 
 .date-heading {
@@ -427,7 +444,7 @@ hr {
 
 .popup {
 	position: absolute;
-	z-index: 3; /* Put it above everything else. */
+	z-index: 3; /* Put it above everything else except the modal dialog. */
 	right: 0;
 	background-color: var(--background-color);
 	border: solid var(--border-width) var(--border-color);
@@ -458,10 +475,10 @@ footer, footer a {
 }
 
 .social-icon {
-	display: inline-block;
+	vertical-align: middle;
+	width: 2em;
+	height: 2em;
 	fill: currentColor;
-	width: var(--social-icon-length);
-	height: var(--social-icon-length);
 }
 
 .error-log {
@@ -497,6 +514,72 @@ footer, footer a {
 	background-color: #FFF;
 }
 
+.modal-backdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 4; /* Put it above everything else. */
+	margin: 0;
+	border: none;
+	width: 100vw;
+	max-width: initial;
+	height: 100vh;
+	max-height: initial;
+	padding: 0;
+	background: none;
+}
+
+.modal-backdrop:not([open]) {
+	display: none;
+}
+
+.modal-backdrop[open] ~ .primary-window {
+	filter: blur(5px);
+}
+
+.modal {
+	display: flex;
+	flex-direction: column;
+	align-self: center;
+	width: 100vw;
+	height: 100vh;
+	background-color: var(--background-color);
+	color: var(--color);
+}
+
+.dialog-title-bar {
+	display: grid;
+	border-bottom: solid var(--border-width) var(--border-color);
+	padding: calc(2 * var(--margin-unit));
+	padding-top: 0;
+	padding-bottom: 0;
+	height: var(--hamburger-length);
+	flex-shrink: 0;
+}
+
+.dialog-title {
+	grid-row: 1;
+	grid-column: 1/2;
+	justify-self: center;
+	align-self: center;
+}
+
+.dialog-close-button {
+	grid-row: 1;
+	grid-column: 1;
+	width: 2em;
+	height: 2em;
+	align-self: center;
+	cursor: pointer;
+	stroke: currentColor;
+}
+
+.dialog-content {
+	padding: calc(2 * var(--margin-unit));
+	padding-top: 0;
+	overflow-y: scroll;
+}
+
 /* Always show icons in the drawer. */
 @media (min-width: 480px) {
 	:root {
@@ -507,22 +590,22 @@ footer, footer a {
 		background-color: var(--background-color);
 	}
 
-	.drawer-container {
+	.drawer {
 		/* Use `initial` rather than `0` to prevent `transition` animation to trigger when shrinking
 		 * the viewport width. */
 		/* XXX: The animation of `.drawer-right` still triggers. */
 		left: initial;
-		/* Visually hide labels and the search input in `.drawer` by default. */
+		/* Visually hide labels and the search input inside it by default. */
 		width: calc(var(--hamburger-length) + var(--border-width));
 		overflow-x: hidden;
 		transition: width .3s;
 	}
 
-	.hamburger-checkbox:checked ~ .drawer-container,
+	.hamburger-checkbox:checked ~ .drawer,
 	/* We want the drawer to open when the search input is focused, but using `:focus-within` here
 	 * would cause the drawer to open when a feed filter button is clicked too.
 	 * So we are using `.search-focused` class, which is set by Elm when the input is focused. */
-	.search-focused ~ .drawer-container {
+	.search-focused ~ .drawer {
 		/* Show the labels and input. */
 		width: var(--drawer-width);
 	}
@@ -539,7 +622,7 @@ footer, footer a {
 
 	@media (prefers-reduced-motion) {
 		/* TODO: Find a better animation. */
-		.drawer-container {
+		.drawer {
 			transition: none;
 			/* Revert rules in the previous `@media (prefers-reduced-motion)`. */
 			z-index: 2;
@@ -549,6 +632,25 @@ footer, footer a {
 		.drawer-right {
 			transition: none;
 		}
+	}
+}
+
+/* Make the modal dialog smaller. */
+@media (min-width: 600px) {
+	.modal-backdrop {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.modal {
+		width: fit-content;
+		min-width: 480px;
+		max-width: calc(100vw - 12 * var(--margin-unit));
+		height: fit-content;
+		max-height: calc(100vh - 12 * var(--margin-unit));
+		border: solid var(--border-width) var(--border-color);
+		border-radius: 10px;
 	}
 }
 

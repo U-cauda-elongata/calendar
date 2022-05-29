@@ -4,7 +4,7 @@ import Browser exposing (Document)
 import Browser.Dom as Dom
 import Browser.Events exposing (onKeyDown)
 import Calendar.Attributes exposing (..)
-import Calendar.Elements exposing (intlDate, intlTime)
+import Calendar.Elements exposing (..)
 import Calendar.Event as Event exposing (Event)
 import Calendar.Feed as Feed
 import Calendar.Icon as Icon
@@ -18,16 +18,18 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onBlur, onClick, onFocus, onInput)
 import Html.Keyed as Keyed
-import Html.Lazy exposing (lazy6)
+import Html.Lazy exposing (..)
 import Http
 import I18Next exposing (Translations, translationsDecoder)
 import Json.Decode as D
 import List.Extra
 import Process
 import Regex
+import Svg.Attributes
 import Task
 import Time
 import Translations as T
+import Translations.About as TAbout
 import Translations.Error as TError
 import Translations.Event as TEvent
 import Translations.Share as TShare
@@ -48,6 +50,7 @@ type alias Model =
       -- from causing `slideViewportInto` to be called again.
       initialized : Bool
     , feeds : List Feed
+    , mode : Mode
     , searchFocused : Bool
     , activePopup : Maybe ( Int, Int )
     , errors : List Error
@@ -75,6 +78,11 @@ type FeedRetrievalState
     | Failure
 
 
+type Mode
+    = None
+    | About
+
+
 type Error
     = FeedHttpError Int Http.Error
     | TranslationsHttpError String Http.Error
@@ -87,6 +95,8 @@ type Msg
     | ToggleFeedFilter Int Bool
     | KeyDown String
     | SearchFocus Bool
+    | SetMode Mode
+    | CloseWidgets
     | OpenPopup ( Int, Int )
     | ClosePopup
     | SetTimeZone Time.Zone
@@ -109,6 +119,12 @@ port setLang : String -> Cmd msg
 
 
 port slideViewportInto : String -> Cmd msg
+
+
+port showModal : String -> Cmd msg
+
+
+port close : String -> Cmd msg
 
 
 port copy : String -> Cmd msg
@@ -143,6 +159,7 @@ init flags =
         Time.utc
         False
         (Feed.presets |> List.map (\feed -> Feed feed "" [] Retrieving True))
+        None
         False
         Nothing
         []
@@ -297,7 +314,8 @@ update msg model =
                     ( model, focusSearch )
 
                 "Escape" ->
-                    ( model, blurSearch )
+                    update CloseWidgets model
+                        |> Tuple.mapSecond (\cmd -> Cmd.batch [ cmd, blurSearch ])
 
                 _ ->
                     ( model, Cmd.none )
@@ -307,6 +325,28 @@ update msg model =
             , -- Prevent `.drawer` to scroll into the search input before the transition completes.
               Dom.setViewportOf "drawer" 0 0 |> Task.attempt handleDomResult
             )
+
+        SetMode mode ->
+            ( { model | mode = mode, activePopup = Nothing }
+            , case ( model.mode, mode ) of
+                ( None, About ) ->
+                    Cmd.batch
+                        [ showModal "about"
+                        , Dom.focus "about-close-button" |> Task.attempt handleDomResult
+                        ]
+
+                ( About, None ) ->
+                    Cmd.batch
+                        [ close "about"
+                        , Dom.focus "about-button" |> Task.attempt handleDomResult
+                        ]
+
+                _ ->
+                    Cmd.none
+            )
+
+        CloseWidgets ->
+            update (SetMode None) { model | activePopup = Nothing }
 
         OpenPopup idx ->
             ( { model | activePopup = Just idx }, Cmd.none )
@@ -395,12 +435,10 @@ handleDomResult result =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions model =
+subscriptions _ =
     Sub.batch
         [ onKeyDown keyDecoder
-        , model.activePopup
-            |> Maybe.map (always <| Browser.Events.onClick (D.succeed ClosePopup))
-            |> Maybe.withDefault Sub.none
+        , Browser.Events.onClick (D.succeed CloseWidgets)
         ]
 
 
@@ -434,58 +472,72 @@ view : Model -> Document Msg
 view model =
     { title = T.title model.translations
     , body =
-        [ input
-            [ id "hamburger"
-            , classList
-                [ ( "hamburger-checkbox", True )
-                , -- XXX: Maybe this should be set to `<body>` ideally?
-                  ( "search-focused", model.searchFocused )
+        [ lazy viewAboutDialog model.translations
+        , div [ class "primary-window", ariaHidden <| model.mode /= None ]
+            [ input
+                [ id "hamburger"
+                , classList
+                    [ ( "hamburger-checkbox", True )
+                    , -- XXX: Maybe this should be set to `<body>` ideally?
+                      ( "search-focused", model.searchFocused )
+                    ]
+                , type_ "checkbox"
                 ]
-            , type_ "checkbox"
-            ]
-            []
-        , label
-            [ classList
-                [ ( "hamburger-label", True )
-                , ( "filter-active", filterApplied model )
+                []
+            , label
+                [ classList
+                    [ ( "hamburger-label", True )
+                    , ( "filter-active", filterApplied model )
+                    ]
+                , for "hamburger"
+                , ariaHidden True
                 ]
-            , for "hamburger"
-            , ariaHidden True
+                [ Icon.hamburger ]
+            , header [ class "app-title", class "drawer-right" ]
+                [ h1 [] [ text (T.title model.translations) ] ]
+            , div [ id "drawer", class "drawer" ] [ viewDrawer model ]
+            , div [ class "drawer-right" ] [ viewMain model, viewErrorLog model ]
             ]
-            [ Icon.hamburger ]
-        , header [ class "app-title", class "drawer-right" ]
-            [ h1 [] [ text (T.title model.translations) ] ]
-        , div [ id "drawer", class "drawer-container" ] [ viewDrawer model ]
-        , div [ class "drawer-right" ] [ viewMain model, viewErrorLog model ]
         ]
     }
 
 
 viewDrawer : Model -> Html Msg
 viewDrawer model =
-    div [ class "drawer" ]
-        [ menu [ ariaLabel (T.filterMenuLabel model.translations) ]
-            [ li []
-                [ button
-                    [ class "drawer-labeled-button"
-                    , class "filter-clear-button"
-                    , title <| T.clearFilter model.translations
-                    , disabled <| not (filterApplied model)
-                    , onClick ClearFilter
-                    , ariaLabelledby "filter-clear-button-label"
-                    ]
-                    [ Icon.clear
-                    , span [ id "filter-clear-button-label", class "drawer-button-label" ]
-                        [ text <| T.clearFilter model.translations ]
-                    ]
+    menu [ class "filter-menu", ariaLabel (T.filterMenuLabel model.translations) ]
+        [ li []
+            [ button
+                [ class "drawer-labeled-button"
+                , class "filter-clear-button"
+                , title <| T.clearFilter model.translations
+                , disabled <| not (filterApplied model)
+                , onClick ClearFilter
+                , ariaLabelledby "filter-clear-button-label"
                 ]
-            , viewSearch model
-            , hr [] []
-            , viewFeedFilter model
+                [ Icon.clear
+                , span [ id "filter-clear-button-label", class "drawer-button-label" ]
+                    [ text <| T.clearFilter model.translations ]
+                ]
             ]
-        , footer []
-            [ a [ class "social-icon", href "https://github.com/U-cauda-elongata/calendar" ]
-                [ Icon.gitHub ]
+        , viewSearch model
+        , hr [] []
+        , viewFeedFilter model
+        , hr [] []
+        , li []
+            [ button
+                [ id "about-button"
+                , class "drawer-labeled-button"
+                , class "about-button"
+                , ariaControls "about"
+                , ariaExpanded <| model.mode == About
+                , ariaHaspopup "dialog"
+                , ariaLabelledby "about-button-label"
+                , Html.Events.stopPropagationOn "click" <| D.succeed ( SetMode About, True )
+                ]
+                [ Icon.about
+                , span [ id "about-button-label", class "drawer-button-label" ]
+                    [ text <| TAbout.title model.translations ]
+                ]
             ]
         ]
 
@@ -553,7 +605,7 @@ searchTags string =
 
 viewFeedFilter : Model -> Html Msg
 viewFeedFilter model =
-    li [ ariaLabel (T.feedFilterLabel model.translations) ]
+    li [ class "feed-filter", ariaLabel (T.feedFilterLabel model.translations) ]
         [ ul []
             (model.feeds
                 |> List.indexedMap
@@ -932,7 +984,7 @@ viewEventPopup features translations idx key expanded event =
             , ariaHaspopup "menu"
             , ariaControls popupId
             , ariaExpanded expanded
-            , -- Call `stopPropagation` to prevent `ClosePopup` message to be sent.
+            , -- Call `stopPropagation` to prevent `CloseWidgets` message to be sent.
               Html.Events.stopPropagationOn "click" <|
                 D.succeed
                     ( if expanded then
@@ -1118,3 +1170,60 @@ httpErrorToString err =
 
         Http.BadBody e ->
             "BadBody: " ++ e
+
+
+viewAboutDialog : Translations -> Html Msg
+viewAboutDialog translations =
+    dialog
+        [ id "about"
+        , class "modal-backdrop"
+        , role "dialog"
+        , ariaLabelledby "about-heading"
+        , ariaModal True
+        ]
+        [ -- The purposes of this `div` are:
+          -- 1. To prevent the click event from firinng on the backdrop
+          -- 2. To make polyfill styling easier
+          div [ class "modal", Html.Events.stopPropagationOn "click" <| D.succeed ( NoOp, True ) ]
+            [ header [ class "dialog-title-bar" ]
+                [ h2 [ id "about-heading", class "dialog-title" ]
+                    [ text <| TAbout.title translations ]
+                , button
+                    [ id "about-close-button"
+                    , class "dialog-close-button"
+                    , ariaLabel <| T.closeDialog translations
+                    , onClick <| SetMode None
+                    ]
+                    [ Icon.closeDialog ]
+                ]
+            , div [ class "dialog-content" ]
+                [ p [] [ text <| TAbout.introduction translations ]
+                , p [] [ text <| TAbout.aboutAccuracy translations ]
+                , p []
+                    (TAbout.disclaimerCustom translations
+                        text
+                        (a [ href "https://github.com/U-cauda-elongata/calendar" ]
+                            [ text <| TAbout.gitHubRepository translations ]
+                        )
+                    )
+                , p [] [ text <| TAbout.rights translations ]
+                , p [] [ text <| TAbout.appeal translations ]
+                , h3 [] [ text <| TAbout.licenseHeading translations ]
+                , p []
+                    (TAbout.licenseBodyCustom translations text <|
+                        a [ href "COPYING" ] [ text "COPYING" ]
+                    )
+                , h3 [] [ text <| TAbout.links translations ]
+                , ul []
+                    [ li []
+                        [ a [ href "https://github.com/U-cauda-elongata/calendar" ]
+                            -- Using `Html.Attributes.class` function here would cause an exception
+                            -- (in pure Elm, wow!) of setting getter-only property `className`.
+                            [ Icon.gitHub [ Svg.Attributes.class "social-icon", ariaHidden True ]
+                            , text "GitHub"
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]

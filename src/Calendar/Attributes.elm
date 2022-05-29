@@ -9,6 +9,7 @@ module Calendar.Attributes exposing
     , ariaLabel
     , ariaLabelledby
     , ariaLive
+    , ariaModal
     , loading
     , role
     , xmlns
@@ -78,6 +79,11 @@ ariaLabelledby =
 ariaLive : String -> Attribute msg
 ariaLive =
     attribute "aria-live"
+
+
+ariaModal : Bool -> Attribute msg
+ariaModal =
+    boolStringAttribute "aria-modal"
 
 
 loading : String -> Attribute msg

@@ -1,9 +1,14 @@
-module Calendar.Elements exposing (intlDate, intlTime)
+module Calendar.Elements exposing (dialog, intlDate, intlTime)
 
 import Calendar.Util.NaiveDate exposing (NaiveDate)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Time
+
+
+dialog : List (Attribute msg) -> List (Html msg) -> Html msg
+dialog =
+    node "dialog"
 
 
 intlDate : List (Attribute msg) -> NaiveDate -> Html msg

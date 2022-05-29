@@ -45,5 +45,18 @@
 		"http": "Error retrieving <{{url}}>: {{msg}}",
 		"retry": "Retry",
 		"unexpected": "Unexpected error: {{msg}}"
+	},
+	"closeDialog": "Close",
+	"about": {
+		"title": "About this site",
+		"introduction": "This website collects videos and live streamings of official YouTube channels of Kemono Friends and Kemono Friends V Project and displays them in a single place.",
+		"aboutAccuracy": "The live streaming schedules are retrieved at certain intervals, and they do not always reflect latest information. See each YouTube channel for the latest information.",
+		"disclaimer": "The website is an unofficial site and thus, neither of Kemono Friends Project nor its affiliates, of course, shall be liable for the website in any way. For complaints and/or feature requests (esp. translation fixes ;), contact the operator via the {{ghRepository}} of the website or any other means.",
+		"gitHubRepository": "GitHub repository",
+		"rights": "The contents displayed on the website, such as thumbnail images, are retrieved from the official YouTube channels of Kemono Friends and the contents belong to copyright holders of respective videos or live streamings.",
+		"appeal": "Last of all, it's my pleasure if you support Kemono Friends and Kemono Friends V Project by subscribing to the YouTube channels, liking the linked live streamings, sending (super) chats, posting comments, following Twitter accounts of the streamers, et cetera!",
+		"licenseHeading": "License of the site",
+		"licenseBody": "For copyright notice of the website itself, including thirdparty software used by it, see {{copying}} file.",
+		"links": "Links"
 	}
 }
