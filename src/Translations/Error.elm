@@ -7,6 +7,16 @@ module Translations.Error exposing (..)
 import I18Next exposing (Delims(..), Translations, customTr, t, tr)
 
 
+error : Translations -> String
+error translations =
+    t translations "error.error"
+
+
+errorCustom : Translations -> (String -> a) -> List a
+errorCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "error.error" []
+
+
 http : Translations -> String -> String -> String
 http translations url msg =
     tr translations Curly "error.http" [ ( "url", url ), ( "msg", msg ) ]

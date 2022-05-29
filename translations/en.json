@@ -32,6 +32,7 @@
 	},
 	"thumbnailAlt": "Thumbnail image",
 	"share": {
+		"share": "Share",
 		"copyTitleAndUrl": "Copy title and URL",
 		"copyTimestamp": "Copy timestamp",
 		"shareVia": "Share via…"
@@ -40,6 +41,7 @@
 	"emptyResultKidding": "",
 	"emptyResultPost": "Try changing search terms in the menu.",
 	"error": {
+		"error": "Errors",
 		"http": "Error retrieving <{{url}}>: {{msg}}",
 		"retry": "Retry",
 		"unexpected": "Unexpected error: {{msg}}"

@@ -939,14 +939,14 @@ viewEventPopup features translations idx key expanded event =
                         OpenPopup idx
                     , True
                     )
-            , ariaLabel "共有"
+            , ariaLabel <| TShare.share translations
             ]
             -- TODO: Add an icon.
             [ text "…" ]
         , menu
             [ id popupId
             , classList [ ( "popup", True ), ( "expanded", expanded ) ]
-            , ariaLabel "共有"
+            , ariaLabel <| TShare.share translations
             ]
             -- TODO: Add icons to list items too.
             (let
@@ -1053,7 +1053,7 @@ viewErrorLog model =
         [ class "error-log"
         , role "log"
         , ariaLive "assertive"
-        , ariaLabel "Error"
+        , ariaLabel <| TError.error model.translations
         , hidden (List.isEmpty model.errors)
         ]
         (model.errors

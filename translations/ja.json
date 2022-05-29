@@ -33,6 +33,7 @@
 	},
 	"thumbnailAlt": "サムネイル",
 	"share": {
+		"share": "共有",
 		"copyTitleAndUrl": "タイトルとURLをコピー",
 		"copyTimestamp": "タイムスタンプをコピー",
 		"shareVia": "その他の方法で共有…"
@@ -41,6 +42,7 @@
 	"emptyResultKidding": "これから思い出が増えていくよ！",
 	"emptyResultPost": "メニューから検索条件を変えてみましょう。",
 	"error": {
+		"error": "エラー",
 		"http": "<{{url}}> の取得中にエラー: {{msg}}",
 		"retry": "再試行",
 		"unexpected": "予期せぬエラー: {{msg}}"

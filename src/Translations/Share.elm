@@ -7,6 +7,16 @@ module Translations.Share exposing (..)
 import I18Next exposing (Delims(..), Translations, customTr, t, tr)
 
 
+share : Translations -> String
+share translations =
+    t translations "share.share"
+
+
+shareCustom : Translations -> (String -> a) -> List a
+shareCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "share.share" []
+
+
 copyTitleAndUrl : Translations -> String
 copyTitleAndUrl translations =
     t translations "share.copyTitleAndUrl"
