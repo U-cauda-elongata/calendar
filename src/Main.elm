@@ -600,9 +600,7 @@ viewMain model =
             model.feeds |> List.any (\feed -> feed.retrieving == Retrieving)
     in
     Keyed.node "main"
-        [ ariaLive "polite"
-        , ariaBusy busy
-        ]
+        [ ariaBusy busy ]
         (let
             anyEventIsShown =
                 model.feeds
