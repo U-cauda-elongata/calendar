@@ -1049,7 +1049,7 @@ viewEventMember isAuthor feed =
 
 viewErrorLog : Model -> Html Msg
 viewErrorLog model =
-    div
+    ul
         [ class "error-log"
         , role "log"
         , ariaLive "assertive"
@@ -1058,7 +1058,7 @@ viewErrorLog model =
         ]
         (model.errors
             |> List.Extra.indexedFoldl
-                (\i err acc -> p [] (viewError model i err) :: acc)
+                (\i err acc -> li [] (viewError model i err) :: acc)
                 []
         )
 

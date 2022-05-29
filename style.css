@@ -489,7 +489,7 @@ footer, footer a {
 		sans-serif;
 }
 
-.error-log > p {
+.error-log > li {
 	margin: var(--margin-unit);
 }
 
