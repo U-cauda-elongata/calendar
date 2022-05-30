@@ -8,9 +8,8 @@ jq -r '.dependencies | values | .[] | to_entries | .[] | [.key, .value] | @tsv' 
 | while read -r pkg ver; do
 	echo "## $pkg $ver"
 	echo
-	# Print line-by-line to unify final-newline behaviors.
 	while read -r line; do
-		echo "$line"
+		echo "> $line"
 	done < "$elm_home/packages/$pkg/$ver/LICENSE"
 	echo
 done

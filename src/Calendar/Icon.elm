@@ -1,4 +1,4 @@
-module Calendar.Icon exposing (about, clear, closeDialog, gitHub, hamburger, search)
+module Calendar.Icon exposing (about, backButton, clear, closeDialog, gitHub, hamburger, search)
 
 import Calendar.Attributes exposing (..)
 import Svg exposing (..)
@@ -9,6 +9,7 @@ import Svg.Attributes
         , cy
         , d
         , fill
+        , points
         , r
         , stroke
         , strokeWidth
@@ -33,6 +34,17 @@ about attrs =
         , circle [ cx "50%", cy "5", r "1", stroke "none", fill "currentColor" ] []
         , line [ x1 "50%", y1 "50%", x2 "50%", y2 "75%", strokeWidth "2" ] []
         ]
+
+
+backButton : Svg msg
+backButton =
+    svg
+        [ xmlns "http://www.w3.org/2000/svg"
+        , viewBox "0 0 16 16"
+        , class "icon"
+        , role "img"
+        ]
+        [ polyline [ points "8,4 0,8 8,12", fill "none" ] [] ]
 
 
 clear : List (Attribute msg) -> Svg msg

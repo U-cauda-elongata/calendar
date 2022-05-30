@@ -47,6 +47,7 @@
 		"unexpected": "Unexpected error: {{msg}}"
 	},
 	"closeDialog": "Close",
+	"goBackTo": "Go back to \"{{section}}\"",
 	"about": {
 		"title": "About this site",
 		"introduction": "This website collects videos and live streamings of official YouTube channels of Kemono Friends and Kemono Friends V Project and displays them in a single place.",

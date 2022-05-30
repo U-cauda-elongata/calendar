@@ -23,6 +23,7 @@ import Http
 import I18Next exposing (Translations, translationsDecoder)
 import Json.Decode as D
 import List.Extra
+import Markdown
 import Process
 import Regex
 import Svg.Attributes
@@ -51,6 +52,7 @@ type alias Model =
       initialized : Bool
     , feeds : List Feed
     , mode : Mode
+    , copying : Maybe (Result Http.Error (Html Msg))
     , searchFocused : Bool
     , activePopup : Maybe ( Int, Int )
     , errors : List Error
@@ -80,7 +82,12 @@ type FeedRetrievalState
 
 type Mode
     = None
-    | About
+    | About AboutView
+
+
+type AboutView
+    = AboutMain
+    | AboutCopying
 
 
 type Error
@@ -97,6 +104,10 @@ type Msg
     | SearchFocus Bool
     | SetMode Mode
     | CloseWidgets
+    | AboutBackToMain
+    | AboutOpenCopying
+    | AboutGotCopying (Result Http.Error String)
+    | AboutRetryGetCopying
     | OpenPopup ( Int, Int )
     | ClosePopup
     | SetTimeZone Time.Zone
@@ -160,6 +171,7 @@ init flags =
         False
         (Feed.presets |> List.map (\feed -> Feed feed "" [] Retrieving True))
         None
+        Nothing
         False
         Nothing
         []
@@ -329,13 +341,13 @@ update msg model =
         SetMode mode ->
             ( { model | mode = mode, activePopup = Nothing }
             , case ( model.mode, mode ) of
-                ( None, About ) ->
+                ( None, About _ ) ->
                     Cmd.batch
                         [ showModal "about"
                         , Dom.focus "about-close-button" |> Task.attempt handleDomResult
                         ]
 
-                ( About, None ) ->
+                ( About _, None ) ->
                     Cmd.batch
                         [ close "about"
                         , Dom.focus "about-button" |> Task.attempt handleDomResult
@@ -347,6 +359,25 @@ update msg model =
 
         CloseWidgets ->
             update (SetMode None) { model | activePopup = Nothing }
+
+        AboutBackToMain ->
+            ( { model | mode = About AboutMain }, Cmd.none )
+
+        AboutOpenCopying ->
+            ( { model | mode = About AboutCopying }
+            , case model.copying of
+                Just _ ->
+                    Cmd.none
+
+                Nothing ->
+                    getCopying
+            )
+
+        AboutGotCopying result ->
+            ( { model | copying = Just <| Result.map (Markdown.toHtml []) result }, Cmd.none )
+
+        AboutRetryGetCopying ->
+            ( model, getCopying )
 
         OpenPopup idx ->
             ( { model | activePopup = Just idx }, Cmd.none )
@@ -430,6 +461,11 @@ handleDomResult result =
             ReportError <| Unexpected ("Node not found: " ++ id)
 
 
+getCopying : Cmd Msg
+getCopying =
+    Http.get { url = "COPYING", expect = Http.expectString AboutGotCopying }
+
+
 
 -- SUBSCRIPTIONS
 
@@ -472,7 +508,7 @@ view : Model -> Document Msg
 view model =
     { title = T.title model.translations
     , body =
-        [ lazy viewAboutDialog model.translations
+        [ lazy3 viewAboutDialog model.mode model.copying model.translations
         , div [ class "primary-window", ariaHidden <| model.mode /= None ]
             [ input
                 [ id "hamburger"
@@ -509,6 +545,7 @@ viewDrawer model =
             [ button
                 [ class "drawer-labelled-button"
                 , class "filter-clear-button"
+                , class "unstyle"
                 , title <| T.clearFilter model.translations
                 , disabled <| not (filterApplied model)
                 , onClick ClearFilter
@@ -530,11 +567,19 @@ viewDrawer model =
                 [ id "about-button"
                 , class "drawer-labelled-button"
                 , class "about-button"
+                , class "unstyle"
                 , ariaControls "about"
-                , ariaExpanded <| model.mode == About
+                , ariaExpanded <|
+                    case model.mode of
+                        About _ ->
+                            True
+
+                        _ ->
+                            False
                 , ariaHaspopup "dialog"
                 , ariaLabelledby "about-button-label"
-                , Html.Events.stopPropagationOn "click" <| D.succeed ( SetMode About, True )
+                , Html.Events.stopPropagationOn "click" <|
+                    D.succeed ( SetMode <| About AboutMain, True )
                 ]
                 [ Icon.about [ Svg.Attributes.class "drawer-icon" ]
                 , span [ id "about-button-label", class "drawer-button-label" ]
@@ -625,6 +670,7 @@ viewFeedFilter model =
                             [ button
                                 [ class "drawer-labelled-button"
                                 , class "filter-button"
+                                , class "unstyle"
                                 , role "switch"
                                 , title feed.meta.title
                                 , onClick (ToggleFeedFilter i (not feed.checked))
@@ -989,6 +1035,7 @@ viewEventPopup features translations idx key expanded event =
         [ class "popup-container" ]
         [ button
             [ class "popup-toggle"
+            , class "unstyle"
             , ariaHaspopup "menu"
             , ariaControls popupId
             , ariaExpanded expanded
@@ -1047,7 +1094,7 @@ viewCopyEvent translations event =
     in
     li []
         [ button
-            [ onClick <| Copy copyText ]
+            [ class "unstyle", onClick <| Copy copyText ]
             [ text <| TShare.copyTitleAndUrl translations ]
         ]
 
@@ -1056,7 +1103,9 @@ viewCopyEventTimestamp : Translations -> Event -> Html Msg
 viewCopyEventTimestamp translations event =
     li []
         [ button
-            [ onClick <| Copy (String.fromInt (Time.posixToMillis event.time // 1000)) ]
+            [ class "unstyle"
+            , onClick <| Copy (String.fromInt (Time.posixToMillis event.time // 1000))
+            ]
             [ text <| TShare.copyTimestamp translations ]
         ]
 
@@ -1065,7 +1114,7 @@ viewShareEvent : Translations -> Event -> Html Msg
 viewShareEvent translations event =
     li []
         [ button
-            [ onClick <| Share event.name event.link ]
+            [ class "unstyle", onClick <| Share event.name event.link ]
             [ text <| TShare.shareVia translations ]
         ]
 
@@ -1137,7 +1186,11 @@ viewError model errIdx err =
             [ text "Error retrieving <"
             , a [ href url ] [ text url ]
             , text <| ">: " ++ httpErrorToString e
-            , button [ class "dismiss-error", onClick <| RetryGetTranslations lang errIdx ]
+            , button
+                [ class "dismiss-error"
+                , class "unstyle"
+                , onClick <| RetryGetTranslations lang errIdx
+                ]
                 [ text "Retry" ]
             ]
 
@@ -1151,7 +1204,11 @@ viewError model errIdx err =
                     |> Maybe.withDefault (text "a feed")
                 )
                 (text <| httpErrorToString e)
-                ++ [ button [ class "dismiss-error", onClick <| RetryGetFeed feedIdx errIdx ]
+                ++ [ button
+                        [ class "dismiss-error"
+                        , class "unstyle"
+                        , onClick <| RetryGetFeed feedIdx errIdx
+                        ]
                         [ text <| TError.retry model.translations ]
                    ]
 
@@ -1180,56 +1237,103 @@ httpErrorToString err =
             "BadBody: " ++ e
 
 
-viewAboutDialog : Translations -> Html Msg
-viewAboutDialog translations =
+viewAboutDialog : Mode -> Maybe (Result Http.Error (Html Msg)) -> Translations -> Html Msg
+viewAboutDialog mode copying translations =
     dialog
         [ id "about"
+        , class "about"
         , class "modal-backdrop"
         , role "dialog"
-        , ariaLabelledby "about-heading"
         , ariaModal True
+        , ariaLabelledby "about-heading"
         ]
         [ -- The purposes of this `div` are:
           -- 1. To prevent the click event from firinng on the backdrop
           -- 2. To make polyfill styling easier
           div [ class "modal", Html.Events.stopPropagationOn "click" <| D.succeed ( NoOp, True ) ]
             [ header [ class "dialog-title-bar" ]
-                [ h2 [ id "about-heading", class "dialog-title" ]
-                    [ text <| TAbout.title translations ]
+                [ button
+                    [ class "dialog-title-bar-button"
+                    , class "modal-back-button"
+                    , class "unstyle"
+                    , disabled <| mode == About AboutMain
+                    , ariaLabel <| T.goBackTo translations <| TAbout.title translations
+                    , onClick AboutBackToMain
+                    ]
+                    [ Icon.backButton ]
+                , h2 [ id "about-heading", class "dialog-title" ]
+                    [ text <|
+                        case mode of
+                            About AboutCopying ->
+                                "COPYING"
+
+                            _ ->
+                                TAbout.title translations
+                    ]
                 , button
                     [ id "about-close-button"
-                    , class "dialog-close-button"
+                    , class "dialog-title-bar-button"
+                    , class "unstyle"
                     , ariaLabel <| T.closeDialog translations
                     , onClick <| SetMode None
                     ]
                     [ Icon.closeDialog ]
                 ]
-            , div [ class "dialog-content" ]
-                [ p [] [ text <| TAbout.introduction translations ]
-                , p [] [ text <| TAbout.aboutAccuracy translations ]
-                , p []
-                    (TAbout.disclaimerCustom translations
-                        text
-                        (a [ href "https://github.com/U-cauda-elongata/calendar" ]
-                            [ text <| TAbout.gitHubRepository translations ]
-                        )
-                    )
-                , p [] [ text <| TAbout.rights translations ]
-                , p [] [ text <| TAbout.appeal translations ]
-                , h3 [] [ text <| TAbout.licenseHeading translations ]
-                , p []
-                    (TAbout.licenseBodyCustom translations text <|
-                        a [ href "COPYING" ] [ text "COPYING" ]
-                    )
-                , h3 [] [ text <| TAbout.links translations ]
-                , ul []
-                    [ li []
-                        [ a [ href "https://github.com/U-cauda-elongata/calendar" ]
-                            [ Icon.gitHub [ Svg.Attributes.class "social-icon", ariaHidden True ]
-                            , text "GitHub"
-                            ]
-                        ]
-                    ]
+            , div
+                [ class "dialog-content", hidden <| mode /= About AboutMain ]
+                (viewAboutDialogMain translations)
+            , viewAboutDialogCopying copying
+                [ class "dialog-content", hidden <| mode /= About AboutCopying ]
+            ]
+        ]
+
+
+viewAboutDialogMain : Translations -> List (Html Msg)
+viewAboutDialogMain translations =
+    [ p [] [ text <| TAbout.introduction translations ]
+    , p [] [ text <| TAbout.aboutAccuracy translations ]
+    , p []
+        (TAbout.disclaimerCustom translations
+            text
+            (a [ href "https://github.com/U-cauda-elongata/calendar" ]
+                [ text <| TAbout.gitHubRepository translations ]
+            )
+        )
+    , p [] [ text <| TAbout.rights translations ]
+    , p [] [ text <| TAbout.appeal translations ]
+    , h3 [] [ text <| TAbout.licenseHeading translations ]
+    , p []
+        (TAbout.licenseBodyCustom translations text <|
+            a
+                [ href "COPYING"
+                , Html.Events.preventDefaultOn "click" <| D.succeed ( AboutOpenCopying, True )
+                ]
+                [ text "COPYING" ]
+        )
+    , h3 [] [ text <| TAbout.links translations ]
+    , ul []
+        [ li []
+            [ a [ href "https://github.com/U-cauda-elongata/calendar" ]
+                [ Icon.gitHub [ Svg.Attributes.class "social-icon", ariaHidden True ]
+                , text "GitHub"
                 ]
             ]
         ]
+    ]
+
+
+viewAboutDialogCopying : Maybe (Result Http.Error (Html Msg)) -> List (Attribute Msg) -> Html Msg
+viewAboutDialogCopying copying attrs =
+    case copying of
+        Nothing ->
+            div (class "copying-loading" :: attrs) [ p [] [ text "Loading…" ] ]
+
+        Just (Ok html) ->
+            div attrs [ html ]
+
+        Just (Err err) ->
+            div (class "copying-error" :: attrs)
+                [ h3 [] [ text "Error" ]
+                , p [] [ text <| httpErrorToString err ]
+                , button [ onClick AboutRetryGetCopying ] [ text "Retry" ]
+                ]

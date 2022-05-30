@@ -102,17 +102,11 @@ h1, h2, h3, h4, h5, h6 {
 	margin: initial;
 }
 
-ul, menu {
-	margin: initial;
-	padding: initial;
-}
-
 li {
 	display: block;
-	padding: initial;
 }
 
-button {
+.unstyle:where(button) {
 	appearance: none;
 	border: none;
 	color: inherit;
@@ -221,6 +215,8 @@ hr {
 .filter-menu {
 	display: flex;
 	flex-direction: column;
+	margin: initial;
+	padding: initial;
 	padding-top: calc(2 * var(--border-width) + var(--hamburger-length));
 	width: var(--drawer-width);
 	min-height: calc(100vh - 2 * var(--border-width) - var(--hamburger-length));
@@ -322,10 +318,19 @@ hr {
 	flex-grow: 1;
 }
 
+.feed-filter > ul {
+	padding: initial;
+}
+
 .about-button {
 	cursor: pointer;
 	fill: var(--background-color);
 	stroke: currentColor;
+}
+
+.timeline {
+	margin: initial;
+	padding: initial;
 }
 
 .date-heading {
@@ -431,6 +436,7 @@ hr {
 
 .event-members {
 	margin-top: var(--margin-unit);
+	padding: initial;
 	overflow-x: scroll;
 	white-space: nowrap;
 }
@@ -462,6 +468,7 @@ hr {
 	position: absolute;
 	z-index: 3; /* Put it above everything else except the modal dialog. */
 	right: 0;
+	padding: initial;
 	background-color: var(--background-color);
 	border: solid var(--border-width) var(--border-color);
 }
@@ -495,6 +502,8 @@ footer, footer a {
 	position: sticky;
 	bottom: 0;
 	z-index: 1; /* Put it above `.date-heading`. */
+	margin: initial;
+	padding: initial;
 	max-height: calc(100vh - 260px);
 	min-height: 2em;
 	overflow: scroll;
@@ -557,8 +566,12 @@ footer, footer a {
 	color: var(--color);
 }
 
+.about li {
+	display: list-item;
+}
+
 .dialog-title-bar {
-	display: grid;
+	display: flex;
 	border-bottom: solid var(--border-width) var(--border-color);
 	padding: calc(2 * var(--margin-unit));
 	padding-top: 0;
@@ -567,16 +580,7 @@ footer, footer a {
 	flex-shrink: 0;
 }
 
-.dialog-title {
-	grid-row: 1;
-	grid-column: 1/2;
-	justify-self: center;
-	align-self: center;
-}
-
-.dialog-close-button {
-	grid-row: 1;
-	grid-column: 1;
+.dialog-title-bar-button{
 	width: 2em;
 	height: 2em;
 	align-self: center;
@@ -584,10 +588,28 @@ footer, footer a {
 	stroke: currentColor;
 }
 
+.modal-back-button:disabled {
+	visibility: hidden;
+}
+
+.dialog-title {
+	flex-grow: 1;
+	align-self: center;
+	text-align: center;
+}
+
 .dialog-content {
 	padding: calc(2 * var(--margin-unit));
 	padding-top: 0;
 	overflow-y: scroll;
+}
+
+.copyright-loading {
+	margin: auto;
+}
+
+.copying-error {
+	color: red;
 }
 
 /* Always show icons in the drawer. */

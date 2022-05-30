@@ -135,3 +135,13 @@ closeDialog translations =
 closeDialogCustom : Translations -> (String -> a) -> List a
 closeDialogCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "closeDialog" []
+
+
+goBackTo : Translations -> String -> String
+goBackTo translations section =
+    tr translations Curly "goBackTo" [ ( "section", section ) ]
+
+
+goBackToCustom : Translations -> (String -> a) -> a -> List a
+goBackToCustom translations nonPlaceholderLift section =
+    customTr translations Curly nonPlaceholderLift "goBackTo" [ ( "section", section ) ]
