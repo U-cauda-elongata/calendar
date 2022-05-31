@@ -22,7 +22,8 @@ type alias Preset =
 
 
 type alias Entry =
-    { name : String
+    { id : String
+    , name : String
     , live : Bool
     , upcoming : Bool
     , time : Int
@@ -71,20 +72,21 @@ decoder meta =
 
 entryDecoder : D.Decoder Entry
 entryDecoder =
-    D.map8 Entry
-        (D.field "name" D.string)
-        (D.oneOf [ D.field "live" D.bool, D.succeed False ])
-        (D.oneOf [ D.field "upcoming" D.bool, D.succeed False ])
-        (D.field "time" D.int)
-        (D.maybe (D.field "duration" D.int))
-        (D.maybe (D.field "link" D.string))
-        (D.maybe (D.field "thumbnail" D.string))
-        (D.maybe (D.field "description" D.string))
+    D.map Entry (D.field "id" D.string)
+        |> D.andThen (\f -> D.map f <| D.field "name" D.string)
+        |> D.andThen (\f -> D.map f <| D.oneOf [ D.field "live" D.bool, D.succeed False ])
+        |> D.andThen (\f -> D.map f <| D.oneOf [ D.field "upcoming" D.bool, D.succeed False ])
+        |> D.andThen (\f -> D.map f <| D.field "time" D.int)
+        |> D.andThen (\f -> D.map f <| D.maybe <| D.field "duration" D.int)
+        |> D.andThen (\f -> D.map f <| D.maybe <| D.field "link" D.string)
+        |> D.andThen (\f -> D.map f <| D.maybe <| D.field "thumbnail" D.string)
+        |> D.andThen (\f -> D.map f <| D.maybe <| D.field "description" D.string)
 
 
 eventFromEntry : List Preset -> Entry -> Event
 eventFromEntry meta entry =
-    Event entry.name
+    Event entry.id
+        entry.name
         entry.live
         entry.upcoming
         (Time.millisToPosix (entry.time * 1000))

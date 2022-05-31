@@ -5,7 +5,7 @@ import Browser.Dom as Dom
 import Browser.Events exposing (onKeyDown)
 import Calendar.Attributes exposing (..)
 import Calendar.Elements exposing (..)
-import Calendar.Event as Event exposing (Event)
+import Calendar.Event as Event
 import Calendar.Feed as Feed
 import Calendar.Icon as Icon
 import Calendar.TranslationsExt as T
@@ -51,10 +51,11 @@ type alias Model =
       -- from causing `slideViewportInto` to be called again.
       initialized : Bool
     , feeds : List Feed
+    , events : List Event
     , mode : Mode
     , copying : Maybe (Result Http.Error (Html Msg))
     , searchFocused : Bool
-    , activePopup : Maybe ( Int, Int )
+    , activePopup : Maybe String
     , errors : List Error
     }
 
@@ -68,9 +69,14 @@ type alias Features =
 type alias Feed =
     { meta : Feed.Preset
     , alternate : String
-    , events : List Event
     , retrieving : FeedRetrievalState
     , checked : Bool
+    }
+
+
+type alias Event =
+    { feed : Int
+    , inner : Event.Event
     }
 
 
@@ -108,7 +114,7 @@ type Msg
     | AboutOpenCopying
     | AboutGotCopying (Result Http.Error String)
     | AboutRetryGetCopying
-    | OpenPopup ( Int, Int )
+    | OpenPopup String
     | ClosePopup
     | SetTimeZone Time.Zone
     | Tick Time.Posix
@@ -169,7 +175,8 @@ init flags =
         (Time.millisToPosix 0)
         Time.utc
         False
-        (Feed.presets |> List.map (\feed -> Feed feed "" [] Retrieving True))
+        (Feed.presets |> List.map (\feed -> Feed feed "" Retrieving True))
+        []
         None
         Nothing
         False
@@ -264,12 +271,8 @@ update msg model =
             let
                 interval =
                     if
-                        model.feeds
-                            |> List.any
-                                (\feed ->
-                                    (feed.retrieving == Retrieving)
-                                        || (feed.events |> List.any Event.isOngoing)
-                                )
+                        (model.feeds |> List.any (\feed -> feed.retrieving == Retrieving))
+                            || (model.events |> List.any (.inner >> Event.isOngoing))
                     then
                         -- An ongoing event need to show the duration elapsed since the start time
                         -- in one-second precision.
@@ -404,9 +407,28 @@ update msg model =
                                                     | meta =
                                                         { meta | title = title }
                                                     , alternate = alternate
-                                                    , events = events
                                                     , retrieving = Success
                                                 }
+                                            )
+                                , events =
+                                    model.events
+                                        |> List.append
+                                            (events
+                                                |> List.map
+                                                    (\event ->
+                                                        Event i
+                                                            { event
+                                                                | members =
+                                                                    event.members
+                                                                        |> List.Extra.remove i
+                                                            }
+                                                    )
+                                            )
+                                        |> List.sortWith
+                                            (\e1 e2 ->
+                                                compare
+                                                    (Time.posixToMillis e2.inner.time)
+                                                    (Time.posixToMillis e1.inner.time)
                                             )
                             }
 
@@ -616,8 +638,8 @@ viewSearch model =
                 ]
             ]
         , datalist [ id "searchlist" ]
-            (model.feeds
-                |> List.concatMap .events
+            (model.events
+                |> List.map .inner
                 |> List.concatMap (\event -> searchTags event.name)
                 |> Util.cardinalities
                 |> DictUtil.groupKeysBy normalizeSearchTerm
@@ -696,8 +718,8 @@ viewFeedFilter model =
 
 
 type TimelineItem
-    = TimelineEvent ( ( Int, Int ), Feed, Event )
-    | Now (List ( ( Int, Int ), Feed, Event ))
+    = TimelineEvent ( Feed, Event.Event )
+    | Now (List ( Feed, Event.Event ))
 
 
 viewMain : Model -> Html Msg
@@ -709,36 +731,31 @@ viewMain model =
     Keyed.node "main"
         [ ariaBusy busy ]
         (let
-            anyEventIsShown =
-                model.feeds
-                    |> List.any (\feed -> feed.events |> List.any (eventIsShown model feed.checked))
-
             events =
-                model.feeds
-                    |> List.indexedMap Tuple.pair
-                    |> List.concatMap
-                        (\( feedIdx, feed ) ->
-                            feed.events |> List.indexedMap (\i e -> ( ( feedIdx, i ), feed, e ))
+                model.events
+                    |> List.filterMap
+                        (\event ->
+                            model.feeds
+                                |> List.Extra.getAt event.feed
+                                |> Maybe.map (\feed -> ( feed, event.inner ))
                         )
-                    |> List.sortWith
-                        (\( _, _, e1 ) ( _, _, e2 ) ->
-                            compare (Time.posixToMillis e2.time) (Time.posixToMillis e1.time)
-                        )
+
+            anyEventIsShown =
+                events
+                    |> List.any (\( feed, event ) -> eventIsShown model feed.checked event)
 
             ( ongoing, ( upcoming, past ) ) =
                 let
                     ( og, other ) =
-                        events
-                            |> List.partition
-                                (\( _, _, event ) -> Event.isOngoing event)
+                        events |> List.partition (\( _, event ) -> Event.isOngoing event)
                 in
                 ( og
                 , other
                     |> List.Extra.splitWhen
-                        (\( _, _, event ) ->
+                        (\( _, event ) ->
                             Time.posixToMillis event.time <= Time.posixToMillis model.now
                         )
-                    |> Maybe.withDefault ( events, [] )
+                    |> Maybe.withDefault ( other, [] )
                     |> Tuple.mapBoth (List.map TimelineEvent) (List.map TimelineEvent)
                 )
          in
@@ -746,7 +763,7 @@ viewMain model =
             |> Util.groupBy
                 (\item ->
                     case item of
-                        TimelineEvent ( _, _, event ) ->
+                        TimelineEvent ( _, event ) ->
                             NaiveDate.fromPosix model.timeZone event.time
 
                         Now _ ->
@@ -789,7 +806,7 @@ viewDateSection model date items =
                     |> List.any
                         (\item ->
                             case item of
-                                TimelineEvent ( _, feed, event ) ->
+                                TimelineEvent ( feed, event ) ->
                                     eventIsShown model feed.checked event
 
                                 Now _ ->
@@ -803,8 +820,8 @@ viewDateSection model date items =
                 |> List.map
                     (\item ->
                         case item of
-                            TimelineEvent ( id, feed, event ) ->
-                                viewKeyedEvent model id feed event
+                            TimelineEvent ( feed, event ) ->
+                                viewKeyedEvent model feed event
 
                             Now ongoing_items ->
                                 ( "now"
@@ -832,8 +849,8 @@ viewDateSection model date items =
                                         , Keyed.ul []
                                             (ongoing_items
                                                 |> List.map
-                                                    (\( id, feed, event ) ->
-                                                        viewKeyedEvent model id feed event
+                                                    (\( feed, event ) ->
+                                                        viewKeyedEvent model feed event
                                                     )
                                             )
                                         ]
@@ -843,11 +860,11 @@ viewDateSection model date items =
         ]
 
 
-viewKeyedEvent : Model -> ( Int, Int ) -> Feed -> Event -> ( String, Html Msg )
-viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
+viewKeyedEvent : Model -> Feed -> Event.Event -> ( String, Html Msg )
+viewKeyedEvent model feed event =
     let
         eventId =
-            "event-" ++ String.fromInt feedIdx ++ "-" ++ String.fromInt eventIdx
+            "event-" ++ event.id
 
         headingId =
             eventId ++ "-heading"
@@ -921,12 +938,11 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
                 |> Maybe.withDefault (header [ class "event-header-grid" ] headerContent)
 
         eta =
-            Duration.fromMillis <| Time.posixToMillis event.time - Time.posixToMillis model.now
+            Duration.fromMillis <|
+                (Time.posixToMillis event.time - Time.posixToMillis model.now)
 
         members =
-            -- Exclude the author.
             event.members
-                |> List.filter ((/=) feedIdx)
                 |> List.filterMap (\memberIdx -> model.feeds |> List.Extra.getAt memberIdx)
 
         membersMeta =
@@ -1010,12 +1026,10 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
             :: div [ id descriptionId, hidden True ] description
             :: (if model.features.copy || model.features.share then
                     List.singleton <|
-                        lazy6 viewEventPopup
+                        lazy4 viewEventPopup
                             model.features
                             model.translations
-                            ( feedIdx, eventIdx )
-                            eventId
-                            (model.activePopup == Just ( feedIdx, eventIdx ))
+                            model.activePopup
                             event
 
                 else
@@ -1025,11 +1039,14 @@ viewKeyedEvent model ( feedIdx, eventIdx ) feed event =
     )
 
 
-viewEventPopup : Features -> Translations -> ( Int, Int ) -> String -> Bool -> Event -> Html Msg
-viewEventPopup features translations idx key expanded event =
+viewEventPopup : Features -> Translations -> Maybe String -> Event.Event -> Html Msg
+viewEventPopup features translations activePopup event =
     let
         popupId =
-            key ++ "-popup"
+            "popup-" ++ event.id
+
+        expanded =
+            activePopup == Just event.id
     in
     div
         [ class "popup-container" ]
@@ -1046,7 +1063,7 @@ viewEventPopup features translations idx key expanded event =
                         ClosePopup
 
                       else
-                        OpenPopup idx
+                        OpenPopup event.id
                     , True
                     )
             , ariaLabel <| TShare.share translations
@@ -1084,7 +1101,7 @@ viewEventPopup features translations idx key expanded event =
         ]
 
 
-viewCopyEvent : Translations -> Event -> Html Msg
+viewCopyEvent : Translations -> Event.Event -> Html Msg
 viewCopyEvent translations event =
     let
         copyText =
@@ -1099,7 +1116,7 @@ viewCopyEvent translations event =
         ]
 
 
-viewCopyEventTimestamp : Translations -> Event -> Html Msg
+viewCopyEventTimestamp : Translations -> Event.Event -> Html Msg
 viewCopyEventTimestamp translations event =
     li []
         [ button
@@ -1110,7 +1127,7 @@ viewCopyEventTimestamp translations event =
         ]
 
 
-viewShareEvent : Translations -> Event -> Html Msg
+viewShareEvent : Translations -> Event.Event -> Html Msg
 viewShareEvent translations event =
     li []
         [ button
@@ -1119,7 +1136,7 @@ viewShareEvent translations event =
         ]
 
 
-eventIsShown : Model -> Bool -> Event -> Bool
+eventIsShown : Model -> Bool -> Event.Event -> Bool
 eventIsShown model feedChecked event =
     (feedChecked
         || -- Check that any of the members' feed is checked.
@@ -1132,7 +1149,7 @@ eventIsShown model feedChecked event =
         && searchMatches model event
 
 
-searchMatches : Model -> Event -> Bool
+searchMatches : Model -> Event.Event -> Bool
 searchMatches model event =
     String.isEmpty model.search
         || (event.name |> normalizeSearchTerm |> String.contains (normalizeSearchTerm model.search))

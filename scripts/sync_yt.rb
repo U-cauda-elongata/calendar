@@ -49,7 +49,7 @@ class Feed
       'title' => @title,
       'entries' => @entries.map do |id, entry|
         entry = entry.clone
-        entry['id'] = id
+        entry['id'] = "yt:video:#{id}"
         entry
       end,
     }.to_json(*args)
@@ -80,8 +80,10 @@ cached = channels.each_with_object({}) do |channel, feeds|
     open("#{channel}.json") do |f|
       feed = JSON.load(f)
       feed['entries'].filter_map do |entry|
-        if entry['id'] and entry['duration'] # Only videos or ended livestreams have duration.
-          [entry.delete('id'), entry]
+        id = entry.delete('id')
+        if id and entry['duration'] # Only videos or ended livestreams have duration.
+          id.delete_prefix!('yt:video:')
+          [id, entry]
         end
       end.to_h
     end

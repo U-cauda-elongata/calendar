@@ -6,7 +6,8 @@ import Time
 
 
 type alias Event =
-    { name : String
+    { id : String
+    , name : String
     , live : Bool
     , upcoming : Bool
     , time : Time.Posix
