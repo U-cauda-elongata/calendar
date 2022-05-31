@@ -40,10 +40,15 @@
 	"emptyResultPre": "No items to show.",
 	"emptyResultKidding": "",
 	"emptyResultPost": "Try changing search terms in the menu.",
+	"loadMore": "Load more",
+	"retryLoading": "Retry loading",
+	"loading": "Loading…",
+	"noMoreItems": "No more items to load.",
+	"noMoreItemsGibberish": "You are at the very beginning of the history of KF YouTube channels, whew!",
 	"error": {
 		"error": "Errors",
 		"http": "Error retrieving <{{url}}>: {{msg}}",
-		"retry": "Retry",
+		"dismiss": "Dismiss",
 		"unexpected": "Unexpected error: {{msg}}"
 	},
 	"closeDialog": "Close",

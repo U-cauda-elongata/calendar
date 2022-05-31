@@ -27,14 +27,14 @@ httpCustom translations nonPlaceholderLift url msg =
     customTr translations Curly nonPlaceholderLift "error.http" [ ( "url", url ), ( "msg", msg ) ]
 
 
-retry : Translations -> String
-retry translations =
-    t translations "error.retry"
+dismiss : Translations -> String
+dismiss translations =
+    t translations "error.dismiss"
 
 
-retryCustom : Translations -> (String -> a) -> List a
-retryCustom translations nonPlaceholderLift =
-    customTr translations Curly nonPlaceholderLift "error.retry" []
+dismissCustom : Translations -> (String -> a) -> List a
+dismissCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "error.dismiss" []
 
 
 unexpected : Translations -> String -> String

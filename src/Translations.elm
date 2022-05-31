@@ -127,6 +127,56 @@ emptyResultPostCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "emptyResultPost" []
 
 
+loadMore : Translations -> String
+loadMore translations =
+    t translations "loadMore"
+
+
+loadMoreCustom : Translations -> (String -> a) -> List a
+loadMoreCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "loadMore" []
+
+
+retryLoading : Translations -> String
+retryLoading translations =
+    t translations "retryLoading"
+
+
+retryLoadingCustom : Translations -> (String -> a) -> List a
+retryLoadingCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "retryLoading" []
+
+
+loading : Translations -> String
+loading translations =
+    t translations "loading"
+
+
+loadingCustom : Translations -> (String -> a) -> List a
+loadingCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "loading" []
+
+
+noMoreItems : Translations -> String
+noMoreItems translations =
+    t translations "noMoreItems"
+
+
+noMoreItemsCustom : Translations -> (String -> a) -> List a
+noMoreItemsCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "noMoreItems" []
+
+
+noMoreItemsGibberish : Translations -> String
+noMoreItemsGibberish translations =
+    t translations "noMoreItemsGibberish"
+
+
+noMoreItemsGibberishCustom : Translations -> (String -> a) -> List a
+noMoreItemsGibberishCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "noMoreItemsGibberish" []
+
+
 closeDialog : Translations -> String
 closeDialog translations =
     t translations "closeDialog"

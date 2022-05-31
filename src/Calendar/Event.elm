@@ -7,6 +7,7 @@ import Time
 
 type alias Event =
     { id : String
+    , feed : String
     , name : String
     , live : Bool
     , upcoming : Bool
@@ -14,7 +15,7 @@ type alias Event =
     , duration : Maybe Duration
     , link : Maybe String
     , thumbnail : Maybe String
-    , members : List Int
+    , members : List String
     }
 
 

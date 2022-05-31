@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'fileutils'
 require 'json'
 require 'net/http'
 require 'rexml/document'
@@ -77,7 +78,7 @@ end
 
 cached = channels.each_with_object({}) do |channel, feeds|
   feeds[channel] = begin
-    open("#{channel}.json") do |f|
+    open("data/#{channel}.json") do |f|
       feed = JSON.load(f)
       feed['entries'].filter_map do |entry|
         id = entry.delete('id')
@@ -163,8 +164,9 @@ items.each do |video|
   end
 end
 
+FileUtils.mkdir_p('data')
 feeds.map do |channel, feed|
-  open("#{channel}.json", 'w') do |out|
+  open("data/#{channel}.json", 'w') do |out|
     JSON.dump(feed, out)
   end
 end

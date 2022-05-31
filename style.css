@@ -487,6 +487,10 @@ hr {
 	text-align: center;
 }
 
+.load-more-feed {
+	text-align: center;
+}
+
 footer, footer a {
 	color: var(--footer-color);
 }

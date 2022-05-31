@@ -41,10 +41,15 @@
 	"emptyResultPre": "表示できるアイテムがありません。",
 	"emptyResultKidding": "これから思い出が増えていくよ！",
 	"emptyResultPost": "メニューから検索条件を変えてみましょう。",
+	"loadMore": "さらに読み込む",
+	"retryLoading": "再読み込み",
+	"loading": "読み込み中…",
+	"noMoreItems": "これ以上読み込めるアイテムはありません。",
+	"noMoreItemsGibberish": "ここがいわばジャパリパークの最深部です！　地下 100 km くらいしょうか？",
 	"error": {
 		"error": "エラー",
 		"http": "<{{url}}> の取得中にエラー: {{msg}}",
-		"retry": "再試行",
+		"dismiss": "了解",
 		"unexpected": "予期せぬエラー: {{msg}}"
 	},
 	"closeDialog": "閉じる",

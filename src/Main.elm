@@ -5,7 +5,7 @@ import Browser.Dom as Dom
 import Browser.Events exposing (onKeyDown)
 import Calendar.Attributes exposing (..)
 import Calendar.Elements exposing (..)
-import Calendar.Event as Event
+import Calendar.Event as Event exposing (Event)
 import Calendar.Feed as Feed
 import Calendar.Icon as Icon
 import Calendar.TranslationsExt as T
@@ -34,6 +34,7 @@ import Translations.About as TAbout
 import Translations.Error as TError
 import Translations.Event as TEvent
 import Translations.Share as TShare
+import Url.Builder
 
 
 main : Program Flags Model Msg
@@ -47,11 +48,12 @@ type alias Model =
     , search : String
     , now : Time.Posix
     , timeZone : Time.Zone
-    , -- Set this to `True` once all the feed requests are done in order to prevent retried requests
-      -- from causing `slideViewportInto` to be called again.
+    , -- Set this to `True` once the first feed request completes, in order to prevent subsequent
+      -- requests from causing `slideViewportInto` to be called again.
       initialized : Bool
     , feeds : List Feed
     , events : List Event
+    , pendingFeed : PendingFeed
     , mode : Mode
     , copying : Maybe (Result Http.Error (Html Msg))
     , searchFocused : Bool
@@ -67,23 +69,17 @@ type alias Features =
 
 
 type alias Feed =
-    { meta : Feed.Preset
+    { preset : Feed.Preset
     , alternate : String
-    , retrieving : FeedRetrievalState
     , checked : Bool
     }
 
 
-type alias Event =
-    { feed : Int
-    , inner : Event.Event
-    }
-
-
-type FeedRetrievalState
-    = Retrieving
-    | Success
-    | Failure
+type PendingFeed
+    = OneMore String
+    | Retry String
+    | Loading
+    | Done
 
 
 type Mode
@@ -97,7 +93,7 @@ type AboutView
 
 
 type Error
-    = FeedHttpError Int Http.Error
+    = FeedHttpError String Http.Error
     | TranslationsHttpError String Http.Error
     | Unexpected String
 
@@ -105,7 +101,7 @@ type Error
 type Msg
     = ClearFilter
     | SearchInput String
-    | ToggleFeedFilter Int Bool
+    | ToggleFeedFilter String Bool
     | KeyDown String
     | SearchFocus Bool
     | SetMode Mode
@@ -119,9 +115,10 @@ type Msg
     | SetTimeZone Time.Zone
     | Tick Time.Posix
     | GotTranslations String (Result Http.Error Translations)
-    | GotFeed Int (Result Http.Error Feed.Feed)
+    | GotFeed String (Result Http.Error Feed.Feed)
+    | LoadFeed String
+    | DismissError Int
     | RetryGetTranslations String Int
-    | RetryGetFeed Int Int
     | Copy String
     | Share String (Maybe String)
     | NoOp
@@ -175,28 +172,20 @@ init flags =
         (Time.millisToPosix 0)
         Time.utc
         False
-        (Feed.presets |> List.map (\feed -> Feed feed "" Retrieving True))
+        (Feed.presets |> List.map (\feed -> Feed feed "" True))
         []
+        Loading
         None
         Nothing
         False
         Nothing
         []
     , Cmd.batch
-        ((Time.here |> Task.perform SetTimeZone)
-            :: (getTranslations <| selectLanguage flags.languages)
-            :: (Time.now |> Task.perform Tick)
-            :: (Feed.presets
-                    |> List.indexedMap
-                        (\i feed ->
-                            Http.get
-                                { url = feed.url
-                                , expect =
-                                    Http.expectJson (GotFeed i) (Feed.decoder Feed.presets)
-                                }
-                        )
-               )
-        )
+        [ Time.here |> Task.perform SetTimeZone
+        , getTranslations <| selectLanguage flags.languages
+        , Time.now |> Task.perform Tick
+        , getFeed "latest.json"
+        ]
     )
 
 
@@ -238,6 +227,14 @@ getTranslations lang =
         }
 
 
+getFeed : String -> Cmd Msg
+getFeed url =
+    Http.get
+        { url = Url.Builder.relative [ "feed", url ] []
+        , expect = Http.expectJson (GotFeed url) (Feed.decoder Feed.presets)
+        }
+
+
 
 -- UPDATE
 
@@ -256,10 +253,18 @@ update msg model =
         SearchInput search ->
             ( { model | search = search }, Cmd.none )
 
-        ToggleFeedFilter i checked ->
+        ToggleFeedFilter id checked ->
             ( { model
                 | feeds =
-                    model.feeds |> List.Extra.updateAt i (\feed -> { feed | checked = checked })
+                    model.feeds
+                        |> List.map
+                            (\feed ->
+                                if feed.preset.id == id then
+                                    { feed | checked = checked }
+
+                                else
+                                    feed
+                            )
               }
             , Cmd.none
             )
@@ -270,10 +275,7 @@ update msg model =
         Tick now ->
             let
                 interval =
-                    if
-                        (model.feeds |> List.any (\feed -> feed.retrieving == Retrieving))
-                            || (model.events |> List.any (.inner >> Event.isOngoing))
-                    then
+                    if model.events |> List.any Event.isOngoing then
                         -- An ongoing event need to show the duration elapsed since the start time
                         -- in one-second precision.
                         1000
@@ -298,26 +300,12 @@ update msg model =
                 Err err ->
                     model |> update (ReportError (TranslationsHttpError lang err))
 
+        DismissError errIdx ->
+            ( { model | errors = model.errors |> List.Extra.removeAt errIdx }, Cmd.none )
+
         RetryGetTranslations lang errIdx ->
             ( { model | errors = model.errors |> List.Extra.removeAt errIdx }
             , getTranslations lang
-            )
-
-        RetryGetFeed feedIdx errIdx ->
-            ( { model | errors = model.errors |> List.Extra.removeAt errIdx }
-            , model.feeds
-                |> List.Extra.getAt feedIdx
-                |> Maybe.map
-                    (\feed ->
-                        Http.get
-                            { url = feed.meta.url
-                            , expect =
-                                Http.expectJson
-                                    (GotFeed feedIdx)
-                                    (Feed.decoder Feed.presets)
-                            }
-                    )
-                |> Maybe.withDefault Cmd.none
             )
 
         KeyDown key ->
@@ -388,67 +376,93 @@ update msg model =
         ClosePopup ->
             ( { model | activePopup = Nothing }, Cmd.none )
 
-        GotFeed i result ->
+        GotFeed url result ->
             -- XXX: #lm prohibits shadowing.
             let
-                model2 =
+                ( model2, cmd ) =
                     case result of
-                        Ok { title, alternate, events } ->
-                            { model
+                        Ok { meta, entries, next } ->
+                            ( { model
                                 | feeds =
-                                    model.feeds
-                                        |> List.Extra.updateAt i
-                                            (\feed ->
-                                                let
-                                                    meta =
-                                                        feed.meta
-                                                in
-                                                { feed
-                                                    | meta =
-                                                        { meta | title = title }
-                                                    , alternate = alternate
-                                                    , retrieving = Success
-                                                }
+                                    meta
+                                        |> List.foldl
+                                            (\m acc ->
+                                                acc
+                                                    |> List.map
+                                                        (\feed ->
+                                                            let
+                                                                preset =
+                                                                    feed.preset
+                                                            in
+                                                            if preset.id == m.id then
+                                                                { feed
+                                                                    | preset =
+                                                                        { preset | title = m.title }
+                                                                    , alternate = m.alternate
+                                                                }
+
+                                                            else
+                                                                feed
+                                                        )
                                             )
+                                            model.feeds
                                 , events =
                                     model.events
-                                        |> List.append
-                                            (events
-                                                |> List.map
-                                                    (\event ->
-                                                        Event i
-                                                            { event
-                                                                | members =
-                                                                    event.members
-                                                                        |> List.Extra.remove i
-                                                            }
-                                                    )
-                                            )
+                                        |> List.append entries
                                         |> List.sortWith
                                             (\e1 e2 ->
                                                 compare
-                                                    (Time.posixToMillis e2.inner.time)
-                                                    (Time.posixToMillis e1.inner.time)
+                                                    (Time.posixToMillis e2.time)
+                                                    (Time.posixToMillis e1.time)
                                             )
-                            }
+                                , pendingFeed =
+                                    next
+                                        |> Maybe.map OneMore
+                                        |> Maybe.withDefault Done
+                              }
+                            , if entries |> List.any Event.isOngoing then
+                                -- Reset the clock to get one-second-precision time required by
+                                -- ongoing events.
+                                Time.now |> Task.perform Tick
+
+                              else
+                                Cmd.none
+                            )
 
                         Err err ->
-                            { model
-                                | feeds =
-                                    model.feeds
-                                        |> List.Extra.updateAt i
-                                            (\feed -> { feed | retrieving = Failure })
-                                , errors = FeedHttpError i err :: model.errors
-                            }
+                            ( { model
+                                | pendingFeed = Retry url
+                                , errors = FeedHttpError url err :: model.errors
+                              }
+                            , Cmd.none
+                            )
             in
-            if
-                not model2.initialized
-                    && (model2.feeds |> List.all (\feed -> feed.retrieving /= Retrieving))
-            then
-                ( { model2 | initialized = True }, slideViewportInto "now" )
+            if not model2.initialized then
+                -- Slide to current time once the first page is read, assuming that the first page
+                -- is large enough to contain current time. If KemoV becomes big enough to fill up
+                -- the first page with upcoming streams in the future, then we should revisit this!
+                ( { model2 | initialized = True }, Cmd.batch [ cmd, slideViewportInto "now" ] )
 
             else
-                ( model2, Cmd.none )
+                ( model2, cmd )
+
+        LoadFeed url ->
+            ( { model
+                | pendingFeed = Loading
+                , errors =
+                    model.errors
+                        |> List.filter
+                            (\err ->
+                                case err of
+                                    FeedHttpError _ _ ->
+                                        False
+
+                                    _ ->
+                                        True
+                            )
+              }
+            , getFeed url
+            )
 
         Copy text ->
             ( model, copy text )
@@ -639,7 +653,6 @@ viewSearch model =
             ]
         , datalist [ id "searchlist" ]
             (model.events
-                |> List.map .inner
                 |> List.concatMap (\event -> searchTags event.name)
                 |> Util.cardinalities
                 |> DictUtil.groupKeysBy normalizeSearchTerm
@@ -682,11 +695,11 @@ viewFeedFilter model =
     li [ class "feed-filter", ariaLabel (T.feedFilterLabel model.translations) ]
         [ ul []
             (model.feeds
-                |> List.indexedMap
-                    (\i feed ->
+                |> List.map
+                    (\feed ->
                         let
                             pId =
-                                "feed-" ++ String.fromInt i
+                                "feed-" ++ feed.preset.id
                         in
                         li [ class "filter-item" ]
                             [ button
@@ -694,22 +707,21 @@ viewFeedFilter model =
                                 , class "filter-button"
                                 , class "unstyle"
                                 , role "switch"
-                                , title feed.meta.title
-                                , onClick (ToggleFeedFilter i (not feed.checked))
+                                , title feed.preset.title
+                                , onClick (ToggleFeedFilter feed.preset.id (not feed.checked))
                                 , checked feed.checked
-                                , disabled (feed.retrieving /= Success)
                                 , ariaChecked feed.checked
                                 , ariaLabelledby pId
                                 ]
                                 [ img
                                     [ class "avatar"
                                     , class "drawer-icon"
-                                    , src feed.meta.icon
+                                    , src feed.preset.icon
                                     , alt (T.avatarAlt model.translations)
                                     ]
                                     []
                                 , span [ id pId, class "drawer-button-label" ]
-                                    [ text feed.meta.title ]
+                                    [ text feed.preset.title ]
                                 ]
                             ]
                     )
@@ -726,7 +738,7 @@ viewMain : Model -> Html Msg
 viewMain model =
     let
         busy =
-            model.feeds |> List.any (\feed -> feed.retrieving == Retrieving)
+            model.pendingFeed == Loading
     in
     Keyed.node "main"
         [ ariaBusy busy ]
@@ -736,8 +748,8 @@ viewMain model =
                     |> List.filterMap
                         (\event ->
                             model.feeds
-                                |> List.Extra.getAt event.feed
-                                |> Maybe.map (\feed -> ( feed, event.inner ))
+                                |> List.Extra.find (\feed -> feed.preset.id == event.feed)
+                                |> Maybe.map (\feed -> ( feed, event ))
                         )
 
             anyEventIsShown =
@@ -772,7 +784,11 @@ viewMain model =
             |> List.map (\( date, items ) -> viewKeyedDateSection model date items)
          )
             ++ [ ( "empty"
-                 , div [ class "empty-result", hidden <| busy || anyEventIsShown ]
+                 , div
+                    [ class "empty-result"
+                    , hidden
+                        (busy || anyEventIsShown || model.pendingFeed /= Done)
+                    ]
                     (let
                         pre =
                             p [] [ text <| T.emptyResultPre model.translations ]
@@ -787,6 +803,30 @@ viewMain model =
                         mid ->
                             [ pre, p [] [ del [] [ text mid ] ], post ]
                     )
+                 )
+               , ( "loadMore"
+                 , div [ class "load-more-feed" ] <|
+                    case model.pendingFeed of
+                        OneMore url ->
+                            [ button [ onClick <| LoadFeed url ]
+                                [ text <| T.loadMore model.translations ]
+                            ]
+
+                        Retry url ->
+                            [ button [ onClick <| LoadFeed url ]
+                                [ text <| T.retryLoading model.translations ]
+                            ]
+
+                        Loading ->
+                            [ button [ disabled True ]
+                                [ text <| T.loading model.translations ]
+                            ]
+
+                        Done ->
+                            [ p [] [ text <| T.noMoreItems model.translations ]
+                            , p [ hidden <| filterApplied model ]
+                                [ text <| T.noMoreItemsGibberish model.translations ]
+                            ]
                  )
                ]
         )
@@ -943,10 +983,14 @@ viewKeyedEvent model feed event =
 
         members =
             event.members
-                |> List.filterMap (\memberIdx -> model.feeds |> List.Extra.getAt memberIdx)
+                |> List.filterMap
+                    (\feedId ->
+                        model.feeds
+                            |> List.Extra.find (\f -> f.preset.id == feedId)
+                    )
 
-        membersMeta =
-            members |> List.map .meta
+        memberPresets =
+            members |> List.map .preset
 
         ( viewTimeInfo, description ) =
             let
@@ -963,8 +1007,8 @@ viewKeyedEvent model feed event =
                     if event.live then
                         ( TEvent.startedAtCustom model.translations text viewTime
                         , T.describeEndedLive model.translations
-                            feed.meta
-                            membersMeta
+                            feed.preset
+                            memberPresets
                             viewTime
                             viewDuration
                         )
@@ -972,8 +1016,8 @@ viewKeyedEvent model feed event =
                     else
                         ( TEvent.uploadedAtCustom model.translations text viewTime
                         , T.describeVideo model.translations
-                            feed.meta
-                            membersMeta
+                            feed.preset
+                            memberPresets
                             viewTime
                             viewDuration
                         )
@@ -990,8 +1034,8 @@ viewKeyedEvent model feed event =
                             viewStartsIn
                             |> List.concat
                         , T.describeScheduledLive model.translations
-                            feed.meta
-                            membersMeta
+                            feed.preset
+                            memberPresets
                             viewStartsIn
                         )
 
@@ -1006,8 +1050,8 @@ viewKeyedEvent model feed event =
                             viewStartedAgo
                             |> List.concat
                         , T.describeOngoingLive model.translations
-                            feed.meta
-                            membersMeta
+                            feed.preset
+                            memberPresets
                             viewStartedAgo
                         )
     in
@@ -1141,9 +1185,7 @@ eventIsShown model feedChecked event =
     (feedChecked
         || -- Check that any of the members' feed is checked.
            (model.feeds
-                |> List.Extra.indexedFoldl
-                    (\i f any -> any || (f.checked && (event.members |> List.member i)))
-                    False
+                |> List.any (\feed -> feed.checked && (event.members |> List.member feed.preset.id))
            )
     )
         && searchMatches model event
@@ -1172,7 +1214,7 @@ viewEventMember isAuthor feed =
                         []
                    )
             )
-            [ img [ class "avatar", src feed.meta.icon, alt feed.meta.title ] [] ]
+            [ img [ class "avatar", src feed.preset.icon, alt feed.preset.title ] [] ]
         ]
 
 
@@ -1211,22 +1253,17 @@ viewError model errIdx err =
                 [ text "Retry" ]
             ]
 
-        FeedHttpError feedIdx e ->
+        FeedHttpError url e ->
             TError.httpCustom model.translations
                 text
-                (model.feeds
-                    |> List.Extra.getAt feedIdx
-                    |> Maybe.map (\feed -> a [ href feed.meta.url ] [ text feed.meta.url ])
-                    -- This should never happen though.
-                    |> Maybe.withDefault (text "a feed")
-                )
+                (a [ href url ] [ text url ])
                 (text <| httpErrorToString e)
                 ++ [ button
                         [ class "dismiss-error"
                         , class "unstyle"
-                        , onClick <| RetryGetFeed feedIdx errIdx
+                        , onClick <| DismissError errIdx
                         ]
-                        [ text <| TError.retry model.translations ]
+                        [ text <| TError.dismiss model.translations ]
                    ]
 
         Unexpected msg ->
