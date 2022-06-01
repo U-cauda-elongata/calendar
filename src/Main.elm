@@ -886,7 +886,7 @@ viewDateSection model date items =
                                                     viewTime
                                                 )
                                             ]
-                                        , Keyed.ul []
+                                        , Keyed.ul [ class "timeline" ]
                                             (ongoing_items
                                                 |> List.map
                                                     (\( feed, event ) ->
