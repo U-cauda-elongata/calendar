@@ -14,58 +14,8 @@
 	<meta name="twitter:creator" content="@U_caudaElongata" />
 	<meta name="twitter:creator:id" content="1037918258052005888" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<script src="app.js"></script>
+	<script src="app.js" defer></script>
 </head>
 <body>
 	<noscript>このページの内容を表示するには JavaScript を有効にする必要があります。</noscript>
-	<script>
-		var app = Elm.Main.init({
-			flags: {
-				features: {
-					copy: !!navigator.clipboard,
-					share: !!navigator.share
-				},
-				languages: navigator.languages
-			}
-		});
-		app.ports.setLang.subscribe(lang => {
-			var h = document.documentElement;
-			h.lang = lang;
-			h.classList.add('lang-confirmed');
-		});
-		app.ports.slideViewportInto.subscribe(id => {
-			var node = document.getElementById(id);
-			if (node) {
-				requestAnimationFrame(() => {
-					node.scrollIntoView({ behavior: 'smooth', block: 'center' });
-				});
-			}
-		});
-		app.ports.showModal.subscribe(id => {
-			var node = document.getElementById(id);
-			if (node) {
-				if (node.showModal) {
-					node.showModal();
-				} else {
-					node.toggleAttribute('open', true);
-				}
-			}
-		});
-		app.ports.close.subscribe(id => {
-			var node = document.getElementById(id);
-			if (node) {
-				if (node.close) {
-					node.close();
-				} else {
-					node.toggleAttribute('open', false);
-				}
-			}
-		});
-		app.ports.copy.subscribe(text => {
-			navigator.clipboard.writeText(text);
-		});
-		app.ports.share.subscribe(data => {
-			navigator.share(data).catch(() => {})
-		});
-	</script>
 </body>
