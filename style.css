@@ -333,6 +333,10 @@ hr {
 	padding: initial;
 }
 
+.timeline > li {
+	display: inline-block;
+}
+
 .date-heading {
 	position: sticky;
 	z-index: 1; /* Put it above `.event-thumbnail-container`. */
@@ -381,7 +385,7 @@ hr {
 }
 
 .event {
-	display: inline-grid;
+	display: grid;
 	width: calc(100% - 2 * var(--margin-unit));
 	margin: 0;
 	margin-top: calc(-1 * var(--border-width));

@@ -6,10 +6,12 @@ module Calendar.Attributes exposing
     , ariaExpanded
     , ariaHaspopup
     , ariaHidden
+    , ariaKeyshortcuts
     , ariaLabel
     , ariaLabelledby
     , ariaLive
     , ariaModal
+    , ariaOrientation
     , loading
     , role
     , xmlns
@@ -66,6 +68,11 @@ ariaHidden =
     boolStringAttribute "aria-hidden"
 
 
+ariaKeyshortcuts : String -> Attribute msg
+ariaKeyshortcuts =
+    attribute "aria-keyshortcuts"
+
+
 ariaLabel : String -> Attribute msg
 ariaLabel =
     attribute "aria-label"
@@ -84,6 +91,11 @@ ariaLive =
 ariaModal : Bool -> Attribute msg
 ariaModal =
     boolStringAttribute "aria-modal"
+
+
+ariaOrientation : String -> Attribute msg
+ariaOrientation =
+    attribute "aria-orientation"
 
 
 loading : String -> Attribute msg

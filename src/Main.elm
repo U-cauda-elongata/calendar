@@ -576,7 +576,12 @@ view model =
 
 viewDrawer : Model -> Html Msg
 viewDrawer model =
-    menu [ class "filter-menu", ariaLabel (T.filterMenuLabel model.translations) ]
+    menu
+        [ class "filter-menu"
+        , role "toolbar"
+        , ariaOrientation "vertical"
+        , ariaLabel (T.filterMenuLabel model.translations)
+        ]
         [ li []
             [ button
                 [ class "drawer-labelled-button"
@@ -594,7 +599,7 @@ viewDrawer model =
                     [ text <| T.clearFilter model.translations ]
                 ]
             ]
-        , viewSearch model
+        , li [] <| viewSearch model
         , hr [] []
         , viewFeedFilter model
         , hr [] []
@@ -630,46 +635,46 @@ filterApplied model =
     model.search /= "" || not (model.feeds |> List.all .checked)
 
 
-viewSearch : Model -> Html Msg
+viewSearch : Model -> List (Html Msg)
 viewSearch model =
-    li []
-        [ label [ class "search-label" ]
-            [ Icon.search
-                [ Svg.Attributes.class "drawer-icon"
-                , ariaLabel <| T.search model.translations
-                ]
-            , div [ class "search-container" ]
-                [ input
-                    [ id "calendar-search"
-                    , type_ "search"
-                    , value model.search
-                    , list "searchlist"
-                    , onInput SearchInput
-                    , onFocus (SearchFocus True)
-                    , onBlur (SearchFocus False)
-                    ]
-                    []
-                ]
+    [ label [ class "search-label" ]
+        [ Icon.search
+            [ Svg.Attributes.class "drawer-icon"
+            , ariaLabel <| T.search model.translations
             ]
-        , datalist [ id "searchlist" ]
-            (model.events
-                |> List.concatMap (\event -> searchTags event.name)
-                |> Util.cardinalities
-                |> DictUtil.groupKeysBy normalizeSearchTerm
-                |> Dict.values
-                |> List.filterMap
-                    (\pairs ->
-                        pairs
-                            -- Use the most common form among unnormalized terms.
-                            |> List.Extra.maximumBy Tuple.second
-                            -- This should never produce `Nothing` though.
-                            |> Maybe.map
-                                (\( tag, _ ) -> ( tag, pairs |> List.map Tuple.second |> List.sum ))
-                    )
-                |> List.sortBy (\( _, n ) -> -n)
-                |> List.map (\( tag, _ ) -> option [ value tag ] [])
-            )
+        , div [ class "search-container" ]
+            [ input
+                [ id "calendar-search"
+                , type_ "search"
+                , value model.search
+                , list "searchlist"
+                , ariaKeyshortcuts "S"
+                , onInput SearchInput
+                , onFocus (SearchFocus True)
+                , onBlur (SearchFocus False)
+                ]
+                []
+            ]
         ]
+    , datalist [ id "searchlist" ]
+        (model.events
+            |> List.concatMap (\event -> searchTags event.name)
+            |> Util.cardinalities
+            |> DictUtil.groupKeysBy normalizeSearchTerm
+            |> Dict.values
+            |> List.filterMap
+                (\pairs ->
+                    pairs
+                        -- Use the most common form among unnormalized terms.
+                        |> List.Extra.maximumBy Tuple.second
+                        -- This should never produce `Nothing` though.
+                        |> Maybe.map
+                            (\( tag, _ ) -> ( tag, pairs |> List.map Tuple.second |> List.sum ))
+                )
+            |> List.sortBy (\( _, n ) -> -n)
+            |> List.map (\( tag, _ ) -> option [ value tag ] [])
+        )
+    ]
 
 
 tagRe : Regex.Regex
@@ -1057,29 +1062,30 @@ viewKeyedEvent model feed event =
     in
     ( eventId
     , li
-        [ class "event"
-        , role "article"
-        , ariaLabelledby headingId
-        , ariaDescribedby descriptionId
-        , hidden <| not (eventIsShown model feed.checked event)
-        ]
-        (div [ class "event-time" ] viewTimeInfo
-            :: eventHeader
-            :: ul [ class "event-members" ]
-                (viewEventMember True feed :: (members |> List.map (viewEventMember False)))
-            :: div [ id descriptionId, hidden True ] description
-            :: (if model.features.copy || model.features.share then
-                    List.singleton <|
-                        lazy4 viewEventPopup
-                            model.features
-                            model.translations
-                            model.activePopup
-                            event
+        [ hidden <| not <| eventIsShown model feed.checked event ]
+        [ article
+            [ class "event"
+            , ariaLabelledby headingId
+            , ariaDescribedby descriptionId
+            ]
+            (div [ class "event-time" ] viewTimeInfo
+                :: eventHeader
+                :: ul [ class "event-members" ]
+                    (viewEventMember True feed :: (members |> List.map (viewEventMember False)))
+                :: div [ id descriptionId, hidden True ] description
+                :: (if model.features.copy || model.features.share then
+                        List.singleton <|
+                            lazy4 viewEventPopup
+                                model.features
+                                model.translations
+                                model.activePopup
+                                event
 
-                else
-                    []
-               )
-        )
+                    else
+                        []
+                   )
+            )
+        ]
     )
 
 
@@ -1126,15 +1132,15 @@ viewEventPopup features translations activePopup event =
 
                 items2 =
                     if features.share then
-                        viewShareEvent translations event :: items
+                        li [] (viewShareEvent translations event) :: items
 
                     else
                         items
 
                 items3 =
                     if features.copy then
-                        viewCopyEventTimestamp translations event
-                            :: viewCopyEvent translations event
+                        li [] (viewCopyEventTimestamp translations event)
+                            :: li [] (viewCopyEvent translations event)
                             :: items2
 
                     else
@@ -1145,7 +1151,7 @@ viewEventPopup features translations activePopup event =
         ]
 
 
-viewCopyEvent : Translations -> Event.Event -> Html Msg
+viewCopyEvent : Translations -> Event.Event -> List (Html Msg)
 viewCopyEvent translations event =
     let
         copyText =
@@ -1153,31 +1159,28 @@ viewCopyEvent translations event =
                 |> Maybe.map (\link -> event.name ++ "\n" ++ link)
                 |> Maybe.withDefault event.name
     in
-    li []
-        [ button
-            [ class "unstyle", onClick <| Copy copyText ]
-            [ text <| TShare.copyTitleAndUrl translations ]
-        ]
+    [ button
+        [ class "unstyle", onClick <| Copy copyText ]
+        [ text <| TShare.copyTitleAndUrl translations ]
+    ]
 
 
-viewCopyEventTimestamp : Translations -> Event.Event -> Html Msg
+viewCopyEventTimestamp : Translations -> Event.Event -> List (Html Msg)
 viewCopyEventTimestamp translations event =
-    li []
-        [ button
-            [ class "unstyle"
-            , onClick <| Copy (String.fromInt (Time.posixToMillis event.time // 1000))
-            ]
-            [ text <| TShare.copyTimestamp translations ]
+    [ button
+        [ class "unstyle"
+        , onClick <| Copy (String.fromInt (Time.posixToMillis event.time // 1000))
         ]
+        [ text <| TShare.copyTimestamp translations ]
+    ]
 
 
-viewShareEvent : Translations -> Event.Event -> Html Msg
+viewShareEvent : Translations -> Event.Event -> List (Html Msg)
 viewShareEvent translations event =
-    li []
-        [ button
-            [ class "unstyle", onClick <| Share event.name event.link ]
-            [ text <| TShare.shareVia translations ]
-        ]
+    [ button
+        [ class "unstyle", onClick <| Share event.name event.link ]
+        [ text <| TShare.shareVia translations ]
+    ]
 
 
 eventIsShown : Model -> Bool -> Event.Event -> Bool
