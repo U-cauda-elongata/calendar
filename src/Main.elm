@@ -375,7 +375,9 @@ update msg model =
             )
 
         AboutGotCopying result ->
-            ( { model | copying = Just <| Result.map (Markdown.toHtml []) result }, Cmd.none )
+            ( { model | copying = Just <| Result.map (Markdown.toHtml [ class "copying" ]) result }
+            , Cmd.none
+            )
 
         AboutRetryGetCopying ->
             ( model, getCopying )

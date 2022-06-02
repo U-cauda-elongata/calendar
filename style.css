@@ -630,6 +630,10 @@ footer, footer a {
 	color: red;
 }
 
+.copying blockquote p {
+	white-space: pre-wrap;
+}
+
 /* Always show icons in the drawer. */
 @media (min-width: 480px) {
 	:root {
