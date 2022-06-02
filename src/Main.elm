@@ -238,7 +238,7 @@ getFeed : String -> Cmd Msg
 getFeed url =
     Http.get
         { url = Url.Builder.relative [ "feed", url ] []
-        , expect = Http.expectJson (GotFeed url) (Feed.decoder Feed.presets)
+        , expect = Http.expectJson (GotFeed url) Feed.decoder
         }
 
 

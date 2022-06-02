@@ -37,7 +37,7 @@ type alias Entry =
     , duration : Maybe Int
     , link : Maybe String
     , thumbnail : Maybe String
-    , description : Maybe String
+    , members : List String
     }
 
 
@@ -67,13 +67,11 @@ presets =
     ]
 
 
-decoder : List Preset -> D.Decoder Feed
-decoder presetlist =
+decoder : D.Decoder Feed
+decoder =
     D.map3 Feed
         (D.oneOf [ D.field "meta" (D.list metaDecoder), D.succeed [] ])
-        (D.field "entries" (D.list entryDecoder)
-            |> D.map (\entries -> entries |> List.map (eventFromEntry presetlist))
-        )
+        (D.field "entries" <| D.list eventDecoder)
         (D.maybe <| D.field "next" D.string)
 
 
@@ -85,45 +83,20 @@ metaDecoder =
         (D.field "alternate" D.string)
 
 
-entryDecoder : D.Decoder Entry
-entryDecoder =
-    D.map Entry (D.field "id" D.string)
+eventDecoder : D.Decoder Event
+eventDecoder =
+    D.map Event (D.field "id" D.string)
         |> D.andThen (\f -> D.map f <| D.field "feed" D.string)
         |> D.andThen (\f -> D.map f <| D.field "name" D.string)
         |> D.andThen (\f -> D.map f <| D.oneOf [ D.field "live" D.bool, D.succeed False ])
         |> D.andThen (\f -> D.map f <| D.oneOf [ D.field "upcoming" D.bool, D.succeed False ])
-        |> D.andThen (\f -> D.map f <| D.field "time" D.int)
-        |> D.andThen (\f -> D.map f <| D.maybe <| D.field "duration" D.int)
+        |> D.andThen
+            (\f ->
+                D.map f (D.field "time" D.int |> D.map (\time -> Time.millisToPosix <| time * 1000))
+            )
+        |> D.andThen
+            (\f -> D.map f <| D.maybe (D.field "duration" D.int |> D.map Duration.fromMillis))
         |> D.andThen (\f -> D.map f <| D.maybe <| D.field "link" D.string)
         |> D.andThen (\f -> D.map f <| D.maybe <| D.field "thumbnail" D.string)
-        |> D.andThen (\f -> D.map f <| D.maybe <| D.field "description" D.string)
-
-
-eventFromEntry : List Preset -> Entry -> Event
-eventFromEntry presetlist entry =
-    Event entry.id
-        entry.feed
-        entry.name
-        entry.live
-        entry.upcoming
-        (Time.millisToPosix (entry.time * 1000))
-        (entry.duration |> Maybe.map Duration.fromMillis)
-        entry.link
-        entry.thumbnail
-        (entry.description
-            |> Maybe.map (extractMembers presetlist entry.feed)
-            |> Maybe.withDefault []
-        )
-
-
-extractMembers : List Preset -> String -> String -> List String
-extractMembers presetlist myFeed description =
-    presetlist
-        |> List.filterMap
-            (\{ id, title } ->
-                if id /= myFeed && (description |> String.contains ("@" ++ title)) then
-                    Just id
-
-                else
-                    Nothing
-            )
+        |> D.andThen
+            (\f -> D.map f <| D.oneOf [ D.field "members" <| D.list D.string, D.succeed [] ])

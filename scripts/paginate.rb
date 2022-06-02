@@ -35,6 +35,24 @@ require 'json'
   end
 end
 
+title_to_id = meta.map do |m|
+  [m['title'], m['id']]
+end.to_h
+
+entries.each do |entry|
+  description = entry.delete('description')
+  members = description.each_line.filter_map do |line|
+    match = line.match(/^\s*[@＠](.+?)\s*$/)
+    if match
+      id = title_to_id[match[1]]
+      id unless id == entry['feed']
+    end
+  end
+  unless members.empty?
+    entry['members'] = members
+  end
+end
+
 entries.sort_by! do |e|
   e['time']
 end
