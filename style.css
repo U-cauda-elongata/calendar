@@ -492,7 +492,17 @@ hr {
 }
 
 .load-more-feed {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: var(--hamburger-length);
 	text-align: center;
+}
+
+.load-more-feed-button {
+	width: 100%;
+	height: 100%;
+	font-size: initial;
 }
 
 footer, footer a {

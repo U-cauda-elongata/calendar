@@ -137,6 +137,16 @@ loadMoreCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "loadMore" []
 
 
+loadMoreLabel : Translations -> String
+loadMoreLabel translations =
+    t translations "loadMoreLabel"
+
+
+loadMoreLabelCustom : Translations -> (String -> a) -> List a
+loadMoreLabelCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "loadMoreLabel" []
+
+
 retryLoading : Translations -> String
 retryLoading translations =
     t translations "retryLoading"
@@ -145,6 +155,16 @@ retryLoading translations =
 retryLoadingCustom : Translations -> (String -> a) -> List a
 retryLoadingCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "retryLoading" []
+
+
+retryLoadingLabel : Translations -> String
+retryLoadingLabel translations =
+    t translations "retryLoadingLabel"
+
+
+retryLoadingLabelCustom : Translations -> (String -> a) -> List a
+retryLoadingLabelCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "retryLoadingLabel" []
 
 
 loading : Translations -> String

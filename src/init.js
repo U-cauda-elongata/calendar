@@ -53,4 +53,27 @@
 	app.ports.share.subscribe(data => {
 		navigator.share(data).catch(() => {})
 	});
+
+	let ticking = false;
+	let feedBottom;
+	function listener() {
+		if (!ticking) {
+			requestAnimationFrame(() => {
+				feedBottom = feedBottom || document.getElementById('feedBottom');
+				if (feedBottom) {
+					const viewportBottom = scrollY + document.documentElement.clientHeight;
+					if (viewportBottom > feedBottom.offsetTop) {
+						app.ports.onScrollToBottom.send(null);
+					}
+				}
+				ticking = false;
+			});
+			ticking = true;
+		}
+	}
+	addEventListener('scroll', listener);
+
+	app.ports.removeScrollEventListener.subscribe(() => {
+		removeEventListener('scroll', listener);
+	});
 })();

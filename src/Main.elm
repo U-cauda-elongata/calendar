@@ -104,6 +104,7 @@ type Msg
     | ToggleFeedFilter String Bool
     | KeyDown String
     | SearchFocus Bool
+    | GetFeed String
     | SetMode Mode
     | CloseWidgets
     | AboutBackToMain
@@ -116,9 +117,9 @@ type Msg
     | Tick Time.Posix
     | GotTranslations String (Result Http.Error Translations)
     | GotFeed String (Result Http.Error Feed.Feed)
-    | LoadFeed String
     | DismissError Int
     | RetryGetTranslations String Int
+    | RetryGetFeed String
     | Copy String
     | Share String (Maybe String)
     | NoOp
@@ -145,6 +146,12 @@ port copy : String -> Cmd msg
 
 
 port share : ShareData -> Cmd msg
+
+
+port onScrollToBottom : (() -> msg) -> Sub msg
+
+
+port removeScrollEventListener : () -> Cmd msg
 
 
 type alias ShareData =
@@ -329,6 +336,9 @@ update msg model =
               Dom.setViewportOf "drawer" 0 0 |> Task.attempt handleDomResult
             )
 
+        GetFeed url ->
+            ( { model | pendingFeed = Loading }, getFeed url )
+
         SetMode mode ->
             ( { model | mode = mode, activePopup = Nothing }
             , case ( model.mode, mode ) of
@@ -420,13 +430,25 @@ update msg model =
                                         |> Maybe.map OneMore
                                         |> Maybe.withDefault Done
                               }
-                            , if entries |> List.any Event.isOngoing then
-                                -- Reset the clock to get one-second-precision time required by
-                                -- ongoing events.
-                                Time.now |> Task.perform Tick
+                            , let
+                                cmds =
+                                    case next of
+                                        Just _ ->
+                                            []
 
-                              else
-                                Cmd.none
+                                        Nothing ->
+                                            [ removeScrollEventListener () ]
+
+                                cmds2 =
+                                    if entries |> List.any Event.isOngoing then
+                                        -- Reset the clock to get one-second-precision time required by
+                                        -- ongoing events.
+                                        (Time.now |> Task.perform Tick) :: cmds
+
+                                    else
+                                        cmds
+                              in
+                              Cmd.batch cmds2
                             )
 
                         Err err ->
@@ -446,23 +468,22 @@ update msg model =
             else
                 ( model2, cmd )
 
-        LoadFeed url ->
-            ( { model
-                | pendingFeed = Loading
-                , errors =
-                    model.errors
-                        |> List.filter
-                            (\err ->
-                                case err of
-                                    FeedHttpError _ _ ->
-                                        False
+        RetryGetFeed url ->
+            update (GetFeed url)
+                { model
+                    | pendingFeed = Loading
+                    , errors =
+                        model.errors
+                            |> List.filter
+                                (\err ->
+                                    case err of
+                                        FeedHttpError _ _ ->
+                                            False
 
-                                    _ ->
-                                        True
-                            )
-              }
-            , getFeed url
-            )
+                                        _ ->
+                                            True
+                                )
+                }
 
         Copy text ->
             ( model, copy text )
@@ -507,11 +528,22 @@ getCopying =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions _ =
-    Sub.batch
-        [ onKeyDown keyDecoder
-        , Browser.Events.onClick (D.succeed CloseWidgets)
-        ]
+subscriptions model =
+    let
+        subs =
+            [ onKeyDown keyDecoder
+            , Browser.Events.onClick (D.succeed CloseWidgets)
+            ]
+
+        subs2 =
+            case model.pendingFeed of
+                OneMore url ->
+                    onScrollToBottom (\() -> GetFeed url) :: subs
+
+                _ ->
+                    subs
+    in
+    Sub.batch subs2
 
 
 keyDecoder : D.Decoder Msg
@@ -746,7 +778,7 @@ viewMain model =
             model.pendingFeed == Loading
     in
     Keyed.node "main"
-        [ ariaBusy busy ]
+        [ role "feed", ariaBusy busy ]
         (let
             events =
                 model.events
@@ -810,27 +842,40 @@ viewMain model =
                     )
                  )
                , ( "loadMore"
-                 , div [ class "load-more-feed" ] <|
+                 , div [ id "feedBottom", class "load-more-feed" ] <|
                     case model.pendingFeed of
                         OneMore url ->
-                            [ button [ onClick <| LoadFeed url ]
+                            -- Scrolling to here will trigger loading of more items so there's
+                            -- usually no need for a special button here, but there's this should be focusable in order to make it
+                            -- keyboard-navigable.
+                            [ button
+                                [ class "load-more-feed-button"
+                                , class "unstyle"
+                                , ariaLabel <| T.loadMoreLabel model.translations
+                                , onClick <| GetFeed url
+                                ]
                                 [ text <| T.loadMore model.translations ]
                             ]
 
                         Retry url ->
-                            [ button [ onClick <| LoadFeed url ]
+                            [ button
+                                [ class "load-more-feed-button"
+                                , class "unstyle"
+                                , ariaLabel <| T.retryLoadingLabel model.translations
+                                , onClick <| RetryGetFeed url
+                                ]
                                 [ text <| T.retryLoading model.translations ]
                             ]
 
                         Loading ->
-                            [ button [ disabled True ]
-                                [ text <| T.loading model.translations ]
-                            ]
+                            [ text <| T.loading model.translations ]
 
                         Done ->
-                            [ p [] [ text <| T.noMoreItems model.translations ]
-                            , p [ hidden <| filterApplied model ]
-                                [ text <| T.noMoreItemsGibberish model.translations ]
+                            [ div []
+                                [ p [] [ text <| T.noMoreItems model.translations ]
+                                , p [ hidden <| filterApplied model ]
+                                    [ text <| T.noMoreItemsGibberish model.translations ]
+                                ]
                             ]
                  )
                ]
