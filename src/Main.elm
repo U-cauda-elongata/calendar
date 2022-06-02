@@ -919,15 +919,13 @@ viewDateSection model date items =
                                     viewTime =
                                         intlTime [ class "flashing-time" ] model.now
                                   in
-                                  if List.isEmpty ongoing_items then
-                                    h2 [ id "now", class "now" ]
-                                        [ h2 [] <|
-                                            T.nowSeparatorCustom model.translations
-                                                text
-                                                viewTime
-                                        ]
-
-                                  else
+                                  if
+                                    ongoing_items
+                                        |> List.any
+                                            (\( feed, event ) ->
+                                                eventIsShown model feed.checked event
+                                            )
+                                  then
                                     section [ id "now", class "ongoing" ]
                                         [ header [ class "now" ]
                                             [ h2 []
@@ -943,6 +941,14 @@ viewDateSection model date items =
                                                         viewKeyedEvent model feed event
                                                     )
                                             )
+                                        ]
+
+                                  else
+                                    h2 [ id "now", class "now" ]
+                                        [ h2 [] <|
+                                            T.nowSeparatorCustom model.translations
+                                                text
+                                                viewTime
                                         ]
                                 )
                     )
