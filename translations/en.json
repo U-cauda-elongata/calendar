@@ -9,8 +9,8 @@
 	"ongoing": "Live now: {{time}}",
 	"event": {
 		"description": {
-			"scheduledLive": "an upcoming live streaming by {{members}}, starts {{beginsIn}}",
-			"ongoingLive": "an ongoing live streaming by {{members}}, started {{beganAgo}}",
+			"scheduledLive": "an upcoming live streaming by {{members}}, starts in {{duration}}",
+			"ongoingLive": "an ongoing live streaming by {{members}}, started {{duration}} ago",
 			"endedLive": "an ended live streaming by {{members}}, started at {{time}}, was live for {{duration}}",
 			"video": "a video by {{members}}, uploaded at {{time}}, is {{duration}} in length",
 			"twoMembers": "{{author}} and {{member}}",

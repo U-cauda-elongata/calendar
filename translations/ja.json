@@ -10,8 +10,8 @@
 	"ongoing": "配信中：{{time}}",
 	"event": {
 		"description": {
-			"scheduledLive": "{{members}}により配信予定、{{beginsIn}}に開始",
-			"ongoingLive": "{{members}}により配信中、{{beganAgo}}に開始",
+			"scheduledLive": "{{members}}により配信予定、{{duration}}後に開始",
+			"ongoingLive": "{{members}}により配信中、{{duration}}前に開始",
 			"endedLive": "{{members}}にり行われたライブ配信、{{time}}に開始、長さ{{duration}}",
 			"video": "{{members}}による動画、{{time}}にアップロード、長さ{{duration}}",
 			"twoMembers": "{{author}}と{{member}}",

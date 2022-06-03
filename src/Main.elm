@@ -33,6 +33,7 @@ import Translations as T
 import Translations.About as TAbout
 import Translations.Error as TError
 import Translations.Event as TEvent
+import Translations.Event.Description as TEventDescription
 import Translations.Share as TShare
 import Url.Builder
 
@@ -1064,18 +1065,18 @@ viewKeyedEvent model feed event =
                     in
                     if event.live then
                         ( TEvent.startedAtCustom model.translations text viewTime
-                        , T.describeEndedLive model.translations
-                            feed.preset
-                            memberPresets
+                        , TEventDescription.endedLiveCustom model.translations
+                            text
+                            (text <| T.members model.translations feed.preset memberPresets)
                             viewTime
                             viewDuration
                         )
 
                     else
                         ( TEvent.uploadedAtCustom model.translations text viewTime
-                        , T.describeVideo model.translations
-                            feed.preset
-                            memberPresets
+                        , TEventDescription.videoCustom model.translations
+                            text
+                            (text <| T.members model.translations feed.preset memberPresets)
                             viewTime
                             viewDuration
                         )
@@ -1083,34 +1084,40 @@ viewKeyedEvent model feed event =
                 Nothing ->
                     if event.upcoming then
                         let
+                            viewDuration =
+                                T.viewDuration model.translations eta
+
                             viewStartsIn =
-                                T.startsIn model.translations eta
+                                TEvent.startsInCustom model.translations text viewDuration
                         in
                         ( TEvent.timeWithEtaCustom model.translations
                             (text >> List.singleton)
                             [ viewTime ]
                             viewStartsIn
                             |> List.concat
-                        , T.describeScheduledLive model.translations
-                            feed.preset
-                            memberPresets
-                            viewStartsIn
+                        , TEventDescription.scheduledLiveCustom model.translations
+                            text
+                            (text <| T.members model.translations feed.preset memberPresets)
+                            viewDuration
                         )
 
                     else
                         let
+                            viewDuration =
+                                T.viewDuration model.translations <| Duration.negate eta
+
                             viewStartedAgo =
-                                T.startedAgo model.translations (Duration.negate eta)
+                                TEvent.startedAgoCustom model.translations text viewDuration
                         in
                         ( TEvent.timeWithEtaCustom model.translations
                             (text >> List.singleton)
                             [ viewTime ]
                             viewStartedAgo
                             |> List.concat
-                        , T.describeOngoingLive model.translations
-                            feed.preset
-                            memberPresets
-                            viewStartedAgo
+                        , TEventDescription.ongoingLiveCustom model.translations
+                            text
+                            (text <| T.members model.translations feed.preset memberPresets)
+                            viewDuration
                         )
     in
     ( eventId
