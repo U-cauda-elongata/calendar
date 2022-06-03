@@ -620,7 +620,7 @@ handleDomResult result =
             NoOp
 
         Err (Dom.NotFound id) ->
-            ReportError <| Unexpected ("Node not found: " ++ id)
+            ReportError <| Unexpected <| "Node not found: " ++ id
 
 
 getCopying : Cmd Msg
@@ -660,8 +660,8 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     let
         subs =
-            [ onKeyDown keyDecoder
-            , Browser.Events.onClick (D.succeed CloseWidgets)
+            [ onKeyDown <| D.map KeyDown keyDecoder
+            , Browser.Events.onClick <| D.succeed CloseWidgets
             ]
 
         subs2 =
@@ -675,13 +675,12 @@ subscriptions model =
     Sub.batch subs2
 
 
-keyDecoder : D.Decoder Msg
+keyDecoder : D.Decoder String
 keyDecoder =
     D.field "key" D.string
         |> D.andThen (appendModifier "metaKey" "M-")
         |> D.andThen (appendModifier "ctrlKey" "C-")
         |> D.andThen (appendModifier "altKey" "A-")
-        |> D.map KeyDown
 
 
 appendModifier : String -> String -> String -> D.Decoder String
@@ -741,7 +740,7 @@ viewDrawer model =
         [ class "filter-menu"
         , role "toolbar"
         , ariaOrientation "vertical"
-        , ariaLabel (T.filterMenuLabel model.translations)
+        , ariaLabel <| T.filterMenuLabel model.translations
         ]
         [ li []
             [ button
@@ -749,7 +748,7 @@ viewDrawer model =
                 , class "filter-clear-button"
                 , class "unstyle"
                 , title <| T.clearFilter model.translations
-                , disabled <| not (filterApplied model)
+                , disabled <| not <| filterApplied model
                 , onClick ClearFilter
                 , ariaLabelledby "filter-clear-button-label"
                 ]
@@ -811,8 +810,8 @@ viewSearch model =
                 , list "searchlist"
                 , ariaKeyshortcuts "S"
                 , onInput SearchInput
-                , onFocus (SearchFocus True)
-                , onBlur (SearchFocus False)
+                , onFocus <| SearchFocus True
+                , onBlur <| SearchFocus False
                 ]
                 []
             ]
@@ -858,13 +857,13 @@ searchTags string =
 
 viewFeedFilter : Model -> Html Msg
 viewFeedFilter model =
-    li [ class "feed-filter", ariaLabel (T.feedFilterLabel model.translations) ]
+    li [ class "feed-filter", ariaLabel <| T.feedFilterLabel model.translations ]
         [ ul []
             (model.feeds
                 |> List.map
                     (\feed ->
                         let
-                            pId =
+                            labelId =
                                 "feed-" ++ feed.preset.id
                         in
                         li [ class "filter-item" ]
@@ -874,19 +873,19 @@ viewFeedFilter model =
                                 , class "unstyle"
                                 , role "switch"
                                 , title feed.preset.title
-                                , onClick (ToggleFeedFilter feed.preset.id (not feed.checked))
+                                , onClick <| ToggleFeedFilter feed.preset.id (not feed.checked)
                                 , checked feed.checked
                                 , ariaChecked feed.checked
-                                , ariaLabelledby pId
+                                , ariaLabelledby labelId
                                 ]
                                 [ img
                                     [ class "avatar"
                                     , class "drawer-icon"
                                     , src feed.preset.icon
-                                    , alt (T.avatarAlt model.translations)
+                                    , alt <| T.avatarAlt model.translations
                                     ]
                                     []
-                                , span [ id pId, class "drawer-button-label" ]
+                                , span [ id labelId, class "drawer-button-label" ]
                                     [ text feed.preset.title ]
                                 ]
                             ]
@@ -1360,7 +1359,7 @@ viewCopyEventTimestamp : Translations -> Event.Event -> List (Html Msg)
 viewCopyEventTimestamp translations event =
     [ button
         [ class "unstyle"
-        , onClick <| Copy (String.fromInt (Time.posixToMillis event.time // 1000))
+        , onClick <| Copy <| String.fromInt <| Time.posixToMillis event.time // 1000
         ]
         [ text <| TShare.copyTimestamp translations ]
     ]
@@ -1419,7 +1418,7 @@ viewErrorLog model =
         , role "log"
         , ariaLive "assertive"
         , ariaLabel <| TError.error model.translations
-        , hidden (List.isEmpty model.errors)
+        , hidden <| List.isEmpty model.errors
         ]
         (model.errors
             |> List.Extra.indexedFoldl

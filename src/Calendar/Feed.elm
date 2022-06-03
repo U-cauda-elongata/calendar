@@ -27,20 +27,6 @@ type alias Preset =
     }
 
 
-type alias Entry =
-    { id : String
-    , feed : String
-    , name : String
-    , live : Bool
-    , upcoming : Bool
-    , time : Int
-    , duration : Maybe Int
-    , link : Maybe String
-    , thumbnail : Maybe String
-    , members : List String
-    }
-
-
 presets : List Preset
 presets =
     [ Preset "yt:channel:UCEOugXOAfa-HRmRjKbH8z3Q"

@@ -1,4 +1,4 @@
-module Calendar.Util exposing (cardinalities, groupBy, isNothing)
+module Calendar.Util exposing (cardinalities, groupBy)
 
 import Dict exposing (Dict)
 
@@ -35,17 +35,3 @@ groupBy pred list =
                         [ ( b, [ a ] ) ]
             )
             []
-
-
-
--- MAYBE
-
-
-isNothing : Maybe a -> Bool
-isNothing x =
-    case x of
-        Just _ ->
-            False
-
-        Nothing ->
-            True
