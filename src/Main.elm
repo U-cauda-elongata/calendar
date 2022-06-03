@@ -26,6 +26,7 @@ import List.Extra
 import Markdown
 import Process
 import Regex
+import Set exposing (Set)
 import Svg.Attributes
 import Task
 import Time
@@ -53,6 +54,8 @@ type alias Model =
       -- requests from causing `slideViewportInto` to be called again.
       initialized : Bool
     , feeds : List Feed
+    , latestNumberedPage : Maybe String
+    , gotPages : Set String
     , events : List Event
     , pendingFeed : PendingFeed
     , mode : Mode
@@ -99,6 +102,13 @@ type Error
     | Unexpected String
 
 
+type PollingKind
+    = Initial
+    | Manual
+    | AutoRefresh
+    | Backfill (Maybe String)
+
+
 type Msg
     = ClearFilter
     | SearchInput String
@@ -106,6 +116,7 @@ type Msg
     | KeyDown String
     | SearchFocus Bool
     | GetFeed String
+    | Refresh
     | SetMode Mode
     | CloseWidgets
     | AboutBackToMain
@@ -117,7 +128,7 @@ type Msg
     | SetTimeZone Time.Zone
     | Tick Time.Posix
     | GotTranslations String (Result Http.Error Translations)
-    | GotFeed String (Result Http.Error Feed.Feed)
+    | GotFeed PollingKind String (Result Http.Error Feed.Feed)
     | DismissError Int
     | RetryGetTranslations String Int
     | RetryGetFeed String
@@ -181,6 +192,8 @@ init flags =
         Time.utc
         False
         (Feed.presets |> List.map (\feed -> Feed feed "" True))
+        Nothing
+        Set.empty
         []
         Loading
         None
@@ -192,7 +205,7 @@ init flags =
         [ Time.here |> Task.perform SetTimeZone
         , getTranslations <| selectLanguage flags.languages
         , Time.now |> Task.perform Tick
-        , getFeed "latest.json"
+        , getFeed Initial "latest.json"
         ]
     )
 
@@ -235,11 +248,11 @@ getTranslations lang =
         }
 
 
-getFeed : String -> Cmd Msg
-getFeed url =
+getFeed : PollingKind -> String -> Cmd Msg
+getFeed polling url =
     Http.get
         { url = Url.Builder.relative [ "feed", url ] []
-        , expect = Http.expectJson (GotFeed url) Feed.decoder
+        , expect = Http.expectJson (GotFeed polling url) Feed.decoder
         }
 
 
@@ -338,7 +351,10 @@ update msg model =
             )
 
         GetFeed url ->
-            ( { model | pendingFeed = Loading }, getFeed url )
+            ( { model | pendingFeed = Loading }, getFeed Manual url )
+
+        Refresh ->
+            ( model, getFeed AutoRefresh "latest.json" )
 
         SetMode mode ->
             ( { model | mode = mode, activePopup = Nothing }
@@ -389,12 +405,59 @@ update msg model =
         ClosePopup ->
             ( { model | activePopup = Nothing }, Cmd.none )
 
-        GotFeed url result ->
+        GotFeed polling url result ->
             -- XXX: #lm prohibits shadowing.
             let
                 ( model2, cmd ) =
                     case result of
                         Ok { meta, entries, next } ->
+                            let
+                                updateEvents oldEvents newEvents =
+                                    -- Replace existing event if any, or insert new one if not.
+                                    -- XXX: This could be done more efficiently if there'd be an
+                                    -- implementation of `Dict` that preserves ordering.
+                                    newEvents
+                                        |> List.foldl
+                                            (\ne acc1 ->
+                                                let
+                                                    ( acc, replaced ) =
+                                                        acc1
+                                                            |> List.foldl
+                                                                (\oe ( acc2, r ) ->
+                                                                    if ne.id == oe.id then
+                                                                        ( ne :: acc2, True )
+
+                                                                    else
+                                                                        ( oe :: acc2, r )
+                                                                )
+                                                                ( [], False )
+                                                in
+                                                if replaced then
+                                                    acc
+
+                                                else
+                                                    ne :: acc
+                                            )
+                                            oldEvents
+
+                                events =
+                                    (case polling of
+                                        AutoRefresh ->
+                                            updateEvents model.events entries
+
+                                        Backfill _ ->
+                                            updateEvents model.events entries
+
+                                        _ ->
+                                            entries ++ model.events
+                                    )
+                                        |> List.sortWith
+                                            (\e1 e2 ->
+                                                compare
+                                                    (Time.posixToMillis e2.time)
+                                                    (Time.posixToMillis e1.time)
+                                            )
+                            in
                             ( { model
                                 | feeds =
                                     meta
@@ -419,39 +482,78 @@ update msg model =
                                                         )
                                             )
                                             model.feeds
-                                , events =
-                                    model.events
-                                        |> List.append entries
-                                        |> List.sortWith
-                                            (\e1 e2 ->
-                                                compare
-                                                    (Time.posixToMillis e2.time)
-                                                    (Time.posixToMillis e1.time)
-                                            )
+                                , latestNumberedPage =
+                                    if url == "latest.json" then
+                                        next
+
+                                    else
+                                        model.latestNumberedPage
+                                , gotPages = model.gotPages |> Set.insert url
+                                , events = events
                                 , pendingFeed =
-                                    next
-                                        |> Maybe.map OneMore
-                                        |> Maybe.withDefault Done
+                                    if polling == Initial || polling == Manual then
+                                        next
+                                            |> Maybe.map OneMore
+                                            |> Maybe.withDefault Done
+
+                                    else
+                                        model.pendingFeed
                               }
                             , let
                                 cmds =
                                     case next of
-                                        Just _ ->
-                                            []
+                                        Just nextUrl ->
+                                            case polling of
+                                                AutoRefresh ->
+                                                    if
+                                                        model.latestNumberedPage
+                                                            /= Just nextUrl
+                                                            && not
+                                                                (model.gotPages
+                                                                    |> Set.member nextUrl
+                                                                )
+                                                    then
+                                                        -- Keep on loading since we are overdue by
+                                                        -- more than one page. A rare case though!
+                                                        [ getFeed
+                                                            (Backfill model.latestNumberedPage)
+                                                            nextUrl
+                                                        ]
+
+                                                    else
+                                                        []
+
+                                                Backfill dest ->
+                                                    if dest == Just nextUrl then
+                                                        []
+
+                                                    else
+                                                        [ getFeed polling nextUrl ]
+
+                                                _ ->
+                                                    []
 
                                         Nothing ->
                                             [ removeScrollEventListener () ]
 
                                 cmds2 =
-                                    if entries |> List.any Event.isOngoing then
-                                        -- Reset the clock to get one-second-precision time required by
-                                        -- ongoing events.
-                                        (Time.now |> Task.perform Tick) :: cmds
+                                    if polling == Initial || polling == AutoRefresh then
+                                        -- Set up next update.
+                                        autoRefresh model.now events :: cmds
 
                                     else
                                         cmds
+
+                                cmds3 =
+                                    if entries |> List.any Event.isOngoing then
+                                        -- Reset the clock to get one-second-precision time required by
+                                        -- ongoing events.
+                                        (Time.now |> Task.perform Tick) :: cmds2
+
+                                    else
+                                        cmds2
                               in
-                              Cmd.batch cmds2
+                              Cmd.batch cmds3
                             )
 
                         Err err ->
@@ -524,6 +626,30 @@ handleDomResult result =
 getCopying : Cmd Msg
 getCopying =
     Http.get { url = "COPYING", expect = Http.expectString AboutGotCopying }
+
+
+autoRefresh : Time.Posix -> List Event -> Cmd Msg
+autoRefresh now events =
+    let
+        interval =
+            if
+                events
+                    |> List.any
+                        (\e ->
+                            Event.isOngoing e
+                                || ((e.duration == Nothing)
+                                        && (Time.posixToMillis e.time - Time.posixToMillis now)
+                                        < (5 * 60 * 1000)
+                                   )
+                        )
+            then
+                -- Refresh more frequently if there's an ongoing or imminent stream.
+                5 * 1000
+
+            else
+                60 * 1000
+    in
+    Process.sleep interval |> Task.perform (\() -> Refresh)
 
 
 
