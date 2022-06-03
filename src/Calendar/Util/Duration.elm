@@ -20,26 +20,20 @@ fromSeconds secs =
 
 
 toSeconds : Duration -> Int
-toSeconds duration =
-    case duration of
-        Duration secs ->
-            secs
+toSeconds (Duration secs) =
+    secs
 
 
 toSmh : Duration -> ( Int, Maybe ( Int, Maybe Int ) )
-toSmh duration =
-    let
-        sec =
-            toSeconds duration
-    in
-    case sec // 60 of
+toSmh (Duration secs) =
+    case secs // 60 of
         0 ->
-            ( sec, Nothing )
+            ( secs, Nothing )
 
         min ->
             let
                 secPart =
-                    sec |> modBy 60
+                    secs |> modBy 60
             in
             case min // 60 of
                 0 ->
@@ -50,10 +44,8 @@ toSmh duration =
 
 
 negate : Duration -> Duration
-negate duration =
-    case duration of
-        Duration secs ->
-            fromSeconds -secs
+negate (Duration secs) =
+    fromSeconds -secs
 
 
 render : Duration -> List (Html msg)
