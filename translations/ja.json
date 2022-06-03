@@ -19,6 +19,7 @@
 		},
 		"timeWithEta": "{{time}}（{{beginsIn}}）",
 		"startsIn": "{{duration}}後",
+		"dueAgo": "{{duration}}前の予定",
 		"startedAgo": "{{duration}}前",
 		"aDay": "1日",
 		"nDays": "{{n}}日",

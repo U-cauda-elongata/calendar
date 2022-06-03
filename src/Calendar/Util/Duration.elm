@@ -1,4 +1,14 @@
-module Calendar.Util.Duration exposing (Duration, fromMillis, fromSeconds, negate, render, toDatetime, toSeconds, toSmh)
+module Calendar.Util.Duration exposing
+    ( Duration
+    , fromMillis
+    , fromSeconds
+    , isNegative
+    , negate
+    , render
+    , toDatetime
+    , toSeconds
+    , toSmh
+    )
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -41,6 +51,11 @@ toSmh (Duration secs) =
 
                 h ->
                     ( secPart, Just ( min |> modBy 60, Just h ) )
+
+
+isNegative : Duration -> Bool
+isNegative (Duration secs) =
+    secs < 0
 
 
 negate : Duration -> Duration

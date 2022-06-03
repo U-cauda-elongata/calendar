@@ -18,6 +18,7 @@
 		},
 		"timeWithEta": "{{time}} ({{eta}})",
 		"startsIn": "in {{duration}}",
+		"dueAgo": "due {{duration}} ago",
 		"startedAgo": "{{duration}} ago",
 		"aDay": "a day",
 		"nDays": "{{n}} days",

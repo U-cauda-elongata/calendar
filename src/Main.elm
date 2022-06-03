@@ -1088,7 +1088,12 @@ viewKeyedEvent model feed event =
                                 T.viewDuration model.translations eta
 
                             viewStartsIn =
-                                TEvent.startsInCustom model.translations text viewDuration
+                                if Duration.isNegative eta then
+                                    TEvent.dueAgoCustom model.translations text <|
+                                        T.viewDuration model.translations (Duration.negate eta)
+
+                                else
+                                    TEvent.startsInCustom model.translations text viewDuration
                         in
                         ( TEvent.timeWithEtaCustom model.translations
                             (text >> List.singleton)

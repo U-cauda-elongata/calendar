@@ -27,6 +27,16 @@ startsInCustom translations nonPlaceholderLift duration =
     customTr translations Curly nonPlaceholderLift "event.startsIn" [ ( "duration", duration ) ]
 
 
+dueAgo : Translations -> String -> String
+dueAgo translations duration =
+    tr translations Curly "event.dueAgo" [ ( "duration", duration ) ]
+
+
+dueAgoCustom : Translations -> (String -> a) -> a -> List a
+dueAgoCustom translations nonPlaceholderLift duration =
+    customTr translations Curly nonPlaceholderLift "event.dueAgo" [ ( "duration", duration ) ]
+
+
 startedAgo : Translations -> String -> String
 startedAgo translations duration =
     tr translations Curly "event.startedAgo" [ ( "duration", duration ) ]
