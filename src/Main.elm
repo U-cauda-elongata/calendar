@@ -1259,7 +1259,7 @@ viewKeyedEvent model feed event =
             , ariaLabelledby headingId
             , ariaDescribedby descriptionId
             ]
-            (div [ class "event-time" ] viewTimeInfo
+            (div [] viewTimeInfo
                 :: eventHeader
                 :: ul [ class "event-members" ]
                     (viewEventMember True feed :: (members |> List.map (viewEventMember False)))

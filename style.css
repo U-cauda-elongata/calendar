@@ -16,7 +16,6 @@
 	--background-color: #FFF;
 	--color: #000;
 	--border-color: #000;
-	--footer-color: #777;
 	--active-filter-background-color: #0FF;
 	--active-filter-border-color: #008080;
 	--disabled-button-color: #6d6d6d;
@@ -37,7 +36,6 @@
 
 @media (prefers-contrast: more) {
 	:root {
-		--footer-color: #444;
 		--disabled-button-color: #000;
 	}
 }
@@ -47,7 +45,6 @@
 		--background-color: #000;
 		--color: #FFF;
 		--border-color: #2F3336;
-		--footer-color: #888;
 		/* --active-filter-background-color: TODO; */
 		/* --active-filter-border-color: TODO; */
 		--disabled-button-color: #c0c0c0;
@@ -68,7 +65,6 @@
 	@media (prefers-contrast: more) {
 		:root {
 			--border-color: #FFF;
-			--footer-color: #BBB;
 		}
 	}
 }
@@ -184,6 +180,7 @@ hr {
 	/* XXX: On desktop, the user agent may _always_ render the scroll bar, covering a portion of the
 	 * drawer content when it is collapsed. */
 	overflow-y: scroll;
+	overscroll-behavior-y: contain;
 	/* Hide the drawer visually, but not from screen readers, since the whole point of a drawer
 	 * widget is to save display space, which is irrelevant to screen reader users. */
 	left: calc(-1 * var(--drawer-width) - var(--border-width) - 2 * var(--margin-unit));
@@ -385,8 +382,8 @@ hr {
 }
 
 .event {
-	display: grid;
-	width: calc(100% - 2 * var(--margin-unit));
+	position: relative;
+	width: calc(100vw - 2 * var(--margin-unit));
 	margin: 0;
 	margin-top: calc(-1 * var(--border-width));
 	border: solid var(--border-width) var(--border-color);
@@ -394,15 +391,6 @@ hr {
 	border-right: none;
 	padding: var(--margin-unit);
 	break-inside: avoid;
-}
-
-.event > * {
-	/* FIXME: The elements still do not extend to the second column. */
-	grid-column: 1/2;
-}
-
-.event-time {
-	grid-column: 1;
 }
 
 .event-header-grid {
@@ -460,8 +448,9 @@ hr {
 }
 
 .popup-container {
-	grid-column: 2;
-	grid-row: 1;
+	position: absolute;
+	top: var(--margin-unit);
+	right: var(--margin-unit);
 }
 
 .popup-toggle {
@@ -473,6 +462,7 @@ hr {
 	z-index: 3; /* Put it above everything else except the modal dialog. */
 	right: 0;
 	padding: initial;
+	width: max-content;
 	background-color: var(--background-color);
 	border: solid var(--border-width) var(--border-color);
 }
@@ -485,6 +475,8 @@ hr {
 	cursor: pointer;
 	padding-top: var(--margin-unit);
 	padding-bottom: var(--margin-unit);
+	width: 100%;
+	text-align: initial;
 }
 
 .empty-result {
@@ -503,10 +495,6 @@ hr {
 	width: 100%;
 	height: 100%;
 	font-size: initial;
-}
-
-footer, footer a {
-	color: var(--footer-color);
 }
 
 .social-icon {
@@ -563,7 +551,9 @@ footer, footer a {
 	height: 100vh;
 	max-height: initial;
 	padding: 0;
-	background: none;
+	background-color: var(--background-color);
+	overscroll-behavior-x: none;
+	overscroll-behavior-y: contain;
 }
 
 .modal-backdrop:not([open]) {
@@ -578,8 +568,6 @@ footer, footer a {
 	display: flex;
 	flex-direction: column;
 	align-self: center;
-	width: 100vw;
-	height: 100vh;
 	background-color: var(--background-color);
 	color: var(--color);
 }
@@ -695,6 +683,7 @@ footer, footer a {
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		background: none;
 	}
 
 	.modal {
