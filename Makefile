@@ -12,9 +12,9 @@ build/elm.js: src/Translations.elm src/*.elm src/*/*.elm src/*/*/*.elm
 app.js: elm.json build/elm.js src/customElements.js src/init.js src/notice.js
 	$(UGLIFYJS) build/elm.js --compress 'pure_funcs=[F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9],pure_getters,keep_fargs=false,unsafe_comps,unsafe' \
 	| $(UGLIFYJS) --mangle --output build/elm.min.js \
-	&& $(UGLIFYJS) src/customElements.js --compress --mangle --output build/customElements.min.js \
-	&& $(UGLIFYJS) src/init.js --compress --mangle --output build/init.min.js \
-	&& $(UGLIFYJS) src/notice.js build/elm.min.js build/customElements.min.js build/init.min.js --comments all --output app.js \
+	&& $(UGLIFYJS) src/customElements.js --compress --mangle --toplevel --output build/customElements.min.js \
+	&& $(UGLIFYJS) src/init.js --compress --mangle --toplevel --output build/init.min.js \
+	&& $(UGLIFYJS) src/notice.js build/elm.min.js build/customElements.min.js build/init.min.js --mangle --toplevel --comments all --output app.js \
 	|| cat src/notice.js build/elm.js src/customElements.js src/init.js > app.js
 
 fonts: NikumaruFont.en.woff2 NikumaruFont.ja.woff2
