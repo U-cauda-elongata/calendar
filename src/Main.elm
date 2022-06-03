@@ -1386,8 +1386,15 @@ eventIsShown model feedChecked event =
 
 searchMatches : Model -> Event.Event -> Bool
 searchMatches model event =
+    let
+        name =
+            event.name |> normalizeSearchTerm
+    in
     String.isEmpty model.search
-        || (event.name |> normalizeSearchTerm |> String.contains (normalizeSearchTerm model.search))
+        || (normalizeSearchTerm model.search
+                |> String.words
+                |> List.all (\term -> name |> String.contains term)
+           )
 
 
 normalizeSearchTerm : String -> String
