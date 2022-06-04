@@ -93,6 +93,8 @@ cached = channels.each_with_object({}) do |channel, feeds|
   end
 end
 
+FileUtils.mkdir_p('data')
+feed_changed = false
 http = Net::HTTP.new('www.youtube.com', Net::HTTP.https_default_port)
 http.use_ssl = true
 feeds = http.start do
@@ -107,10 +109,24 @@ feeds = http.start do
     [channel, res.body]
   end
 end.map do |(channel, xml)|
+  cache = "data/#{channel.xml}"
+  # Check if the cache has updated by its content because the feed URL doesn't return `ETag` nor
+  # `Last-modified`.
+  feed_changed ||= begin
+    open(cache, &:read) != xml
+  rescue Errno::ENOENT
+    true
+  end
+  IO.write(cache, xml, mode: 'wb')
   [channel, Feed.parse(xml)]
 end.to_h
 
-ids = feeds.flat_map {|_, feed| feed.entries.keys } - cached.flat_map {|_, entries| entries.keys }
+ids = if feed_changed
+  feeds.flat_map {|_, feed| feed.entries.keys } - cached.flat_map {|_, entries| entries.keys }
+else
+  STDERR.puts 'No feed has changed, skipping API request'
+  []
+end
 items = if ids.empty?
   []
 else
@@ -164,7 +180,6 @@ items.each do |video|
   end
 end
 
-FileUtils.mkdir_p('data')
 feeds.map do |channel, feed|
   open("data/#{channel}.json", 'w') do |out|
     JSON.dump(feed, out)
