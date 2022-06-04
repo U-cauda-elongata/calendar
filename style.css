@@ -25,7 +25,7 @@
 	--border-width: 1px;
 	--hamburger-length: 50px;
 	--drawer-width: 100vw;
-	--event-width: 280px;
+	--event-width: 100vw;
 }
 
 @supports not ((backdrop-filter: blur(5px)) or (-webkit-backdrop-filter: blur(5px))) {
@@ -383,7 +383,7 @@ hr {
 
 .event {
 	position: relative;
-	width: calc(100vw - 2 * var(--margin-unit));
+	width: calc(var(--event-width) - 2 * var(--margin-unit));
 	margin: 0;
 	margin-top: calc(-1 * var(--border-width));
 	border: solid var(--border-width) var(--border-color);
@@ -399,12 +399,11 @@ hr {
 
 .event-thumbnail-container {
 	position: relative;
-	height: calc((100vw - var(--hamburger-length) - var(--border-width) - 2 * var(--margin-unit)) * 9 / 16);
+	min-height: calc((var(--event-width) - 2 * var(--margin-unit)) * 9 / 16);
 	order: -1;
 }
 
 .event-thumbnail {
-	display: block;
 	width: 100%;
 }
 
@@ -638,6 +637,7 @@ hr {
 @media (min-width: 480px) {
 	:root {
 		--drawer-width: 240px;
+		--event-width: calc(100vw - 2 * var(--border-width) - var(--hamburger-length));
 	}
 
 	.hamburger-label.filter-active {
@@ -710,7 +710,11 @@ hr {
 }
 
 /* Accomodate multiple events in each row of `.timeline` if the viewport is capable of it. */
-@media (min-width: 712px) {
+@media (min-width: 680px) {
+	:root {
+		--event-width: 280px;
+	}
+
 	.timeline {
 		/* This is fine since overflow would only occur when the drawer is expanded. */
 		overflow-x: hidden;
@@ -720,11 +724,6 @@ hr {
 		vertical-align: top;
 		margin: calc(2 * var(--margin-unit));
 		border: solid var(--border-width) var(--border-color);
-		width: var(--event-width);
-	}
-
-	.event-thumbnail-container {
-		height: calc((var(--event-width) - 2 * var(--margin-unit)) * 9 / 16);
 	}
 
 	.popup {
