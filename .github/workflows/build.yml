@@ -29,6 +29,7 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Build
+          commit_author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
       - uses: benc-uk/workflow-dispatch@4c044c1613fabbe5250deadc65452d54c4ad4fc7
         with:
           workflow: 3609993
