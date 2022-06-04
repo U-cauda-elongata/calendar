@@ -16,7 +16,7 @@ import Calendar.Util.NaiveDate as NaiveDate exposing (NaiveDate)
 import Dict
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onBlur, onClick, onFocus, onInput)
+import Html.Events exposing (onBlur, onClick, onDoubleClick, onFocus, onInput)
 import Html.Keyed as Keyed
 import Html.Lazy exposing (..)
 import Http
@@ -111,9 +111,13 @@ type PollingKind
 
 type Msg
     = ClearFilter
+    | ClearFeedFilter
     | SearchInput String
-    | ToggleFeedFilter String Bool
+    | ToggleFeedFilter Int
+    | HideOtherFeeds Int
     | KeyDown String
+    | SearchConfirm
+    | SearchClear
     | SearchFocus Bool
     | GetFeed String
     | Refresh
@@ -271,21 +275,29 @@ update msg model =
             , Cmd.none
             )
 
+        ClearFeedFilter ->
+            ( { model
+                | feeds = model.feeds |> List.map (\feed -> { feed | checked = True })
+              }
+            , Cmd.none
+            )
+
         SearchInput search ->
             ( { model | search = search }, Cmd.none )
 
-        ToggleFeedFilter id checked ->
+        ToggleFeedFilter i ->
             ( { model
                 | feeds =
                     model.feeds
-                        |> List.map
-                            (\feed ->
-                                if feed.preset.id == id then
-                                    { feed | checked = checked }
+                        |> List.Extra.updateAt i (\feed -> { feed | checked = not feed.checked })
+              }
+            , Cmd.none
+            )
 
-                                else
-                                    feed
-                            )
+        HideOtherFeeds i ->
+            ( { model
+                | feeds =
+                    model.feeds |> List.indexedMap (\j feed -> { feed | checked = i == j })
               }
             , Cmd.none
             )
@@ -331,18 +343,84 @@ update msg model =
 
         KeyDown key ->
             case key of
-                "s" ->
-                    ( model, focusSearch )
-
                 "S" ->
                     ( model, focusSearch )
 
-                "Escape" ->
+                "S-S" ->
+                    ( model, focusSearch )
+
+                "0" ->
+                    update ClearFeedFilter model
+
+                "S-0" ->
+                    update ClearFilter model
+
+                "1" ->
+                    update (ToggleFeedFilter 0) model
+
+                "S-1" ->
+                    update (HideOtherFeeds 0) model
+
+                "2" ->
+                    update (ToggleFeedFilter 1) model
+
+                "S-2" ->
+                    update (HideOtherFeeds 1) model
+
+                "3" ->
+                    update (ToggleFeedFilter 2) model
+
+                "S-3" ->
+                    update (HideOtherFeeds 2) model
+
+                "4" ->
+                    update (ToggleFeedFilter 3) model
+
+                "S-4" ->
+                    update (HideOtherFeeds 3) model
+
+                "5" ->
+                    update (ToggleFeedFilter 4) model
+
+                "S-5" ->
+                    update (HideOtherFeeds 4) model
+
+                "6" ->
+                    update (ToggleFeedFilter 5) model
+
+                "S-6" ->
+                    update (HideOtherFeeds 5) model
+
+                "7" ->
+                    update (ToggleFeedFilter 6) model
+
+                "S-7" ->
+                    update (HideOtherFeeds 6) model
+
+                "8" ->
+                    update (ToggleFeedFilter 7) model
+
+                "S-8" ->
+                    update (HideOtherFeeds 7) model
+
+                "9" ->
+                    update (ToggleFeedFilter 8) model
+
+                "S-9" ->
+                    update (HideOtherFeeds 8) model
+
+                "ESCAPE" ->
                     update CloseWidgets model
                         |> Tuple.mapSecond (\cmd -> Cmd.batch [ cmd, blurSearch ])
 
                 _ ->
                     ( model, Cmd.none )
+
+        SearchConfirm ->
+            ( model, blurSearch )
+
+        SearchClear ->
+            ( { model | search = "" }, blurSearch )
 
         SearchFocus value ->
             ( { model | searchFocused = value }
@@ -677,7 +755,18 @@ subscriptions model =
 
 keyDecoder : D.Decoder String
 keyDecoder =
-    D.field "key" D.string
+    D.field "code" D.string
+        |> D.andThen
+            (\code ->
+                if code |> String.startsWith "Digit" then
+                    -- Special-casing for digit keys because we want to match on combinations like
+                    -- `<S-1>`, which maps to `key` value of `!` on US QWERTY layout for example.
+                    D.succeed (code |> String.dropLeft 5)
+
+                else
+                    D.field "key" D.string |> D.map String.toUpper
+            )
+        |> D.andThen (appendModifier "shiftKey" "S-")
         |> D.andThen (appendModifier "metaKey" "M-")
         |> D.andThen (appendModifier "ctrlKey" "C-")
         |> D.andThen (appendModifier "altKey" "A-")
@@ -750,6 +839,7 @@ viewDrawer model =
                 , title <| T.clearFilter model.translations
                 , disabled <| not <| filterApplied model
                 , onClick ClearFilter
+                , ariaKeyshortcuts "Shift+0"
                 , ariaLabelledby "filter-clear-button-label"
                 ]
                 -- Using `Html.Attributes.class` function here would cause an exception
@@ -810,6 +900,22 @@ viewSearch model =
                 , list "searchlist"
                 , ariaKeyshortcuts "S"
                 , onInput SearchInput
+                , Html.Events.stopPropagationOn "keydown"
+                    (keyDecoder
+                        |> D.map
+                            (\key ->
+                                case key of
+                                    "ENTER" ->
+                                        SearchConfirm
+
+                                    "ESCAPE" ->
+                                        SearchClear
+
+                                    _ ->
+                                        NoOp
+                            )
+                        |> D.map (\msg -> ( msg, True ))
+                    )
                 , onFocus <| SearchFocus True
                 , onBlur <| SearchFocus False
                 ]
@@ -860,8 +966,8 @@ viewFeedFilter model =
     li [ class "feed-filter", ariaLabel <| T.feedFilterLabel model.translations ]
         [ ul []
             (model.feeds
-                |> List.map
-                    (\feed ->
+                |> List.indexedMap
+                    (\i feed ->
                         let
                             labelId =
                                 "feed-" ++ feed.preset.id
@@ -873,9 +979,11 @@ viewFeedFilter model =
                                 , class "unstyle"
                                 , role "switch"
                                 , title feed.preset.title
-                                , onClick <| ToggleFeedFilter feed.preset.id (not feed.checked)
+                                , onClick <| ToggleFeedFilter i
+                                , onDoubleClick <| HideOtherFeeds i
                                 , checked feed.checked
                                 , ariaChecked feed.checked
+                                , ariaKeyshortcuts <| String.fromInt <| i + 1
                                 , ariaLabelledby labelId
                                 ]
                                 [ img
