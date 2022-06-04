@@ -622,6 +622,18 @@ hr {
 	white-space: pre-wrap;
 }
 
+.kbd-help-dl {
+	display: grid;
+}
+
+.kbd-help-dl > dt {
+	grid-column: 1;
+}
+
+.kbd-help-dl > dd {
+	grid-column: 2;
+}
+
 /* Always show icons in the drawer. */
 @media (min-width: 480px) {
 	:root {

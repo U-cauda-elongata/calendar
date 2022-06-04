@@ -67,5 +67,12 @@
 		"licenseHeading": "License of the site",
 		"licenseBody": "For copyright notice of the website itself, including thirdparty software used by it, see {{copying}} file.",
 		"links": "Links"
+	},
+	"help": {
+		"title": "Keyboard shortcuts",
+		"kbdS": "Focus the search field",
+		"kbdN": "Show/hide N-th channel in the menu (N is a number)",
+		"kbdSN": "Show only N-th channel in the menu (N is a number)",
+		"kbdQuestion": "Show this help"
 	}
 }

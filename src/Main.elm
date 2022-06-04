@@ -35,6 +35,7 @@ import Translations.About as TAbout
 import Translations.Error as TError
 import Translations.Event as TEvent
 import Translations.Event.Description as TEventDescription
+import Translations.Help as THelp
 import Translations.Share as TShare
 import Url.Builder
 
@@ -89,6 +90,7 @@ type PendingFeed
 type Mode
     = None
     | About AboutView
+    | Help
 
 
 type AboutView
@@ -409,6 +411,12 @@ update msg model =
                 "S-9" ->
                     update (HideOtherFeeds 8) model
 
+                "?" ->
+                    update (SetMode Help) model
+
+                "S-?" ->
+                    update (SetMode Help) model
+
                 "ESCAPE" ->
                     update CloseWidgets model
                         |> Tuple.mapSecond (\cmd -> Cmd.batch [ cmd, blurSearch ])
@@ -437,11 +445,11 @@ update msg model =
         SetMode mode ->
             ( { model | mode = mode, activePopup = Nothing }
             , case ( model.mode, mode ) of
-                ( None, About _ ) ->
-                    Cmd.batch
-                        [ showModal "about"
-                        , Dom.focus "about-close-button" |> Task.attempt handleDomResult
-                        ]
+                ( None, None ) ->
+                    Cmd.none
+
+                ( About _, About _ ) ->
+                    Cmd.none
 
                 ( About _, None ) ->
                     Cmd.batch
@@ -449,8 +457,38 @@ update msg model =
                         , Dom.focus "about-button" |> Task.attempt handleDomResult
                         ]
 
-                _ ->
+                ( Help, Help ) ->
                     Cmd.none
+
+                _ ->
+                    Cmd.batch
+                        [ case model.mode of
+                            None ->
+                                Cmd.none
+
+                            About _ ->
+                                close "about"
+
+                            Help ->
+                                close "help"
+                        , case mode of
+                            None ->
+                                Cmd.none
+
+                            About _ ->
+                                Cmd.batch
+                                    [ showModal "about"
+                                    , Dom.focus "about-close-button"
+                                        |> Task.attempt handleDomResult
+                                    ]
+
+                            Help ->
+                                Cmd.batch
+                                    [ showModal "help"
+                                    , Dom.focus "help-close-button"
+                                        |> Task.attempt handleDomResult
+                                    ]
+                        ]
             )
 
         CloseWidgets ->
@@ -794,6 +832,7 @@ view model =
     { title = T.title model.translations
     , body =
         [ lazy3 viewAboutDialog model.mode model.copying model.translations
+        , lazy2 viewHelpDialog model.translations model.mode
         , div [ class "primary-window", ariaHidden <| model.mode /= None ]
             [ input
                 [ id "hamburger"
@@ -1699,3 +1738,42 @@ viewAboutDialogCopying copying attrs =
                 , p [] [ text <| httpErrorToString err ]
                 , button [ onClick AboutRetryGetCopying ] [ text "Retry" ]
                 ]
+
+
+viewHelpDialog : Translations -> Mode -> Html Msg
+viewHelpDialog translations mode =
+    dialog
+        [ id "help"
+        , class "modal-backdrop"
+        , role "dialog"
+        , ariaModal True
+        , ariaLabelledby "kdb-help-heading"
+        ]
+        [ div [ class "modal", Html.Events.stopPropagationOn "click" <| D.succeed ( NoOp, True ) ]
+            [ header [ class "dialog-title-bar" ]
+                [ h2 [ id "help-heading", class "dialog-title" ]
+                    [ text <| THelp.title translations ]
+                , button
+                    [ id "help-close-button"
+                    , class "dialog-title-bar-button"
+                    , class "unstyle"
+                    , ariaLabel <| T.closeDialog translations
+                    , onClick <| SetMode None
+                    ]
+                    [ Icon.closeDialog ]
+                ]
+            , div
+                [ class "dialog-content", hidden <| mode /= Help ]
+                [ dl [ class "kbd-help-dl" ]
+                    [ dt [] [ kbd [] [ text "s" ] ]
+                    , dd [] [ text <| THelp.kbdS translations ]
+                    , dt [] [ kbd [] [ text "N" ] ]
+                    , dd [] [ text <| THelp.kbdN translations ]
+                    , dt [] [ kbd [] [ kbd [] [ text "Shift" ], text "+", kbd [] [ text "N" ] ] ]
+                    , dd [] [ text <| THelp.kbdSN translations ]
+                    , dt [] [ kbd [] [ text "?" ] ]
+                    , dd [] [ text <| THelp.kbdQuestion translations ]
+                    ]
+                ]
+            ]
+        ]
