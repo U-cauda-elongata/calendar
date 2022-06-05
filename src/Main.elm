@@ -2,7 +2,7 @@ port module Main exposing (main)
 
 import Browser exposing (Document)
 import Browser.Dom as Dom
-import Browser.Events exposing (onKeyDown)
+import Browser.Events exposing (Visibility(..), onKeyDown, onVisibilityChange)
 import Browser.Navigation as Nav
 import Calendar.Attributes exposing (..)
 import Calendar.Elements exposing (..)
@@ -60,6 +60,7 @@ type alias Model =
     { features : Features
     , key : Nav.Key
     , url : Url
+    , visibility : Visibility
     , translations : Translations
     , search : String
     , now : Time.Posix
@@ -131,6 +132,7 @@ type Msg
     | ToggleFeedFilter Int
     | HideOtherFeeds Int
     | KeyDown String
+    | VisibilityChanged Visibility
     | SearchConfirm
     | SearchClear
     | SearchFocus Bool
@@ -219,6 +221,7 @@ init flags url key =
         flags.features
         key
         { url | query = Nothing }
+        Visible
         initialTranslations
         query.q
         (Time.millisToPosix 0)
@@ -372,23 +375,27 @@ update msg model =
             ( { model | timeZone = timeZone }, Cmd.none )
 
         Tick now ->
-            let
-                interval =
-                    if model.events |> List.any Event.isOngoing then
-                        -- An ongoing event need to show the duration elapsed since the start time
-                        -- in one-second precision.
-                        1000
-
-                    else
-                        60000
-
-                nextTick =
-                    interval - (Time.posixToMillis now |> modBy interval)
-            in
             ( { model | now = now }
-            , Process.sleep (nextTick |> toFloat)
-                |> Task.andThen (\() -> Time.now)
-                |> Task.perform Tick
+            , if model.visibility == Visible then
+                let
+                    interval =
+                        if model.events |> List.any Event.isOngoing then
+                            -- An ongoing event need to show the duration elapsed since the start
+                            -- time in one-second precision.
+                            1000
+
+                        else
+                            60000
+
+                    nextTick =
+                        interval - (Time.posixToMillis now |> modBy interval)
+                in
+                Process.sleep (nextTick |> toFloat)
+                    |> Task.andThen (\() -> Time.now)
+                    |> Task.perform Tick
+
+              else
+                Cmd.none
             )
 
         GotTranslations lang result ->
@@ -487,6 +494,18 @@ update msg model =
 
                 _ ->
                     ( model, Cmd.none )
+
+        VisibilityChanged visibility ->
+            ( { model | visibility = visibility }
+            , if visibility == Visible then
+                Cmd.batch
+                    [ getFeed AutoRefresh "latest.json"
+                    , Time.now |> Task.perform Tick
+                    ]
+
+              else
+                Cmd.none
+            )
 
         SearchConfirm ->
             ( model, Cmd.batch [ blurSearch, pushQuery model ] )
@@ -707,23 +726,15 @@ update msg model =
                                             [ removeScrollEventListener () ]
 
                                 cmds2 =
-                                    if polling == Initial || polling == AutoRefresh then
-                                        -- Set up next update.
-                                        autoRefresh model.now events :: cmds
-
-                                    else
-                                        cmds
-
-                                cmds3 =
                                     if entries |> List.any Event.isOngoing then
                                         -- Reset the clock to get one-second-precision time required by
                                         -- ongoing events.
-                                        (Time.now |> Task.perform Tick) :: cmds2
+                                        (Time.now |> Task.perform Tick) :: cmds
 
                                     else
-                                        cmds2
+                                        cmds
                               in
-                              Cmd.batch cmds3
+                              Cmd.batch cmds2
                             )
 
                         Err err ->
@@ -880,30 +891,6 @@ getCopying =
     Http.get { url = "COPYING", expect = Http.expectString AboutGotCopying }
 
 
-autoRefresh : Time.Posix -> List Event -> Cmd Msg
-autoRefresh now events =
-    let
-        interval =
-            if
-                events
-                    |> List.any
-                        (\e ->
-                            Event.isOngoing e
-                                || ((e.duration == Nothing)
-                                        && (Time.posixToMillis e.time - Time.posixToMillis now)
-                                        < (5 * 60 * 1000)
-                                   )
-                        )
-            then
-                -- Refresh more frequently if there's an ongoing or imminent stream.
-                5 * 1000
-
-            else
-                60 * 1000
-    in
-    Process.sleep interval |> Task.perform (\() -> Refresh)
-
-
 
 -- SUBSCRIPTIONS
 
@@ -914,6 +901,7 @@ subscriptions model =
         subs =
             [ onKeyDown <| D.map KeyDown keyDecoder
             , Browser.Events.onClick <| D.succeed CloseWidgets
+            , onVisibilityChange VisibilityChanged
             ]
 
         subs2 =
@@ -923,8 +911,35 @@ subscriptions model =
 
                 _ ->
                     subs
+
+        subs3 =
+            if model.visibility == Visible then
+                let
+                    interval =
+                        if
+                            model.events
+                                |> List.any
+                                    (\e ->
+                                        Event.isOngoing e
+                                            || ((e.duration == Nothing)
+                                                    && Time.posixToMillis e.time
+                                                    - Time.posixToMillis model.now
+                                                    < (5 * 60 * 1000)
+                                               )
+                                    )
+                        then
+                            -- Refresh more frequently if there's an ongoing or imminent stream.
+                            5 * 1000
+
+                        else
+                            60 * 1000
+                in
+                Time.every interval (always Refresh) :: subs2
+
+            else
+                subs2
     in
-    Sub.batch subs2
+    Sub.batch subs3
 
 
 keyDecoder : D.Decoder String
