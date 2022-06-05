@@ -73,6 +73,8 @@
 		"kbdS": "Focus the search field",
 		"kbdN": "Show/hide N-th channel in the menu (N is a number)",
 		"kbdSN": "Show only N-th channel in the menu (N is a number)",
+		"kbd0": "Show all the channels",
+		"kbdS0": "Clear all the filters (show all the channels and clear the search field)",
 		"kbdQuestion": "Show this help"
 	}
 }

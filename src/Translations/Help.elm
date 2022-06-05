@@ -47,6 +47,26 @@ kbdSNCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "help.kbdSN" []
 
 
+kbd0 : Translations -> String
+kbd0 translations =
+    t translations "help.kbd0"
+
+
+kbd0Custom : Translations -> (String -> a) -> List a
+kbd0Custom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "help.kbd0" []
+
+
+kbdS0 : Translations -> String
+kbdS0 translations =
+    t translations "help.kbdS0"
+
+
+kbdS0Custom : Translations -> (String -> a) -> List a
+kbdS0Custom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "help.kbdS0" []
+
+
 kbdQuestion : Translations -> String
 kbdQuestion translations =
     t translations "help.kbdQuestion"

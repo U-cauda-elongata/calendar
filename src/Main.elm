@@ -3,6 +3,7 @@ port module Main exposing (main)
 import Browser exposing (Document)
 import Browser.Dom as Dom
 import Browser.Events exposing (onKeyDown)
+import Browser.Navigation as Nav
 import Calendar.Attributes exposing (..)
 import Calendar.Elements exposing (..)
 import Calendar.Event as Event exposing (Event)
@@ -37,16 +38,28 @@ import Translations.Event as TEvent
 import Translations.Event.Description as TEventDescription
 import Translations.Help as THelp
 import Translations.Share as TShare
+import Url exposing (Url)
 import Url.Builder
+import Url.Parser
+import Url.Parser.Query as Query
 
 
 main : Program Flags Model Msg
 main =
-    Browser.document { init = init, update = update, view = view, subscriptions = subscriptions }
+    Browser.application
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = subscriptions
+        , onUrlRequest = LinkClicked
+        , onUrlChange = UrlChanged
+        }
 
 
 type alias Model =
     { features : Features
+    , key : Nav.Key
+    , url : Url
     , translations : Translations
     , search : String
     , now : Time.Posix
@@ -126,7 +139,6 @@ type Msg
     | SetMode Mode
     | CloseWidgets
     | AboutBackToMain
-    | AboutOpenCopying
     | AboutGotCopying (Result Http.Error String)
     | AboutRetryGetCopying
     | OpenPopup String
@@ -142,6 +154,8 @@ type Msg
     | Share String (Maybe String)
     | NoOp
     | ReportError Error
+    | LinkClicked Browser.UrlRequest
+    | UrlChanged Url
 
 
 
@@ -188,16 +202,29 @@ type alias Flags =
     }
 
 
-init : Flags -> ( Model, Cmd Msg )
-init flags =
+type alias Query =
+    { q : String
+    , feed : Set String
+    , empty : Bool
+    }
+
+
+init : Flags -> Url -> Nav.Key -> ( Model, Cmd Msg )
+init flags url key =
+    let
+        query =
+            parseQuery url
+    in
     ( Model
         flags.features
+        key
+        { url | query = Nothing }
         initialTranslations
-        ""
+        query.q
         (Time.millisToPosix 0)
         Time.utc
         False
-        (Feed.presets |> List.map (\feed -> Feed feed "" True))
+        (Feed.presets |> List.map (\feed -> Feed feed "" True) |> applyQueryToFeeds query)
         Nothing
         Set.empty
         []
@@ -214,6 +241,32 @@ init flags =
         , getFeed Initial "latest.json"
         ]
     )
+
+
+parseQuery : Url -> Query
+parseQuery url =
+    { url | path = "/" }
+        |> Url.Parser.parse (Url.Parser.query queryParser)
+        |> Maybe.withDefault (Query "" Set.empty False)
+
+
+queryParser : Query.Parser Query
+queryParser =
+    Query.map3 Query
+        (Query.string "q" |> Query.map (Maybe.withDefault ""))
+        (Query.custom "feed" Set.fromList)
+        (Query.string "empty" |> Query.map (Maybe.map (always True) >> Maybe.withDefault False))
+
+
+applyQueryToFeeds : Query -> List Feed -> List Feed
+applyQueryToFeeds query feeds =
+    let
+        showAll =
+            Set.isEmpty query.feed && not query.empty
+    in
+    feeds
+        |> List.map
+            (\feed -> { feed | checked = showAll || (query.feed |> Set.member feed.preset.id) })
 
 
 initialTranslations : Translations
@@ -270,39 +323,50 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         ClearFilter ->
-            ( { model
-                | search = ""
-                , feeds = model.feeds |> List.map (\feed -> { feed | checked = True })
-              }
-            , Cmd.none
-            )
+            let
+                new =
+                    { model
+                        | search = ""
+                        , feeds = model.feeds |> List.map (\feed -> { feed | checked = True })
+                    }
+            in
+            ( new, pushQuery new )
 
         ClearFeedFilter ->
-            ( { model
-                | feeds = model.feeds |> List.map (\feed -> { feed | checked = True })
-              }
-            , Cmd.none
-            )
+            let
+                new =
+                    { model | feeds = model.feeds |> List.map (\feed -> { feed | checked = True }) }
+            in
+            ( new, pushQuery new )
 
         SearchInput search ->
-            ( { model | search = search }, Cmd.none )
+            let
+                new =
+                    { model | search = search }
+            in
+            ( new, replaceQuery new )
 
         ToggleFeedFilter i ->
-            ( { model
-                | feeds =
-                    model.feeds
-                        |> List.Extra.updateAt i (\feed -> { feed | checked = not feed.checked })
-              }
-            , Cmd.none
-            )
+            let
+                new =
+                    { model
+                        | feeds =
+                            model.feeds
+                                |> List.Extra.updateAt i
+                                    (\feed -> { feed | checked = not feed.checked })
+                    }
+            in
+            ( new, pushQuery new )
 
         HideOtherFeeds i ->
-            ( { model
-                | feeds =
-                    model.feeds |> List.indexedMap (\j feed -> { feed | checked = i == j })
-              }
-            , Cmd.none
-            )
+            let
+                new =
+                    { model
+                        | feeds =
+                            model.feeds |> List.indexedMap (\j feed -> { feed | checked = i == j })
+                    }
+            in
+            ( new, pushQuery new )
 
         SetTimeZone timeZone ->
             ( { model | timeZone = timeZone }, Cmd.none )
@@ -425,7 +489,7 @@ update msg model =
                     ( model, Cmd.none )
 
         SearchConfirm ->
-            ( model, blurSearch )
+            ( model, Cmd.batch [ blurSearch, pushQuery model ] )
 
         SearchClear ->
             ( { model | search = "" }, blurSearch )
@@ -496,16 +560,6 @@ update msg model =
 
         AboutBackToMain ->
             ( { model | mode = About AboutMain }, Cmd.none )
-
-        AboutOpenCopying ->
-            ( { model | mode = About AboutCopying }
-            , case model.copying of
-                Just _ ->
-                    Cmd.none
-
-                Nothing ->
-                    getCopying
-            )
 
         AboutGotCopying result ->
             ( { model | copying = Just <| Result.map (Markdown.toHtml [ class "copying" ]) result }
@@ -718,6 +772,88 @@ update msg model =
         ReportError err ->
             ( { model | errors = err :: model.errors }, Cmd.none )
 
+        LinkClicked (Browser.Internal url) ->
+            case url.path |> Util.stripPrefix model.url.path of
+                Just "COPYING" ->
+                    ( { model | mode = About AboutCopying }
+                    , case model.copying of
+                        Just _ ->
+                            Cmd.none
+
+                        Nothing ->
+                            getCopying
+                    )
+
+                _ ->
+                    ( model, Nav.load <| Url.toString url )
+
+        LinkClicked (Browser.External href) ->
+            ( model, Nav.load href )
+
+        UrlChanged url ->
+            let
+                query =
+                    parseQuery url
+            in
+            ( { model | search = query.q, feeds = model.feeds |> applyQueryToFeeds query }
+            , Cmd.none
+            )
+
+
+pushQuery : Model -> Cmd Msg
+pushQuery model =
+    case toQueryString model.search model.feeds of
+        "" ->
+            Nav.pushUrl model.key <| Url.toString model.url
+
+        q ->
+            Nav.pushUrl model.key q
+
+
+replaceQuery : Model -> Cmd Msg
+replaceQuery model =
+    case toQueryString model.search model.feeds of
+        "" ->
+            Nav.replaceUrl model.key <| Url.toString model.url
+
+        q ->
+            Nav.replaceUrl model.key q
+
+
+toQueryString : String -> List Feed -> String
+toQueryString q feeds =
+    Url.Builder.toQuery <|
+        let
+            queries =
+                case
+                    feeds
+                        |> List.foldr
+                            (\feed ( qs, uncheckedAny ) ->
+                                ( if feed.checked then
+                                    Url.Builder.string "feed" feed.preset.id :: qs
+
+                                  else
+                                    qs
+                                , uncheckedAny || not feed.checked
+                                )
+                            )
+                            ( [], False )
+                of
+                    ( [], _ ) ->
+                        [ Url.Builder.string "empty" "" ]
+
+                    ( qs, True ) ->
+                        qs
+
+                    ( _, False ) ->
+                        []
+        in
+        if q == "" then
+            queries
+
+        else
+            Url.Builder.string "q" q :: queries
+
 
 focusSearch : Cmd Msg
 focusSearch =
@@ -796,13 +932,14 @@ keyDecoder =
     D.field "code" D.string
         |> D.andThen
             (\code ->
-                if code |> String.startsWith "Digit" then
-                    -- Special-casing for digit keys because we want to match on combinations like
-                    -- `<S-1>`, which maps to `key` value of `!` on US QWERTY layout for example.
-                    D.succeed (code |> String.dropLeft 5)
+                -- Special-casing for digit keys because we want to match on combinations like
+                -- `<S-1>`, which maps to `key` value of `!` on US QWERTY layout for example.
+                case code |> Util.stripPrefix "Digit" of
+                    Just n ->
+                        D.succeed n
 
-                else
-                    D.field "key" D.string |> D.map String.toUpper
+                    Nothing ->
+                        D.field "key" D.string |> D.map String.toUpper
             )
         |> D.andThen (appendModifier "shiftKey" "S-")
         |> D.andThen (appendModifier "metaKey" "M-")
@@ -1703,14 +1840,7 @@ viewAboutDialogMain translations =
     , p [] [ text <| TAbout.rights translations ]
     , p [] [ text <| TAbout.appeal translations ]
     , h3 [] [ text <| TAbout.licenseHeading translations ]
-    , p []
-        (TAbout.licenseBodyCustom translations text <|
-            a
-                [ href "COPYING"
-                , Html.Events.preventDefaultOn "click" <| D.succeed ( AboutOpenCopying, True )
-                ]
-                [ text "COPYING" ]
-        )
+    , p [] (TAbout.licenseBodyCustom translations text <| a [ href "COPYING" ] [ text "COPYING" ])
     , h3 [] [ text <| TAbout.links translations ]
     , ul []
         [ li []
@@ -1771,6 +1901,10 @@ viewHelpDialog translations mode =
                     , dd [] [ text <| THelp.kbdN translations ]
                     , dt [] [ kbd [] [ kbd [] [ text "Shift" ], text "+", kbd [] [ text "N" ] ] ]
                     , dd [] [ text <| THelp.kbdSN translations ]
+                    , dt [] [ kbd [] [ text "0" ] ]
+                    , dd [] [ text <| THelp.kbd0 translations ]
+                    , dt [] [ kbd [] [ kbd [] [ text "Shift" ], text "+", kbd [] [ text "0" ] ] ]
+                    , dd [] [ text <| THelp.kbdS0 translations ]
                     , dt [] [ kbd [] [ text "?" ] ]
                     , dd [] [ text <| THelp.kbdQuestion translations ]
                     ]

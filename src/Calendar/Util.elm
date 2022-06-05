@@ -1,4 +1,4 @@
-module Calendar.Util exposing (cardinalities, groupBy)
+module Calendar.Util exposing (cardinalities, groupBy, stripPrefix)
 
 import Dict exposing (Dict)
 
@@ -35,3 +35,16 @@ groupBy pred list =
                         [ ( b, [ a ] ) ]
             )
             []
+
+
+
+-- STRING
+
+
+stripPrefix : String -> String -> Maybe String
+stripPrefix prefix s =
+    if String.startsWith prefix s then
+        Just <| String.dropLeft (String.length prefix) s
+
+    else
+        Nothing
