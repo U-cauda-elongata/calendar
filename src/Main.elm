@@ -1017,7 +1017,8 @@ view model =
 viewDrawer : Model -> Html Msg
 viewDrawer model =
     menu
-        [ class "filter-menu"
+        [ class "drawer-menu"
+        , class "unstyle"
         , role "toolbar"
         , ariaOrientation "vertical"
         , ariaLabel <| T.filterMenuLabel model.translations
@@ -1163,7 +1164,7 @@ viewFeedFilter model =
                             labelId =
                                 "feed-" ++ feed.preset.id
                         in
-                        li [ class "filter-item" ]
+                        li []
                             [ button
                                 [ class "drawer-labelled-button"
                                 , class "filter-button"
@@ -1332,7 +1333,7 @@ viewDateSection model date items =
                 )
         ]
         [ header [ class "date-heading" ] [ h2 [] [ intlDate [] date ] ]
-        , Keyed.ul [ class "timeline" ]
+        , Keyed.ul [ class "timeline", class "unstyle" ]
             (items
                 |> List.map
                     (\item ->
@@ -1609,7 +1610,7 @@ viewEventPopup features translations activePopup event =
             -- TODO: Add an icon.
             [ text "…" ]
         , menu
-            [ id popupId, class "popup", ariaLabel <| TShare.share translations ]
+            [ id popupId, class "popup", class "unstyle", ariaLabel <| TShare.share translations ]
             -- TODO: Add icons to list items too.
             (let
                 items =
@@ -1725,6 +1726,7 @@ viewErrorLog : Model -> Html Msg
 viewErrorLog model =
     ul
         [ class "error-log"
+        , class "unstyle"
         , role "log"
         , ariaLive "assertive"
         , ariaLabel <| TError.error model.translations

@@ -102,12 +102,19 @@ li {
 	display: block;
 }
 
+/* Sometimes we wayt to use the default style, and sometimes not.
+ * Use the `unstyle` class to opt out of the default style in such cases. */
 .unstyle:where(button) {
 	appearance: none;
 	border: none;
 	color: inherit;
 	background: inherit;
 	font-family: inherit;
+}
+
+.unstyle:where(menu, ol, ul) {
+	margin: initial;
+	padding: initial;
 }
 
 hr {
@@ -209,7 +216,7 @@ hr {
 	}
 }
 
-.filter-menu {
+.drawer-menu {
 	display: flex;
 	flex-direction: column;
 	margin: initial;
@@ -220,19 +227,15 @@ hr {
 	background-color: var(--background-color);
 }
 
-.filter-menu > li {
+.drawer-menu > li {
 	margin-top: var(--margin-unit);
 }
 
-.filter-menu > li:last-child {
+.drawer-menu > li:last-child {
 	margin-bottom: var(--margin-unit);
 }
 
-.filter-item {
-	margin: var(--margin-unit) 0;
-}
-
-.filter-menu > hr {
+.drawer-menu > hr {
 	width: 100%;
 }
 
@@ -249,17 +252,14 @@ hr {
 	font-size: inherit;
 }
 
-.drawer-labelled-button > .avatar {
+.drawer-icon {
 	flex-shrink: 0;
+	width: calc(var(--border-width) + var(--hamburger-length));
+	height: calc(var(--border-width) + var(--hamburger-length));
 }
 
 .avatar {
 	border-radius: 50%;
-}
-
-.drawer-icon {
-	width: calc(var(--border-width) + var(--hamburger-length));
-	height: calc(var(--border-width) + var(--hamburger-length));
 }
 
 .drawer-button-label {
@@ -318,15 +318,14 @@ hr {
 	padding: initial;
 }
 
+.feed-filter > ul > li {
+	margin: var(--margin-unit) 0;
+}
+
 .about-button {
 	cursor: pointer;
 	fill: var(--background-color);
 	stroke: currentColor;
-}
-
-.timeline {
-	margin: initial;
-	padding: initial;
 }
 
 .timeline > li {
@@ -453,7 +452,6 @@ hr {
 	position: absolute;
 	z-index: 3; /* Put it above everything else except the modal dialog. */
 	right: 0;
-	padding: initial;
 	width: max-content;
 	background-color: var(--background-color);
 	border: solid var(--border-width) var(--border-color);
@@ -499,8 +497,6 @@ hr {
 	position: sticky;
 	bottom: 0;
 	z-index: 1; /* Put it above `.date-heading`. */
-	margin: initial;
-	padding: initial;
 	max-height: calc(100vh - 260px);
 	min-height: 2em;
 	overflow-y: scroll;
