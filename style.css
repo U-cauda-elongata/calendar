@@ -229,8 +229,7 @@ hr {
 }
 
 .filter-item {
-	margin-top: var(--margin-unit);
-	margin-bottom: var(--margin-unit);
+	margin: var(--margin-unit) 0;
 }
 
 .filter-menu > hr {
@@ -345,8 +344,7 @@ hr {
 }
 
 .now {
-	margin-top: var(--margin-unit);
-	margin-bottom: var(--margin-unit);
+	margin: var(--margin-unit) 0;
 	border-top: solid var(--border-width) var(--border-color);
 	border-bottom: solid var(--border-width) var(--border-color);
 	text-align: center;
@@ -382,7 +380,6 @@ hr {
 .event {
 	position: relative;
 	width: var(--event-width);
-	margin: 0;
 	margin-top: calc(-1 * var(--border-width));
 	border: solid var(--border-width) var(--border-color);
 	border-left: none;
@@ -412,10 +409,9 @@ hr {
 
 .event-duration {
 	position: absolute;
-	right: 0;
-	bottom: 0;
+	inset: auto 0 0 auto;
 	border-top-left-radius: 5px;
-	padding-left: calc(var(--margin-unit) / 2);
+	padding: 0 calc(var(--margin-unit) / 2);
 	background-color: var(--translucent-background-color);
 	backdrop-filter: blur(5px);
 	-webkit-backdrop-filter: blur(5px);
@@ -423,8 +419,7 @@ hr {
 }
 
 .event-members {
-	padding-left: var(--margin-unit);
-	padding-right: var(--margin-unit);
+	padding: 0 var(--margin-unit);
 	height: 60px;
 	overflow-x: scroll;
 	white-space: nowrap;
@@ -447,8 +442,7 @@ hr {
 
 .popup-container {
 	position: absolute;
-	top: var(--margin-unit);
-	right: var(--margin-unit);
+	inset: var(--margin-unit) var(--margin-unit) auto auto;
 }
 
 .popup-toggle {
@@ -471,8 +465,7 @@ hr {
 
 .popup button {
 	cursor: pointer;
-	padding-top: var(--margin-unit);
-	padding-bottom: var(--margin-unit);
+	padding: var(--margin-unit);
 	width: 100%;
 	text-align: initial;
 }
@@ -539,8 +532,7 @@ hr {
 
 .modal-backdrop {
 	position: fixed;
-	top: 0;
-	left: 0;
+	inset: 0;
 	z-index: 4; /* Put it above everything else. */
 	border: none;
 	width: 100vw;
@@ -575,9 +567,7 @@ hr {
 .dialog-title-bar {
 	display: flex;
 	border-bottom: solid var(--border-width) var(--border-color);
-	padding: calc(2 * var(--margin-unit));
-	padding-top: 0;
-	padding-bottom: 0;
+	padding: 0 calc(2 * var(--margin-unit));
 	height: var(--hamburger-length);
 	flex-shrink: 0;
 }
@@ -604,8 +594,7 @@ hr {
 	padding: calc(2 * var(--margin-unit));
 	padding-top: 0;
 	overflow-y: scroll;
-	overscroll-behavior-x: none;
-	overscroll-behavior-y: contain;
+	overscroll-behavior: none contain;
 }
 
 .copyright-loading {
