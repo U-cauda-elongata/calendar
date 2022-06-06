@@ -399,12 +399,13 @@ hr {
 
 .event-thumbnail-container {
 	position: relative;
-	min-height: calc((var(--event-width) - 2 * var(--margin-unit)) * 9 / 16);
 	order: -1;
 }
 
 .event-thumbnail {
+	display: block;
 	width: 100%;
+	aspect-ratio: 16 / 9;
 }
 
 .event-duration {
@@ -428,8 +429,15 @@ hr {
 .event-members {
 	margin-top: var(--margin-unit);
 	padding: initial;
+	height: 60px;
 	overflow-x: scroll;
 	white-space: nowrap;
+}
+
+.event-members .avatar {
+	display: block;
+	width: 60px;
+	height: 60px;
 }
 
 .event-member {
@@ -439,11 +447,6 @@ hr {
 
 .event-member:first-child {
 	margin-left: 0;
-}
-
-.event-member .avatar {
-	width: 60px;
-	height: 60px;
 }
 
 .popup-container {

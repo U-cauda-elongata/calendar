@@ -1713,7 +1713,15 @@ viewEventMember isAuthor feed =
                         []
                    )
             )
-            [ img [ class "avatar", src feed.preset.icon, alt feed.preset.title ] [] ]
+            [ img
+                [ class "avatar"
+                , src feed.preset.icon
+                , alt feed.preset.title
+                , width 60
+                , height 60
+                ]
+                []
+            ]
         ]
 
 
