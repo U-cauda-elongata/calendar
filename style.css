@@ -568,9 +568,10 @@ hr {
 	flex-shrink: 0;
 }
 
-.dialog-title-bar-button{
-	width: 2em;
-	height: 2em;
+.dialog-title-bar-button {
+	padding: initial;
+	width: 16px;
+	height: 16px;
 	align-self: center;
 	cursor: pointer;
 	stroke: currentColor;
