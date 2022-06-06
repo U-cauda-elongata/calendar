@@ -728,8 +728,11 @@ hr {
 		--event-width: 280px;
 	}
 
-	.event {
+	.timeline > li {
 		vertical-align: top;
+	}
+
+	.event {
 		margin: calc(2 * var(--margin-unit));
 		border: solid var(--border-width) var(--border-color);
 	}
