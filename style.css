@@ -681,6 +681,11 @@ hr {
 		margin-left: var(--drawer-width);
 	}
 
+	.timeline {
+		/* This is fine since overflow would only occur when the drawer is expanded. */
+		overflow-inline: hidden;
+	}
+
 	@media (prefers-reduced-motion) {
 		/* TODO: Find a better animation. */
 		.drawer {
@@ -720,11 +725,6 @@ hr {
 @media (min-width: 680px) {
 	:root {
 		--event-width: 280px;
-	}
-
-	.timeline {
-		/* This is fine since overflow would only occur when the drawer is expanded. */
-		overflow-x: hidden;
 	}
 
 	.event {
