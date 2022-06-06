@@ -71,6 +71,7 @@
 	"help": {
 		"title": "Keyboard shortcuts",
 		"kbdS": "Focus the search field",
+		"kbdX": "Expand/collapse the menu",
 		"kbdN": "Show/hide N-th channel in the menu (N is a number)",
 		"kbdSN": "Show only N-th channel in the menu (N is a number)",
 		"kbd0": "Show all the channels",

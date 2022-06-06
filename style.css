@@ -640,11 +640,7 @@ hr {
 		transition: width .3s;
 	}
 
-	.hamburger-checkbox:checked ~ .drawer,
-	/* We want the drawer to open when the search input is focused, but using `:focus-within` here
-	 * would cause the drawer to open when a feed filter button is clicked too.
-	 * So we are using `.search-focused` class, which is set by Elm when the input is focused. */
-	.search-focused ~ .drawer {
+	.hamburger-checkbox:checked ~ .drawer {
 		/* Show the labels and input. */
 		width: var(--drawer-width);
 	}
@@ -655,7 +651,7 @@ hr {
 		transition: margin-left .3s;
 	}
 
-	.hamburger-checkbox:checked ~ .drawer-right, .search-focused ~ .drawer-right {
+	.hamburger-checkbox:checked ~ .drawer-right {
 		margin-left: var(--drawer-width);
 	}
 

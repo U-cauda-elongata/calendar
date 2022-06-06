@@ -17,7 +17,7 @@ import Calendar.Util.NaiveDate as NaiveDate exposing (NaiveDate)
 import Dict
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onBlur, onClick, onDoubleClick, onFocus, onInput)
+import Html.Events exposing (onBlur, onCheck, onClick, onDoubleClick, onFocus, onInput)
 import Html.Keyed as Keyed
 import Html.Lazy exposing (..)
 import Http
@@ -75,6 +75,7 @@ type alias Model =
     , pendingFeed : PendingFeed
     , mode : Mode
     , copying : Maybe (Result Http.Error (Html Msg))
+    , drawerExpanded : Bool
     , searchFocused : Bool
     , activePopup : Maybe String
     , errors : List Error
@@ -126,7 +127,8 @@ type PollingKind
 
 
 type Msg
-    = ClearFilter
+    = HamburgerChecked Bool
+    | ClearFilter
     | ClearFeedFilter
     | SearchInput String
     | ToggleFeedFilter Int
@@ -235,6 +237,7 @@ init flags url key =
         None
         Nothing
         False
+        False
         Nothing
         []
     , Cmd.batch
@@ -325,6 +328,9 @@ getFeed polling url =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        HamburgerChecked value ->
+            ( { model | drawerExpanded = value }, Cmd.none )
+
         ClearFilter ->
             let
                 new =
@@ -421,6 +427,9 @@ update msg model =
 
                 "S-S" ->
                     ( model, focusSearch )
+
+                "X" ->
+                    update (HamburgerChecked <| not model.drawerExpanded) model
 
                 "0" ->
                     update ClearFeedFilter model
@@ -988,12 +997,10 @@ view model =
         , div [ class "primary-window", ariaHidden <| model.mode /= None ]
             [ input
                 [ id "hamburger"
-                , classList
-                    [ ( "hamburger-checkbox", True )
-                    , -- XXX: Maybe this should be set to `<body>` ideally?
-                      ( "search-focused", model.searchFocused )
-                    ]
+                , class "hamburger-checkbox"
                 , type_ "checkbox"
+                , checked <| model.drawerExpanded || model.searchFocused
+                , onCheck HamburgerChecked
                 ]
                 []
             , label
@@ -1925,6 +1932,8 @@ viewHelpDialog translations mode =
                 [ dl [ class "kbd-help-dl" ]
                     [ dt [] [ kbd [] [ text "s" ] ]
                     , dd [] [ text <| THelp.kbdS translations ]
+                    , dt [] [ kbd [] [ text "x" ] ]
+                    , dd [] [ text <| THelp.kbdX translations ]
                     , dt [] [ kbd [] [ text "N" ] ]
                     , dd [] [ text <| THelp.kbdN translations ]
                     , dt [] [ kbd [] [ kbd [] [ text "Shift" ], text "+", kbd [] [ text "N" ] ] ]
