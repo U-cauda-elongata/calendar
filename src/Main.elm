@@ -1155,8 +1155,8 @@ searchTags string =
 
 viewFeedFilter : Model -> Html Msg
 viewFeedFilter model =
-    li [ class "feed-filter", ariaLabel <| T.feedFilterLabel model.translations ]
-        [ ul []
+    li [ class "feed-filter" ]
+        [ ul [ ariaLabel <| T.feedFilterLabel model.translations ]
             (model.feeds
                 |> List.indexedMap
                     (\i feed ->
