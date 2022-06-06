@@ -109,7 +109,7 @@ feeds = http.start do
     [channel, res.body]
   end
 end.map do |(channel, xml)|
-  cache = "data/#{channel.xml}"
+  cache = "data/#{channel}.xml"
   # Check if the cache has updated by its content because the feed URL doesn't return `ETag` nor
   # `Last-modified`.
   feed_changed ||= begin
