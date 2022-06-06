@@ -558,8 +558,6 @@ hr {
 	max-height: initial;
 	padding: 0;
 	background-color: var(--background-color);
-	overscroll-behavior-x: none;
-	overscroll-behavior-y: contain;
 }
 
 .modal-backdrop:not([open]) {
@@ -574,6 +572,7 @@ hr {
 	display: flex;
 	flex-direction: column;
 	align-self: center;
+	height: 100vh;
 	background-color: var(--background-color);
 	color: var(--color);
 }
@@ -614,6 +613,8 @@ hr {
 	padding: calc(2 * var(--margin-unit));
 	padding-top: 0;
 	overflow-y: scroll;
+	overscroll-behavior-x: none;
+	overscroll-behavior-y: contain;
 }
 
 .copyright-loading {
