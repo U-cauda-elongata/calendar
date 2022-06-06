@@ -1045,12 +1045,17 @@ viewDrawer model =
         , hr [] []
         , viewFeedFilter model
         , hr [] []
-        , li []
+        , let
+            labelText =
+                TAbout.title model.translations
+          in
+          li []
             [ button
                 [ id "about-button"
                 , class "drawer-labelled-button"
                 , class "about-button"
                 , class "unstyle"
+                , title labelText
                 , ariaControls "about"
                 , ariaExpanded <|
                     case model.mode of
@@ -1066,7 +1071,7 @@ viewDrawer model =
                 ]
                 [ Icon.about [ Svg.Attributes.class "drawer-icon" ]
                 , span [ id "about-button-label", class "drawer-button-label" ]
-                    [ text <| TAbout.title model.translations ]
+                    [ text <| labelText ]
                 ]
             ]
         ]
@@ -1079,11 +1084,12 @@ filterApplied model =
 
 viewSearch : Model -> List (Html Msg)
 viewSearch model =
-    [ label [ class "search-label" ]
-        [ Icon.search
-            [ Svg.Attributes.class "drawer-icon"
-            , ariaLabel <| T.search model.translations
-            ]
+    let
+        labelText =
+            T.search model.translations
+    in
+    [ label [ class "search-label", title labelText ]
+        [ Icon.search [ Svg.Attributes.class "drawer-icon", ariaHidden True ]
         , div [ class "search-container" ]
             [ input
                 [ id "calendar-search"
@@ -1091,6 +1097,7 @@ viewSearch model =
                 , value model.search
                 , list "searchlist"
                 , ariaKeyshortcuts "S"
+                , ariaLabel labelText
                 , onInput SearchInput
                 , Html.Events.stopPropagationOn "keydown"
                     (keyDecoder
