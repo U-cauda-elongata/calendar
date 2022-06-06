@@ -338,8 +338,6 @@ hr {
 	position: sticky;
 	z-index: 1; /* Put it above `.event-thumbnail-container`. */
 	top: 0;
-	left: var(--drawer-width);
-	width: 100%;
 	text-align: center;
 	background-color: var(--background-color);
 	border-bottom: solid var(--border-width) var(--border-color);
@@ -422,12 +420,6 @@ hr {
 	backdrop-filter: blur(5px);
 	-webkit-backdrop-filter: blur(5px);
 	color: var(--color);
-}
-
-.duration {
-	position: absolute;
-	right: 0;
-	bottom: 0;
 }
 
 .event-members {
@@ -518,7 +510,7 @@ hr {
 	padding: initial;
 	max-height: calc(100vh - 260px);
 	min-height: 2em;
-	overflow: scroll;
+	overflow-y: scroll;
 	background-color: red;
 	color: white;
 	font-family:
@@ -550,7 +542,6 @@ hr {
 	top: 0;
 	left: 0;
 	z-index: 4; /* Put it above everything else. */
-	margin: 0;
 	border: none;
 	width: 100vw;
 	max-width: initial;

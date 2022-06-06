@@ -1609,10 +1609,7 @@ viewEventPopup features translations activePopup event =
             -- TODO: Add an icon.
             [ text "…" ]
         , menu
-            [ id popupId
-            , classList [ ( "popup", True ), ( "expanded", expanded ) ]
-            , ariaLabel <| TShare.share translations
-            ]
+            [ id popupId, class "popup", ariaLabel <| TShare.share translations ]
             -- TODO: Add icons to list items too.
             (let
                 items =
