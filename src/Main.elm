@@ -1557,8 +1557,7 @@ viewKeyedEvent model feed event =
             , ariaLabelledby headingId
             , ariaDescribedby descriptionId
             ]
-            (div [] viewTimeInfo
-                :: eventHeader
+            (div [ class "event-padding" ] [ div [] viewTimeInfo, eventHeader ]
                 :: ul [ class "event-members" ]
                     (viewEventMember True feed :: (members |> List.map (viewEventMember False)))
                 :: div [ id descriptionId, hidden True ] description

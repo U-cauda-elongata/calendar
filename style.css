@@ -383,14 +383,18 @@ hr {
 
 .event {
 	position: relative;
-	width: calc(var(--event-width) - 2 * var(--margin-unit));
+	width: var(--event-width);
 	margin: 0;
 	margin-top: calc(-1 * var(--border-width));
 	border: solid var(--border-width) var(--border-color);
 	border-left: none;
 	border-right: none;
-	padding: var(--margin-unit);
+	padding-bottom: var(--margin-unit);
 	break-inside: avoid;
+}
+
+.event-padding {
+	padding: var(--margin-unit);
 }
 
 .event-header-grid {
@@ -427,8 +431,8 @@ hr {
 }
 
 .event-members {
-	margin-top: var(--margin-unit);
-	padding: initial;
+	padding-left: var(--margin-unit);
+	padding-right: var(--margin-unit);
 	height: 60px;
 	overflow-x: scroll;
 	white-space: nowrap;
