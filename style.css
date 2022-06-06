@@ -189,7 +189,7 @@ hr {
 	 * sighted users a bit, but might be confusing for screen reader users. */
 }
 
-.hamburger-checkbox:checked ~ .drawer, .drawer-container:focus-within {
+.hamburger-checkbox:checked ~ .drawer, .drawer:focus-within {
 	left: 0;
 }
 
