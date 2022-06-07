@@ -1265,15 +1265,15 @@ viewMain model =
             ++ [ ( "empty"
                  , div
                     [ class "empty-result"
-                    , hidden
-                        (busy || anyEventIsShown || model.pendingFeed /= Done)
+                    , hidden <| busy || anyEventIsShown
                     ]
                     (let
                         pre =
                             p [] [ text <| T.emptyResultPre model.translations ]
 
                         post =
-                            p [] [ text <| T.emptyResultPost model.translations ]
+                            p [ hidden <| model.pendingFeed /= Done ]
+                                [ text <| T.emptyResultPost model.translations ]
                      in
                      case T.emptyResultKidding model.translations of
                         "" ->
