@@ -1581,7 +1581,7 @@ viewKeyedEvent model feed event =
                             lazy4 viewEventPopup
                                 model.features
                                 model.translations
-                                model.activePopup
+                                (model.activePopup == Just event.id)
                                 event
 
                     else
@@ -1592,14 +1592,11 @@ viewKeyedEvent model feed event =
     )
 
 
-viewEventPopup : Features -> Translations -> Maybe String -> Event.Event -> Html Msg
-viewEventPopup features translations activePopup event =
+viewEventPopup : Features -> Translations -> Bool -> Event.Event -> Html Msg
+viewEventPopup features translations expanded event =
     let
         popupId =
             "popup-" ++ event.id
-
-        expanded =
-            activePopup == Just event.id
     in
     div
         [ class "popup-container" ]
