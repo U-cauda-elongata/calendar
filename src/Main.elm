@@ -89,9 +89,9 @@ type alias Features =
 
 
 type alias Feed =
-    { preset : Feed.Preset
+    { checked : Bool
     , alternate : String
-    , checked : Bool
+    , preset : Feed.Preset
     }
 
 
@@ -229,7 +229,7 @@ init flags url key =
         (Time.millisToPosix 0)
         Time.utc
         False
-        (Feed.presets |> List.map (\feed -> Feed feed "" True) |> applyQueryToFeeds query)
+        (Feed.presets |> List.map (Feed True "") |> applyQueryToFeeds query)
         Nothing
         Set.empty
         []
