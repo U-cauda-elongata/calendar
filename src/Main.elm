@@ -63,8 +63,8 @@ type alias Model =
     , visibility : Visibility
     , translations : Translations
     , search : String
-    , now : Time.Posix
-    , timeZone : Time.Zone
+    , searchSuggestions : List String
+    , time : { now : Time.Posix, zone : Time.Zone }
     , -- Set this to `True` once the first feed request completes, in order to prevent subsequent
       -- requests from causing `slideViewportInto` to be called again.
       initialized : Bool
@@ -227,8 +227,8 @@ init flags url key =
         Visible
         initialTranslations
         query.q
-        (Time.millisToPosix 0)
-        Time.utc
+        []
+        { now = Time.millisToPosix 0, zone = Time.utc }
         False
         (flags.feeds |> List.map (Feed True "") |> applyQueryToFeeds query)
         Nothing
@@ -379,10 +379,18 @@ update msg model =
             ( new, pushQuery new )
 
         SetTimeZone timeZone ->
-            ( { model | timeZone = timeZone }, Cmd.none )
+            let
+                time =
+                    model.time
+            in
+            ( { model | time = { time | zone = timeZone } }, Cmd.none )
 
         Tick now ->
-            ( { model | now = now }
+            let
+                time =
+                    model.time
+            in
+            ( { model | time = { time | now = now } }
             , if model.visibility == Visible then
                 let
                     interval =
@@ -689,6 +697,7 @@ update msg model =
                                         model.latestNumberedPage
                                 , gotPages = model.gotPages |> Set.insert url
                                 , events = events
+                                , searchSuggestions = searchTagsFromEvents events
                                 , pendingFeed =
                                     if polling == Initial || polling == Manual then
                                         next
@@ -901,6 +910,44 @@ getCopying =
     Http.get { url = "COPYING", expect = Http.expectString AboutGotCopying }
 
 
+searchTagsFromEvents : List Event -> List String
+searchTagsFromEvents events =
+    events
+        |> List.concatMap (searchTags << .name)
+        |> Util.cardinalities
+        |> DictUtil.groupKeysBy normalizeSearchTerm
+        |> Dict.values
+        |> List.filterMap
+            (\pairs ->
+                pairs
+                    -- Use the most common form among unnormalized terms.
+                    |> List.Extra.maximumBy Tuple.second
+                    -- This should never produce `Nothing` though.
+                    |> Maybe.map
+                        (\( tag, _ ) -> ( tag, pairs |> List.map Tuple.second |> List.sum ))
+            )
+        |> List.sortBy (Tuple.second >> negate)
+        |> List.map Tuple.first
+
+
+tagRe : Regex.Regex
+tagRe =
+    Regex.fromString "【([^】]*)】" |> Maybe.withDefault Regex.never
+
+
+slashesRe : Regex.Regex
+slashesRe =
+    Regex.fromString "[/／]" |> Maybe.withDefault Regex.never
+
+
+searchTags : String -> List String
+searchTags string =
+    Regex.find tagRe string
+        |> List.filterMap (\match -> List.head match.submatches |> Maybe.andThen identity)
+        |> List.concatMap (Regex.split slashesRe)
+        |> List.map String.trim
+
+
 
 -- SUBSCRIPTIONS
 
@@ -933,7 +980,7 @@ subscriptions model =
                                         Event.isOngoing e
                                             || ((e.duration == Nothing)
                                                     && Time.posixToMillis e.time
-                                                    - Time.posixToMillis model.now
+                                                    - Time.posixToMillis model.time.now
                                                     < (5 * 60 * 1000)
                                                )
                                     )
@@ -1007,7 +1054,7 @@ view model =
             , label
                 [ classList
                     [ ( "hamburger-label", True )
-                    , ( "filter-active", filterApplied model )
+                    , ( "filter-active", filterApplied model.search model.feeds )
                     ]
                 , for "hamburger"
                 , ariaHidden True
@@ -1015,29 +1062,47 @@ view model =
                 [ Icon.hamburger ]
             , header [ class "app-title", class "drawer-right" ]
                 [ h1 [] [ text (T.title model.translations) ] ]
-            , div [ id "drawer", class "drawer" ] [ viewDrawer model ]
-            , div [ class "drawer-right" ] [ viewMain model, viewErrorLog model ]
+            , div [ id "drawer", class "drawer" ]
+                [ lazy5 viewDrawer
+                    model.translations
+                    model.mode
+                    model.searchSuggestions
+                    model.search
+                    model.feeds
+                ]
+            , div [ class "drawer-right" ]
+                [ lazy8 viewMain
+                    model.translations
+                    model.features
+                    model.time
+                    model.activePopup
+                    model.pendingFeed
+                    model.search
+                    model.feeds
+                    model.events
+                , lazy2 viewErrorLog model.translations model.errors
+                ]
             ]
         ]
     }
 
 
-viewDrawer : Model -> Html Msg
-viewDrawer model =
+viewDrawer : Translations -> Mode -> List String -> String -> List Feed -> Html Msg
+viewDrawer translations mode searchSuggestions search feeds =
     menu
         [ class "drawer-menu"
         , class "unstyle"
         , role "toolbar"
         , ariaOrientation "vertical"
-        , ariaLabel <| T.filterMenuLabel model.translations
+        , ariaLabel <| T.filterMenuLabel translations
         ]
         [ li []
             [ button
                 [ class "drawer-labelled-button"
                 , class "filter-clear-button"
                 , class "unstyle"
-                , title <| T.clearFilter model.translations
-                , disabled <| not <| filterApplied model
+                , title <| T.clearFilter translations
+                , disabled <| not <| filterApplied search feeds
                 , onClick ClearFilter
                 , ariaKeyshortcuts "Shift+0"
                 , ariaLabelledby "filter-clear-button-label"
@@ -1046,16 +1111,16 @@ viewDrawer model =
                 -- (in pure Elm, wow!) of setting getter-only property `className`.
                 [ Icon.clear [ Svg.Attributes.class "drawer-icon" ]
                 , span [ id "filter-clear-button-label", class "drawer-button-label" ]
-                    [ text <| T.clearFilter model.translations ]
+                    [ text <| T.clearFilter translations ]
                 ]
             ]
-        , li [] <| viewSearch model
+        , li [] <| viewSearch translations searchSuggestions search
         , hr [] []
-        , viewFeedFilter model
+        , viewFeedFilter translations feeds
         , hr [] []
         , let
             labelText =
-                TAbout.title model.translations
+                TAbout.title translations
           in
           li []
             [ button
@@ -1066,7 +1131,7 @@ viewDrawer model =
                 , title labelText
                 , ariaControls "about"
                 , ariaExpanded <|
-                    case model.mode of
+                    case mode of
                         About _ ->
                             True
 
@@ -1085,16 +1150,16 @@ viewDrawer model =
         ]
 
 
-filterApplied : Model -> Bool
-filterApplied model =
-    model.search /= "" || not (model.feeds |> List.all .checked)
+filterApplied : String -> List Feed -> Bool
+filterApplied search feeds =
+    search /= "" || not (feeds |> List.all .checked)
 
 
-viewSearch : Model -> List (Html Msg)
-viewSearch model =
+viewSearch : Translations -> List String -> String -> List (Html Msg)
+viewSearch translations suggestions search =
     let
         labelText =
-            T.search model.translations
+            T.search translations
     in
     [ label [ class "search-label", title labelText ]
         [ Icon.search [ Svg.Attributes.class "drawer-icon", ariaHidden True ]
@@ -1102,7 +1167,7 @@ viewSearch model =
             [ input
                 [ id "calendar-search"
                 , type_ "search"
-                , value model.search
+                , value search
                 , list "searchlist"
                 , ariaKeyshortcuts "S"
                 , ariaLabel labelText
@@ -1129,50 +1194,15 @@ viewSearch model =
                 []
             ]
         ]
-    , datalist [ id "searchlist" ]
-        (model.events
-            |> List.concatMap (\event -> searchTags event.name)
-            |> Util.cardinalities
-            |> DictUtil.groupKeysBy normalizeSearchTerm
-            |> Dict.values
-            |> List.filterMap
-                (\pairs ->
-                    pairs
-                        -- Use the most common form among unnormalized terms.
-                        |> List.Extra.maximumBy Tuple.second
-                        -- This should never produce `Nothing` though.
-                        |> Maybe.map
-                            (\( tag, _ ) -> ( tag, pairs |> List.map Tuple.second |> List.sum ))
-                )
-            |> List.sortBy (\( _, n ) -> -n)
-            |> List.map (\( tag, _ ) -> option [ value tag ] [])
-        )
+    , datalist [ id "searchlist" ] (suggestions |> List.map (\term -> option [ value term ] []))
     ]
 
 
-tagRe : Regex.Regex
-tagRe =
-    Regex.fromString "【([^】]*)】" |> Maybe.withDefault Regex.never
-
-
-slashesRe : Regex.Regex
-slashesRe =
-    Regex.fromString "[/／]" |> Maybe.withDefault Regex.never
-
-
-searchTags : String -> List String
-searchTags string =
-    Regex.find tagRe string
-        |> List.filterMap (\match -> List.head match.submatches |> Maybe.andThen identity)
-        |> List.concatMap (Regex.split slashesRe)
-        |> List.map String.trim
-
-
-viewFeedFilter : Model -> Html Msg
-viewFeedFilter model =
+viewFeedFilter : Translations -> List Feed -> Html Msg
+viewFeedFilter translations feeds =
     li [ class "feed-filter" ]
-        [ ul [ ariaLabel <| T.feedFilterLabel model.translations ]
-            (model.feeds
+        [ ul [ ariaLabel <| T.feedFilterLabel translations ]
+            (feeds
                 |> List.indexedMap
                     (\i feed ->
                         let
@@ -1197,7 +1227,7 @@ viewFeedFilter model =
                                     [ class "avatar"
                                     , class "drawer-icon"
                                     , src feed.preset.icon
-                                    , alt <| T.avatarAlt model.translations
+                                    , alt <| T.avatarAlt translations
                                     ]
                                     []
                                 , span [ id labelId, class "drawer-button-label" ]
@@ -1214,38 +1244,50 @@ type TimelineItem
     | Now (List ( Feed, Event.Event ))
 
 
-viewMain : Model -> Html Msg
-viewMain model =
+viewMain :
+    Translations
+    -> Features
+    -> { now : Time.Posix, zone : Time.Zone }
+    -> Maybe String
+    -> PendingFeed
+    -> String
+    -> List Feed
+    -> List Event
+    -> Html Msg
+viewMain translations features time activePopup pendingFeed search feeds events =
     let
         busy =
-            model.pendingFeed == Loading
+            pendingFeed == Loading
     in
     Keyed.node "main"
         [ role "feed", ariaBusy busy ]
         (let
-            events =
-                model.events
+            feedAndEvents =
+                events
                     |> List.filterMap
                         (\event ->
-                            model.feeds
+                            feeds
                                 |> List.Extra.find (\feed -> feed.preset.id == event.feed)
                                 |> Maybe.map (\feed -> ( feed, event ))
                         )
 
             anyEventIsShown =
-                events
-                    |> List.any (\( feed, event ) -> eventIsShown model feed.checked event)
+                feedAndEvents
+                    |> List.any
+                        (\( feed, event ) ->
+                            eventIsShown search feeds feed.checked event
+                        )
 
             ( ongoing, ( upcoming, past ) ) =
                 let
                     ( og, other ) =
-                        events |> List.partition (\( _, event ) -> Event.isOngoing event)
+                        feedAndEvents |> List.partition (\( _, event ) -> Event.isOngoing event)
                 in
                 ( og
                 , other
                     |> List.Extra.splitWhen
                         (\( _, event ) ->
-                            Time.posixToMillis event.time <= Time.posixToMillis model.now
+                            Time.posixToMillis event.time <= Time.posixToMillis time.now
                         )
                     |> Maybe.withDefault ( other, [] )
                     |> Tuple.mapBoth (List.map TimelineEvent) (List.map TimelineEvent)
@@ -1256,12 +1298,23 @@ viewMain model =
                 (\item ->
                     case item of
                         TimelineEvent ( _, event ) ->
-                            NaiveDate.fromPosix model.timeZone event.time
+                            NaiveDate.fromPosix time.zone event.time
 
                         Now _ ->
-                            NaiveDate.fromPosix model.timeZone model.now
+                            NaiveDate.fromPosix time.zone time.now
                 )
-            |> List.map (\( date, items ) -> viewKeyedDateSection model date items)
+            |> List.map
+                (\( date, items ) ->
+                    viewKeyedDateSection
+                        translations
+                        features
+                        time.now
+                        activePopup
+                        search
+                        feeds
+                        date
+                        items
+                )
          )
             ++ [ ( "empty"
                  , div
@@ -1270,13 +1323,13 @@ viewMain model =
                     ]
                     (let
                         pre =
-                            p [] [ text <| T.emptyResultPre model.translations ]
+                            p [] [ text <| T.emptyResultPre translations ]
 
                         post =
-                            p [ hidden <| model.pendingFeed /= Done ]
-                                [ text <| T.emptyResultPost model.translations ]
+                            p [ hidden <| pendingFeed /= Done ]
+                                [ text <| T.emptyResultPost translations ]
                      in
-                     case T.emptyResultKidding model.translations of
+                     case T.emptyResultKidding translations of
                         "" ->
                             [ pre, post ]
 
@@ -1286,7 +1339,7 @@ viewMain model =
                  )
                , ( "loadMore"
                  , div [ id "feedBottom", class "load-more-feed" ] <|
-                    case model.pendingFeed of
+                    case pendingFeed of
                         OneMore url ->
                             -- Scrolling to here will trigger loading of more items so there's
                             -- usually no need for a special button here, but there's this should be focusable in order to make it
@@ -1294,30 +1347,30 @@ viewMain model =
                             [ button
                                 [ class "load-more-feed-button"
                                 , class "unstyle"
-                                , ariaLabel <| T.loadMoreLabel model.translations
+                                , ariaLabel <| T.loadMoreLabel translations
                                 , onClick <| GetFeed url
                                 ]
-                                [ text <| T.loadMore model.translations ]
+                                [ text <| T.loadMore translations ]
                             ]
 
                         Retry url ->
                             [ button
                                 [ class "load-more-feed-button"
                                 , class "unstyle"
-                                , ariaLabel <| T.retryLoadingLabel model.translations
+                                , ariaLabel <| T.retryLoadingLabel translations
                                 , onClick <| RetryGetFeed url
                                 ]
-                                [ text <| T.retryLoading model.translations ]
+                                [ text <| T.retryLoading translations ]
                             ]
 
                         Loading ->
-                            [ text <| T.loading model.translations ]
+                            [ text <| T.loading translations ]
 
                         Done ->
                             [ div []
-                                [ p [] [ text <| T.noMoreItems model.translations ]
-                                , p [ hidden <| filterApplied model ]
-                                    [ text <| T.noMoreItemsGibberish model.translations ]
+                                [ p [] [ text <| T.noMoreItems translations ]
+                                , p [ hidden <| filterApplied search feeds ]
+                                    [ text <| T.noMoreItemsGibberish translations ]
                                 ]
                             ]
                  )
@@ -1325,14 +1378,19 @@ viewMain model =
         )
 
 
-viewKeyedDateSection : Model -> NaiveDate -> List TimelineItem -> ( String, Html Msg )
-viewKeyedDateSection model date items =
-    ( NaiveDate.toIso8601 date, viewDateSection model date items )
-
-
-viewDateSection : Model -> NaiveDate -> List TimelineItem -> Html Msg
-viewDateSection model date items =
-    section
+viewKeyedDateSection :
+    Translations
+    -> Features
+    -> Time.Posix
+    -> Maybe String
+    -> String
+    -> List Feed
+    -> NaiveDate
+    -> List TimelineItem
+    -> ( String, Html Msg )
+viewKeyedDateSection translations features now activePopup search feeds date items =
+    ( NaiveDate.toIso8601 date
+    , section
         [ hidden <|
             not
                 (items
@@ -1340,7 +1398,7 @@ viewDateSection model date items =
                         (\item ->
                             case item of
                                 TimelineEvent ( feed, event ) ->
-                                    eventIsShown model feed.checked event
+                                    eventIsShown search feeds feed.checked event
 
                                 Now _ ->
                                     True
@@ -1352,27 +1410,41 @@ viewDateSection model date items =
             (items
                 |> List.map
                     (\item ->
+                        let
+                            partialViewKeyedEvent =
+                                viewKeyedEvent
+                                    translations
+                                    features
+                                    now
+                                    activePopup
+                                    search
+                                    feeds
+                        in
                         case item of
                             TimelineEvent ( feed, event ) ->
-                                viewKeyedEvent model feed event
+                                partialViewKeyedEvent feed event
 
                             Now ongoing_items ->
                                 ( "now"
                                 , let
                                     viewTime =
-                                        intlTime [ class "flashing-time" ] model.now
+                                        intlTime [ class "flashing-time" ] now
                                   in
                                   if
                                     ongoing_items
                                         |> List.any
                                             (\( feed, event ) ->
-                                                eventIsShown model feed.checked event
+                                                eventIsShown
+                                                    search
+                                                    feeds
+                                                    feed.checked
+                                                    event
                                             )
                                   then
                                     section [ id "now", class "ongoing" ]
                                         [ header [ class "now" ]
                                             [ h2 []
-                                                (T.ongoingCustom model.translations
+                                                (T.ongoingCustom translations
                                                     text
                                                     viewTime
                                                 )
@@ -1381,7 +1453,7 @@ viewDateSection model date items =
                                             (ongoing_items
                                                 |> List.map
                                                     (\( feed, event ) ->
-                                                        viewKeyedEvent model feed event
+                                                        partialViewKeyedEvent feed event
                                                     )
                                             )
                                         ]
@@ -1389,7 +1461,7 @@ viewDateSection model date items =
                                   else
                                     h2 [ id "now", class "now" ]
                                         [ h2 [] <|
-                                            T.nowSeparatorCustom model.translations
+                                            T.nowSeparatorCustom translations
                                                 text
                                                 viewTime
                                         ]
@@ -1397,10 +1469,20 @@ viewDateSection model date items =
                     )
             )
         ]
+    )
 
 
-viewKeyedEvent : Model -> Feed -> Event.Event -> ( String, Html Msg )
-viewKeyedEvent model feed event =
+viewKeyedEvent :
+    Translations
+    -> Features
+    -> Time.Posix
+    -> Maybe String
+    -> String
+    -> List Feed
+    -> Feed
+    -> Event
+    -> ( String, Html Msg )
+viewKeyedEvent translations features now activePopup search feeds feed event =
     let
         eventId =
             "event-" ++ event.id
@@ -1430,7 +1512,7 @@ viewKeyedEvent model feed event =
                                             [ class "event-thumbnail"
                                             , loading "lazy"
                                             , src thumb
-                                            , alt <| T.thumbnailAlt model.translations
+                                            , alt <| T.thumbnailAlt translations
                                             ]
                                             []
                                  in
@@ -1449,7 +1531,7 @@ viewKeyedEvent model feed event =
                                             let
                                                 duration =
                                                     Duration.fromMillis <|
-                                                        Time.posixToMillis model.now
+                                                        Time.posixToMillis now
                                                             - Time.posixToMillis event.time
                                             in
                                             [ viewImg
@@ -1478,15 +1560,12 @@ viewKeyedEvent model feed event =
 
         eta =
             Duration.fromMillis <|
-                (Time.posixToMillis event.time - Time.posixToMillis model.now)
+                (Time.posixToMillis event.time - Time.posixToMillis now)
 
         members =
             event.members
                 |> List.filterMap
-                    (\feedId ->
-                        model.feeds
-                            |> List.Extra.find (\f -> f.preset.id == feedId)
-                    )
+                    (\feedId -> feeds |> List.Extra.find (\f -> f.preset.id == feedId))
 
         memberPresets =
             members |> List.map .preset
@@ -1504,19 +1583,19 @@ viewKeyedEvent model feed event =
                                 (Duration.render duration)
                     in
                     if event.live then
-                        ( TEvent.startedAtCustom model.translations text viewTime
-                        , TEventDescription.endedLiveCustom model.translations
+                        ( TEvent.startedAtCustom translations text viewTime
+                        , TEventDescription.endedLiveCustom translations
                             text
-                            (text <| T.members model.translations feed.preset memberPresets)
+                            (text <| T.members translations feed.preset memberPresets)
                             viewTime
                             viewDuration
                         )
 
                     else
-                        ( TEvent.uploadedAtCustom model.translations text viewTime
-                        , TEventDescription.videoCustom model.translations
+                        ( TEvent.uploadedAtCustom translations text viewTime
+                        , TEventDescription.videoCustom translations
                             text
-                            (text <| T.members model.translations feed.preset memberPresets)
+                            (text <| T.members translations feed.preset memberPresets)
                             viewTime
                             viewDuration
                         )
@@ -1525,49 +1604,49 @@ viewKeyedEvent model feed event =
                     if event.upcoming then
                         let
                             viewDuration =
-                                T.viewDuration model.translations eta
+                                T.viewDuration translations eta
 
                             viewStartsIn =
                                 if Duration.isNegative eta then
-                                    TEvent.dueAgoCustom model.translations text <|
-                                        T.viewDuration model.translations (Duration.negate eta)
+                                    TEvent.dueAgoCustom translations text <|
+                                        T.viewDuration translations (Duration.negate eta)
 
                                 else
-                                    TEvent.startsInCustom model.translations text viewDuration
+                                    TEvent.startsInCustom translations text viewDuration
                         in
-                        ( TEvent.timeWithEtaCustom model.translations
+                        ( TEvent.timeWithEtaCustom translations
                             (text >> List.singleton)
                             [ viewTime ]
                             viewStartsIn
                             |> List.concat
-                        , TEventDescription.scheduledLiveCustom model.translations
+                        , TEventDescription.scheduledLiveCustom translations
                             text
-                            (text <| T.members model.translations feed.preset memberPresets)
+                            (text <| T.members translations feed.preset memberPresets)
                             viewDuration
                         )
 
                     else
                         let
                             viewDuration =
-                                T.viewDuration model.translations <| Duration.negate eta
+                                T.viewDuration translations <| Duration.negate eta
 
                             viewStartedAgo =
-                                TEvent.startedAgoCustom model.translations text viewDuration
+                                TEvent.startedAgoCustom translations text viewDuration
                         in
-                        ( TEvent.timeWithEtaCustom model.translations
+                        ( TEvent.timeWithEtaCustom translations
                             (text >> List.singleton)
                             [ viewTime ]
                             viewStartedAgo
                             |> List.concat
-                        , TEventDescription.ongoingLiveCustom model.translations
+                        , TEventDescription.ongoingLiveCustom translations
                             text
-                            (text <| T.members model.translations feed.preset memberPresets)
+                            (text <| T.members translations feed.preset memberPresets)
                             viewDuration
                         )
     in
     ( eventId
     , li
-        [ hidden <| not <| eventIsShown model feed.checked event ]
+        [ hidden <| not <| eventIsShown search feeds feed.checked event ]
         [ article
             [ class "event"
             , ariaLabelledby headingId
@@ -1577,12 +1656,12 @@ viewKeyedEvent model feed event =
                 :: ul [ class "event-members" ]
                     (viewEventMember True feed :: (members |> List.map (viewEventMember False)))
                 :: div [ id descriptionId, hidden True ] description
-                :: (if model.features.copy || model.features.share then
+                :: (if features.copy || features.share then
                         List.singleton <|
                             lazy4 viewEventPopup
-                                model.features
-                                model.translations
-                                (model.activePopup == Just event.id)
+                                features
+                                translations
+                                (activePopup == Just event.id)
                                 event
 
                     else
@@ -1681,25 +1760,25 @@ viewShareEvent translations event =
     ]
 
 
-eventIsShown : Model -> Bool -> Event.Event -> Bool
-eventIsShown model feedChecked event =
+eventIsShown : String -> List Feed -> Bool -> Event -> Bool
+eventIsShown search feeds feedChecked event =
     (feedChecked
         || -- Check that any of the members' feed is checked.
-           (model.feeds
+           (feeds
                 |> List.any (\feed -> feed.checked && (event.members |> List.member feed.preset.id))
            )
     )
-        && searchMatches model event
+        && searchMatches search event
 
 
-searchMatches : Model -> Event.Event -> Bool
-searchMatches model event =
+searchMatches : String -> Event -> Bool
+searchMatches search event =
     let
         name =
             event.name |> normalizeSearchTerm
     in
-    String.isEmpty model.search
-        || (normalizeSearchTerm model.search
+    String.isEmpty search
+        || (normalizeSearchTerm search
                 |> String.words
                 |> List.all (\term -> name |> String.contains term)
            )
@@ -1734,25 +1813,25 @@ viewEventMember isAuthor feed =
         ]
 
 
-viewErrorLog : Model -> Html Msg
-viewErrorLog model =
+viewErrorLog : Translations -> List Error -> Html Msg
+viewErrorLog translations errors =
     ul
         [ class "error-log"
         , class "unstyle"
         , role "log"
         , ariaLive "assertive"
-        , ariaLabel <| TError.error model.translations
-        , hidden <| List.isEmpty model.errors
+        , ariaLabel <| TError.error translations
+        , hidden <| List.isEmpty errors
         ]
-        (model.errors
+        (errors
             |> List.Extra.indexedFoldl
-                (\i err acc -> li [] (viewError model i err) :: acc)
+                (\i err acc -> li [] (viewError translations i err) :: acc)
                 []
         )
 
 
-viewError : Model -> Int -> Error -> List (Html Msg)
-viewError model errIdx err =
+viewError : Translations -> Int -> Error -> List (Html Msg)
+viewError translations errIdx err =
     case err of
         TranslationsHttpError lang e ->
             let
@@ -1771,7 +1850,7 @@ viewError model errIdx err =
             ]
 
         FeedHttpError url e ->
-            TError.httpCustom model.translations
+            TError.httpCustom translations
                 text
                 (a [ href url ] [ text url ])
                 (text <| httpErrorToString e)
@@ -1780,13 +1859,13 @@ viewError model errIdx err =
                         , class "unstyle"
                         , onClick <| DismissError errIdx
                         ]
-                        [ text <| TError.dismiss model.translations ]
+                        [ text <| TError.dismiss translations ]
                    ]
 
         Unexpected msg ->
             -- I'd prefer the application to simply crash in the event of a programming error which
             -- cannot be caught by the compiler like this, but Elm doesn't allow it.
-            [ text <| TError.unexpected model.translations msg ]
+            [ text <| TError.unexpected translations msg ]
 
 
 httpErrorToString : Http.Error -> String
