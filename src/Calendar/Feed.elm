@@ -1,4 +1,4 @@
-module Calendar.Feed exposing (Feed, Preset, decoder, presets)
+module Calendar.Feed exposing (Feed, Preset, decoder)
 
 import Calendar.Event exposing (Event)
 import Calendar.Util.Duration as Duration
@@ -25,32 +25,6 @@ type alias Preset =
     , title : String
     , icon : String
     }
-
-
-presets : List Preset
-presets =
-    [ Preset "yt:channel:UCEOugXOAfa-HRmRjKbH8z3Q"
-        "けものフレンズプロジェクト公式"
-        "https://yt3.ggpht.com/ryEtopDlUPjueM1j3UufZ3UrGCpuYxc5tdeX5-pTlkjygXqbw7j29bFIPu8uCy4NzHAM1EetmLM=s60"
-    , Preset "yt:channel:UCmYO-WfY7Tasry4D1YB4LJw"
-        "フンボルトペンギン / Humboldt Penguin"
-        "https://yt3.ggpht.com/ytc/AKedOLSr75ivVQI4bHcaoMOaYxPjbRnL3-2VCSNuHbJ-=s60"
-    , Preset "yt:channel:UCMpw36mXEu3SLsqdrJxUKNA"
-        "シマハイイロギツネ / Island Fox"
-        "https://yt3.ggpht.com/2ohbFqFqLbEw66rWMhTjb-wpa5X9APonb1KZiiBJbmGcS69yKUwtmLSHfhPUSF4snFp1O9r_=s60"
-    , Preset "yt:channel:UCabMjG8p6G5xLkPJgEoTnDg"
-        "コヨーテ / Coyote"
-        "https://yt3.ggpht.com/VwLc2w11lh_JlrsDB9P4OvBJpqaoAZdS08gqQx7vtJ5-4DjsEiP5Un6xmT0q8VE6zr8uXYEnTqg=s60"
-    , Preset "yt:channel:UCdNBhcAohYjXlUVYsz8X2KQ"
-        "ダイアウルフ / Dire Wolf"
-        "https://yt3.ggpht.com/yJUytRAl-MwBrGmIXMdctRgcNuAborghz1SGt2o6KDewrB1aP6saZLdX9HWBPdF5JEutZ6aBKNY=s60"
-    , Preset "yt:channel:UCxm7yNjJsSvyvcG96-Cvmpw"
-        "カラカル / Caracal"
-        "https://yt3.ggpht.com/PfYRtTGfYRkpluFsqAjYgSERbvu7wQ-pNpRARUeSTvka1pa-t3rFgb4DhxNuhDikmz-BP8WLgw=s60"
-    , Preset "yt:channel:UCEcMIuGR8WO2TwL9XIpjKtw"
-        "ケープペンギン / African Penguin"
-        "https://yt3.ggpht.com/ytc/AKedOLSiSzCCyj5TBipvNgNcz0NrPZbvJZmZQU9JUFE-=s60"
-    ]
 
 
 decoder : D.Decoder Feed

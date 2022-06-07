@@ -203,6 +203,7 @@ type alias ShareData =
 type alias Flags =
     { features : Features
     , languages : List String
+    , feeds : List Feed.Preset
     }
 
 
@@ -229,7 +230,7 @@ init flags url key =
         (Time.millisToPosix 0)
         Time.utc
         False
-        (Feed.presets |> List.map (Feed True "") |> applyQueryToFeeds query)
+        (flags.feeds |> List.map (Feed True "") |> applyQueryToFeeds query)
         Nothing
         Set.empty
         []
