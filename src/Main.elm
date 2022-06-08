@@ -1481,7 +1481,7 @@ viewKeyedDateSection translations features now activePopup search feeds date ite
                                                     viewTime
                                                 )
                                             ]
-                                        , Keyed.ul [ class "timeline" ]
+                                        , Keyed.ul [ class "timeline", class "unstyle" ]
                                             (ongoing_items
                                                 |> List.map
                                                     (\( feed, event ) ->
