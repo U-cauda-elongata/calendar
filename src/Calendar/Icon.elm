@@ -101,14 +101,15 @@ search attrs =
         ]
 
 
-hamburger : Svg msg
-hamburger =
+hamburger : List (Attribute msg) -> Svg msg
+hamburger attrs =
     svg
-        [ xmlns "http://www.w3.org/2000/svg"
-        , viewBox "0 0 24 24"
-        , class "icon"
-        , role "img"
-        ]
+        (xmlns "http://www.w3.org/2000/svg"
+            :: viewBox "0 0 24 24"
+            :: class "icon"
+            :: role "img"
+            :: attrs
+        )
         [ line [ x1 "6", x2 "18", y1 "6", y2 "6" ] []
         , line [ x1 "6", x2 "18", y1 "12", y2 "12" ] []
         , line [ x1 "6", x2 "18", y1 "18", y2 "18" ] []

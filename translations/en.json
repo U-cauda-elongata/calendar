@@ -1,6 +1,7 @@
 {
 	"title": "KF Live Streaming Calendar",
 	"filterMenuLabel": "Filter tools",
+	"collapseMenu": "Collapse menu",
 	"clearFilter": "Clear filters",
 	"search": "Search",
 	"feedFilterLabel": "Channels",

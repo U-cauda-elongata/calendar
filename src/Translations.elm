@@ -27,6 +27,16 @@ filterMenuLabelCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "filterMenuLabel" []
 
 
+collapseMenu : Translations -> String
+collapseMenu translations =
+    t translations "collapseMenu"
+
+
+collapseMenuCustom : Translations -> (String -> a) -> List a
+collapseMenuCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "collapseMenu" []
+
+
 clearFilter : Translations -> String
 clearFilter translations =
     t translations "clearFilter"

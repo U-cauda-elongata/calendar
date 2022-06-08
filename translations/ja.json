@@ -2,6 +2,7 @@
 {
 	"title": "けもフレ配信カレンダー",
 	"filterMenuLabel": "フィルターツール",
+	"collapseMenu": "メニューを畳む",
 	"clearFilter": "フィルターをクリアー",
 	"search": "検索",
 	"feedFilterLabel": "チャンネル",

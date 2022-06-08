@@ -1042,29 +1042,21 @@ view model =
     , body =
         [ lazy3 viewAboutDialog model.mode model.copying model.translations
         , lazy2 viewHelpDialog model.translations model.mode
-        , div [ class "primary-window", ariaHidden <| model.mode /= None ]
-            [ input
-                [ id "hamburger"
-                , class "hamburger-checkbox"
-                , type_ "checkbox"
-                , checked <| model.drawerExpanded || model.searchFocused
-                , onCheck HamburgerChecked
-                ]
-                []
-            , label
-                [ classList
-                    [ ( "hamburger-label", True )
-                    , ( "filter-active", filterApplied model.search model.feeds )
-                    ]
-                , for "hamburger"
-                , ariaHidden True
-                ]
-                [ Icon.hamburger ]
-            , header [ class "app-title", class "drawer-right" ]
-                [ h1 [] [ text (T.title model.translations) ] ]
+        , let
+            drawerExpanded =
+                model.drawerExpanded || model.searchFocused
+          in
+          div
+            [ class "primary-window"
+            , classList [ ( "drawer-expanded", drawerExpanded ) ]
+            , ariaHidden <| model.mode /= None
+            ]
+            [ header [ class "app-title", class "drawer-right" ]
+                [ h1 [] [ text <| T.title model.translations ] ]
             , div [ id "drawer", class "drawer" ]
-                [ lazy5 viewDrawer
+                [ lazy6 viewDrawer
                     model.translations
+                    drawerExpanded
                     model.mode
                     model.searchSuggestions
                     model.search
@@ -1087,8 +1079,8 @@ view model =
     }
 
 
-viewDrawer : Translations -> Mode -> List String -> String -> List Feed -> Html Msg
-viewDrawer translations mode searchSuggestions search feeds =
+viewDrawer : Translations -> Bool -> Mode -> List String -> String -> List Feed -> Html Msg
+viewDrawer translations expanded mode searchSuggestions search feeds =
     menu
         [ class "drawer-menu"
         , class "unstyle"
@@ -1096,7 +1088,33 @@ viewDrawer translations mode searchSuggestions search feeds =
         , ariaOrientation "vertical"
         , ariaLabel <| T.filterMenuLabel translations
         ]
-        [ li []
+        [ label [ class "drawer-labelled-button", ariaHidden True ]
+            [ input
+                [ id "hamburger"
+                , type_ "checkbox"
+                , checked <| expanded
+                , hidden True
+                , onCheck HamburgerChecked
+                ]
+                []
+            , Icon.hamburger
+                (let
+                    attrs =
+                        [ Svg.Attributes.class "hamburger" ]
+                 in
+                 if filterApplied search feeds then
+                    Svg.Attributes.class "filter-active" :: attrs
+
+                 else
+                    attrs
+                )
+            , span
+                [ class "hamburger-label"
+                , class "drawer-button-label"
+                ]
+                [ text <| T.collapseMenu translations ]
+            ]
+        , li []
             [ button
                 [ class "drawer-labelled-button"
                 , class "filter-clear-button"

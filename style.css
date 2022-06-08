@@ -122,11 +122,6 @@ hr {
 	border-top: solid var(--border-width) var(--border-color);
 }
 
-/* `<input>` is difficult to style, so hide it and style the preceding `<label>` instead. */
-.hamburger-checkbox, .filter-checkbox {
-	display: none;
-}
-
 .app-title {
 	display: flex;
 	justify-content: center;
@@ -150,31 +145,34 @@ hr {
 
 /* Drawer widget */
 
-.hamburger-label {
+.drawer-button-label {
+	align-self: center;
+	margin-left: var(--margin-unit);
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.hamburger {
+	/* XXX: On Gecko, the `blur(...)` filter on `.primary-window` ignores fixed state of backdrop
+	 * elements. */
 	position: fixed;
+	top: 0;
+	left: 0;
 	z-index: 3; /* Put it above `.drawer`. */
 	width: var(--hamburger-length);
 	height: var(--hamburger-length);
 	border: var(--border-width) solid var(--border-color);
-	cursor: pointer;
 	background-color: var(--background-color);
 	stroke: var(--color);
 }
 
-.hamburger-label.filter-active {
+.hamburger-label {
+	margin-left: calc(2 * var(--border-width) + var(--hamburger-length) + var(--margin-unit));
+}
+
+.hamburger.filter-active {
 	background-color: var(--active-filter-background-color);
-}
-
-.hamburger-checkbox:checked ~ .hamburger-label {
-	/* XXX: On Gecko, the `blur(...)` filter on `.primary-window` ignores fixed state of backdrop
-	 * elements. */
-	position: fixed;
-}
-
-@media print {
-	.hamburger-label {
-		visibility: hidden;
-	}
 }
 
 .drawer {
@@ -196,7 +194,7 @@ hr {
 	 * sighted users a bit, but might be confusing for screen reader users. */
 }
 
-.hamburger-checkbox:checked ~ .drawer, .drawer:focus-within {
+.drawer-expanded .drawer, .drawer:focus-within {
 	left: 0;
 }
 
@@ -210,7 +208,7 @@ hr {
 		transition-property: z-index,opacity;
 	}
 
-	.hamburger-checkbox:checked ~ .drawer, .drawer-container:focus-within {
+	.drawer-expanded .drawer, .drawer-container:focus-within {
 		z-index: 2;
 		opacity: 1;
 	}
@@ -220,10 +218,8 @@ hr {
 	display: flex;
 	flex-direction: column;
 	margin: initial;
-	padding: initial;
-	padding-top: calc(2 * var(--border-width) + var(--hamburger-length));
 	width: var(--drawer-width);
-	min-height: calc(100vh - 2 * var(--border-width) - var(--hamburger-length));
+	min-height: 100vh;
 	background-color: var(--background-color);
 }
 
@@ -252,6 +248,10 @@ hr {
 	font-size: inherit;
 }
 
+.drawer-labelled-button:not(:disabled) {
+	cursor: pointer;
+}
+
 .drawer-icon {
 	flex-shrink: 0;
 	width: calc(var(--border-width) + var(--hamburger-length));
@@ -262,23 +262,13 @@ hr {
 	border-radius: 50%;
 }
 
-.drawer-button-label {
-	align-self: center;
-	margin-left: var(--margin-unit);
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}
-
 .filter-clear-button {
 	appearance: none;
-	cursor: pointer;
 	fill: var(--active-filter-background-color);
 	stroke: currentColor;
 }
 
 .filter-clear-button:disabled {
-	cursor: default;
 	fill: var(--disabled-button-background-color);
 	stroke: var(--disabled-button-color);
 }
@@ -302,10 +292,6 @@ hr {
 	margin-left: var(--margin-unit);
 }
 
-.filter-button:not(:disabled) {
-	cursor: pointer;
-}
-
 .filter-button[aria-checked="false"], .filter-button:disabled {
 	opacity: .2;
 }
@@ -323,7 +309,6 @@ hr {
 }
 
 .about-button {
-	cursor: pointer;
 	fill: var(--background-color);
 	stroke: currentColor;
 }
@@ -625,7 +610,7 @@ hr {
 		--event-width: calc(100vw - 2 * var(--border-width) - var(--hamburger-length));
 	}
 
-	.hamburger-label.filter-active {
+	.hamburger.filter-active {
 		background-color: var(--background-color);
 	}
 
@@ -640,7 +625,7 @@ hr {
 		transition: width .3s;
 	}
 
-	.hamburger-checkbox:checked ~ .drawer {
+	.drawer-expanded .drawer {
 		/* Show the labels and input. */
 		width: var(--drawer-width);
 	}
@@ -651,7 +636,7 @@ hr {
 		transition: margin-left .3s;
 	}
 
-	.hamburger-checkbox:checked ~ .drawer-right {
+	.drawer-expanded .drawer-right {
 		margin-left: var(--drawer-width);
 	}
 
