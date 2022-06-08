@@ -56,29 +56,81 @@ main =
         }
 
 
+
+-- PORTS
+
+
+port setLang : String -> Cmd msg
+
+
+port slideViewportInto : String -> Cmd msg
+
+
+port showModal : String -> Cmd msg
+
+
+port close : String -> Cmd msg
+
+
+port copy : String -> Cmd msg
+
+
+port share : ShareData -> Cmd msg
+
+
+port onScrollToBottom : (() -> msg) -> Sub msg
+
+
+port removeScrollEventListener : () -> Cmd msg
+
+
+type alias ShareData =
+    { title : String
+    , url : Maybe String
+    }
+
+
+
+-- MODEL
+
+
 type alias Model =
-    { features : Features
-    , key : Nav.Key
-    , url : Url
-    , visibility : Visibility
-    , translations : Translations
-    , search : String
-    , searchSuggestions : List String
-    , time : { now : Time.Posix, zone : Time.Zone }
-    , -- Set this to `True` once the first feed request completes, in order to prevent subsequent
+    { -- FIelds not used by `view`:
+      -- Set this to `True` once the first feed request completes, in order to prevent subsequent
       -- requests from causing `slideViewportInto` to be called again.
       initialized : Bool
-    , feeds : List Feed
     , latestNumberedPage : Maybe String
     , gotPages : Set String
-    , events : List Event
+    , visibility : Visibility
+
+    -- Fields that are set by `init` or `Cmd`s issued by it and never changes:
+    , key : Nav.Key
+    , -- Base URL of the app.
+      url : Url
+    , features : Features
+    , translations : Translations
+
+    -- Fields used by `view`:
+    , time : { now : Time.Posix, zone : Time.Zone }
     , pendingFeed : PendingFeed
-    , mode : Mode
-    , copying : Maybe (Result Http.Error (Html Msg))
+    , errors : List Error
+
+    -- Widgets:
     , drawerExpanded : Bool
     , searchFocused : Bool
     , activePopup : Maybe String
-    , errors : List Error
+
+    -- Filter:
+    , search : String
+    , searchSuggestions : List String
+    , feeds : List Feed
+
+    -- Modal dialogs:
+    , mode : Mode
+    , copying : Maybe (Result Http.Error (Html Msg))
+
+    -- Main:
+    , events : List Event
     }
 
 
@@ -119,87 +171,6 @@ type Error
     | Unexpected String
 
 
-type PollingKind
-    = Initial
-    | Manual
-    | AutoRefresh
-    | Backfill (Maybe String)
-
-
-type Msg
-    = HamburgerChecked Bool
-    | ClearFilter
-    | ClearFeedFilter
-    | SearchInput String
-    | ToggleFeedFilter Int
-    | HideOtherFeeds Int
-    | KeyDown String
-    | VisibilityChanged Visibility
-    | SearchConfirm
-    | SearchClear
-    | SearchFocus Bool
-    | GetFeed String
-    | Refresh
-    | SetMode Mode
-    | CloseWidgets
-    | AboutBackToMain
-    | AboutGotCopying (Result Http.Error String)
-    | AboutRetryGetCopying
-    | OpenPopup String
-    | ClosePopup
-    | SetTimeZone Time.Zone
-    | Tick Time.Posix
-    | GotTranslations String (Result Http.Error Translations)
-    | GotFeed PollingKind String (Result Http.Error Feed.Feed)
-    | DismissError Int
-    | RetryGetTranslations String Int
-    | RetryGetFeed String
-    | Copy String
-    | Share String (Maybe String)
-    | NoOp
-    | ReportError Error
-    | LinkClicked Browser.UrlRequest
-    | UrlChanged Url
-
-
-
--- PORTS
-
-
-port setLang : String -> Cmd msg
-
-
-port slideViewportInto : String -> Cmd msg
-
-
-port showModal : String -> Cmd msg
-
-
-port close : String -> Cmd msg
-
-
-port copy : String -> Cmd msg
-
-
-port share : ShareData -> Cmd msg
-
-
-port onScrollToBottom : (() -> msg) -> Sub msg
-
-
-port removeScrollEventListener : () -> Cmd msg
-
-
-type alias ShareData =
-    { title : String
-    , url : Maybe String
-    }
-
-
-
--- INIT
-
-
 type alias Flags =
     { features : Features
     , languages : List String
@@ -220,27 +191,27 @@ init flags url key =
         query =
             parseQuery url
     in
-    ( Model
-        flags.features
-        key
-        { url | query = Nothing }
-        Visible
-        initialTranslations
-        query.q
-        []
-        { now = Time.millisToPosix 0, zone = Time.utc }
-        False
-        (flags.feeds |> List.map (Feed True "") |> applyQueryToFeeds query)
-        Nothing
-        Set.empty
-        []
-        Loading
-        None
-        Nothing
-        False
-        False
-        Nothing
-        []
+    ( { initialized = False
+      , latestNumberedPage = Nothing
+      , gotPages = Set.empty
+      , visibility = Visible
+      , key = key
+      , url = { url | query = Nothing }
+      , features = flags.features
+      , translations = initialTranslations
+      , time = { now = Time.millisToPosix 0, zone = Time.utc }
+      , pendingFeed = Loading
+      , errors = []
+      , drawerExpanded = False
+      , searchFocused = False
+      , activePopup = Nothing
+      , search = query.q
+      , searchSuggestions = []
+      , feeds = flags.feeds |> List.map (Feed True "") |> applyQueryToFeeds query
+      , mode = None
+      , copying = Nothing
+      , events = []
+      }
     , Cmd.batch
         [ Time.here |> Task.perform SetTimeZone
         , getTranslations <| selectLanguage flags.languages
@@ -324,6 +295,49 @@ getFeed polling url =
 
 
 -- UPDATE
+
+
+type PollingKind
+    = Initial
+    | Manual
+    | AutoRefresh
+    | Backfill (Maybe String)
+
+
+type Msg
+    = HamburgerChecked Bool
+    | ClearFilter
+    | ClearFeedFilter
+    | SearchInput String
+    | ToggleFeedFilter Int
+    | HideOtherFeeds Int
+    | KeyDown String
+    | VisibilityChanged Visibility
+    | SearchConfirm
+    | SearchClear
+    | SearchFocus Bool
+    | GetFeed String
+    | Refresh
+    | SetMode Mode
+    | CloseWidgets
+    | AboutBackToMain
+    | AboutGotCopying (Result Http.Error String)
+    | AboutRetryGetCopying
+    | OpenPopup String
+    | ClosePopup
+    | SetTimeZone Time.Zone
+    | Tick Time.Posix
+    | GotTranslations String (Result Http.Error Translations)
+    | GotFeed PollingKind String (Result Http.Error Feed.Feed)
+    | DismissError Int
+    | RetryGetTranslations String Int
+    | RetryGetFeed String
+    | Copy String
+    | Share String (Maybe String)
+    | NoOp
+    | ReportError Error
+    | LinkClicked Browser.UrlRequest
+    | UrlChanged Url
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
