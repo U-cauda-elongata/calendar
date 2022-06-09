@@ -186,6 +186,7 @@ hr {
 	 * drawer content when it is collapsed. */
 	overflow-y: scroll;
 	overscroll-behavior-y: contain;
+	background-color: var(--background-color);
 	/* Hide the drawer visually, but not from screen readers, since the whole point of a drawer
 	 * widget is to save display space, which is irrelevant to screen reader users. */
 	left: calc(-1 * var(--drawer-width) - var(--border-width) - 2 * var(--margin-unit));
@@ -220,7 +221,6 @@ hr {
 	margin: initial;
 	width: var(--drawer-width);
 	min-height: 100vh;
-	background-color: var(--background-color);
 }
 
 .drawer-menu > li {
