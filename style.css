@@ -190,7 +190,7 @@ hr {
 	/* Hide the drawer visually, but not from screen readers, since the whole point of a drawer
 	 * widget is to save display space, which is irrelevant to screen reader users. */
 	left: calc(-1 * var(--drawer-width) - var(--border-width) - 2 * var(--margin-unit));
-	transition: left .3s;
+	transition: left .2s;
 	/* XXX: Should we include `user-select: none` here? That would improve experience for
 	 * sighted users a bit, but might be confusing for screen reader users. */
 }
@@ -622,7 +622,7 @@ hr {
 		/* Visually hide labels and the search input inside it by default. */
 		width: calc(var(--hamburger-length) + var(--border-width));
 		overflow-x: hidden;
-		transition: width .3s;
+		transition-property: width;
 	}
 
 	.drawer-expanded .drawer {
@@ -633,7 +633,7 @@ hr {
 	.drawer-right {
 		margin-left: calc(var(--hamburger-length) + var(--border-width));
 		border-left: solid var(--border-width) var(--border-color);
-		transition: margin-left .3s;
+		transition: margin-left .2s;
 	}
 
 	.drawer-expanded .drawer-right {
