@@ -145,14 +145,6 @@ hr {
 
 /* Drawer widget */
 
-.drawer-button-label {
-	align-self: center;
-	margin-left: var(--margin-unit);
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}
-
 .hamburger {
 	/* XXX: On Gecko, the `blur(...)` filter on `.primary-window` ignores fixed state of backdrop
 	 * elements. */
@@ -163,8 +155,17 @@ hr {
 	width: var(--hamburger-length);
 	height: var(--hamburger-length);
 	border: var(--border-width) solid var(--border-color);
+	cursor: pointer;
 	background-color: var(--background-color);
 	stroke: var(--color);
+}
+
+.drawer-button-label {
+	align-self: center;
+	margin-left: var(--margin-unit);
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .hamburger-label {
@@ -195,7 +196,7 @@ hr {
 	 * sighted users a bit, but might be confusing for screen reader users. */
 }
 
-.drawer-expanded .drawer, .drawer:focus-within {
+.hamburger.checked ~ .drawer, .drawer:focus-within {
 	left: 0;
 }
 
@@ -209,7 +210,7 @@ hr {
 		transition-property: z-index,opacity;
 	}
 
-	.drawer-expanded .drawer, .drawer-container:focus-within {
+	.hamburger.checked ~ .drawer, .drawer-container:focus-within {
 		z-index: 2;
 		opacity: 1;
 	}
@@ -625,7 +626,7 @@ hr {
 		transition-property: width;
 	}
 
-	.drawer-expanded .drawer {
+	.hamburger.checked ~ .drawer {
 		/* Show the labels and input. */
 		width: var(--drawer-width);
 	}
@@ -636,7 +637,7 @@ hr {
 		transition: margin-left .2s;
 	}
 
-	.drawer-expanded .drawer-right {
+	.hamburger.checked ~ .drawer-right {
 		margin-left: var(--drawer-width);
 	}
 

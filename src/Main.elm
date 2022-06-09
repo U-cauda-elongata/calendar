@@ -1061,11 +1061,19 @@ view model =
                 model.drawerExpanded || model.searchFocused
           in
           div
-            [ class "primary-window"
-            , classList [ ( "drawer-expanded", drawerExpanded ) ]
-            , ariaHidden <| model.mode /= None
-            ]
-            [ header [ class "app-title", class "drawer-right" ]
+            [ class "primary-window", ariaHidden <| model.mode /= None ]
+            [ button
+                [ class "hamburger"
+                , class "unstyle"
+                , classList
+                    [ ( "checked", drawerExpanded )
+                    , ( "filter-active", filterApplied model.search model.feeds )
+                    ]
+                , ariaHidden True
+                , onClick <| HamburgerChecked <| not drawerExpanded
+                ]
+                [ Icon.hamburger ]
+            , header [ class "app-title", class "drawer-right" ]
                 [ h1 [] [ text <| T.title model.translations ] ]
             , div [ id "drawer", class "drawer" ]
                 [ lazy6 viewDrawer
@@ -1102,27 +1110,13 @@ viewDrawer translations expanded mode searchSuggestions search feeds =
         , ariaOrientation "vertical"
         , ariaLabel <| T.filterMenuLabel translations
         ]
-        [ label [ class "drawer-labelled-button", ariaHidden True ]
-            [ input
-                [ id "hamburger"
-                , type_ "checkbox"
-                , checked <| expanded
-                , hidden True
-                , onCheck HamburgerChecked
-                ]
-                []
-            , Icon.hamburger
-                (let
-                    attrs =
-                        [ Svg.Attributes.class "hamburger" ]
-                 in
-                 if filterApplied search feeds then
-                    Svg.Attributes.class "filter-active" :: attrs
-
-                 else
-                    attrs
-                )
-            , span
+        [ button
+            [ class "drawer-labelled-button"
+            , class "unstyle"
+            , onClick <| HamburgerChecked <| not expanded
+            , ariaHidden True
+            ]
+            [ span
                 [ class "hamburger-label"
                 , class "drawer-button-label"
                 ]
