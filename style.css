@@ -403,6 +403,7 @@ hr {
 }
 
 .event-members {
+	display: flex;
 	padding: 0 var(--margin-unit);
 	height: 60px;
 	overflow-x: scroll;
@@ -416,7 +417,6 @@ hr {
 }
 
 .event-member {
-	display: inline-block;
 	margin-left: var(--margin-unit);
 }
 
