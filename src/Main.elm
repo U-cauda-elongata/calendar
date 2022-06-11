@@ -405,7 +405,15 @@ update msg model =
                     model.time
             in
             ( { model | time = { time | now = now } }
-            , if model.visibility == Visible then
+            , let
+                ms =
+                    Time.posixToMillis now
+              in
+              if
+                (model.visibility == Visible)
+                    -- Avoid issuing further task if it is likely that another task is running.
+                    && ((abs <| Time.posixToMillis model.time.now - ms) > 100)
+              then
                 let
                     interval =
                         if model.events |> List.any Event.isOngoing then
@@ -417,7 +425,7 @@ update msg model =
                             60000
 
                     nextTick =
-                        interval - (Time.posixToMillis now |> modBy interval)
+                        interval - (ms |> modBy interval)
                 in
                 Process.sleep (nextTick |> toFloat)
                     |> Task.andThen (\() -> Time.now)
@@ -759,9 +767,12 @@ update msg model =
                                             [ removeScrollEventListener () ]
 
                                 cmds2 =
-                                    if entries |> List.any Event.isOngoing then
-                                        -- Reset the clock to get one-second-precision time required by
-                                        -- ongoing events.
+                                    if
+                                        (entries |> List.any Event.isOngoing)
+                                            && not (model.events |> List.any Event.isOngoing)
+                                    then
+                                        -- Reset the clock to get one-second-precision time required
+                                        -- by ongoing events.
                                         (Time.now |> Task.perform Tick) :: cmds
 
                                     else
