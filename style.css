@@ -355,7 +355,7 @@ hr {
 }
 
 @media (prefers-reduced-motion) {
-	.now-separator .time-separator {
+	.flashing-time .time-separator {
 		animation: none;
 	}
 }
