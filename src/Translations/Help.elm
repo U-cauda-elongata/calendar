@@ -17,6 +17,16 @@ titleCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "help.title" []
 
 
+kbdN : Translations -> String
+kbdN translations =
+    t translations "help.kbdN"
+
+
+kbdNCustom : Translations -> (String -> a) -> List a
+kbdNCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "help.kbdN" []
+
+
 kbdS : Translations -> String
 kbdS translations =
     t translations "help.kbdS"
@@ -37,24 +47,24 @@ kbdXCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "help.kbdX" []
 
 
-kbdN : Translations -> String
-kbdN translations =
-    t translations "help.kbdN"
+kbdDigit : Translations -> String
+kbdDigit translations =
+    t translations "help.kbdDigit"
 
 
-kbdNCustom : Translations -> (String -> a) -> List a
-kbdNCustom translations nonPlaceholderLift =
-    customTr translations Curly nonPlaceholderLift "help.kbdN" []
+kbdDigitCustom : Translations -> (String -> a) -> List a
+kbdDigitCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "help.kbdDigit" []
 
 
-kbdSN : Translations -> String
-kbdSN translations =
-    t translations "help.kbdSN"
+kbdSDigit : Translations -> String
+kbdSDigit translations =
+    t translations "help.kbdSDigit"
 
 
-kbdSNCustom : Translations -> (String -> a) -> List a
-kbdSNCustom translations nonPlaceholderLift =
-    customTr translations Curly nonPlaceholderLift "help.kbdSN" []
+kbdSDigitCustom : Translations -> (String -> a) -> List a
+kbdSDigitCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "help.kbdSDigit" []
 
 
 kbd0 : Translations -> String

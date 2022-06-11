@@ -97,7 +97,7 @@ type alias ShareData =
 type alias Model =
     { -- FIelds not used by `view`:
       -- Set this to `True` once the first feed request completes, in order to prevent subsequent
-      -- requests from causing `slideViewportInto` to be called again.
+      -- requests from causing the initial `slideViewportInto` to be called again.
       initialized : Bool
     , latestNumberedPage : Maybe String
     , gotPages : Set String
@@ -453,6 +453,14 @@ update msg model =
 
         KeyDown key ->
             case key of
+                "N" ->
+                    ( model
+                    , Cmd.batch
+                        [ Dom.focus "now" |> Task.attempt handleDomResult
+                        , slideViewportInto "now"
+                        ]
+                    )
+
                 "S" ->
                     ( model, focusSearch )
 
@@ -1478,7 +1486,7 @@ viewKeyedDateSection translations features now activePopup search feeds date ite
                                                     event
                                             )
                                   then
-                                    section [ id "now", class "ongoing" ]
+                                    section [ id "now", class "ongoing", tabindex -1 ]
                                         [ header [ class "now" ]
                                             [ h2 []
                                                 (T.ongoingCustom translations
@@ -1496,7 +1504,7 @@ viewKeyedDateSection translations features now activePopup search feeds date ite
                                         ]
 
                                   else
-                                    h2 [ id "now", class "now" ]
+                                    h2 [ id "now", class "now", tabindex -1 ]
                                         [ h2 [] <|
                                             T.nowSeparatorCustom translations
                                                 text
@@ -2044,14 +2052,16 @@ viewHelpDialog translations mode =
             , div
                 [ class "dialog-content", hidden <| mode /= Help ]
                 [ dl [ class "kbd-help-dl" ]
-                    [ dt [] [ kbd [] [ text "s" ] ]
+                    [ dt [] [ kbd [] [ text "n" ] ]
+                    , dd [] [ text <| THelp.kbdN translations ]
+                    , dt [] [ kbd [] [ text "s" ] ]
                     , dd [] [ text <| THelp.kbdS translations ]
                     , dt [] [ kbd [] [ text "x" ] ]
                     , dd [] [ text <| THelp.kbdX translations ]
                     , dt [] [ kbd [] [ text "N" ] ]
-                    , dd [] [ text <| THelp.kbdN translations ]
+                    , dd [] [ text <| THelp.kbdDigit translations ]
                     , dt [] [ kbd [] [ kbd [] [ text "Shift" ], text "+", kbd [] [ text "N" ] ] ]
-                    , dd [] [ text <| THelp.kbdSN translations ]
+                    , dd [] [ text <| THelp.kbdSDigit translations ]
                     , dt [] [ kbd [] [ text "0" ] ]
                     , dd [] [ text <| THelp.kbd0 translations ]
                     , dt [] [ kbd [] [ kbd [] [ text "Shift" ], text "+", kbd [] [ text "0" ] ] ]
