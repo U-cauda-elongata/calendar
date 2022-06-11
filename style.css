@@ -152,6 +152,8 @@ hr {
 	top: 0;
 	left: 0;
 	z-index: 3; /* Put it above `.drawer`. */
+	box-sizing: initial;
+	padding: initial;
 	width: var(--hamburger-length);
 	height: var(--hamburger-length);
 	border: var(--border-width) solid var(--border-color);
