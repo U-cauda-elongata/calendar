@@ -122,9 +122,16 @@ hr {
 	border-top: solid var(--border-width) var(--border-color);
 }
 
+.primary-window {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+}
+
 .app-title {
 	display: flex;
 	justify-content: center;
+	flex-shrink: 0;
 	margin-left: calc(var(--hamburger-length) + 2 * var(--border-width));
 	border-top: solid var(--border-width) var(--border-color);
 	border-bottom: solid var(--border-width) var(--border-color);
@@ -316,6 +323,18 @@ hr {
 	stroke: currentColor;
 }
 
+.main-container {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+main {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
 .timeline > li {
 	display: inline-block;
 }
@@ -465,6 +484,10 @@ hr {
 	text-align: center;
 }
 
+.flex-padding {
+	flex-grow: 1;
+}
+
 .load-more-feed {
 	display: flex;
 	flex-direction: column;
@@ -487,9 +510,6 @@ hr {
 }
 
 .error-log {
-	position: sticky;
-	bottom: 0;
-	z-index: 1; /* Put it above `.date-heading`. */
 	max-height: calc(100vh - 260px);
 	min-height: 2em;
 	overflow-y: scroll;

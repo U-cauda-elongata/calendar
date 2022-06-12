@@ -1157,7 +1157,7 @@ view model =
                     model.search
                     model.feeds
                 ]
-            , div []
+            , div [ class "main-container" ]
                 [ lazy8 viewMain
                     model.translations
                     model.features
@@ -1444,6 +1444,9 @@ viewMain translations features time activePopup pendingFeed search feeds events 
                             ]
                     )
                  )
+               , -- This is used to visually put the following items at the bottom.
+                 -- I suspect there is a better way though.
+                 ( "padding", div [ class "flex-padding" ] [] )
                , ( "loadMore"
                  , div [ id "feedBottom", class "load-more-feed" ] <|
                     case pendingFeed of
