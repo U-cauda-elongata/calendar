@@ -698,41 +698,13 @@ update msg model =
                     case result of
                         Ok { meta, entries, next } ->
                             let
-                                updateEvents oldEvents newEvents =
-                                    -- Replace existing event if any, or insert new one if not.
-                                    -- XXX: This could be done more efficiently if there'd be an
-                                    -- implementation of `Dict` that preserves ordering.
-                                    newEvents
-                                        |> List.foldl
-                                            (\ne acc1 ->
-                                                let
-                                                    ( acc, replaced ) =
-                                                        acc1
-                                                            |> List.foldl
-                                                                (\oe ( acc2, r ) ->
-                                                                    if ne.id == oe.id then
-                                                                        ( ne :: acc2, True )
-
-                                                                    else
-                                                                        ( oe :: acc2, r )
-                                                                )
-                                                                ( [], False )
-                                                in
-                                                if replaced then
-                                                    acc
-
-                                                else
-                                                    ne :: acc
-                                            )
-                                            oldEvents
-
                                 events =
                                     (case polling of
                                         AutoRefresh ->
-                                            updateEvents model.events entries
+                                            Util.mergeBy .id model.events entries
 
                                         Backfill _ ->
-                                            updateEvents model.events entries
+                                            Util.mergeBy .id model.events entries
 
                                         _ ->
                                             entries ++ model.events
