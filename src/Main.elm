@@ -1567,6 +1567,7 @@ viewKeyedEvent translations features now activePopup search feeds feed event =
                                         , time
                                             [ class "event-duration"
                                             , datetime <| Duration.toDatetime duration
+                                            , role "time"
                                             ]
                                             (Duration.render duration)
                                         ]
@@ -1584,6 +1585,7 @@ viewKeyedEvent translations features now activePopup search feeds feed event =
                                                 [ class "event-duration"
                                                 , class "flashing-time"
                                                 , datetime <| Duration.toDatetime duration
+                                                , role "timer"
                                                 ]
                                                 (text "<" :: Duration.render duration)
                                             ]
@@ -1630,7 +1632,7 @@ viewKeyedEvent translations features now activePopup search feeds feed event =
                 Just duration ->
                     let
                         viewDuration =
-                            time [ datetime <| Duration.toDatetime duration ]
+                            time [ datetime <| Duration.toDatetime duration, role "time" ]
                                 (Duration.render duration)
                     in
                     if event.live then

@@ -3,7 +3,9 @@ customElements.define('intl-date', class extends HTMLElement {
 	constructor() {
 		super();
 		this.attachShadow({ mode: 'open' });
-		this.shadowRoot.appendChild(document.createElement('time'));
+		const time = document.createElement('time');
+		time.setAttribute('role', 'time');
+		this.shadowRoot.appendChild(time);
 	}
 
 	connectedCallback() { this.update(); }
@@ -58,7 +60,9 @@ customElements.define('intl-time', class extends HTMLElement {
 
 	connectedCallback() {
 		if (!this.firstChild) {
-			this.appendChild(document.createElement('time'));
+			const time = document.createElement('time');
+			time.setAttribute('role', 'time');
+			this.appendChild(time);
 		}
 		this.update();
 	}
