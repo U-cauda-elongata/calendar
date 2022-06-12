@@ -405,8 +405,8 @@ hr {
 	border-top-left-radius: 5px;
 	padding: 0 calc(var(--margin-unit) / 2);
 	background-color: var(--translucent-background-color);
-	backdrop-filter: blur(5px);
 	-webkit-backdrop-filter: blur(5px);
+	backdrop-filter: blur(5px);
 	color: var(--color);
 }
 
