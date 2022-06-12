@@ -122,6 +122,20 @@ hr {
 	border-top: solid var(--border-width) var(--border-color);
 }
 
+.fine-pointer {
+	display: none;
+}
+
+@media (pointer: fine) {
+	.fine-pointer {
+		display: unset;
+	}
+
+	.no-fine-pointer {
+		display: none;
+	}
+}
+
 .primary-window {
 	display: flex;
 	flex-direction: column;

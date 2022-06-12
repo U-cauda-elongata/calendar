@@ -137,14 +137,24 @@ emptyResultPostCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "emptyResultPost" []
 
 
-loadMore : Translations -> String
-loadMore translations =
-    t translations "loadMore"
+clickToLoadMore : Translations -> String
+clickToLoadMore translations =
+    t translations "clickToLoadMore"
 
 
-loadMoreCustom : Translations -> (String -> a) -> List a
-loadMoreCustom translations nonPlaceholderLift =
-    customTr translations Curly nonPlaceholderLift "loadMore" []
+clickToLoadMoreCustom : Translations -> (String -> a) -> List a
+clickToLoadMoreCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "clickToLoadMore" []
+
+
+tapToLoadMore : Translations -> String
+tapToLoadMore translations =
+    t translations "tapToLoadMore"
+
+
+tapToLoadMoreCustom : Translations -> (String -> a) -> List a
+tapToLoadMoreCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "tapToLoadMore" []
 
 
 loadMoreLabel : Translations -> String

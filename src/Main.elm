@@ -1428,11 +1428,20 @@ viewMain translations features time activePopup pendingFeed search feeds events 
                             -- keyboard-navigable.
                             [ button
                                 [ class "load-more-feed-button"
+                                , class "fine-pointer"
                                 , class "unstyle"
                                 , ariaLabel <| T.loadMoreLabel translations
                                 , onClick <| GetFeed url
                                 ]
-                                [ text <| T.loadMore translations ]
+                                [ text <| T.clickToLoadMore translations ]
+                            , button
+                                [ class "load-more-feed-button"
+                                , class "no-fine-pointer"
+                                , class "unstyle"
+                                , ariaLabel <| T.loadMoreLabel translations
+                                , onClick <| GetFeed url
+                                ]
+                                [ text <| T.tapToLoadMore translations ]
                             ]
 
                         Retry url ->
