@@ -38,6 +38,7 @@ import Translations.Event as TEvent
 import Translations.Event.Description as TEventDescription
 import Translations.Help as THelp
 import Translations.Share as TShare
+import Translations.Status as TStatus
 import Url exposing (Url)
 import Url.Builder
 import Url.Parser
@@ -114,6 +115,8 @@ type alias Model =
     , time : { now : Time.Posix, zone : Time.Zone }
     , pendingFeed : PendingFeed
     , errors : List Error
+    , -- An ephemeral message to be announced by screen readers.
+      status : Maybe String
 
     -- Widgets:
     , drawerExpanded : Bool
@@ -201,6 +204,7 @@ init flags url key =
       , translations = initialTranslations
       , time = { now = Time.millisToPosix 0, zone = Time.utc }
       , pendingFeed = Loading
+      , status = Nothing
       , errors = []
       , drawerExpanded = False
       , searchFocused = False
@@ -320,6 +324,7 @@ type Msg
     | Refresh
     | SetMode Mode
     | CloseWidgets
+    | ClearStatus
     | AboutBackToMain
     | AboutGotCopying (Result Http.Error String)
     | AboutRetryGetCopying
@@ -452,6 +457,45 @@ update msg model =
             )
 
         KeyDown key ->
+            let
+                setStatus status ( m, cmd ) =
+                    ( { m | status = Just status }, Cmd.batch [ clearStatus, cmd ] )
+
+                toggle i =
+                    let
+                        ret =
+                            update (ToggleFeedFilter i) model
+                    in
+                    model.feeds
+                        |> List.Extra.getAt i
+                        |> Maybe.map
+                            (\feed ->
+                                ret
+                                    |> setStatus
+                                        (if feed.checked then
+                                            TStatus.showingFeed model.translations feed.preset.title
+
+                                         else
+                                            TStatus.hidingFeed model.translations feed.preset.title
+                                        )
+                            )
+                        |> Maybe.withDefault ret
+
+                hideOthers i =
+                    let
+                        ret =
+                            update (HideOtherFeeds 0) model
+                    in
+                    model.feeds
+                        |> List.Extra.getAt i
+                        |> Maybe.map
+                            (\feed ->
+                                ret
+                                    |> setStatus
+                                        (TStatus.showingOnly model.translations feed.preset.title)
+                            )
+                        |> Maybe.withDefault ret
+            in
             case key of
                 "N" ->
                     ( model
@@ -472,63 +516,65 @@ update msg model =
 
                 "0" ->
                     update ClearFeedFilter model
+                        |> setStatus (TStatus.clearFeedFilter model.translations)
 
                 "S-0" ->
                     update ClearFilter model
+                        |> setStatus (TStatus.clearFilter model.translations)
 
                 "1" ->
-                    update (ToggleFeedFilter 0) model
+                    toggle 0
 
                 "S-1" ->
-                    update (HideOtherFeeds 0) model
+                    hideOthers 0
 
                 "2" ->
-                    update (ToggleFeedFilter 1) model
+                    toggle 1
 
                 "S-2" ->
-                    update (HideOtherFeeds 1) model
+                    hideOthers 1
 
                 "3" ->
-                    update (ToggleFeedFilter 2) model
+                    toggle 2
 
                 "S-3" ->
-                    update (HideOtherFeeds 2) model
+                    hideOthers 2
 
                 "4" ->
-                    update (ToggleFeedFilter 3) model
+                    toggle 3
 
                 "S-4" ->
-                    update (HideOtherFeeds 3) model
+                    hideOthers 3
 
                 "5" ->
-                    update (ToggleFeedFilter 4) model
+                    toggle 4
 
                 "S-5" ->
-                    update (HideOtherFeeds 4) model
+                    hideOthers 4
 
                 "6" ->
-                    update (ToggleFeedFilter 5) model
+                    toggle 5
 
                 "S-6" ->
-                    update (HideOtherFeeds 5) model
+                    hideOthers 5
 
                 "7" ->
-                    update (ToggleFeedFilter 6) model
+                    toggle 6
 
                 "S-7" ->
-                    update (HideOtherFeeds 6) model
+                    hideOthers 6
 
                 "8" ->
-                    update (ToggleFeedFilter 7) model
+                    toggle 7
 
                 "S-8" ->
-                    update (HideOtherFeeds 7) model
+                    hideOthers 7
 
                 "9" ->
-                    update (ToggleFeedFilter 8) model
+                    toggle 8
 
                 "S-9" ->
-                    update (HideOtherFeeds 8) model
+                    hideOthers 8
 
                 "?" ->
                     update (SetMode Help) model
@@ -624,6 +670,9 @@ update msg model =
 
         CloseWidgets ->
             update (SetMode None) { model | activePopup = Nothing }
+
+        ClearStatus ->
+            ( { model | status = Nothing }, Cmd.none )
 
         AboutBackToMain ->
             ( { model | mode = About AboutMain }, Cmd.none )
@@ -938,6 +987,11 @@ handleDomResult result =
             ReportError <| Unexpected <| "Node not found: " ++ id
 
 
+clearStatus : Cmd Msg
+clearStatus =
+    Process.sleep 1000 |> Task.perform (always ClearStatus)
+
+
 getCopying : Cmd Msg
 getCopying =
     Http.get { url = "COPYING", expect = Http.expectString AboutGotCopying }
@@ -1116,6 +1170,11 @@ view model =
                 , lazy2 viewErrorLog model.translations model.errors
                 ]
             ]
+        , div
+            [ role "status"
+            , model.status |> Maybe.map ariaLabel |> Maybe.withDefault (hidden True)
+            ]
+            []
         ]
     }
 

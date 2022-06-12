@@ -79,5 +79,12 @@
 		"kbd0": "Show all the channels",
 		"kbdS0": "Clear all the filters (show all the channels and clear the search field)",
 		"kbdQuestion": "Show this help"
+	},
+	"status": {
+		"clearFeedFilter": "Showing all the channels.",
+		"clearFilter": "Cleared all the filters.",
+		"showingFeed": "Showing channel: {{title}}.",
+		"hidingFeed": "Hiding channel: {{title}}.",
+		"showingOnly": "Showing only channel: {{title}}."
 	}
 }
