@@ -56,6 +56,7 @@
 		"unexpected": "Unexpected error: {{msg}}"
 	},
 	"closeDialog": "Close",
+	"srCloseDialog": "Close the dialog",
 	"goBackTo": "Go back to \"{{section}}\"",
 	"about": {
 		"title": "About this site",

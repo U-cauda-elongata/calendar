@@ -2049,6 +2049,13 @@ viewAboutDialog mode copying translations =
                 (viewAboutDialogMain translations)
             , viewAboutDialogCopying copying
                 [ class "dialog-content", lang "en", hidden <| mode /= About AboutCopying ]
+            , button
+                [ class "dialog-sr-only-button"
+                , class "unstyle"
+                , ariaLabel <| T.srCloseDialog translations
+                , onClick <| SetMode None
+                ]
+                []
             ]
         ]
 
@@ -2140,5 +2147,12 @@ viewHelpDialog translations mode =
                     , dd [] [ text <| THelp.kbdQuestion translations ]
                     ]
                 ]
+            , button
+                [ class "dialog-sr-only-button"
+                , class "unstyle"
+                , ariaLabel <| T.srCloseDialog translations
+                , onClick <| SetMode None
+                ]
+                []
             ]
         ]

@@ -587,6 +587,12 @@ hr {
 	overscroll-behavior: none contain;
 }
 
+.dialog-sr-only-button {
+	padding: initial;
+	width: 0;
+	height: 0;
+}
+
 .copyright-loading {
 	margin: auto;
 }

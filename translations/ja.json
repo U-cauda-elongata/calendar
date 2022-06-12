@@ -57,6 +57,7 @@
 		"unexpected": "予期せぬエラー: {{msg}}"
 	},
 	"closeDialog": "閉じる",
+	"srCloseDialog": "このダイアログを閉じる",
 	"goBackTo": "「{{section}}」に戻る",
 	"about": {
 		"title": "このサイトについて",
