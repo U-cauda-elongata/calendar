@@ -1379,7 +1379,10 @@ viewMain translations features time activePopup pendingFeed search feeds events 
                             [ pre, post ]
 
                         mid ->
-                            [ pre, p [] [ del [] [ text mid ] ], post ]
+                            [ pre
+                            , p [ hidden <| pendingFeed /= Done ] [ del [] [ text mid ] ]
+                            , post
+                            ]
                     )
                  )
                , ( "loadMore"
@@ -1986,7 +1989,7 @@ viewAboutDialog mode copying translations =
                 [ class "dialog-content", hidden <| mode /= About AboutMain ]
                 (viewAboutDialogMain translations)
             , viewAboutDialogCopying copying
-                [ class "dialog-content", hidden <| mode /= About AboutCopying ]
+                [ class "dialog-content", lang "en", hidden <| mode /= About AboutCopying ]
             ]
         ]
 
