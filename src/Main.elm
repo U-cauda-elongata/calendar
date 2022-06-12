@@ -1146,7 +1146,7 @@ view model =
                 , onClick <| HamburgerChecked <| not drawerExpanded
                 ]
                 [ Icon.hamburger ]
-            , header [ class "app-title", class "drawer-right" ]
+            , header [ class "app-title" ]
                 [ h1 [] [ text <| T.title model.translations ] ]
             , div [ id "drawer", class "drawer" ]
                 [ lazy6 viewDrawer
@@ -1157,7 +1157,7 @@ view model =
                     model.search
                     model.feeds
                 ]
-            , div [ class "drawer-right" ]
+            , div []
                 [ lazy8 viewMain
                     model.translations
                     model.features

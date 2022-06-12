@@ -628,6 +628,12 @@ hr {
 		background-color: var(--background-color);
 	}
 
+	.primary-window > *:not(.hamburger, .drawer) {
+		margin-left: calc(var(--hamburger-length) + var(--border-width));
+		border-left: solid var(--border-width) var(--border-color);
+		transition: margin-left .2s;
+	}
+
 	.drawer {
 		/* Use `initial` rather than `0` to prevent `transition` animation to trigger when shrinking
 		 * the viewport width. */
@@ -642,12 +648,6 @@ hr {
 	.hamburger.checked ~ .drawer {
 		/* Show the labels and input. */
 		width: var(--drawer-width);
-	}
-
-	.drawer-right {
-		margin-left: calc(var(--hamburger-length) + var(--border-width));
-		border-left: solid var(--border-width) var(--border-color);
-		transition: margin-left .2s;
 	}
 
 	.hamburger.checked ~ .drawer-right {
