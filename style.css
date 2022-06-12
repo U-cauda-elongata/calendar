@@ -344,13 +344,18 @@ hr {
 
 @keyframes flash {
 	from {
-		visibility: visible;
+		/* Animate `opacity` instead of `visibility`
+		 * to prevent screen readers from announcing the change when focused. */
+		opacity: 1;
+	}
+	49.99999% {
+		opacity: 1;
 	}
 	50% {
-		visibility: hidden;
+		opacity: 0;
 	}
 	to {
-		visibility: hidden;
+		opacity: 0;
 	}
 }
 

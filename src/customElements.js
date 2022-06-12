@@ -90,39 +90,44 @@ customElements.define('intl-time', class extends HTMLElement {
 		time.dateTime = date.toISOString();
 
 		// Set the inner HTML to something like `12<span class="time-separator">:</span>00 AM`.
-		// Reuse `<span>` elements from a previous `update()` call if possible, in order not to
-		// reset CSS animation of the element, which complicates the implementation a lot (meh).
+		//
+		// Reuse `<span>` elements from a previous `update()` call if possible, in order to:
+		//
+		// - Prevent CSS animation of the element from resetting
+		// - Prevent screen readers from announcing a change, which is not the case in fact
+		//
+		// ... which complicates the implementation a lot (meh).
 		const parts = fmt.format(date).split(':');
 		const nodes = Array.from(time.childNodes);
 		const first = parts.shift();
-		let node = nodes.shift();
 		if (first) {
+			const node = nodes.shift();
 			if (node) {
-				time.insertBefore(document.createTextNode(first), node);
+				// Note: First node is always a text node, if any.
+				if (node.nodeValue != first) {
+					node.replaceWith(first);
+				}
 			} else {
 				time.append(first);
 			}
 			for (const part of parts) {
-				while (node) {
-					if (node.tagName == 'SPAN') {
-						break;
-					}
-					time.removeChild(node);
-					node = nodes.shift();
-				}
+				const node = nodes.shift();
 				if (node) {
-					node.insertAdjacentText('afterend', part);
-					node = nodes.shift();
+					// Note: `node` is always a separator element, followed by a text node.
+					const text = nodes.shift();
+					if (text.nodeValue != part) {
+						text.replaceWith(part);
+					}
 				} else {
 					const separator = document.createElement('span');
 					separator.className = 'time-separator';
 					separator.textContent = ':';
-					time.appendChild(separator);
-					time.appendChild(document.createTextNode(part));
+					time.append(separator);
+					time.append(part);
 				}
 			}
 		}
-		while (time.contains(node)) {
+		for (const node of nodes) {
 			time.removeChild(node);
 		}
 	}

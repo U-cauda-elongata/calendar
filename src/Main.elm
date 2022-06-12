@@ -1599,9 +1599,15 @@ viewKeyedEvent translations features now activePopup search feeds feed event =
             event.link
                 |> Maybe.map
                     (\link ->
-                        header [] [ a [ class "event-header-grid", href link ] headerContent ]
+                        header []
+                            [ a [ class "event-header-grid", href link, ariaLabelledby headingId ]
+                                headerContent
+                            ]
                     )
-                |> Maybe.withDefault (header [ class "event-header-grid" ] headerContent)
+                |> Maybe.withDefault
+                    (header [ class "event-header-grid", ariaLabelledby headingId ]
+                        headerContent
+                    )
 
         eta =
             Duration.fromMillis <|
