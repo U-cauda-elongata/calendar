@@ -28,7 +28,7 @@
 	--event-width: 100vw;
 }
 
-@supports not ((backdrop-filter: blur(5px)), (-webkit-backdrop-filter: blur(5px))) {
+@supports not ((backdrop-filter: blur(5px)) or (-webkit-backdrop-filter: blur(5px))) {
 	:root {
 		--translucent-background-color: #FFFC;
 	}
@@ -52,7 +52,7 @@
 		--translucent-background-color: #0004;
 	}
 
-	@supports not ((backdrop-filter: blur(5px)), (-webkit-backdrop-filter: blur(5px))) {
+	@supports not ((backdrop-filter: blur(5px)) or (-webkit-backdrop-filter: blur(5px))) {
 		:root {
 			--translucent-background-color: #000C;
 		}
