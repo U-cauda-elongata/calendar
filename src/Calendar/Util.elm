@@ -38,7 +38,7 @@ groupBy pred list =
 
 
 {-| Merge the second list into the first list, i.e., for each element in the second list, replace
-with it an equal element in the first list if any, or insert it into the first list if not.
+with it an equal element in the first list if any, or insert it into the first list otherwise.
 -}
 mergeBy : (a -> b) -> List a -> List a -> List a
 mergeBy f old new =
@@ -51,23 +51,23 @@ mergeBy f old new =
                     fn =
                         f n
 
-                    ( acc, replaced ) =
+                    ( acc, replacing ) =
                         acc1
                             |> List.foldl
                                 (\o ( acc2, r ) ->
-                                    if not r && fn == f o then
-                                        ( n :: acc2, True )
+                                    if r && fn == f o then
+                                        ( n :: acc2, False )
 
                                     else
                                         ( o :: acc2, r )
                                 )
-                                ( [], False )
+                                ( [], True )
                 in
-                if replaced then
-                    acc
+                if replacing then
+                    n :: acc
 
                 else
-                    n :: acc
+                    acc
             )
             old
 
