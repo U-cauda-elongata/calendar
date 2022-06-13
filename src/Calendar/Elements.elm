@@ -25,5 +25,5 @@ intlDate attrs date =
 intlTime : List (Attribute msg) -> Time.Posix -> Html msg
 intlTime attrs time =
     node "intl-time"
-        (attribute "data-timestamp" (String.fromInt (Time.posixToMillis time)) :: attrs)
+        (attribute "data-timestamp" (String.fromInt <| Time.posixToMillis time) :: attrs)
         []

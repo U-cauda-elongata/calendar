@@ -5,6 +5,7 @@ module Calendar.Util.Duration exposing
     , isNegative
     , negate
     , render
+    , subPosix
     , toDatetime
     , toSeconds
     , toSmh
@@ -12,6 +13,7 @@ module Calendar.Util.Duration exposing
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Time
 
 
 type Duration
@@ -21,12 +23,17 @@ type Duration
 fromMillis : Int -> Duration
 fromMillis millis =
     -- Discarding the subsecond part for now. May use at some point in the future.
-    fromSeconds (millis // 1000)
+    fromSeconds <| millis // 1000
 
 
 fromSeconds : Int -> Duration
-fromSeconds secs =
-    Duration secs
+fromSeconds =
+    Duration
+
+
+subPosix : Time.Posix -> Time.Posix -> Duration
+subPosix t u =
+    fromMillis <| Time.posixToMillis t - Time.posixToMillis u
 
 
 toSeconds : Duration -> Int
@@ -73,15 +80,15 @@ render duration =
         ( s, ( m, Just h ) ) ->
             [ text <| String.fromInt h
             , sep
-            , text (String.fromInt m |> zeroPad2)
+            , text <| zeroPad2 <| String.fromInt m
             , sep
-            , text (String.fromInt s |> zeroPad2)
+            , text <| zeroPad2 <| String.fromInt s
             ]
 
         ( s, ( m, Nothing ) ) ->
             [ text <| String.fromInt m
             , sep
-            , text (String.fromInt s |> zeroPad2)
+            , text <| zeroPad2 <| String.fromInt s
             ]
 
 
@@ -113,14 +120,14 @@ toDatetime duration =
                                 String.fromInt m ++ "M"
 
                             else
-                                prepend "M" m (String.fromInt s ++ "S")
+                                String.fromInt s ++ "S" |> prepend "M" m
                     in
                     case hour of
                         Nothing ->
                             dt1
 
                         Just h ->
-                            prepend "H" h dt1
+                            dt1 |> prepend "H" h
            )
 
 

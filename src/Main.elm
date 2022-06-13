@@ -17,7 +17,7 @@ import Calendar.Util.NaiveDate as NaiveDate exposing (NaiveDate)
 import Dict
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onBlur, onCheck, onClick, onDoubleClick, onFocus, onInput)
+import Html.Events exposing (onBlur, onClick, onDoubleClick, onFocus, onInput)
 import Html.Keyed as Keyed
 import Html.Lazy exposing (..)
 import Http
@@ -818,14 +818,14 @@ update msg model =
                             , Cmd.none
                             )
             in
-            if not model2.initialized then
+            if model2.initialized then
+                ( model2, cmd )
+
+            else
                 -- Slide to current time once the first page is read, assuming that the first page
                 -- is large enough to contain current time. If KemoV becomes big enough to fill up
                 -- the first page with upcoming streams in the future, then we should revisit this!
                 ( { model2 | initialized = True }, Cmd.batch [ cmd, slideViewportInto "now" ] )
-
-            else
-                ( model2, cmd )
 
         RetryGetFeed url ->
             update (GetFeed url)
@@ -1172,7 +1172,11 @@ viewDrawer translations expanded mode searchSuggestions search feeds =
                 ]
                 [ text <| T.collapseMenu translations ]
             ]
-        , li []
+        , let
+            labelId =
+                "filter-clear-button-label"
+          in
+          li []
             [ button
                 [ class "drawer-labelled-button"
                 , class "filter-clear-button"
@@ -1181,12 +1185,12 @@ viewDrawer translations expanded mode searchSuggestions search feeds =
                 , disabled <| not <| filterApplied search feeds
                 , onClick ClearFilter
                 , ariaKeyshortcuts "Shift+0"
-                , ariaLabelledby "filter-clear-button-label"
+                , ariaLabelledby labelId
                 ]
                 -- Using `Html.Attributes.class` function here would cause an exception
                 -- (in pure Elm, wow!) of setting getter-only property `className`.
                 [ Icon.clear [ Svg.Attributes.class "drawer-icon" ]
-                , span [ id "filter-clear-button-label", class "drawer-button-label" ]
+                , span [ id labelId, class "drawer-button-label" ]
                     [ text <| T.clearFilter translations ]
                 ]
             ]
@@ -1195,6 +1199,9 @@ viewDrawer translations expanded mode searchSuggestions search feeds =
         , viewFeedFilter translations feeds
         , hr [] []
         , let
+            labelId =
+                "about-button-label"
+
             labelText =
                 TAbout.title translations
           in
@@ -1214,12 +1221,12 @@ viewDrawer translations expanded mode searchSuggestions search feeds =
                         _ ->
                             False
                 , ariaHaspopup "dialog"
-                , ariaLabelledby "about-button-label"
+                , ariaLabelledby labelId
                 , Html.Events.stopPropagationOn "click" <|
                     D.succeed ( SetMode <| About AboutMain, True )
                 ]
                 [ Icon.about [ Svg.Attributes.class "drawer-icon" ]
-                , span [ id "about-button-label", class "drawer-button-label" ]
+                , span [ id labelId, class "drawer-button-label" ]
                     [ text <| labelText ]
                 ]
             ]
@@ -1424,8 +1431,8 @@ viewMain translations features time activePopup pendingFeed search feeds events 
                     case pendingFeed of
                         OneMore url ->
                             -- Scrolling to here will trigger loading of more items so there's
-                            -- usually no need for a special button here, but there's this should be focusable in order to make it
-                            -- keyboard-navigable.
+                            -- usually no need for a special button here, but there's this should be
+                            -- focusable in order to make it keyboard-navigable.
                             [ button
                                 [ class "load-more-feed-button"
                                 , class "fine-pointer"
@@ -1619,12 +1626,13 @@ viewKeyedEvent translations features now activePopup search feeds feed event =
                                         ]
 
                                     Nothing ->
-                                        if not event.upcoming then
+                                        if event.upcoming then
+                                            [ viewImg ]
+
+                                        else
                                             let
                                                 duration =
-                                                    Duration.fromMillis <|
-                                                        Time.posixToMillis now
-                                                            - Time.posixToMillis event.time
+                                                    Duration.subPosix now event.time
                                             in
                                             [ viewImg
                                             , time
@@ -1635,9 +1643,6 @@ viewKeyedEvent translations features now activePopup search feeds feed event =
                                                 ]
                                                 (text "<" :: Duration.render duration)
                                             ]
-
-                                        else
-                                            [ viewImg ]
                                 )
                             ]
 
@@ -1658,8 +1663,7 @@ viewKeyedEvent translations features now activePopup search feeds feed event =
                     )
 
         eta =
-            Duration.fromMillis <|
-                (Time.posixToMillis event.time - Time.posixToMillis now)
+            Duration.subPosix event.time now
 
         members =
             event.members
@@ -1785,7 +1789,7 @@ viewEventPopup features translations expanded event =
             , ariaHaspopup "menu"
             , ariaControls popupId
             , ariaExpanded expanded
-            , -- Call `stopPropagation` to prevent `CloseWidgets` message to be sent.
+            , -- Call `stopPropagation` to prevent `CloseWidgets` message from being sent.
               Html.Events.stopPropagationOn "click" <|
                 D.succeed
                     ( if expanded then
@@ -1988,16 +1992,20 @@ httpErrorToString err =
 
 viewAboutDialog : Mode -> Maybe (Result Http.Error (Html Msg)) -> Translations -> Html Msg
 viewAboutDialog mode copying translations =
+    let
+        headingId =
+            "about-heading"
+    in
     dialog
         [ id "about"
         , class "about"
         , class "modal-backdrop"
         , role "dialog"
         , ariaModal True
-        , ariaLabelledby "about-heading"
+        , ariaLabelledby headingId
         ]
         [ -- The purposes of this `div` are:
-          -- 1. To prevent the click event from firinng on the backdrop
+          -- 1. To prevent the click event from firing on the backdrop
           -- 2. To make polyfill styling easier
           div [ class "modal", Html.Events.stopPropagationOn "click" <| D.succeed ( NoOp, True ) ]
             [ header [ class "dialog-title-bar" ]
@@ -2010,7 +2018,7 @@ viewAboutDialog mode copying translations =
                     , onClick AboutBackToMain
                     ]
                     [ Icon.backButton ]
-                , h2 [ id "about-heading", class "dialog-title" ]
+                , h2 [ id headingId, class "dialog-title" ]
                     [ text <|
                         case mode of
                             About AboutCopying ->
@@ -2090,16 +2098,20 @@ viewAboutDialogCopying copying attrs =
 
 viewHelpDialog : Translations -> Mode -> Html Msg
 viewHelpDialog translations mode =
+    let
+        headingId =
+            "kdb-help-heading"
+    in
     dialog
         [ id "help"
         , class "modal-backdrop"
         , role "dialog"
         , ariaModal True
-        , ariaLabelledby "kdb-help-heading"
+        , ariaLabelledby headingId
         ]
         [ div [ class "modal", Html.Events.stopPropagationOn "click" <| D.succeed ( NoOp, True ) ]
             [ header [ class "dialog-title-bar" ]
-                [ h2 [ id "help-heading", class "dialog-title" ]
+                [ h2 [ id headingId, class "dialog-title" ]
                     [ text <| THelp.title translations ]
                 , button
                     [ id "help-close-button"
