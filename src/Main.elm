@@ -199,13 +199,19 @@ init flags url key =
     let
         query =
             parseQuery url
+
+        filter =
+            Filter query.q (flags.feeds |> List.map (Feed True "") |> applyQueryToFeeds query)
+
+        baseUrl =
+            { url | query = Nothing }
     in
     ( { initialized = False
       , latestNumberedPage = Nothing
       , gotPages = Set.empty
       , visibility = Visible
       , key = key
-      , url = { url | query = Nothing }
+      , url = baseUrl
       , features = flags.features
       , translations = initialTranslations
       , tz = Time.utc
@@ -216,7 +222,7 @@ init flags url key =
       , drawerExpanded = False
       , searchFocused = False
       , activePopup = Nothing
-      , filter = Filter query.q (flags.feeds |> List.map (Feed True "") |> applyQueryToFeeds query)
+      , filter = filter
       , searchSuggestions = []
       , mode = None
       , copying = Nothing
@@ -226,6 +232,7 @@ init flags url key =
         [ Time.here |> Task.perform SetTimeZone
         , getTranslations <| selectLanguage flags.languages
         , Time.now |> Task.perform Tick
+        , replaceQuery key baseUrl filter
         , getFeed Initial "latest.json"
         ]
     )
