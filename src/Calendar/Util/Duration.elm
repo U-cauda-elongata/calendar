@@ -72,6 +72,15 @@ negate (Duration secs) =
 
 render : Duration -> List (Html msg)
 render duration =
+    if isNegative duration then
+        text "-" :: renderPositive (negate duration)
+
+    else
+        renderPositive duration
+
+
+renderPositive : Duration -> List (Html msg)
+renderPositive duration =
     let
         sep =
             span [ class "time-separator" ] [ text ":" ]
@@ -97,6 +106,16 @@ render duration =
 -}
 toDatetime : Duration -> String
 toDatetime duration =
+    positiveToDatetime <|
+        if isNegative duration then
+            negate duration
+
+        else
+            duration
+
+
+positiveToDatetime : Duration -> String
+positiveToDatetime duration =
     let
         prepend suffix n text =
             if n == 0 then
