@@ -366,8 +366,12 @@ update msg model =
 
         ClearFilter ->
             ( model
-            , pushQuery model.key model.url <|
-                Filter "" (model.filter.feeds |> List.map (\feed -> { feed | checked = True }))
+            , if filterApplied model.filter then
+                pushQuery model.key model.url <|
+                    Filter "" (model.filter.feeds |> List.map (\feed -> { feed | checked = True }))
+
+              else
+                Cmd.none
             )
 
         ClearFeedFilter ->
@@ -376,10 +380,15 @@ update msg model =
                     model.filter
             in
             ( model
-            , pushQuery model.key model.url <|
-                { filter
-                    | feeds = model.filter.feeds |> List.map (\feed -> { feed | checked = True })
-                }
+            , if model.filter.feeds |> List.all .checked then
+                Cmd.none
+
+              else
+                pushQuery model.key model.url <|
+                    { filter
+                        | feeds =
+                            model.filter.feeds |> List.map (\feed -> { feed | checked = True })
+                    }
             )
 
         SearchInput q ->
@@ -408,14 +417,29 @@ update msg model =
             let
                 filter =
                     model.filter
+
+                ( feeds, updated ) =
+                    model.filter.feeds
+                        |> List.Extra.indexedFoldl
+                            (\j feed ( acc, u ) ->
+                                let
+                                    checked =
+                                        i == j
+                                in
+                                if checked == feed.checked then
+                                    ( feed :: acc, u )
+
+                                else
+                                    ( { feed | checked = checked } :: acc, True )
+                            )
+                            ( [], False )
             in
             ( model
-            , pushQuery model.key model.url <|
-                { filter
-                    | feeds =
-                        model.filter.feeds
-                            |> List.indexedMap (\j feed -> { feed | checked = i == j })
-                }
+            , if updated then
+                pushQuery model.key model.url { filter | feeds = feeds }
+
+              else
+                Cmd.none
             )
 
         SetTimeZone tz ->
@@ -624,9 +648,16 @@ update msg model =
             in
             ( model
             , Cmd.batch
-                [ blurSearch
-                , pushQuery model.key model.url { filter | q = "" }
-                ]
+                (let
+                    cmds =
+                        [ blurSearch ]
+                 in
+                 if String.isEmpty filter.q then
+                    cmds
+
+                 else
+                    pushQuery model.key model.url { filter | q = "" } :: cmds
+                )
             )
 
         SearchFocus value ->
