@@ -8,6 +8,7 @@ import Calendar.Attributes exposing (..)
 import Calendar.Elements exposing (..)
 import Calendar.Event as Event exposing (Event)
 import Calendar.Feed as Feed
+import Calendar.Filter as Filter exposing (Feed, Filter)
 import Calendar.Icon as Icon
 import Calendar.TranslationsExt as T
 import Calendar.Util as Util
@@ -143,24 +144,11 @@ type alias Features =
     }
 
 
-type alias Feed =
-    { checked : Bool
-    , alternate : String
-    , preset : Feed.Preset
-    }
-
-
 type PendingFeed
     = OneMore String
     | Retry String
     | Loading
     | Done
-
-
-type alias Filter =
-    { q : String
-    , feeds : List Feed
-    }
 
 
 type Mode
@@ -366,29 +354,20 @@ update msg model =
 
         ClearFilter ->
             ( model
-            , if filterApplied model.filter then
-                pushQuery model.key model.url <|
-                    Filter "" (model.filter.feeds |> List.map (\feed -> { feed | checked = True }))
+            , if Filter.isActive model.filter then
+                pushQuery model.key model.url <| Filter.clear model.filter
 
               else
                 Cmd.none
             )
 
         ClearFeedFilter ->
-            let
-                filter =
-                    model.filter
-            in
             ( model
             , if model.filter.feeds |> List.all .checked then
                 Cmd.none
 
               else
-                pushQuery model.key model.url <|
-                    { filter
-                        | feeds =
-                            model.filter.feeds |> List.map (\feed -> { feed | checked = True })
-                    }
+                pushQuery model.key model.url <| Filter.clearFeeds model.filter
             )
 
         SearchInput q ->
@@ -399,19 +378,7 @@ update msg model =
             ( model, replaceQuery model.key model.url { filter | q = q } )
 
         ToggleFeedFilter i ->
-            let
-                filter =
-                    model.filter
-            in
-            ( model
-            , pushQuery model.key model.url <|
-                { filter
-                    | feeds =
-                        model.filter.feeds
-                            |> List.Extra.updateAt i
-                                (\feed -> { feed | checked = not feed.checked })
-                }
-            )
+            ( model, pushQuery model.key model.url <| Filter.toggleFeed i model.filter )
 
         HideOtherFeeds i ->
             let
@@ -944,7 +911,7 @@ update msg model =
 
 pushQuery : Nav.Key -> Url -> Filter -> Cmd msg
 pushQuery key url filter =
-    case toQueryString filter of
+    case Filter.toQueryString filter of
         "" ->
             Nav.pushUrl key <| Url.toString url
 
@@ -954,47 +921,12 @@ pushQuery key url filter =
 
 replaceQuery : Nav.Key -> Url -> Filter -> Cmd msg
 replaceQuery key url filter =
-    case toQueryString filter of
+    case Filter.toQueryString filter of
         "" ->
             Nav.replaceUrl key <| Url.toString url
 
         q ->
             Nav.replaceUrl key q
-
-
-toQueryString : Filter -> String
-toQueryString { q, feeds } =
-    Url.Builder.toQuery <|
-        let
-            queries =
-                case
-                    feeds
-                        |> List.foldr
-                            (\feed ( qs, uncheckedAny ) ->
-                                ( if feed.checked then
-                                    Url.Builder.string "feed" feed.preset.id :: qs
-
-                                  else
-                                    qs
-                                , uncheckedAny || not feed.checked
-                                )
-                            )
-                            ( [], False )
-                of
-                    ( [], _ ) ->
-                        [ Url.Builder.string "empty" "" ]
-
-                    ( qs, True ) ->
-                        qs
-
-                    ( _, False ) ->
-                        []
-        in
-        if q == "" then
-            queries
-
-        else
-            Url.Builder.string "q" q :: queries
 
 
 focusSearch : Cmd Msg
@@ -1170,7 +1102,7 @@ view model =
                 , class "unstyle"
                 , classList
                     [ ( "checked", drawerExpanded )
-                    , ( "filter-active", filterApplied model.filter )
+                    , ( "filter-active", Filter.isActive model.filter )
                     ]
                 , ariaHidden True
                 , onClick <| HamburgerChecked <| not drawerExpanded
@@ -1239,7 +1171,7 @@ viewDrawer translations expanded mode searchSuggestions filter =
                 , class "filter-clear-button"
                 , class "unstyle"
                 , title <| T.clearFilter translations
-                , disabled <| not <| filterApplied filter
+                , disabled <| not <| Filter.isActive filter
                 , onClick ClearFilter
                 , ariaKeyshortcuts "Shift+0"
                 , ariaLabelledby labelId
@@ -1288,11 +1220,6 @@ viewDrawer translations expanded mode searchSuggestions filter =
                 ]
             ]
         ]
-
-
-filterApplied : Filter -> Bool
-filterApplied { q, feeds } =
-    q /= "" || not (feeds |> List.all .checked)
 
 
 viewSearch : Translations -> List String -> String -> List (Html Msg)
@@ -1514,7 +1441,7 @@ viewMain translations features tz now activePopup pendingFeed filter events =
                         Done ->
                             [ div []
                                 [ p [] [ text <| T.noMoreItems translations ]
-                                , p [ hidden <| filterApplied filter ]
+                                , p [ hidden <| Filter.isActive filter ]
                                     [ text <| T.noMoreItemsGibberish translations ]
                                 ]
                             ]
