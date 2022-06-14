@@ -365,63 +365,58 @@ update msg model =
             ( { model | drawerExpanded = value }, Cmd.none )
 
         ClearFilter ->
-            let
-                filter =
-                    Filter "" (model.filter.feeds |> List.map (\feed -> { feed | checked = True }))
-            in
-            ( { model | filter = filter }, pushQuery model.key model.url filter )
+            ( model
+            , pushQuery model.key model.url <|
+                Filter "" (model.filter.feeds |> List.map (\feed -> { feed | checked = True }))
+            )
 
         ClearFeedFilter ->
             let
-                f =
-                    model.filter
-
                 filter =
-                    { f
-                        | feeds =
-                            model.filter.feeds |> List.map (\feed -> { feed | checked = True })
-                    }
+                    model.filter
             in
-            ( { model | filter = filter }, pushQuery model.key model.url filter )
+            ( model
+            , pushQuery model.key model.url <|
+                { filter
+                    | feeds = model.filter.feeds |> List.map (\feed -> { feed | checked = True })
+                }
+            )
 
         SearchInput q ->
             let
-                f =
-                    model.filter
-
                 filter =
-                    { f | q = q }
+                    model.filter
             in
-            ( { model | filter = filter }, replaceQuery model.key model.url filter )
+            ( model, replaceQuery model.key model.url { filter | q = q } )
 
         ToggleFeedFilter i ->
             let
-                f =
-                    model.filter
-
                 filter =
-                    { f
-                        | feeds =
-                            model.filter.feeds
-                                |> List.Extra.updateAt i
-                                    (\feed -> { feed | checked = not feed.checked })
-                    }
+                    model.filter
             in
-            ( { model | filter = filter }, pushQuery model.key model.url filter )
+            ( model
+            , pushQuery model.key model.url <|
+                { filter
+                    | feeds =
+                        model.filter.feeds
+                            |> List.Extra.updateAt i
+                                (\feed -> { feed | checked = not feed.checked })
+                }
+            )
 
         HideOtherFeeds i ->
             let
-                f =
-                    model.filter
-
                 filter =
-                    { f
-                        | feeds =
-                            model.filter.feeds
-                                |> List.indexedMap (\j feed -> { feed | checked = i == j })
-                    }
+                    model.filter
             in
-            ( { model | filter = filter }, pushQuery model.key model.url filter )
+            ( model
+            , pushQuery model.key model.url <|
+                { filter
+                    | feeds =
+                        model.filter.feeds
+                            |> List.indexedMap (\j feed -> { feed | checked = i == j })
+                }
+            )
 
         SetTimeZone tz ->
             ( { model | tz = tz }, Cmd.none )
@@ -624,14 +619,14 @@ update msg model =
 
         SearchClear ->
             let
-                f =
-                    model.filter
-
                 filter =
-                    { f | q = "" }
+                    model.filter
             in
-            ( { model | filter = filter }
-            , Cmd.batch [ blurSearch, pushQuery model.key model.url filter ]
+            ( model
+            , Cmd.batch
+                [ blurSearch
+                , pushQuery model.key model.url { filter | q = "" }
+                ]
             )
 
         SearchFocus value ->
