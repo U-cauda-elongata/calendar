@@ -110,9 +110,10 @@ type alias Model =
       url : Url
     , features : Features
     , translations : Translations
+    , tz : Time.Zone
 
     -- Fields used by `view`:
-    , time : { now : Time.Posix, zone : Time.Zone }
+    , now : Time.Posix
     , pendingFeed : PendingFeed
     , errors : List Error
     , -- An ephemeral message to be announced by screen readers.
@@ -124,9 +125,8 @@ type alias Model =
     , activePopup : Maybe String
 
     -- Filter:
-    , search : String
+    , filter : Filter
     , searchSuggestions : List String
-    , feeds : List Feed
 
     -- Modal dialogs:
     , mode : Mode
@@ -155,6 +155,12 @@ type PendingFeed
     | Retry String
     | Loading
     | Done
+
+
+type alias Filter =
+    { q : String
+    , feeds : List Feed
+    }
 
 
 type Mode
@@ -202,16 +208,16 @@ init flags url key =
       , url = { url | query = Nothing }
       , features = flags.features
       , translations = initialTranslations
-      , time = { now = Time.millisToPosix 0, zone = Time.utc }
+      , tz = Time.utc
+      , now = Time.millisToPosix 0
       , pendingFeed = Loading
       , status = Nothing
       , errors = []
       , drawerExpanded = False
       , searchFocused = False
       , activePopup = Nothing
-      , search = query.q
+      , filter = Filter query.q (flags.feeds |> List.map (Feed True "") |> applyQueryToFeeds query)
       , searchSuggestions = []
-      , feeds = flags.feeds |> List.map (Feed True "") |> applyQueryToFeeds query
       , mode = None
       , copying = Nothing
       , events = []
@@ -353,63 +359,68 @@ update msg model =
 
         ClearFilter ->
             let
-                new =
-                    { model
-                        | search = ""
-                        , feeds = model.feeds |> List.map (\feed -> { feed | checked = True })
-                    }
+                filter =
+                    Filter "" (model.filter.feeds |> List.map (\feed -> { feed | checked = True }))
             in
-            ( new, pushQuery new )
+            ( { model | filter = filter }, pushQuery model.key model.url filter )
 
         ClearFeedFilter ->
             let
-                new =
-                    { model | feeds = model.feeds |> List.map (\feed -> { feed | checked = True }) }
-            in
-            ( new, pushQuery new )
+                f =
+                    model.filter
 
-        SearchInput search ->
-            let
-                new =
-                    { model | search = search }
+                filter =
+                    { f
+                        | feeds =
+                            model.filter.feeds |> List.map (\feed -> { feed | checked = True })
+                    }
             in
-            ( new, replaceQuery new )
+            ( { model | filter = filter }, pushQuery model.key model.url filter )
+
+        SearchInput q ->
+            let
+                f =
+                    model.filter
+
+                filter =
+                    { f | q = q }
+            in
+            ( { model | filter = filter }, replaceQuery model.key model.url filter )
 
         ToggleFeedFilter i ->
             let
-                new =
-                    { model
+                f =
+                    model.filter
+
+                filter =
+                    { f
                         | feeds =
-                            model.feeds
+                            model.filter.feeds
                                 |> List.Extra.updateAt i
                                     (\feed -> { feed | checked = not feed.checked })
                     }
             in
-            ( new, pushQuery new )
+            ( { model | filter = filter }, pushQuery model.key model.url filter )
 
         HideOtherFeeds i ->
             let
-                new =
-                    { model
+                f =
+                    model.filter
+
+                filter =
+                    { f
                         | feeds =
-                            model.feeds |> List.indexedMap (\j feed -> { feed | checked = i == j })
+                            model.filter.feeds
+                                |> List.indexedMap (\j feed -> { feed | checked = i == j })
                     }
             in
-            ( new, pushQuery new )
+            ( { model | filter = filter }, pushQuery model.key model.url filter )
 
-        SetTimeZone timeZone ->
-            let
-                time =
-                    model.time
-            in
-            ( { model | time = { time | zone = timeZone } }, Cmd.none )
+        SetTimeZone tz ->
+            ( { model | tz = tz }, Cmd.none )
 
         Tick now ->
-            let
-                time =
-                    model.time
-            in
-            ( { model | time = { time | now = now } }
+            ( { model | now = now }
             , let
                 ms =
                     Time.posixToMillis now
@@ -417,7 +428,7 @@ update msg model =
               if
                 (model.visibility == Visible)
                     -- Avoid issuing further task if it is likely that another task is running.
-                    && ((abs <| Time.posixToMillis model.time.now - ms) > 100)
+                    && ((abs <| Time.posixToMillis model.now - ms) > 100)
               then
                 let
                     interval =
@@ -466,7 +477,7 @@ update msg model =
                         ret =
                             update (ToggleFeedFilter i) model
                     in
-                    model.feeds
+                    model.filter.feeds
                         |> List.Extra.getAt i
                         |> Maybe.map
                             (\feed ->
@@ -486,7 +497,7 @@ update msg model =
                         ret =
                             update (HideOtherFeeds 0) model
                     in
-                    model.feeds
+                    model.filter.feeds
                         |> List.Extra.getAt i
                         |> Maybe.map
                             (\feed ->
@@ -602,10 +613,14 @@ update msg model =
             )
 
         SearchConfirm ->
-            ( model, Cmd.batch [ blurSearch, pushQuery model ] )
+            ( model, Cmd.batch [ blurSearch, pushQuery model.key model.url model.filter ] )
 
         SearchClear ->
-            ( { model | search = "" }, blurSearch )
+            let
+                filter =
+                    model.filter
+            in
+            ( { model | filter = { filter | q = "" } }, blurSearch )
 
         SearchFocus value ->
             ( { model | searchFocused = value }
@@ -698,26 +713,10 @@ update msg model =
                     case result of
                         Ok { meta, entries, next } ->
                             let
-                                events =
-                                    (case polling of
-                                        AutoRefresh ->
-                                            Util.mergeBy .id model.events entries
+                                filter =
+                                    model.filter
 
-                                        Backfill _ ->
-                                            Util.mergeBy .id model.events entries
-
-                                        _ ->
-                                            entries ++ model.events
-                                    )
-                                        |> List.sortWith
-                                            (\e1 e2 ->
-                                                compare
-                                                    (Time.posixToMillis e2.time)
-                                                    (Time.posixToMillis e1.time)
-                                            )
-                            in
-                            ( { model
-                                | feeds =
+                                feeds =
                                     meta
                                         |> List.foldl
                                             (\m acc ->
@@ -739,7 +738,28 @@ update msg model =
                                                                 feed
                                                         )
                                             )
-                                            model.feeds
+                                            model.filter.feeds
+
+                                events =
+                                    (case polling of
+                                        AutoRefresh ->
+                                            Util.mergeBy .id model.events entries
+
+                                        Backfill _ ->
+                                            Util.mergeBy .id model.events entries
+
+                                        _ ->
+                                            entries ++ model.events
+                                    )
+                                        |> List.sortWith
+                                            (\e1 e2 ->
+                                                compare
+                                                    (Time.posixToMillis e2.time)
+                                                    (Time.posixToMillis e1.time)
+                                            )
+                            in
+                            ( { model
+                                | filter = { filter | feeds = feeds }
                                 , latestNumberedPage =
                                     if url == "latest.json" then
                                         next
@@ -879,33 +899,33 @@ update msg model =
                 query =
                     parseQuery url
             in
-            ( { model | search = query.q, feeds = model.feeds |> applyQueryToFeeds query }
+            ( { model | filter = Filter query.q (model.filter.feeds |> applyQueryToFeeds query) }
             , Cmd.none
             )
 
 
-pushQuery : Model -> Cmd Msg
-pushQuery model =
-    case toQueryString model.search model.feeds of
+pushQuery : Nav.Key -> Url -> Filter -> Cmd msg
+pushQuery key url filter =
+    case toQueryString filter of
         "" ->
-            Nav.pushUrl model.key <| Url.toString model.url
+            Nav.pushUrl key <| Url.toString url
 
         q ->
-            Nav.pushUrl model.key q
+            Nav.pushUrl key q
 
 
-replaceQuery : Model -> Cmd Msg
-replaceQuery model =
-    case toQueryString model.search model.feeds of
+replaceQuery : Nav.Key -> Url -> Filter -> Cmd msg
+replaceQuery key url filter =
+    case toQueryString filter of
         "" ->
-            Nav.replaceUrl model.key <| Url.toString model.url
+            Nav.replaceUrl key <| Url.toString url
 
         q ->
-            Nav.replaceUrl model.key q
+            Nav.replaceUrl key q
 
 
-toQueryString : String -> List Feed -> String
-toQueryString q feeds =
+toQueryString : Filter -> String
+toQueryString { q, feeds } =
     Url.Builder.toQuery <|
         let
             queries =
@@ -1039,7 +1059,7 @@ subscriptions model =
                                         Event.isOngoing e
                                             || ((e.duration == Nothing)
                                                     && Time.posixToMillis e.time
-                                                    - Time.posixToMillis model.time.now
+                                                    - Time.posixToMillis model.now
                                                     < (5 * 60 * 1000)
                                                )
                                     )
@@ -1112,7 +1132,7 @@ view model =
                 , class "unstyle"
                 , classList
                     [ ( "checked", drawerExpanded )
-                    , ( "filter-active", filterApplied model.search model.feeds )
+                    , ( "filter-active", filterApplied model.filter )
                     ]
                 , ariaHidden True
                 , onClick <| HamburgerChecked <| not drawerExpanded
@@ -1121,23 +1141,22 @@ view model =
             , header [ class "app-title" ]
                 [ h1 [] [ text <| T.title model.translations ] ]
             , div [ id "drawer", class "drawer" ]
-                [ lazy6 viewDrawer
+                [ lazy5 viewDrawer
                     model.translations
                     drawerExpanded
                     model.mode
                     model.searchSuggestions
-                    model.search
-                    model.feeds
+                    model.filter
                 ]
             , div [ class "main-container" ]
                 [ lazy8 viewMain
                     model.translations
                     model.features
-                    model.time
+                    model.tz
+                    model.now
                     model.activePopup
                     model.pendingFeed
-                    model.search
-                    model.feeds
+                    model.filter
                     model.events
                 , lazy2 viewErrorLog model.translations model.errors
                 ]
@@ -1151,8 +1170,8 @@ view model =
     }
 
 
-viewDrawer : Translations -> Bool -> Mode -> List String -> String -> List Feed -> Html Msg
-viewDrawer translations expanded mode searchSuggestions search feeds =
+viewDrawer : Translations -> Bool -> Mode -> List String -> Filter -> Html Msg
+viewDrawer translations expanded mode searchSuggestions filter =
     menu
         [ class "drawer-menu"
         , class "unstyle"
@@ -1182,7 +1201,7 @@ viewDrawer translations expanded mode searchSuggestions search feeds =
                 , class "filter-clear-button"
                 , class "unstyle"
                 , title <| T.clearFilter translations
-                , disabled <| not <| filterApplied search feeds
+                , disabled <| not <| filterApplied filter
                 , onClick ClearFilter
                 , ariaKeyshortcuts "Shift+0"
                 , ariaLabelledby labelId
@@ -1194,9 +1213,9 @@ viewDrawer translations expanded mode searchSuggestions search feeds =
                     [ text <| T.clearFilter translations ]
                 ]
             ]
-        , li [] <| viewSearch translations searchSuggestions search
+        , li [] <| viewSearch translations searchSuggestions filter.q
         , hr [] []
-        , viewFeedFilter translations feeds
+        , viewFeedFilter translations filter.feeds
         , hr [] []
         , let
             labelId =
@@ -1233,13 +1252,13 @@ viewDrawer translations expanded mode searchSuggestions search feeds =
         ]
 
 
-filterApplied : String -> List Feed -> Bool
-filterApplied search feeds =
-    search /= "" || not (feeds |> List.all .checked)
+filterApplied : Filter -> Bool
+filterApplied { q, feeds } =
+    q /= "" || not (feeds |> List.all .checked)
 
 
 viewSearch : Translations -> List String -> String -> List (Html Msg)
-viewSearch translations suggestions search =
+viewSearch translations suggestions q =
     let
         labelText =
             T.search translations
@@ -1250,7 +1269,7 @@ viewSearch translations suggestions search =
             [ input
                 [ id "calendar-search"
                 , type_ "search"
-                , value search
+                , value q
                 , list "searchlist"
                 , ariaKeyshortcuts "S"
                 , ariaLabel labelText
@@ -1330,14 +1349,14 @@ type TimelineItem
 viewMain :
     Translations
     -> Features
-    -> { now : Time.Posix, zone : Time.Zone }
+    -> Time.Zone
+    -> Time.Posix
     -> Maybe String
     -> PendingFeed
-    -> String
-    -> List Feed
+    -> Filter
     -> List Event
     -> Html Msg
-viewMain translations features time activePopup pendingFeed search feeds events =
+viewMain translations features tz now activePopup pendingFeed filter events =
     let
         busy =
             pendingFeed == Loading
@@ -1349,7 +1368,7 @@ viewMain translations features time activePopup pendingFeed search feeds events 
                 events
                     |> List.filterMap
                         (\event ->
-                            feeds
+                            filter.feeds
                                 |> List.Extra.find (\feed -> feed.preset.id == event.feed)
                                 |> Maybe.map (\feed -> ( feed, event ))
                         )
@@ -1358,7 +1377,7 @@ viewMain translations features time activePopup pendingFeed search feeds events 
                 feedAndEvents
                     |> List.any
                         (\( feed, event ) ->
-                            eventIsShown search feeds feed.checked event
+                            eventIsShown filter feed.checked event
                         )
 
             ( ongoing, ( upcoming, past ) ) =
@@ -1369,9 +1388,7 @@ viewMain translations features time activePopup pendingFeed search feeds events 
                 ( og
                 , other
                     |> List.Extra.splitWhen
-                        (\( _, event ) ->
-                            Time.posixToMillis event.time <= Time.posixToMillis time.now
-                        )
+                        (\( _, event ) -> Time.posixToMillis event.time <= Time.posixToMillis now)
                     |> Maybe.withDefault ( other, [] )
                     |> Tuple.mapBoth (List.map TimelineEvent) (List.map TimelineEvent)
                 )
@@ -1381,22 +1398,14 @@ viewMain translations features time activePopup pendingFeed search feeds events 
                 (\item ->
                     case item of
                         TimelineEvent ( _, event ) ->
-                            NaiveDate.fromPosix time.zone event.time
+                            NaiveDate.fromPosix tz event.time
 
                         Now _ ->
-                            NaiveDate.fromPosix time.zone time.now
+                            NaiveDate.fromPosix tz now
                 )
             |> List.map
                 (\( date, items ) ->
-                    viewKeyedDateSection
-                        translations
-                        features
-                        time.now
-                        activePopup
-                        search
-                        feeds
-                        date
-                        items
+                    viewKeyedDateSection translations features now activePopup filter date items
                 )
          )
             ++ [ ( "empty"
@@ -1467,7 +1476,7 @@ viewMain translations features time activePopup pendingFeed search feeds events 
                         Done ->
                             [ div []
                                 [ p [] [ text <| T.noMoreItems translations ]
-                                , p [ hidden <| filterApplied search feeds ]
+                                , p [ hidden <| filterApplied filter ]
                                     [ text <| T.noMoreItemsGibberish translations ]
                                 ]
                             ]
@@ -1481,12 +1490,11 @@ viewKeyedDateSection :
     -> Features
     -> Time.Posix
     -> Maybe String
-    -> String
-    -> List Feed
+    -> Filter
     -> NaiveDate
     -> List TimelineItem
     -> ( String, Html Msg )
-viewKeyedDateSection translations features now activePopup search feeds date items =
+viewKeyedDateSection translations features now activePopup filter date items =
     ( NaiveDate.toIso8601 date
     , section
         [ hidden <|
@@ -1496,7 +1504,7 @@ viewKeyedDateSection translations features now activePopup search feeds date ite
                         (\item ->
                             case item of
                                 TimelineEvent ( feed, event ) ->
-                                    eventIsShown search feeds feed.checked event
+                                    eventIsShown filter feed.checked event
 
                                 Now _ ->
                                     True
@@ -1510,13 +1518,7 @@ viewKeyedDateSection translations features now activePopup search feeds date ite
                     (\item ->
                         let
                             partialViewKeyedEvent =
-                                viewKeyedEvent
-                                    translations
-                                    features
-                                    now
-                                    activePopup
-                                    search
-                                    feeds
+                                viewKeyedEvent translations features now activePopup filter
                         in
                         case item of
                             TimelineEvent ( feed, event ) ->
@@ -1532,11 +1534,7 @@ viewKeyedDateSection translations features now activePopup search feeds date ite
                                     ongoing_items
                                         |> List.any
                                             (\( feed, event ) ->
-                                                eventIsShown
-                                                    search
-                                                    feeds
-                                                    feed.checked
-                                                    event
+                                                eventIsShown filter feed.checked event
                                             )
                                   then
                                     section [ id "now", class "ongoing", tabindex -1 ]
@@ -1575,12 +1573,11 @@ viewKeyedEvent :
     -> Features
     -> Time.Posix
     -> Maybe String
-    -> String
-    -> List Feed
+    -> Filter
     -> Feed
     -> Event
     -> ( String, Html Msg )
-viewKeyedEvent translations features now activePopup search feeds feed event =
+viewKeyedEvent translations features now activePopup filter feed event =
     let
         eventId =
             "event-" ++ event.id
@@ -1668,7 +1665,7 @@ viewKeyedEvent translations features now activePopup search feeds feed event =
         members =
             event.members
                 |> List.filterMap
-                    (\feedId -> feeds |> List.Extra.find (\f -> f.preset.id == feedId))
+                    (\feedId -> filter.feeds |> List.Extra.find (\f -> f.preset.id == feedId))
 
         memberPresets =
             members |> List.map .preset
@@ -1749,7 +1746,7 @@ viewKeyedEvent translations features now activePopup search feeds feed event =
     in
     ( eventId
     , li
-        [ hidden <| not <| eventIsShown search feeds feed.checked event ]
+        [ hidden <| not <| eventIsShown filter feed.checked event ]
         [ article
             [ class "event"
             , ariaLabelledby headingId
@@ -1863,25 +1860,25 @@ viewShareEvent translations event =
     ]
 
 
-eventIsShown : String -> List Feed -> Bool -> Event -> Bool
-eventIsShown search feeds feedChecked event =
+eventIsShown : Filter -> Bool -> Event -> Bool
+eventIsShown filter feedChecked event =
     (feedChecked
         || -- Check that any of the members' feed is checked.
-           (feeds
+           (filter.feeds
                 |> List.any (\feed -> feed.checked && (event.members |> List.member feed.preset.id))
            )
     )
-        && searchMatches search event
+        && searchMatches filter.q event
 
 
 searchMatches : String -> Event -> Bool
-searchMatches search event =
+searchMatches q event =
     let
         name =
             event.name |> normalizeSearchTerm
     in
-    String.isEmpty search
-        || (normalizeSearchTerm search
+    String.isEmpty q
+        || (normalizeSearchTerm q
                 |> String.words
                 |> List.all (\term -> name |> String.contains term)
            )
