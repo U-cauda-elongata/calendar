@@ -617,10 +617,15 @@ update msg model =
 
         SearchClear ->
             let
-                filter =
+                f =
                     model.filter
+
+                filter =
+                    { f | q = "" }
             in
-            ( { model | filter = { filter | q = "" } }, blurSearch )
+            ( { model | filter = filter }
+            , Cmd.batch [ blurSearch, pushQuery model.key model.url filter ]
+            )
 
         SearchFocus value ->
             ( { model | searchFocused = value }
