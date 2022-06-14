@@ -1016,7 +1016,7 @@ subscriptions model =
     let
         subs =
             [ onKeyDown <| D.map KeyDown keyDecoder
-            , Browser.Events.onClick <| D.succeed CloseWidgets
+            , Browser.Events.onClick <| D.succeed ClosePopup
             , onVisibilityChange VisibilityChanged
             ]
 
@@ -2007,7 +2007,7 @@ viewAboutDialog mode copying translations =
         [ -- The purposes of this `div` are:
           -- 1. To prevent the click event from firing on the backdrop
           -- 2. To make polyfill styling easier
-          div [ class "modal", Html.Events.stopPropagationOn "click" <| D.succeed ( NoOp, True ) ]
+          div [ class "modal" ]
             [ header [ class "dialog-title-bar" ]
                 [ button
                     [ class "dialog-title-bar-button"
@@ -2041,14 +2041,14 @@ viewAboutDialog mode copying translations =
                 (viewAboutDialogMain translations)
             , viewAboutDialogCopying copying
                 [ class "dialog-content", lang "en", hidden <| mode /= About AboutCopying ]
-            , button
-                [ class "dialog-sr-only-button"
-                , class "unstyle"
-                , ariaLabel <| T.srCloseDialog translations
-                , onClick <| SetMode None
-                ]
-                []
             ]
+        , button
+            [ class "modal-backdrop-button"
+            , class "unstyle"
+            , ariaLabel <| T.srCloseDialog translations
+            , onClick <| SetMode None
+            ]
+            []
         ]
 
 
@@ -2143,12 +2143,12 @@ viewHelpDialog translations mode =
                     , dd [] [ text <| THelp.kbdQuestion translations ]
                     ]
                 ]
-            , button
-                [ class "dialog-sr-only-button"
-                , class "unstyle"
-                , ariaLabel <| T.srCloseDialog translations
-                , onClick <| SetMode None
-                ]
-                []
             ]
+        , button
+            [ class "modal-backdrop-button"
+            , class "unstyle"
+            , ariaLabel <| T.srCloseDialog translations
+            , onClick <| SetMode None
+            ]
+            []
         ]
