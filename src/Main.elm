@@ -521,7 +521,7 @@ update msg model =
                 hideOthers i =
                     let
                         ret =
-                            update (HideOtherFeeds 0) model
+                            update (HideOtherFeeds i) model
                     in
                     model.filter.feeds
                         |> List.Extra.getAt i
