@@ -237,7 +237,7 @@ queryParser =
     Query.map3 Query
         (Query.string "q" |> Query.map (Maybe.withDefault ""))
         (Query.custom "feed" Set.fromList)
-        (Query.string "empty" |> Query.map (Maybe.map (always True) >> Maybe.withDefault False))
+        (Query.custom "empty" <| not << List.isEmpty)
 
 
 applyQueryToFeeds : Query -> List Feed -> List Feed
