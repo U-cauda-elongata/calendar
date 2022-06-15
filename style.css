@@ -684,7 +684,7 @@ main {
 		background-color: var(--background-color);
 	}
 
-	.primary-window > *:not(.hamburger, .drawer) {
+	.hamburger ~ *:not(.drawer) {
 		margin-left: calc(var(--hamburger-length) + var(--border-width));
 		border-left: solid var(--border-width) var(--border-color);
 		transition: margin-left .2s;
@@ -693,7 +693,7 @@ main {
 	.drawer {
 		/* Use `initial` rather than `0` to prevent `transition` animation to trigger when shrinking
 		 * the viewport width. */
-		/* XXX: The animation of `.drawer-right` still triggers. */
+		/* XXX: The animation still triggers when growing the viewport. */
 		left: initial;
 		/* Visually hide labels and the search input inside it by default. */
 		width: calc(var(--hamburger-length) + var(--border-width));
@@ -706,7 +706,7 @@ main {
 		width: var(--drawer-width);
 	}
 
-	.hamburger.checked ~ .drawer-right {
+	.hamburger.checked ~ *:not(.drawer) {
 		margin-left: var(--drawer-width);
 	}
 
@@ -724,7 +724,7 @@ main {
 			opacity: 1;
 		}
 
-		.drawer-right {
+		.hamburger ~ *:not(.drawer) {
 			transition: none;
 		}
 	}
