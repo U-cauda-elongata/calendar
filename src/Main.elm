@@ -502,8 +502,8 @@ update msg model =
                 "N" ->
                     ( model
                     , Cmd.batch
-                        [ Dom.focus "now" |> Task.attempt handleDomResult
-                        , slideViewportInto "now"
+                        [ Dom.focus nowSectionId |> Task.attempt handleDomResult
+                        , slideViewportInto nowSectionId
                         ]
                     )
 
@@ -639,7 +639,7 @@ update msg model =
         SearchFocus value ->
             ( { model | searchFocused = value }
             , -- Prevent `.drawer` to scroll into the search input before the transition completes.
-              Dom.setViewportOf "drawer" 0 0 |> Task.attempt handleDomResult
+              Dom.setViewportOf drawerId 0 0 |> Task.attempt handleDomResult
             )
 
         GetFeed url ->
@@ -659,8 +659,8 @@ update msg model =
 
                 ( About _, None ) ->
                     Cmd.batch
-                        [ close "about"
-                        , Dom.focus "about-button" |> Task.attempt handleDomResult
+                        [ close aboutDialogId
+                        , Dom.focus aboutButtonId |> Task.attempt handleDomResult
                         ]
 
                 ( Help, Help ) ->
@@ -673,25 +673,24 @@ update msg model =
                                 Cmd.none
 
                             About _ ->
-                                close "about"
+                                close aboutDialogId
 
                             Help ->
-                                close "help"
+                                close helpDialogId
                         , case mode of
                             None ->
                                 Cmd.none
 
                             About _ ->
                                 Cmd.batch
-                                    [ showModal "about"
-                                    , Dom.focus "about-close-button"
-                                        |> Task.attempt handleDomResult
+                                    [ showModal aboutDialogId
+                                    , Dom.focus aboutCloseButtonId |> Task.attempt handleDomResult
                                     ]
 
                             Help ->
                                 Cmd.batch
-                                    [ showModal "help"
-                                    , Dom.focus "help-close-button"
+                                    [ showModal helpDialogId
+                                    , Dom.focus helpCloseButtonId
                                         |> Task.attempt handleDomResult
                                     ]
                         ]
@@ -859,7 +858,9 @@ update msg model =
                 -- Slide to current time once the first page is read, assuming that the first page
                 -- is large enough to contain current time. If KemoV becomes big enough to fill up
                 -- the first page with upcoming streams in the future, then we should revisit this!
-                ( { model2 | initialized = True }, Cmd.batch [ cmd, slideViewportInto "now" ] )
+                ( { model2 | initialized = True }
+                , Cmd.batch [ cmd, slideViewportInto nowSectionId ]
+                )
 
         RetryGetFeed url ->
             update (GetFeed url)
@@ -1084,6 +1085,11 @@ appendModifier field prefix key =
 -- VIEW
 
 
+drawerId : String
+drawerId =
+    "drawer"
+
+
 view : Model -> Document Msg
 view model =
     { title = T.title model.translations
@@ -1109,7 +1115,7 @@ view model =
                 [ Icon.hamburger ]
             , header [ class "app-title" ]
                 [ h1 [] [ text <| T.title model.translations ] ]
-            , div [ id "drawer", class "drawer" ]
+            , div [ id drawerId, class "drawer" ]
                 [ lazy5 viewDrawer
                     model.translations
                     drawerExpanded
@@ -1137,6 +1143,11 @@ view model =
             []
         ]
     }
+
+
+aboutButtonId : String
+aboutButtonId =
+    "about-button"
 
 
 viewDrawer : Translations -> Bool -> Mode -> List String -> Filter -> Html Msg
@@ -1195,12 +1206,12 @@ viewDrawer translations expanded mode searchSuggestions filter =
           in
           li []
             [ button
-                [ id "about-button"
+                [ id aboutButtonId
                 , class "drawer-labelled-button"
                 , class "about-button"
                 , class "unstyle"
                 , title labelText
-                , ariaControls "about"
+                , ariaControls aboutDialogId
                 , ariaExpanded <|
                     case mode of
                         About _ ->
@@ -1231,6 +1242,9 @@ viewSearch translations suggestions q =
     let
         labelText =
             T.search translations
+
+        datalistId =
+            "searchlist"
     in
     [ label [ class "search-label", title labelText ]
         [ Icon.search [ Svg.Attributes.class "drawer-icon", ariaHidden True ]
@@ -1239,7 +1253,7 @@ viewSearch translations suggestions q =
                 [ id searchInputId
                 , type_ "search"
                 , value q
-                , list "searchlist"
+                , list datalistId
                 , ariaKeyshortcuts "S"
                 , ariaLabel labelText
                 , onInput SearchInput
@@ -1265,7 +1279,7 @@ viewSearch translations suggestions q =
                 []
             ]
         ]
-    , datalist [ id "searchlist" ] (suggestions |> List.map (\term -> option [ value term ] []))
+    , datalist [ id datalistId ] (suggestions |> List.map (\term -> option [ value term ] []))
     ]
 
 
@@ -1454,6 +1468,11 @@ viewMain translations features tz now activePopup pendingFeed filter events =
         )
 
 
+nowSectionId : String
+nowSectionId =
+    "now"
+
+
 viewKeyedDateSection :
     Translations
     -> Features
@@ -1506,7 +1525,7 @@ viewKeyedDateSection translations features now activePopup filter date items =
                                                 eventIsShown filter feed.checked event
                                             )
                                   then
-                                    section [ id "now", class "ongoing", tabindex -1 ]
+                                    section [ id nowSectionId, class "ongoing", tabindex -1 ]
                                         [ header [ class "now" ]
                                             [ h2 []
                                                 (T.ongoingCustom translations
@@ -1524,7 +1543,7 @@ viewKeyedDateSection translations features now activePopup filter date items =
                                         ]
 
                                   else
-                                    h2 [ id "now", class "now", tabindex -1 ]
+                                    h2 [ id nowSectionId, class "now", tabindex -1 ]
                                         [ h2 [] <|
                                             T.nowSeparatorCustom translations
                                                 text
@@ -1952,6 +1971,16 @@ httpErrorToString err =
             "BadBody: " ++ e
 
 
+aboutCloseButtonId : String
+aboutCloseButtonId =
+    "about-close-button"
+
+
+aboutDialogId : String
+aboutDialogId =
+    "about"
+
+
 viewAboutDialog : Mode -> Maybe (Result Http.Error (Html Msg)) -> Translations -> Html Msg
 viewAboutDialog mode copying translations =
     let
@@ -1959,7 +1988,7 @@ viewAboutDialog mode copying translations =
             "about-heading"
     in
     dialog
-        [ id "about"
+        [ id aboutDialogId
         , class "about"
         , class "modal-backdrop"
         , role "dialog"
@@ -1990,7 +2019,7 @@ viewAboutDialog mode copying translations =
                                 TAbout.title translations
                     ]
                 , button
-                    [ id "about-close-button"
+                    [ id aboutCloseButtonId
                     , class "dialog-title-bar-button"
                     , class "unstyle"
                     , ariaLabel <| T.closeDialog translations
@@ -2058,6 +2087,16 @@ viewAboutDialogCopying copying attrs =
                 ]
 
 
+helpDialogId : String
+helpDialogId =
+    "help"
+
+
+helpCloseButtonId : String
+helpCloseButtonId =
+    "help-close-button"
+
+
 viewHelpDialog : Translations -> Mode -> Html Msg
 viewHelpDialog translations mode =
     let
@@ -2065,7 +2104,7 @@ viewHelpDialog translations mode =
             "kdb-help-heading"
     in
     dialog
-        [ id "help"
+        [ id helpDialogId
         , class "modal-backdrop"
         , role "dialog"
         , ariaModal True
@@ -2076,7 +2115,7 @@ viewHelpDialog translations mode =
                 [ h2 [ id headingId, class "dialog-title" ]
                     [ text <| THelp.title translations ]
                 , button
-                    [ id "help-close-button"
+                    [ id helpCloseButtonId
                     , class "dialog-title-bar-button"
                     , class "unstyle"
                     , ariaLabel <| T.closeDialog translations
