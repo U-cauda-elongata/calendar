@@ -1,6 +1,7 @@
 module Calendar.Elements exposing (dialog, intlDate, intlTime)
 
 import Calendar.Util.NaiveDate exposing (NaiveDate)
+import Calendar.Util.Time as Time
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Time
@@ -15,7 +16,7 @@ intlDate : List (Attribute msg) -> NaiveDate -> Html msg
 intlDate attrs date =
     node "intl-date"
         (attribute "data-year" (String.fromInt date.year)
-            :: attribute "data-month" (String.fromInt date.month)
+            :: attribute "data-month" (String.fromInt <| Time.monthToIdx date.month)
             :: attribute "data-day" (String.fromInt date.day)
             :: attrs
         )
