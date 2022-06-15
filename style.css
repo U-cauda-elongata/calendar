@@ -167,8 +167,6 @@ hr {
 /* Drawer widget */
 
 .hamburger {
-	/* XXX: On Gecko, the `blur(...)` filter on `.primary-window` ignores fixed state of backdrop
-	 * elements. */
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -570,8 +568,19 @@ main {
 	display: none;
 }
 
-.modal-backdrop[open] ~ .primary-window {
-	filter: blur(5px);
+@supports (backdrop-filter: blur(5px)) or (-webkit-backdrop-filter: blur(5px)) {
+	.modal-backdrop[open] {
+		-webkit-backdrop-filter: blur(5px);
+		backdrop-filter: blur(5px);
+	}
+}
+
+@supports not ((backdrop-filter: blur(5px)) or (-webkit-backdrop-filter: blur(5px))) {
+	/* XXX: On Gecko, the filter ignores fixed state of backdrop elements like the drawer, by spec.
+	 * <https://stackoverflow.com/a/52937920> */
+	.modal-backdrop[open] ~ .primary-window {
+		filter: blur(5px);
+	}
 }
 
 .modal {
