@@ -508,10 +508,10 @@ update msg model =
                     )
 
                 "S" ->
-                    ( model, focusSearch )
+                    ( model, Dom.focus searchInputId |> Task.attempt handleDomResult )
 
                 "S-S" ->
-                    ( model, focusSearch )
+                    ( model, Dom.focus searchInputId |> Task.attempt handleDomResult )
 
                 "X" ->
                     update (HamburgerChecked <| not model.drawerExpanded) model
@@ -586,7 +586,13 @@ update msg model =
 
                 "ESCAPE" ->
                     update CloseWidgets model
-                        |> Tuple.mapSecond (\cmd -> Cmd.batch [ cmd, blurSearch ])
+                        |> Tuple.mapSecond
+                            (\cmd ->
+                                Cmd.batch
+                                    [ cmd
+                                    , Dom.blur searchInputId |> Task.attempt handleDomResult
+                                    ]
+                            )
 
                 _ ->
                     ( model, Cmd.none )
@@ -604,7 +610,12 @@ update msg model =
             )
 
         SearchConfirm ->
-            ( model, Cmd.batch [ blurSearch, pushQuery model.key model.url model.filter ] )
+            ( model
+            , Cmd.batch
+                [ Dom.blur searchInputId |> Task.attempt handleDomResult
+                , pushQuery model.key model.url model.filter
+                ]
+            )
 
         SearchClear ->
             let
@@ -615,7 +626,7 @@ update msg model =
             , Cmd.batch
                 (let
                     cmds =
-                        [ blurSearch ]
+                        [ Dom.blur searchInputId |> Task.attempt handleDomResult ]
                  in
                  if String.isEmpty filter.q then
                     cmds
@@ -927,16 +938,6 @@ replaceQuery key url filter =
             Nav.replaceUrl key q
 
 
-focusSearch : Cmd Msg
-focusSearch =
-    Dom.focus "calendar-search" |> Task.attempt handleDomResult
-
-
-blurSearch : Cmd Msg
-blurSearch =
-    Dom.blur "calendar-search" |> Task.attempt handleDomResult
-
-
 handleDomResult : Result Dom.Error value -> Msg
 handleDomResult result =
     case result of
@@ -1220,6 +1221,11 @@ viewDrawer translations expanded mode searchSuggestions filter =
         ]
 
 
+searchInputId : String
+searchInputId =
+    "calendar-search"
+
+
 viewSearch : Translations -> List String -> String -> List (Html Msg)
 viewSearch translations suggestions q =
     let
@@ -1230,7 +1236,7 @@ viewSearch translations suggestions q =
         [ Icon.search [ Svg.Attributes.class "drawer-icon", ariaHidden True ]
         , div [ class "search-container" ]
             [ input
-                [ id "calendar-search"
+                [ id searchInputId
                 , type_ "search"
                 , value q
                 , list "searchlist"
