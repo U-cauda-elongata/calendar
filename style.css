@@ -633,6 +633,7 @@ main {
 
 .modal-backdrop-button {
 	position: absolute;
+	outline-offset: -3px;
 	padding: initial;
 	width: 100%;
 	height: 100%;
