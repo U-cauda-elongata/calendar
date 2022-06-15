@@ -1,4 +1,4 @@
-module Calendar.Util.Dict exposing (groupKeysBy)
+module Util.Dict exposing (groupKeysBy)
 
 import Dict exposing (Dict)
 

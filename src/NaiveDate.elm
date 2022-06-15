@@ -1,7 +1,7 @@
-module Calendar.Util.NaiveDate exposing (NaiveDate, fromPosix, toIso8601)
+module NaiveDate exposing (NaiveDate, fromPosix, toIso8601)
 
-import Calendar.Util.Time as Time
 import Time
+import Util.Time as Time
 
 
 type alias NaiveDate =

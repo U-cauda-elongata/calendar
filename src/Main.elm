@@ -1,21 +1,16 @@
 port module Main exposing (main)
 
+import Attributes exposing (..)
 import Browser exposing (Document)
 import Browser.Dom as Dom
 import Browser.Events exposing (Visibility(..), onKeyDown, onVisibilityChange)
 import Browser.Navigation as Nav
-import Calendar.Attributes exposing (..)
-import Calendar.Elements exposing (..)
-import Calendar.Event as Event exposing (Event)
-import Calendar.Feed as Feed
-import Calendar.Filter as Filter exposing (Feed, Filter)
-import Calendar.Icon as Icon
-import Calendar.TranslationsExt as T
-import Calendar.Util as Util
-import Calendar.Util.Dict as DictUtil
-import Calendar.Util.Duration as Duration
-import Calendar.Util.NaiveDate as NaiveDate exposing (NaiveDate)
 import Dict
+import Duration
+import Elements exposing (..)
+import Event exposing (Event)
+import Feed
+import Filter exposing (Feed, Filter)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onBlur, onClick, onDoubleClick, onFocus, onInput)
@@ -23,9 +18,11 @@ import Html.Keyed as Keyed
 import Html.Lazy exposing (..)
 import Http
 import I18Next exposing (Translations, translationsDecoder)
+import Icon
 import Json.Decode as D
-import List.Extra
+import List.Extra as List
 import Markdown
+import NaiveDate exposing (NaiveDate)
 import Process
 import Regex
 import Set exposing (Set)
@@ -40,10 +37,13 @@ import Translations.Event.Description as TEventDescription
 import Translations.Help as THelp
 import Translations.Share as TShare
 import Translations.Status as TStatus
+import TranslationsExt as T
 import Url exposing (Url)
 import Url.Builder
 import Url.Parser
 import Url.Parser.Query as Query
+import Util
+import Util.Dict as Dict
 
 
 main : Program Flags Model Msg
@@ -387,7 +387,7 @@ update msg model =
 
                 ( feeds, updated ) =
                     model.filter.feeds
-                        |> List.Extra.indexedFoldl
+                        |> List.indexedFoldl
                             (\j feed ( acc, u ) ->
                                 let
                                     checked =
@@ -453,12 +453,10 @@ update msg model =
                     model |> update (ReportError (TranslationsHttpError lang err))
 
         DismissError errIdx ->
-            ( { model | errors = model.errors |> List.Extra.removeAt errIdx }, Cmd.none )
+            ( { model | errors = model.errors |> List.removeAt errIdx }, Cmd.none )
 
         RetryGetTranslations lang errIdx ->
-            ( { model | errors = model.errors |> List.Extra.removeAt errIdx }
-            , getTranslations lang
-            )
+            ( { model | errors = model.errors |> List.removeAt errIdx }, getTranslations lang )
 
         KeyDown key ->
             let
@@ -471,7 +469,7 @@ update msg model =
                             update (ToggleFeedFilter i) model
                     in
                     model.filter.feeds
-                        |> List.Extra.getAt i
+                        |> List.getAt i
                         |> Maybe.map
                             (\feed ->
                                 ret
@@ -491,7 +489,7 @@ update msg model =
                             update (HideOtherFeeds i) model
                     in
                     model.filter.feeds
-                        |> List.Extra.getAt i
+                        |> List.getAt i
                         |> Maybe.map
                             (\feed ->
                                 ret
@@ -964,13 +962,13 @@ searchTagsFromEvents events =
     events
         |> List.concatMap (searchTags << .name)
         |> Util.cardinalities
-        |> DictUtil.groupKeysBy normalizeSearchTerm
+        |> Dict.groupKeysBy normalizeSearchTerm
         |> Dict.values
         |> List.filterMap
             (\pairs ->
                 pairs
                     -- Use the most common form among unnormalized terms.
-                    |> List.Extra.maximumBy Tuple.second
+                    |> List.maximumBy Tuple.second
                     -- This should never produce `Nothing` though.
                     |> Maybe.map
                         (\( tag, _ ) -> ( tag, pairs |> List.map Tuple.second |> List.sum ))
@@ -1334,7 +1332,7 @@ viewMain translations features tz now activePopup pendingFeed filter events =
                     |> List.filterMap
                         (\event ->
                             filter.feeds
-                                |> List.Extra.find (\feed -> feed.preset.id == event.feed)
+                                |> List.find (\feed -> feed.preset.id == event.feed)
                                 |> Maybe.map (\feed -> ( feed, event ))
                         )
 
@@ -1352,7 +1350,7 @@ viewMain translations features tz now activePopup pendingFeed filter events =
                 in
                 ( og
                 , other
-                    |> List.Extra.splitWhen
+                    |> List.splitWhen
                         (\( _, event ) -> Time.posixToMillis event.time <= Time.posixToMillis now)
                     |> Maybe.withDefault ( other, [] )
                     |> Tuple.mapBoth (List.map TimelineEvent) (List.map TimelineEvent)
@@ -1630,7 +1628,7 @@ viewKeyedEvent translations features now activePopup filter feed event =
         members =
             event.members
                 |> List.filterMap
-                    (\feedId -> filter.feeds |> List.Extra.find (\f -> f.preset.id == feedId))
+                    (\feedId -> filter.feeds |> List.find (\f -> f.preset.id == feedId))
 
         memberPresets =
             members |> List.map .preset
@@ -1888,11 +1886,7 @@ viewErrorLog translations errors =
         , ariaLabel <| TError.error translations
         , hidden <| List.isEmpty errors
         ]
-        (errors
-            |> List.Extra.indexedFoldl
-                (\i err acc -> li [] (viewError translations i err) :: acc)
-                []
-        )
+        (errors |> List.indexedFoldl (\i err acc -> li [] (viewError translations i err) :: acc) [])
 
 
 viewError : Translations -> Int -> Error -> List (Html Msg)

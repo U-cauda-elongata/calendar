@@ -1,7 +1,7 @@
-module Calendar.Filter exposing (Feed, Filter, clear, clearFeeds, isActive, toQueryString, toggleFeed)
+module Filter exposing (Feed, Filter, clear, clearFeeds, isActive, toQueryString, toggleFeed)
 
-import Calendar.Feed as Feed
-import List.Extra
+import Feed
+import List.Extra as List
 import Url.Builder
 
 
@@ -38,7 +38,7 @@ toggleFeed i filter =
     { filter
         | feeds =
             filter.feeds
-                |> List.Extra.updateAt i
+                |> List.updateAt i
                     (\feed -> { feed | checked = not feed.checked })
     }
 

@@ -1,7 +1,7 @@
-module Calendar.Feed exposing (Feed, Preset, decoder)
+module Feed exposing (Feed, Preset, decoder)
 
-import Calendar.Event exposing (Event)
-import Calendar.Util.Duration as Duration
+import Duration
+import Event exposing (Event)
 import Json.Decode as D
 import Time
 

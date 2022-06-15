@@ -1,4 +1,4 @@
-module Calendar.Util exposing (cardinalities, groupBy, mergeBy, stripPrefix)
+module Util exposing (cardinalities, groupBy, mergeBy, stripPrefix)
 
 import Dict exposing (Dict)
 

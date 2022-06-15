@@ -1,4 +1,4 @@
-module Calendar.Attributes exposing
+module Attributes exposing
     ( ariaBusy
     , ariaChecked
     , ariaControls

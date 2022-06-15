@@ -1,4 +1,4 @@
-module Calendar.Util.Time exposing (monthToIdx)
+module Util.Time exposing (monthToIdx)
 
 import Time
 

@@ -1,4 +1,4 @@
-module Calendar.Util.Duration exposing
+module Duration exposing
     ( Duration
     , fromMillis
     , fromSeconds

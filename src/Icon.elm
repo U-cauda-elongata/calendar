@@ -1,6 +1,6 @@
-module Calendar.Icon exposing (about, backButton, clear, closeDialog, gitHub, hamburger, search)
+module Icon exposing (about, backButton, clear, closeDialog, gitHub, hamburger, search)
 
-import Calendar.Attributes exposing (..)
+import Attributes exposing (..)
 import Svg exposing (..)
 import Svg.Attributes
     exposing

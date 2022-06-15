@@ -1,10 +1,10 @@
 -- A dirty hack to handle plurality in i18n.
 
 
-module Calendar.TranslationsExt exposing (members, trDuration, viewDuration)
+module TranslationsExt exposing (members, trDuration, viewDuration)
 
-import Calendar.Feed as Feed
-import Calendar.Util.Duration as Duration exposing (Duration)
+import Duration exposing (Duration)
+import Feed
 import Html exposing (Html, text, time)
 import Html.Attributes exposing (datetime)
 import I18Next exposing (Translations)

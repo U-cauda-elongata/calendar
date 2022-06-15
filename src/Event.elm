@@ -1,6 +1,6 @@
-module Calendar.Event exposing (Event, isOngoing)
+module Event exposing (Event, isOngoing)
 
-import Calendar.Util.Duration exposing (Duration)
+import Duration exposing (Duration)
 import Time
 
 
