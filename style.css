@@ -147,8 +147,8 @@ hr {
 	justify-content: center;
 	flex-shrink: 0;
 	margin-left: calc(var(--hamburger-length) + 2 * var(--border-width));
-	border-top: solid var(--border-width) var(--border-color);
-	border-bottom: solid var(--border-width) var(--border-color);
+	border: solid var(--border-width) var(--border-color);
+	border-left: none;
 	height: var(--hamburger-length);
 }
 
