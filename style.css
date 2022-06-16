@@ -18,8 +18,9 @@
 	--border-color: #000;
 	--active-filter-background-color: #0FF;
 	--active-filter-border-color: #008080;
-	--disabled-button-color: #6d6d6d;
-	--disabled-button-background-color: #c0c0c0;
+	--disabled-button-color: GrayText;
+	--disabled-button-stroke: #6d6d6d;
+	--disabled-button-fill: #c0c0c0;
 	--translucent-background-color: #FFF4;
 	--margin-unit: 8px;
 	--border-width: 1px;
@@ -30,7 +31,7 @@
 
 @media (prefers-contrast: more) {
 	:root {
-		--disabled-button-color: #000;
+		--disabled-button-stroke: #000;
 	}
 }
 
@@ -47,8 +48,9 @@
 		--border-color: #2F3336;
 		/* --active-filter-background-color: TODO; */
 		/* --active-filter-border-color: TODO; */
-		--disabled-button-color: #c0c0c0;
-		--disabled-button-background-color: #404040;
+		--disabled-button-color: #939393;
+		--disabled-button-stroke: #c0c0c0;
+		--disabled-button-fill: #404040;
 		--translucent-background-color: #0004;
 	}
 
@@ -64,7 +66,7 @@
 
 	@media (prefers-contrast: more) {
 		:root {
-			--disabled-button-color: #FFF;
+			--disabled-button-stroke: #FFF;
 			--border-color: #FFF;
 		}
 	}
@@ -196,6 +198,10 @@ hr {
 	text-overflow: ellipsis;
 }
 
+.drawer-labelled-button:is([aria-checked="false"], :disabled) .drawer-button-label {
+	color: var(--disabled-button-color);
+}
+
 .hamburger-label {
 	margin-left: calc(2 * var(--border-width) + var(--hamburger-length) + var(--margin-unit));
 }
@@ -292,6 +298,13 @@ hr {
 	border-radius: 50%;
 }
 
+@media (prefers-contrast: more) {
+	.drawer-icon.avatar {
+		box-sizing: border-box;
+		border: solid var(--border-width) var(--border-color);
+	}
+}
+
 .filter-clear-button {
 	appearance: none;
 	fill: var(--active-filter-background-color);
@@ -299,12 +312,8 @@ hr {
 }
 
 .filter-clear-button:disabled {
-	fill: var(--disabled-button-background-color);
-	stroke: var(--disabled-button-color);
-}
-
-.filter-clear-button:disabled > .drawer-button-label {
-	opacity: .2;
+	fill: var(--disabled-button-fill);
+	stroke: var(--disabled-button-stroke);
 }
 
 .search-label {
@@ -322,8 +331,13 @@ hr {
 	margin-left: var(--margin-unit);
 }
 
-.filter-button[aria-checked="false"] {
-	opacity: .2;
+.filter-button .avatar > img {
+	width: 100%;
+	height: 100%;
+}
+
+.filter-button[aria-checked="false"] .avatar > img {
+	opacity: .4
 }
 
 .feed-filter {

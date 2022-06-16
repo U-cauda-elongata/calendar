@@ -1326,13 +1326,9 @@ viewFeedFilter translations feeds =
                                 , ariaKeyshortcuts <| String.fromInt <| i + 1
                                 , ariaLabelledby labelId
                                 ]
-                                [ img
-                                    [ class "avatar"
-                                    , class "drawer-icon"
-                                    , src feed.preset.icon
-                                    , alt feed.preset.title
-                                    ]
-                                    []
+                                [ div
+                                    [ class "avatar", class "drawer-icon" ]
+                                    [ img [ src feed.preset.icon, alt feed.preset.title ] [] ]
                                 , span [ id labelId, class "drawer-button-label" ]
                                     [ text feed.preset.title ]
                                 ]
