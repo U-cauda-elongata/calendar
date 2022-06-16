@@ -732,24 +732,23 @@ update msg model =
                                 feeds =
                                     meta
                                         |> List.foldl
-                                            (\m acc ->
-                                                acc
-                                                    |> List.map
-                                                        (\feed ->
-                                                            let
-                                                                preset =
-                                                                    feed.preset
-                                                            in
-                                                            if preset.id == m.id then
-                                                                { feed
-                                                                    | preset =
-                                                                        { preset | title = m.title }
-                                                                    , alternate = m.alternate
-                                                                }
+                                            (\m ->
+                                                List.map
+                                                    (\feed ->
+                                                        let
+                                                            preset =
+                                                                feed.preset
+                                                        in
+                                                        if preset.id == m.id then
+                                                            { feed
+                                                                | preset =
+                                                                    { preset | title = m.title }
+                                                                , alternate = m.alternate
+                                                            }
 
-                                                            else
-                                                                feed
-                                                        )
+                                                        else
+                                                            feed
+                                                    )
                                             )
                                             model.filter.feeds
 
