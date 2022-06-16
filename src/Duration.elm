@@ -50,14 +50,14 @@ toSmh (Duration secs) =
         min ->
             let
                 secPart =
-                    secs |> modBy 60
+                    secs |> remainderBy 60
             in
             case min // 60 of
                 0 ->
                     ( secPart, Just ( min, Nothing ) )
 
                 h ->
-                    ( secPart, Just ( min |> modBy 60, Just h ) )
+                    ( secPart, Just ( min |> remainderBy 60, Just h ) )
 
 
 isNegative : Duration -> Bool

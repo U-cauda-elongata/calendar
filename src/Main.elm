@@ -434,7 +434,7 @@ update msg model =
                             60000
 
                     nextTick =
-                        interval - (ms |> modBy interval)
+                        interval - (ms |> remainderBy interval)
                 in
                 Process.sleep (nextTick |> toFloat)
                     |> Task.andThen (\() -> Time.now)
