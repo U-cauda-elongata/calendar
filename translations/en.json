@@ -1,11 +1,12 @@
 {
 	"title": "KF Live Streaming Calendar",
+	"hamburgerDescription": "This will toggle visual expansion status of the toolbar menu. Screen readers can always navigate to the toolbar regardless of its visual status.",
 	"filterMenuLabel": "Filter tools",
 	"collapseMenu": "Collapse menu",
+	"expandMenu": "Expand menu",
 	"clearFilter": "Clear filters",
 	"search": "Search",
 	"feedFilterLabel": "Channels",
-	"avatarAlt": "Icon",
 	"nowSeparator": "Now: {{time}}",
 	"ongoing": "Live now: {{time}}",
 	"event": {

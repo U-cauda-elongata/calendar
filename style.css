@@ -279,6 +279,7 @@ hr {
 	flex-shrink: 0;
 	width: calc(var(--border-width) + var(--hamburger-length));
 	height: calc(var(--border-width) + var(--hamburger-length));
+	overflow: hidden;
 }
 
 .avatar {

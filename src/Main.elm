@@ -1109,10 +1109,11 @@ view model =
                     [ ( "checked", drawerExpanded )
                     , ( "filter-active", Filter.isActive model.filter )
                     ]
-                , ariaHidden True
+                , ariaLabelledby hamburgerLabelId
+                , ariaDescribedby hamburgerDescriptionId
                 , onClick <| HamburgerChecked <| not drawerExpanded
                 ]
-                [ Icon.hamburger ]
+                [ Icon.hamburger [ ariaLabelledby hamburgerLabelId ] ]
             , header [ class "app-title" ]
                 [ h1 [] [ text <| T.title model.translations ] ]
             , div [ id drawerId, class "drawer" ]
@@ -1150,6 +1151,16 @@ aboutButtonId =
     "about-button"
 
 
+hamburgerLabelId : String
+hamburgerLabelId =
+    "hamburger-label"
+
+
+hamburgerDescriptionId : String
+hamburgerDescriptionId =
+    "hamburger-description"
+
+
 viewDrawer : Translations -> Bool -> Mode -> List String -> Filter -> Html Msg
 viewDrawer translations expanded mode searchSuggestions filter =
     menu
@@ -1162,14 +1173,23 @@ viewDrawer translations expanded mode searchSuggestions filter =
         [ button
             [ class "drawer-labelled-button"
             , class "unstyle"
+            , ariaDescribedby hamburgerDescriptionId
             , onClick <| HamburgerChecked <| not expanded
-            , ariaHidden True
             ]
             [ span
-                [ class "hamburger-label"
+                [ id hamburgerLabelId
+                , class "hamburger-label"
                 , class "drawer-button-label"
                 ]
-                [ text <| T.collapseMenu translations ]
+                [ text <|
+                    if expanded then
+                        T.collapseMenu translations
+
+                    else
+                        T.expandMenu translations
+                ]
+            , span [ id hamburgerDescriptionId, hidden True ]
+                [ text <| T.hamburgerDescription translations ]
             ]
         , let
             labelId =
@@ -1188,7 +1208,7 @@ viewDrawer translations expanded mode searchSuggestions filter =
                 ]
                 -- Using `Html.Attributes.class` function here would cause an exception
                 -- (in pure Elm, wow!) of setting getter-only property `className`.
-                [ Icon.clear [ Svg.Attributes.class "drawer-icon" ]
+                [ Icon.clear [ Svg.Attributes.class "drawer-icon", ariaLabelledby labelId ]
                 , span [ id labelId, class "drawer-button-label" ]
                     [ text <| T.clearFilter translations ]
                 ]
@@ -1224,7 +1244,7 @@ viewDrawer translations expanded mode searchSuggestions filter =
                 , Html.Events.stopPropagationOn "click" <|
                     D.succeed ( SetMode <| About AboutMain, True )
                 ]
-                [ Icon.about [ Svg.Attributes.class "drawer-icon" ]
+                [ Icon.about [ Svg.Attributes.class "drawer-icon", ariaLabelledby labelId ]
                 , span [ id labelId, class "drawer-button-label" ]
                     [ text <| labelText ]
                 ]
@@ -1247,7 +1267,7 @@ viewSearch translations suggestions q =
             "searchlist"
     in
     [ label [ class "search-label", title labelText ]
-        [ Icon.search [ Svg.Attributes.class "drawer-icon", ariaHidden True ]
+        [ Icon.search [ Svg.Attributes.class "drawer-icon", ariaLabel labelText ]
         , div [ class "search-container" ]
             [ input
                 [ id searchInputId
@@ -1255,7 +1275,6 @@ viewSearch translations suggestions q =
                 , value q
                 , list datalistId
                 , ariaKeyshortcuts "S"
-                , ariaLabel labelText
                 , onInput SearchInput
                 , Html.Events.stopPropagationOn "keydown"
                     (keyDecoder
@@ -1312,7 +1331,7 @@ viewFeedFilter translations feeds =
                                     [ class "avatar"
                                     , class "drawer-icon"
                                     , src feed.preset.icon
-                                    , alt <| T.avatarAlt translations
+                                    , alt feed.preset.title
                                     ]
                                     []
                                 , span [ id labelId, class "drawer-button-label" ]
@@ -2062,7 +2081,7 @@ viewAboutDialogMain translations =
     , ul []
         [ li []
             [ a [ href "https://github.com/U-cauda-elongata/calendar" ]
-                [ Icon.gitHub [ Svg.Attributes.class "social-icon", ariaHidden True ]
+                [ Icon.gitHub [ Svg.Attributes.class "social-icon", ariaLabel "GitHub" ]
                 , text "GitHub"
                 ]
             ]

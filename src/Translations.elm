@@ -37,6 +37,26 @@ collapseMenuCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "collapseMenu" []
 
 
+expandMenu : Translations -> String
+expandMenu translations =
+    t translations "expandMenu"
+
+
+expandMenuCustom : Translations -> (String -> a) -> List a
+expandMenuCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "expandMenu" []
+
+
+hamburgerDescription : Translations -> String
+hamburgerDescription translations =
+    t translations "hamburgerDescription"
+
+
+hamburgerDescriptionCustom : Translations -> (String -> a) -> List a
+hamburgerDescriptionCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "hamburgerDescription" []
+
+
 clearFilter : Translations -> String
 clearFilter translations =
     t translations "clearFilter"
@@ -65,16 +85,6 @@ feedFilterLabel translations =
 feedFilterLabelCustom : Translations -> (String -> a) -> List a
 feedFilterLabelCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "feedFilterLabel" []
-
-
-avatarAlt : Translations -> String
-avatarAlt translations =
-    t translations "avatarAlt"
-
-
-avatarAltCustom : Translations -> (String -> a) -> List a
-avatarAltCustom translations nonPlaceholderLift =
-    customTr translations Curly nonPlaceholderLift "avatarAlt" []
 
 
 nowSeparator : Translations -> String -> String

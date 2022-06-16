@@ -1,12 +1,13 @@
 
 {
 	"title": "けもフレ配信カレンダー",
+	"hamburgerDescription": "これはツールバーメニューの視覚的な表示を操作するボタンです。その視覚的な状態によらず、スクリーンリーダーは常にツールバーを操作できます。",
 	"filterMenuLabel": "フィルターツール",
 	"collapseMenu": "メニューをたたむ",
+	"expandMenu": "メニューを展開する",
 	"clearFilter": "フィルターをクリアー",
 	"search": "検索",
 	"feedFilterLabel": "チャンネル",
-	"avatarAlt": "アイコン",
 	"nowSeparator": "現在時刻：{{time}}",
 	"ongoing": "配信中：{{time}}",
 	"event": {
