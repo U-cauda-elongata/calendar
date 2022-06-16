@@ -322,7 +322,7 @@ hr {
 	margin-left: var(--margin-unit);
 }
 
-.filter-button[aria-checked="false"], .filter-button:disabled {
+.filter-button[aria-checked="false"] {
 	opacity: .2;
 }
 
