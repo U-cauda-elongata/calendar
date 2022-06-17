@@ -1100,8 +1100,13 @@ view model =
                 model.drawerExpanded || model.searchFocused
           in
           div
-            [ class "primary-window", ariaHidden <| model.mode /= None ]
-            [ button
+            [ class "primary-window"
+            , classList [ ( "drawer-expanded", drawerExpanded ) ]
+            , ariaHidden <| model.mode /= None
+            ]
+            [ header [ class "app-title" ]
+                [ h1 [] [ text <| T.title model.translations ] ]
+            , button
                 [ class "hamburger"
                 , class "unstyle"
                 , classList [ ( "filter-active", Filter.isActive model.filter ) ]
@@ -1111,8 +1116,6 @@ view model =
                 , onClick <| HamburgerChecked <| not drawerExpanded
                 ]
                 [ Icon.hamburger [ ariaLabelledby hamburgerLabelId ] ]
-            , header [ class "app-title" ]
-                [ h1 [] [ text <| T.title model.translations ] ]
             , div [ id drawerId, class "drawer" ]
                 [ lazy5 viewDrawer
                     model.translations

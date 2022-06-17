@@ -183,7 +183,7 @@ hr {
 	 * sighted users a bit, but might be confusing for screen reader users. */
 }
 
-.hamburger[aria-pressed="true"] ~ .drawer, .drawer:focus-within {
+.drawer-expanded > .drawer, .drawer:focus-within {
 	left: 0;
 }
 
@@ -197,7 +197,7 @@ hr {
 		transition-property: z-index,opacity;
 	}
 
-	.hamburger[aria-pressed="true"] ~ .drawer, .drawer-container:focus-within {
+	.drawer-expanded >  .drawer, .drawer-container:focus-within {
 		z-index: 2;
 		opacity: 1;
 	}
@@ -658,7 +658,7 @@ main {
 		background-color: var(--background-color);
 	}
 
-	.hamburger ~ *:not(.drawer) {
+	.primary-window > *:not(.hamburger, .drawer) {
 		margin-left: calc(var(--hamburger-length) + var(--border-width));
 		border-left: solid var(--border-width) var(--border-color);
 		transition: margin-left .2s;
@@ -675,12 +675,12 @@ main {
 		transition-property: width;
 	}
 
-	.hamburger[aria-pressed="true"] ~ .drawer {
+	.drawer-expanded > .drawer {
 		/* Show the labels and input. */
 		width: var(--drawer-width);
 	}
 
-	.hamburger[aria-pressed="true"] ~ *:not(.drawer) {
+	.drawer-expanded > *:not(.hamburger, .drawer) {
 		margin-left: var(--drawer-width);
 	}
 
@@ -698,7 +698,7 @@ main {
 			opacity: 1;
 		}
 
-		.hamburger ~ *:not(.drawer) {
+		.hamburger ~ *:not(.hamburger, .drawer) {
 			transition: none;
 		}
 	}
