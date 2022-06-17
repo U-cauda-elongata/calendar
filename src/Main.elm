@@ -2009,9 +2009,8 @@ viewAboutDialog mode copying translations =
         , ariaModal True
         , ariaLabelledby headingId
         ]
-        [ -- The purposes of this `div` are:
-          -- 1. To prevent the click event from firing on the backdrop
-          -- 2. To make polyfill styling easier
+        [ -- The purposes of this `div` is to make polyfill styling easier by emulating `::backdrop`
+          -- with the outer `dialog` element.
           div [ class "modal" ]
             [ header [ class "dialog-title-bar" ]
                 [ button
