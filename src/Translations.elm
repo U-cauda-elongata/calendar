@@ -17,6 +17,16 @@ titleCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "title" []
 
 
+hamburgerDescription : Translations -> String
+hamburgerDescription translations =
+    t translations "hamburgerDescription"
+
+
+hamburgerDescriptionCustom : Translations -> (String -> a) -> List a
+hamburgerDescriptionCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "hamburgerDescription" []
+
+
 filterMenuLabel : Translations -> String
 filterMenuLabel translations =
     t translations "filterMenuLabel"
@@ -27,16 +37,6 @@ filterMenuLabelCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "filterMenuLabel" []
 
 
-collapseMenu : Translations -> String
-collapseMenu translations =
-    t translations "collapseMenu"
-
-
-collapseMenuCustom : Translations -> (String -> a) -> List a
-collapseMenuCustom translations nonPlaceholderLift =
-    customTr translations Curly nonPlaceholderLift "collapseMenu" []
-
-
 expandMenu : Translations -> String
 expandMenu translations =
     t translations "expandMenu"
@@ -45,16 +45,6 @@ expandMenu translations =
 expandMenuCustom : Translations -> (String -> a) -> List a
 expandMenuCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "expandMenu" []
-
-
-hamburgerDescription : Translations -> String
-hamburgerDescription translations =
-    t translations "hamburgerDescription"
-
-
-hamburgerDescriptionCustom : Translations -> (String -> a) -> List a
-hamburgerDescriptionCustom translations nonPlaceholderLift =
-    customTr translations Curly nonPlaceholderLift "hamburgerDescription" []
 
 
 clearFilter : Translations -> String

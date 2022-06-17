@@ -1104,12 +1104,10 @@ view model =
             [ button
                 [ class "hamburger"
                 , class "unstyle"
-                , classList
-                    [ ( "checked", drawerExpanded )
-                    , ( "filter-active", Filter.isActive model.filter )
-                    ]
+                , classList [ ( "filter-active", Filter.isActive model.filter ) ]
                 , ariaLabelledby hamburgerLabelId
                 , ariaDescribedby hamburgerDescriptionId
+                , ariaPressed drawerExpanded
                 , onClick <| HamburgerChecked <| not drawerExpanded
                 ]
                 [ Icon.hamburger [ ariaLabelledby hamburgerLabelId ] ]
@@ -1175,18 +1173,8 @@ viewDrawer translations expanded mode searchSuggestions filter =
             , ariaDescribedby hamburgerDescriptionId
             , onClick <| HamburgerChecked <| not expanded
             ]
-            [ span
-                [ id hamburgerLabelId
-                , class "hamburger-label"
-                , class "drawer-button-label"
-                ]
-                [ text <|
-                    if expanded then
-                        T.collapseMenu translations
-
-                    else
-                        T.expandMenu translations
-                ]
+            [ span [ id hamburgerLabelId, class "hamburger-label", class "drawer-button-label" ]
+                [ text <| T.expandMenu translations ]
             , span [ id hamburgerDescriptionId, hidden True ]
                 [ text <| T.hamburgerDescription translations ]
             ]

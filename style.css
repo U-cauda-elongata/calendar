@@ -183,7 +183,7 @@ hr {
 	 * sighted users a bit, but might be confusing for screen reader users. */
 }
 
-.hamburger.checked ~ .drawer, .drawer:focus-within {
+.hamburger[aria-pressed="true"] ~ .drawer, .drawer:focus-within {
 	left: 0;
 }
 
@@ -197,7 +197,7 @@ hr {
 		transition-property: z-index,opacity;
 	}
 
-	.hamburger.checked ~ .drawer, .drawer-container:focus-within {
+	.hamburger[aria-pressed="true"] ~ .drawer, .drawer-container:focus-within {
 		z-index: 2;
 		opacity: 1;
 	}
@@ -675,12 +675,12 @@ main {
 		transition-property: width;
 	}
 
-	.hamburger.checked ~ .drawer {
+	.hamburger[aria-pressed="true"] ~ .drawer {
 		/* Show the labels and input. */
 		width: var(--drawer-width);
 	}
 
-	.hamburger.checked ~ *:not(.drawer) {
+	.hamburger[aria-pressed="true"] ~ *:not(.drawer) {
 		margin-left: var(--drawer-width);
 	}
 

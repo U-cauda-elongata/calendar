@@ -12,6 +12,7 @@ module Attributes exposing
     , ariaLive
     , ariaModal
     , ariaOrientation
+    , ariaPressed
     , loading
     , role
     , xmlns
@@ -96,6 +97,11 @@ ariaModal =
 ariaOrientation : String -> Attribute msg
 ariaOrientation =
     attribute "aria-orientation"
+
+
+ariaPressed : Bool -> Attribute msg
+ariaPressed =
+    boolStringAttribute "aria-pressed"
 
 
 loading : String -> Attribute msg
