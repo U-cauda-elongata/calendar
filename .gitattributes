@@ -1,3 +1,7 @@
-COPYING linguist-generated
+/app.js linguist-generated
+/COPYING linguist-generated
+/*.woff2 linguist-generated
+/feed/*.json linguist-generated
 /src/Translations.elm linguist-generated
 /src/Translations/**.elm linguist-generated
+/src/07にくまるフォント.otf linguist-vendored
