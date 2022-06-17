@@ -52,12 +52,14 @@ toSmh (Duration secs) =
                 secPart =
                     secs |> remainderBy 60
             in
-            case min // 60 of
+            ( secPart
+            , case min // 60 of
                 0 ->
-                    ( secPart, Just ( min, Nothing ) )
+                    Just ( min, Nothing )
 
                 h ->
-                    ( secPart, Just ( min |> remainderBy 60, Just h ) )
+                    Just ( min |> remainderBy 60, Just h )
+            )
 
 
 isNegative : Duration -> Bool
