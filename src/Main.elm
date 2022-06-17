@@ -1696,16 +1696,15 @@ viewKeyedEvent translations features now activePopup filter feed event =
                 Nothing ->
                     if event.upcoming then
                         let
-                            viewDuration =
-                                T.viewDuration translations eta
+                            viewEta =
+                                intlReltime [] eta
 
                             viewStartsIn =
                                 if Duration.isNegative eta then
-                                    TEvent.dueAgoCustom translations text <|
-                                        T.viewDuration translations (Duration.negate eta)
+                                    TEvent.dueCustom translations text viewEta
 
                                 else
-                                    TEvent.startsInCustom translations text viewDuration
+                                    [ viewEta ]
                         in
                         ( TEvent.timeWithEtaCustom translations
                             (text >> List.singleton)
@@ -1715,26 +1714,19 @@ viewKeyedEvent translations features now activePopup filter feed event =
                         , TEventDescription.scheduledLiveCustom translations
                             text
                             (text <| T.members translations feed.preset memberPresets)
-                            viewDuration
+                            viewEta
                         )
 
                     else
                         let
-                            viewDuration =
-                                T.viewDuration translations <| Duration.negate eta
-
-                            viewStartedAgo =
-                                TEvent.startedAgoCustom translations text viewDuration
+                            viewEta =
+                                intlReltime [] eta
                         in
-                        ( TEvent.timeWithEtaCustom translations
-                            (text >> List.singleton)
-                            [ viewTime ]
-                            viewStartedAgo
-                            |> List.concat
+                        ( TEvent.timeWithEtaCustom translations text viewTime viewEta
                         , TEventDescription.ongoingLiveCustom translations
                             text
                             (text <| T.members translations feed.preset memberPresets)
-                            viewDuration
+                            viewEta
                         )
     in
     ( eventId

@@ -8,23 +8,23 @@ import I18Next exposing (Delims(..), Translations, customTr, t, tr)
 
 
 scheduledLive : Translations -> String -> String -> String
-scheduledLive translations members duration =
-    tr translations Curly "event.description.scheduledLive" [ ( "members", members ), ( "duration", duration ) ]
+scheduledLive translations members eta =
+    tr translations Curly "event.description.scheduledLive" [ ( "members", members ), ( "eta", eta ) ]
 
 
 scheduledLiveCustom : Translations -> (String -> a) -> a -> a -> List a
-scheduledLiveCustom translations nonPlaceholderLift members duration =
-    customTr translations Curly nonPlaceholderLift "event.description.scheduledLive" [ ( "members", members ), ( "duration", duration ) ]
+scheduledLiveCustom translations nonPlaceholderLift members eta =
+    customTr translations Curly nonPlaceholderLift "event.description.scheduledLive" [ ( "members", members ), ( "eta", eta ) ]
 
 
 ongoingLive : Translations -> String -> String -> String
-ongoingLive translations members duration =
-    tr translations Curly "event.description.ongoingLive" [ ( "members", members ), ( "duration", duration ) ]
+ongoingLive translations members eta =
+    tr translations Curly "event.description.ongoingLive" [ ( "members", members ), ( "eta", eta ) ]
 
 
 ongoingLiveCustom : Translations -> (String -> a) -> a -> a -> List a
-ongoingLiveCustom translations nonPlaceholderLift members duration =
-    customTr translations Curly nonPlaceholderLift "event.description.ongoingLive" [ ( "members", members ), ( "duration", duration ) ]
+ongoingLiveCustom translations nonPlaceholderLift members eta =
+    customTr translations Curly nonPlaceholderLift "event.description.ongoingLive" [ ( "members", members ), ( "eta", eta ) ]
 
 
 endedLive : Translations -> String -> String -> String -> String

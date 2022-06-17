@@ -9,6 +9,7 @@ module Duration exposing
     , toDatetime
     , toSeconds
     , toSmh
+    , toSmhd
     )
 
 import Html exposing (..)
@@ -59,6 +60,26 @@ toSmh (Duration secs) =
 
                 h ->
                     Just ( min |> remainderBy 60, Just h )
+            )
+
+
+toSmhd : Duration -> ( Int, Maybe ( Int, Maybe ( Int, Maybe Int ) ) )
+toSmhd duration =
+    toSmh duration
+        |> Tuple.mapSecond
+            (Maybe.map
+                (Tuple.mapSecond
+                    (Maybe.map
+                        (\hr ->
+                            case hr // 24 of
+                                0 ->
+                                    ( hr, Nothing )
+
+                                d ->
+                                    ( hr |> remainderBy 24, Just d )
+                        )
+                    )
+                )
             )
 
 

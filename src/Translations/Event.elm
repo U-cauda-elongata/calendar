@@ -17,114 +17,14 @@ timeWithEtaCustom translations nonPlaceholderLift time eta =
     customTr translations Curly nonPlaceholderLift "event.timeWithEta" [ ( "time", time ), ( "eta", eta ) ]
 
 
-startsIn : Translations -> String -> String
-startsIn translations duration =
-    tr translations Curly "event.startsIn" [ ( "duration", duration ) ]
+due : Translations -> String -> String
+due translations duration =
+    tr translations Curly "event.due" [ ( "duration", duration ) ]
 
 
-startsInCustom : Translations -> (String -> a) -> a -> List a
-startsInCustom translations nonPlaceholderLift duration =
-    customTr translations Curly nonPlaceholderLift "event.startsIn" [ ( "duration", duration ) ]
-
-
-dueAgo : Translations -> String -> String
-dueAgo translations duration =
-    tr translations Curly "event.dueAgo" [ ( "duration", duration ) ]
-
-
-dueAgoCustom : Translations -> (String -> a) -> a -> List a
-dueAgoCustom translations nonPlaceholderLift duration =
-    customTr translations Curly nonPlaceholderLift "event.dueAgo" [ ( "duration", duration ) ]
-
-
-startedAgo : Translations -> String -> String
-startedAgo translations duration =
-    tr translations Curly "event.startedAgo" [ ( "duration", duration ) ]
-
-
-startedAgoCustom : Translations -> (String -> a) -> a -> List a
-startedAgoCustom translations nonPlaceholderLift duration =
-    customTr translations Curly nonPlaceholderLift "event.startedAgo" [ ( "duration", duration ) ]
-
-
-aDay : Translations -> String
-aDay translations =
-    t translations "event.aDay"
-
-
-aDayCustom : Translations -> (String -> a) -> List a
-aDayCustom translations nonPlaceholderLift =
-    customTr translations Curly nonPlaceholderLift "event.aDay" []
-
-
-nDays : Translations -> String -> String
-nDays translations n =
-    tr translations Curly "event.nDays" [ ( "n", n ) ]
-
-
-nDaysCustom : Translations -> (String -> a) -> a -> List a
-nDaysCustom translations nonPlaceholderLift n =
-    customTr translations Curly nonPlaceholderLift "event.nDays" [ ( "n", n ) ]
-
-
-anHour : Translations -> String
-anHour translations =
-    t translations "event.anHour"
-
-
-anHourCustom : Translations -> (String -> a) -> List a
-anHourCustom translations nonPlaceholderLift =
-    customTr translations Curly nonPlaceholderLift "event.anHour" []
-
-
-nHours : Translations -> String -> String
-nHours translations n =
-    tr translations Curly "event.nHours" [ ( "n", n ) ]
-
-
-nHoursCustom : Translations -> (String -> a) -> a -> List a
-nHoursCustom translations nonPlaceholderLift n =
-    customTr translations Curly nonPlaceholderLift "event.nHours" [ ( "n", n ) ]
-
-
-aMinute : Translations -> String
-aMinute translations =
-    t translations "event.aMinute"
-
-
-aMinuteCustom : Translations -> (String -> a) -> List a
-aMinuteCustom translations nonPlaceholderLift =
-    customTr translations Curly nonPlaceholderLift "event.aMinute" []
-
-
-nMinutes : Translations -> String -> String
-nMinutes translations n =
-    tr translations Curly "event.nMinutes" [ ( "n", n ) ]
-
-
-nMinutesCustom : Translations -> (String -> a) -> a -> List a
-nMinutesCustom translations nonPlaceholderLift n =
-    customTr translations Curly nonPlaceholderLift "event.nMinutes" [ ( "n", n ) ]
-
-
-aSecond : Translations -> String
-aSecond translations =
-    t translations "event.aSecond"
-
-
-aSecondCustom : Translations -> (String -> a) -> List a
-aSecondCustom translations nonPlaceholderLift =
-    customTr translations Curly nonPlaceholderLift "event.aSecond" []
-
-
-nSeconds : Translations -> String -> String
-nSeconds translations n =
-    tr translations Curly "event.nSeconds" [ ( "n", n ) ]
-
-
-nSecondsCustom : Translations -> (String -> a) -> a -> List a
-nSecondsCustom translations nonPlaceholderLift n =
-    customTr translations Curly nonPlaceholderLift "event.nSeconds" [ ( "n", n ) ]
+dueCustom : Translations -> (String -> a) -> a -> List a
+dueCustom translations nonPlaceholderLift duration =
+    customTr translations Curly nonPlaceholderLift "event.due" [ ( "duration", duration ) ]
 
 
 startedAt : Translations -> String -> String

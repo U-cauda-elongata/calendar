@@ -10,25 +10,15 @@
 	"ongoing": "Live now: {{time}}",
 	"event": {
 		"description": {
-			"scheduledLive": "an upcoming live streaming by {{members}}, starts in {{duration}}",
-			"ongoingLive": "an ongoing live streaming by {{members}}, started {{duration}} ago",
+			"scheduledLive": "an upcoming live streaming by {{members}}, starts {{eta}}",
+			"ongoingLive": "an ongoing live streaming by {{members}}, started {{eta}}",
 			"endedLive": "an ended live streaming by {{members}}, started at {{time}}, was live for {{duration}}",
 			"video": "a video by {{members}}, uploaded at {{time}}, is {{duration}} in length",
 			"twoMembers": "{{author}} and {{member}}",
 			"moreThanTwoMembers": "{{author}} and {{n}} others"
 		},
 		"timeWithEta": "{{time}} ({{eta}})",
-		"startsIn": "in {{duration}}",
-		"dueAgo": "due {{duration}} ago",
-		"startedAgo": "{{duration}} ago",
-		"aDay": "a day",
-		"nDays": "{{n}} days",
-		"anHour": "an hour",
-		"nHours": "{{n}} hours",
-		"aMinute": "a minute",
-		"nMinutes": "{{n}} minutes",
-		"aSecond": "a second",
-		"nSeconds": "{{n}} seconds",
+		"due": "due {{duration}}",
 		"startedAt": "Started {{time}}",
 		"uploadedAt": "Uploaded {{time}}"
 	},

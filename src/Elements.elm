@@ -1,8 +1,10 @@
-module Elements exposing (dialog, intlDate, intlTime)
+module Elements exposing (dialog, intlDate, intlReltime, intlTime)
 
+import Duration exposing (Duration)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import NaiveDate exposing (NaiveDate)
+import RelativeTime
 import Time
 import Util.Time as Time
 
@@ -27,4 +29,18 @@ intlTime : List (Attribute msg) -> Time.Posix -> Html msg
 intlTime attrs time =
     node "intl-time"
         (attribute "data-timestamp" (String.fromInt <| Time.posixToMillis time) :: attrs)
+        []
+
+
+intlReltime : List (Attribute msg) -> Duration -> Html msg
+intlReltime attrs duration =
+    let
+        ( value, unit ) =
+            RelativeTime.approximate duration
+    in
+    node "intl-reltime"
+        (attribute "data-value" (String.fromInt value)
+            :: attribute "data-unit" (RelativeTime.unitToString unit)
+            :: attrs
+        )
         []

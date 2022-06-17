@@ -12,7 +12,7 @@ customElements.define('intl-date', class extends HTMLElement {
 
 	attributeChangedCallback() { this.update(); }
 
-	static get observedAttributes() { return ['lang','data-year','data-month', 'data-day']; }
+	static get observedAttributes() { return ['lang', 'data-year', 'data-month', 'data-day']; }
 
 	update() {
 		// `attributeChangedCallback` is called every time Elm adds each data attribute, i.e.
@@ -134,5 +134,56 @@ customElements.define('intl-time', class extends HTMLElement {
 		for (const node of nodes) {
 			time.removeChild(node);
 		}
+	}
+});
+
+// Displays a relative time in a locale-specific way.
+customElements.define('intl-reltime', class extends HTMLElement {
+	constructor() {
+		super();
+		this.attachShadow({ mode: 'open' });
+		const time = document.createElement('time');
+		time.setAttribute('role', 'time');
+		this.shadowRoot.appendChild(time);
+	}
+
+	connectedCallback() { this.update(); }
+
+	attributeChangedCallback() { this.update(); }
+
+	static get observedAttributes() { return ['lang', 'data-value', 'data-unit']; }
+
+	update() {
+		if (!this.isConnected) {
+			return;
+		}
+
+		const value = this.dataset.value;
+		const unit = this.dataset.unit;
+
+		const lang = this.getAttribute('lang');
+		const fmt = new Intl.RelativeTimeFormat(lang ?? 'default');
+
+		const time = this.shadowRoot.firstChild;
+		if (lang) {
+			time.removeAttribute('lang');
+		} else {
+			time.lang = fmt.resolvedOptions().locale;
+		}
+		const absValue = value < 0 ? -value : value;
+		// This seems to be more UglifyJS-friendly than a `switch` statement.
+		time.dateTime =
+			unit == 'day'
+			? 'P' + absValue + 'D'
+			: 'PT' + absValue +
+				(unit == 'hour'
+				? 'H'
+				: unit == 'minute'
+				? 'M'
+				: // unit == 'second' ?
+				'S');
+		// Unused units: `year`, `quarter`, `month`, `week`.
+
+		time.textContent = fmt.format(value, unit);
 	}
 });

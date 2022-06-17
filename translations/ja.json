@@ -11,25 +11,15 @@
 	"ongoing": "配信中：{{time}}",
 	"event": {
 		"description": {
-			"scheduledLive": "{{members}}により配信予定、{{duration}}後に開始",
-			"ongoingLive": "{{members}}により配信中、{{duration}}前に開始",
+			"scheduledLive": "{{members}}により配信予定、{{eta}}に開始",
+			"ongoingLive": "{{members}}により配信中、{{eta}}に開始",
 			"endedLive": "{{members}}により行われたライブ配信、{{time}}に開始、長さ{{duration}}",
 			"video": "{{members}}による動画、{{time}}にアップロード、長さ{{duration}}",
 			"twoMembers": "{{author}}と{{member}}",
 			"moreThanTwoMembers": "{{author}}他{{n}}名"
 		},
 		"timeWithEta": "{{time}}（{{eta}}）",
-		"startsIn": "{{duration}}後",
-		"dueAgo": "{{duration}}前の予定",
-		"startedAgo": "{{duration}}前",
-		"aDay": "1日",
-		"nDays": "{{n}}日",
-		"anHour": "1時間",
-		"nHours": "{{n}}時間",
-		"aMinute": "1分",
-		"nMinutes": "{{n}}分",
-		"aSecond": "1秒",
-		"nSeconds": "{{n}}秒",
+		"due": "{{duration}}の予定",
 		"startedAt": "{{time}}開始",
 		"uploadedAt": "{{time}}アップロード"
 	},
