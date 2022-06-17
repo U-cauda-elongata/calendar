@@ -1,3 +1,6 @@
+@import 'light.css' not (prefers-color-scheme: dark);
+@import 'dark.css' (prefers-color-scheme: dark);
+
 :root {
 	font-family:
 		'ヒラギノ丸ゴ ProN W4',
@@ -13,63 +16,13 @@
 		sans-serif;
 	background-color: var(--background-color);
 	color: var(--color);
-	--background-color: #FFF;
-	--color: #000;
-	--border-color: #000;
 	--active-filter-background-color: #0FF;
 	--active-filter-border-color: #008080;
-	--disabled-button-color: GrayText;
-	--disabled-button-stroke: #6d6d6d;
-	--disabled-button-fill: #c0c0c0;
-	--translucent-background-color: #FFF4;
 	--margin-unit: 8px;
 	--border-width: 1px;
 	--hamburger-length: 50px;
 	--drawer-width: 100vw;
 	--event-width: 100vw;
-}
-
-@media (prefers-contrast: more) {
-	:root {
-		--disabled-button-stroke: #000;
-	}
-}
-
-@supports not ((backdrop-filter: blur(5px)) or (-webkit-backdrop-filter: blur(5px))) {
-	:root {
-		--translucent-background-color: #FFFC;
-	}
-}
-
-@media (prefers-color-scheme: dark) {
-	:root {
-		--background-color: #000;
-		--color: #FFF;
-		--border-color: #2F3336;
-		/* --active-filter-background-color: TODO; */
-		/* --active-filter-border-color: TODO; */
-		--disabled-button-color: #939393;
-		--disabled-button-stroke: #c0c0c0;
-		--disabled-button-fill: #404040;
-		--translucent-background-color: #0004;
-	}
-
-	@supports not ((backdrop-filter: blur(5px)) or (-webkit-backdrop-filter: blur(5px))) {
-		:root {
-			--translucent-background-color: #000C;
-		}
-	}
-
-	a {
-		color: #0FF;
-	}
-
-	@media (prefers-contrast: more) {
-		:root {
-			--disabled-button-stroke: #FFF;
-			--border-color: #FFF;
-		}
-	}
 }
 
 @media (prefers-contrast: more) {

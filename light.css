@@ -1,0 +1,23 @@
+:root {
+	--background-color: #FFF;
+	--color: #000;
+	--border-color: #000;
+	/* --active-filter-background-color: TODO; */
+	/* --active-filter-border-color: TODO; */
+	--disabled-button-color: GrayText;
+	--disabled-button-stroke: #6d6d6d;
+	--disabled-button-fill: #c0c0c0;
+	--translucent-background-color: #FFF4;
+}
+
+@supports not ((backdrop-filter: blur(5px)) or (-webkit-backdrop-filter: blur(5px))) {
+	:root {
+		--translucent-background-color: #FFFC;
+	}
+}
+
+@media (prefers-contrast: more) {
+	:root {
+		--disabled-button-stroke: #000;
+	}
+}
