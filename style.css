@@ -344,6 +344,18 @@ main {
 }
 
 /* Animate the time separator to indicate that the time is dynamically updated. */
+/*
+ * Note on accessibility concerns:
+ *
+ * Yes, this is the condemned [^1] flash effect. However, I think this is fine because the animation
+ * is far below the threshold of unacceptable flashes as specified by WCAG 2.1 [^2], both in terms
+ * of frequency and of occupied area of visual field.
+ *
+ * Also, the animation is disabled if `prefers-reduced-motion` media feature is enabled.
+ *
+ * [^1]: <https://developer.mozilla.org/en-US/docs/Web/HTML/Element/blink>
+ * [^2]: <https://www.w3.org/TR/WCAG21/#dfn-general-flash-and-red-flash-thresholds>
+ */
 .flashing-time .time-separator {
 	animation: 2s flash infinite;
 }
