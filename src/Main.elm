@@ -23,6 +23,7 @@ import Icon
 import Json.Decode as D
 import List.Extra as List
 import Markdown
+import Observance
 import Process
 import Regex
 import Set exposing (Set)
@@ -106,12 +107,7 @@ type alias Model =
     , visibility : Visibility
 
     -- Fields that are set by `init` or `Cmd`s issued by it and never changes:
-    , key : Nav.Key
-    , -- Base URL of the app.
-      url : Url
-    , features : Features
-    , translations : Translations
-    , tz : Time.Zone
+    , env : Env
 
     -- Fields used by `view`:
     , now : Time.Posix
@@ -135,6 +131,17 @@ type alias Model =
 
     -- Main:
     , events : List Event
+    }
+
+
+type alias Env =
+    { key : Nav.Key
+    , -- Base URL of the app.
+      url : Url
+    , features : Features
+    , translations : Translations
+    , tz : Time.Zone
+    , observances : Observance.Table
     }
 
 
@@ -172,6 +179,7 @@ type alias Flags =
     { features : Features
     , languages : List String
     , feeds : List Feed.Preset
+    , observances : D.Value
     }
 
 
@@ -193,20 +201,32 @@ init flags url key =
 
         baseUrl =
             { url | query = Nothing }
+
+        observances =
+            D.decodeValue Observance.decoder flags.observances
     in
     ( { initialized = False
       , latestNumberedPage = Nothing
       , gotPages = Set.empty
       , visibility = Visible
-      , key = key
-      , url = baseUrl
-      , features = flags.features
-      , translations = initialTranslations
-      , tz = Time.utc
+      , env =
+            { key = key
+            , url = baseUrl
+            , features = flags.features
+            , translations = initialTranslations
+            , tz = Time.utc
+            , observances = observances |> Result.withDefault Observance.empty
+            }
       , now = Time.millisToPosix 0
       , pendingFeed = Loading
       , status = Nothing
-      , errors = []
+      , errors =
+            case observances of
+                Ok _ ->
+                    []
+
+                Err e ->
+                    [ Unexpected <| D.errorToString e ]
       , drawerExpanded = False
       , searchFocused = False
       , activePopup = Nothing
@@ -355,7 +375,7 @@ update msg model =
         ClearFilter ->
             ( model
             , if Filter.isActive model.filter then
-                pushQuery model.key model.url <| Filter.clear model.filter
+                pushQuery model.env.key model.env.url <| Filter.clear model.filter
 
               else
                 Cmd.none
@@ -367,7 +387,7 @@ update msg model =
                 Cmd.none
 
               else
-                pushQuery model.key model.url <| Filter.clearFeeds model.filter
+                pushQuery model.env.key model.env.url <| Filter.clearFeeds model.filter
             )
 
         SearchInput q ->
@@ -375,10 +395,10 @@ update msg model =
                 filter =
                     model.filter
             in
-            ( model, replaceQuery model.key model.url { filter | q = q } )
+            ( model, replaceQuery model.env.key model.env.url { filter | q = q } )
 
         ToggleFeedFilter i ->
-            ( model, pushQuery model.key model.url <| Filter.toggleFeed i model.filter )
+            ( model, pushQuery model.env.key model.env.url <| Filter.toggleFeed i model.filter )
 
         HideOtherFeeds i ->
             let
@@ -403,14 +423,18 @@ update msg model =
             in
             ( model
             , if updated then
-                pushQuery model.key model.url { filter | feeds = feeds }
+                pushQuery model.env.key model.env.url { filter | feeds = feeds }
 
               else
                 Cmd.none
             )
 
         SetTimeZone tz ->
-            ( { model | tz = tz }, Cmd.none )
+            let
+                env =
+                    model.env
+            in
+            ( { model | env = { env | tz = tz } }, Cmd.none )
 
         Tick now ->
             ( { model | now = now }
@@ -447,7 +471,11 @@ update msg model =
         GotTranslations lang result ->
             case result of
                 Ok translations ->
-                    ( { model | translations = translations }, setLang lang )
+                    let
+                        env =
+                            model.env
+                    in
+                    ( { model | env = { env | translations = translations } }, setLang lang )
 
                 Err err ->
                     model |> update (ReportError (TranslationsHttpError lang err))
@@ -475,10 +503,12 @@ update msg model =
                                 ret
                                     |> setStatus
                                         (if feed.checked then
-                                            TStatus.showingFeed model.translations feed.preset.title
+                                            TStatus.showingFeed model.env.translations
+                                                feed.preset.title
 
                                          else
-                                            TStatus.hidingFeed model.translations feed.preset.title
+                                            TStatus.hidingFeed model.env.translations
+                                                feed.preset.title
                                         )
                             )
                         |> Maybe.withDefault ret
@@ -494,7 +524,9 @@ update msg model =
                             (\feed ->
                                 ret
                                     |> setStatus
-                                        (TStatus.showingOnly model.translations feed.preset.title)
+                                        (TStatus.showingOnly model.env.translations
+                                            feed.preset.title
+                                        )
                             )
                         |> Maybe.withDefault ret
             in
@@ -518,11 +550,11 @@ update msg model =
 
                 "0" ->
                     update ClearFeedFilter model
-                        |> setStatus (TStatus.clearFeedFilter model.translations)
+                        |> setStatus (TStatus.clearFeedFilter model.env.translations)
 
                 "S-0" ->
                     update ClearFilter model
-                        |> setStatus (TStatus.clearFilter model.translations)
+                        |> setStatus (TStatus.clearFilter model.env.translations)
 
                 "1" ->
                     toggle 0
@@ -613,7 +645,7 @@ update msg model =
             ( model
             , Cmd.batch
                 [ Dom.blur searchInputId |> Task.attempt handleDomResult
-                , pushQuery model.key model.url model.filter
+                , pushQuery model.env.key model.env.url model.filter
                 ]
             )
 
@@ -632,7 +664,7 @@ update msg model =
                     cmds
 
                  else
-                    pushQuery model.key model.url { filter | q = "" } :: cmds
+                    pushQuery model.env.key model.env.url { filter | q = "" } :: cmds
                 )
             )
 
@@ -891,7 +923,7 @@ update msg model =
             ( { model | errors = err :: model.errors }, Cmd.none )
 
         LinkClicked (Browser.Internal url) ->
-            case url.path |> Util.stripPrefix model.url.path of
+            case url.path |> Util.stripPrefix model.env.url.path of
                 Just "COPYING" ->
                     ( { model | mode = About AboutCopying }
                     , case model.copying of
@@ -1091,10 +1123,10 @@ drawerId =
 
 view : Model -> Document Msg
 view model =
-    { title = T.title model.translations
+    { title = T.title model.env.translations
     , body =
-        [ lazy3 viewAboutDialog model.mode model.copying model.translations
-        , lazy2 viewHelpDialog model.translations model.mode
+        [ lazy3 viewAboutDialog model.mode model.copying model.env.translations
+        , lazy2 viewHelpDialog model.env.translations model.mode
         , let
             drawerExpanded =
                 model.drawerExpanded || model.searchFocused
@@ -1105,7 +1137,7 @@ view model =
             , ariaHidden <| model.mode /= None
             ]
             [ header [ class "app-title" ]
-                [ h1 [] [ text <| T.title model.translations ] ]
+                [ h1 [] [ text <| T.title model.env.translations ] ]
             , button
                 [ class "hamburger"
                 , class "unstyle"
@@ -1118,23 +1150,21 @@ view model =
                 [ Icon.hamburger [ ariaLabelledby hamburgerLabelId ] ]
             , div [ id drawerId, class "drawer" ]
                 [ lazy5 viewDrawer
-                    model.translations
+                    model.env.translations
                     drawerExpanded
                     model.mode
                     model.searchSuggestions
                     model.filter
                 ]
             , div [ class "main-container" ]
-                [ lazy8 viewMain
-                    model.translations
-                    model.features
-                    model.tz
+                [ lazy6 viewMain
+                    model.env
                     model.now
                     model.activePopup
                     model.pendingFeed
                     model.filter
                     model.events
-                , lazy2 viewErrorLog model.translations model.errors
+                , lazy2 viewErrorLog model.env.translations model.errors
                 ]
             ]
         , div
@@ -1334,17 +1364,8 @@ type TimelineItem
     | Now (List ( Feed, Event.Event ))
 
 
-viewMain :
-    Translations
-    -> Features
-    -> Time.Zone
-    -> Time.Posix
-    -> Maybe String
-    -> PendingFeed
-    -> Filter
-    -> List Event
-    -> Html Msg
-viewMain translations features tz now activePopup pendingFeed filter events =
+viewMain : Env -> Time.Posix -> Maybe String -> PendingFeed -> Filter -> List Event -> Html Msg
+viewMain { translations, features, tz, observances } now activePopup pendingFeed filter events =
     let
         busy =
             pendingFeed == Loading
@@ -1393,7 +1414,14 @@ viewMain translations features tz now activePopup pendingFeed filter events =
                 )
             |> List.map
                 (\( date, items ) ->
-                    viewKeyedDateSection translations features now activePopup filter date items
+                    viewKeyedDateSection translations
+                        features
+                        observances
+                        now
+                        activePopup
+                        filter
+                        date
+                        items
                 )
          )
             ++ [ ( "empty"
@@ -1481,13 +1509,14 @@ nowSectionId =
 viewKeyedDateSection :
     Translations
     -> Features
+    -> Observance.Table
     -> Time.Posix
     -> Maybe String
     -> Filter
     -> Date
     -> List TimelineItem
     -> ( String, Html Msg )
-viewKeyedDateSection translations features now activePopup filter date items =
+viewKeyedDateSection translations features observances now activePopup filter date items =
     ( Date.toIsoString date
     , section
         [ hidden <|
@@ -1504,7 +1533,20 @@ viewKeyedDateSection translations features now activePopup filter date items =
                         )
                 )
         ]
-        [ header [ class "date-heading" ] [ h2 [] [ intlDate [] date ] ]
+        [ header [ class "date-heading" ]
+            [ h2 []
+                (let
+                    viewDate =
+                        intlDate [] date
+                 in
+                 case observances |> Observance.get translations date of
+                    [] ->
+                        [ viewDate ]
+
+                    xs ->
+                        [ viewDate, text <| ": " ++ String.join ", " xs ]
+                )
+            ]
         , Keyed.ul [ class "timeline", class "unstyle" ]
             (items
                 |> List.map

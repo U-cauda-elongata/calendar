@@ -79,5 +79,17 @@
 		"showingFeed": "チャンネル「{{title}}」を表示します。",
 		"hidingFeed": "チャンネル「{{title}}」を非表示にします。",
 		"showingOnly": "チャンネル「{{title}}」のみを表示します。"
+	},
+	"observance": {
+		"African Penguin and Humboldt Penguin's debut anniversary": "ケープペンギン・フンボルトペンギンのデビュー記念日",
+		"Island fox's debut anniversary": "シマハイイロギツネのデビュー記念日",
+		"Coyote's debut anniversary": "コヨーテのデビュー記念日",
+		"Dire Wolf's debut anniversary": "ダイアウルフのデビュー記念日",
+		"Caracal's debut anniversary": "カラカルのデビュー記念日",
+		"World Animal Day": "世界動物の日",
+		"World Wildlife Day": "世界野生生物の日",
+		"International Day for Biological Diversity": "国際生物多様性の日",
+		"World Penguin Day": "世界ペンギンの日",
+		"World Migratory Bird Day": "世界渡り鳥の日"
 	}
 }

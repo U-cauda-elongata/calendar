@@ -6,6 +6,7 @@ const app = Elm.Main.init({
 		},
 		languages: navigator.languages,
 		feeds,
+		observances,
 	},
 });
 
