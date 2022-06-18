@@ -1303,7 +1303,7 @@ viewFeedFilter translations feeds =
                             labelId =
                                 "feed-" ++ feed.preset.id
                         in
-                        li []
+                        li [ lang feed.preset.lang ]
                             [ button
                                 [ class "drawer-labelled-button"
                                 , class "filter-button"
@@ -1586,7 +1586,7 @@ viewKeyedEvent translations features now activePopup filter feed event =
         eventHeader =
             let
                 heading =
-                    h3 [ id headingId ] [ text event.name ]
+                    h3 [ id headingId, lang feed.preset.lang ] [ text event.name ]
 
                 headerContent =
                     case event.thumbnail of
@@ -1876,7 +1876,7 @@ normalizeSearchTerm text =
 
 viewEventMember : Bool -> Feed -> Html Msg
 viewEventMember isAuthor feed =
-    li [ class "event-member" ]
+    li [ class "event-member", lang feed.preset.lang ]
         [ a
             (href feed.alternate
                 :: (if isAuthor then

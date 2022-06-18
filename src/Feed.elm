@@ -23,6 +23,7 @@ type alias Meta =
 type alias Preset =
     { id : String
     , title : String
+    , lang : String
     , icon : String
     }
 
