@@ -1,12 +1,11 @@
 module Elements exposing (dialog, intlDate, intlReltime, intlTime)
 
+import Date exposing (Date)
 import Duration exposing (Duration)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import NaiveDate exposing (NaiveDate)
 import RelativeTime
 import Time
-import Util.Time as Time
 
 
 dialog : List (Attribute msg) -> List (Html msg) -> Html msg
@@ -14,12 +13,12 @@ dialog =
     node "dialog"
 
 
-intlDate : List (Attribute msg) -> NaiveDate -> Html msg
+intlDate : List (Attribute msg) -> Date -> Html msg
 intlDate attrs date =
     node "intl-date"
-        (attribute "data-year" (String.fromInt date.year)
-            :: attribute "data-month" (String.fromInt <| Time.monthToIdx date.month)
-            :: attribute "data-day" (String.fromInt date.day)
+        (attribute "data-year" (String.fromInt <| Date.year date)
+            :: attribute "data-month" (String.fromInt <| Date.monthNumber date - 1)
+            :: attribute "data-day" (String.fromInt <| Date.day date)
             :: attrs
         )
         []

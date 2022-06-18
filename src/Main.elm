@@ -5,6 +5,7 @@ import Browser exposing (Document)
 import Browser.Dom as Dom
 import Browser.Events exposing (Visibility(..), onKeyDown, onVisibilityChange)
 import Browser.Navigation as Nav
+import Date exposing (Date)
 import Dict
 import Duration
 import Elements exposing (..)
@@ -22,7 +23,6 @@ import Icon
 import Json.Decode as D
 import List.Extra as List
 import Markdown
-import NaiveDate exposing (NaiveDate)
 import Process
 import Regex
 import Set exposing (Set)
@@ -1386,10 +1386,10 @@ viewMain translations features tz now activePopup pendingFeed filter events =
                 (\item ->
                     case item of
                         TimelineEvent ( _, event ) ->
-                            NaiveDate.fromPosix tz event.time
+                            Date.fromPosix tz event.time
 
                         Now _ ->
-                            NaiveDate.fromPosix tz now
+                            Date.fromPosix tz now
                 )
             |> List.map
                 (\( date, items ) ->
@@ -1484,11 +1484,11 @@ viewKeyedDateSection :
     -> Time.Posix
     -> Maybe String
     -> Filter
-    -> NaiveDate
+    -> Date
     -> List TimelineItem
     -> ( String, Html Msg )
 viewKeyedDateSection translations features now activePopup filter date items =
-    ( NaiveDate.toIso8601 date
+    ( Date.toIsoString date
     , section
         [ hidden <|
             not
