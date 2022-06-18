@@ -1,14 +1,15 @@
 // Displays a local date in a locale-specific way.
 customElements.define('intl-date', class extends HTMLElement {
-	constructor() {
-		super();
-		this.attachShadow({ mode: 'open' });
-		const time = document.createElement('time');
-		time.setAttribute('role', 'time');
-		this.shadowRoot.appendChild(time);
-	}
+	constructor() { super(); }
 
-	connectedCallback() { this.update(); }
+	connectedCallback() {
+		if (!this.firstChild) {
+			const time = document.createElement('time');
+			time.setAttribute('role', 'time');
+			this.appendChild(time);
+		}
+		this.update();
+	}
 
 	attributeChangedCallback() { this.update(); }
 
@@ -38,7 +39,7 @@ customElements.define('intl-date', class extends HTMLElement {
 		}
 		const fmt = new Intl.DateTimeFormat(lang ?? 'default', opts);
 
-		const time = this.shadowRoot.firstChild;
+		const time = this.firstChild;
 		if (lang) {
 			time.removeAttribute('lang');
 		} else {
@@ -54,9 +55,7 @@ customElements.define('intl-date', class extends HTMLElement {
 
 // Displays a ECMAScript timestamp in a locale-specific way, converting it to local datetime.
 customElements.define('intl-time', class extends HTMLElement {
-	constructor() {
-		super();
-	}
+	constructor() { super(); }
 
 	connectedCallback() {
 		if (!this.firstChild) {
@@ -139,15 +138,16 @@ customElements.define('intl-time', class extends HTMLElement {
 
 // Displays a relative time in a locale-specific way.
 customElements.define('intl-reltime', class extends HTMLElement {
-	constructor() {
-		super();
-		this.attachShadow({ mode: 'open' });
-		const time = document.createElement('time');
-		time.setAttribute('role', 'time');
-		this.shadowRoot.appendChild(time);
-	}
+	constructor() { super(); }
 
-	connectedCallback() { this.update(); }
+	connectedCallback() {
+		if (!this.firstChild) {
+			const time = document.createElement('time');
+			time.setAttribute('role', 'time');
+			this.appendChild(time);
+		}
+		this.update();
+	}
 
 	attributeChangedCallback() { this.update(); }
 
@@ -164,7 +164,7 @@ customElements.define('intl-reltime', class extends HTMLElement {
 		const lang = this.getAttribute('lang');
 		const fmt = new Intl.RelativeTimeFormat(lang ?? 'default');
 
-		const time = this.shadowRoot.firstChild;
+		const time = this.firstChild;
 		if (lang) {
 			time.removeAttribute('lang');
 		} else {
