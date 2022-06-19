@@ -749,7 +749,8 @@ update msg model =
                                         model.latestNumberedPage
                                 , gotPages = model.gotPages |> Set.insert url
                                 , events = events
-                                , searchSuggestions = Search.suggestions .name events
+                                , searchSuggestions =
+                                    Search.suggestions .name .time model.now events
                                 , pendingFeed =
                                     if polling == Initial || polling == Manual then
                                         next

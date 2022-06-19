@@ -1,4 +1,4 @@
-module Util.Dict exposing (groupKeysBy)
+module Util.Dict exposing (groupKeysBy, mergeSum, mergeTuple)
 
 import Dict exposing (Dict)
 
@@ -25,3 +25,24 @@ groupKeysBy f dict =
                         )
             )
             Dict.empty
+
+
+mergeSum : Dict comparable number -> Dict comparable number -> Dict comparable number
+mergeSum xs ys =
+    Dict.merge (\k x -> Dict.insert k x)
+        (\k x y -> Dict.insert k (x + y))
+        (\k y -> Dict.insert k y)
+        xs
+        ys
+        Dict.empty
+
+
+mergeTuple : Dict comparable a -> Dict comparable b -> Dict comparable ( Maybe a, Maybe b )
+mergeTuple xs ys =
+    Dict.merge
+        (\k x -> Dict.insert k ( Just x, Nothing ))
+        (\k x y -> Dict.insert k ( Just x, Just y ))
+        (\k y -> Dict.insert k ( Nothing, Just y ))
+        xs
+        ys
+        Dict.empty
