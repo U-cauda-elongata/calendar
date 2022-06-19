@@ -1455,12 +1455,10 @@ viewKeyedDateSection translations features observances now activePopup filter da
                                         ]
 
                                   else
-                                    h2 [ id nowSectionId, class "now", tabindex -1 ]
-                                        [ h2 [] <|
-                                            T.nowSeparatorCustom translations
-                                                text
-                                                viewTime
-                                        ]
+                                    h2 [ id nowSectionId, class "now", tabindex -1 ] <|
+                                        T.nowSeparatorCustom translations
+                                            text
+                                            viewTime
                                 )
                     )
             )
