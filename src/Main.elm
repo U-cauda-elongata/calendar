@@ -6,7 +6,6 @@ import Browser.Dom as Dom
 import Browser.Events exposing (Visibility(..), onKeyDown, onVisibilityChange)
 import Browser.Navigation as Nav
 import Date exposing (Date)
-import Dict
 import Duration
 import Elements exposing (..)
 import Event exposing (Event)
@@ -21,11 +20,13 @@ import Http
 import I18Next exposing (Translations, translationsDecoder)
 import Icon
 import Json.Decode as D
+import KeyboardEvent
 import List.Extra as List
 import Markdown
 import Observance
 import Process
-import Regex
+import Query
+import Search
 import Set exposing (Set)
 import Svg.Attributes
 import Task
@@ -41,10 +42,8 @@ import Translations.Status as TStatus
 import TranslationsExt as T
 import Url exposing (Url)
 import Url.Builder
-import Url.Parser
-import Url.Parser.Query as Query
-import Util
-import Util.Dict as Dict
+import Util.List as List
+import Util.String as String
 
 
 main : Program Flags Model Msg
@@ -183,21 +182,14 @@ type alias Flags =
     }
 
 
-type alias Query =
-    { q : String
-    , feed : Set String
-    , empty : Bool
-    }
-
-
 init : Flags -> Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
     let
         query =
-            parseQuery url
+            Query.parseUrl url
 
         filter =
-            Filter query.q (flags.feeds |> List.map (Feed True "") |> applyQueryToFeeds query)
+            Filter query.q (flags.feeds |> List.map (Feed True "") |> Query.applyToFeeds query)
 
         baseUrl =
             { url | query = Nothing }
@@ -213,7 +205,11 @@ init flags url key =
             { key = key
             , url = baseUrl
             , features = flags.features
-            , translations = initialTranslations
+            , translations =
+                I18Next.fromTree
+                    [ ( "title", I18Next.string "" )
+                    , ( "nowSeparator", I18Next.string "{{time}}" )
+                    ]
             , tz = Time.utc
             , observances = observances |> Result.withDefault Observance.empty
             }
@@ -244,40 +240,6 @@ init flags url key =
         , getFeed Initial "latest.json"
         ]
     )
-
-
-parseQuery : Url -> Query
-parseQuery url =
-    { url | path = "/" }
-        |> Url.Parser.parse (Url.Parser.query queryParser)
-        |> Maybe.withDefault (Query "" Set.empty False)
-
-
-queryParser : Query.Parser Query
-queryParser =
-    Query.map3 Query
-        (Query.string "q" |> Query.map (Maybe.withDefault ""))
-        (Query.custom "feed" Set.fromList)
-        (Query.custom "empty" <| not << List.isEmpty)
-
-
-applyQueryToFeeds : Query -> List Feed -> List Feed
-applyQueryToFeeds query feeds =
-    let
-        showAll =
-            Set.isEmpty query.feed && not query.empty
-    in
-    feeds
-        |> List.map
-            (\feed -> { feed | checked = showAll || (query.feed |> Set.member feed.preset.id) })
-
-
-initialTranslations : Translations
-initialTranslations =
-    I18Next.fromTree
-        [ ( "title", I18Next.string "" )
-        , ( "nowSeparator", I18Next.string "{{time}}" )
-        ]
 
 
 selectLanguage : List String -> String
@@ -759,39 +721,13 @@ update msg model =
                     case result of
                         Ok { meta, entries, next } ->
                             let
-                                filter =
-                                    model.filter
-
-                                feeds =
-                                    meta
-                                        |> List.foldl
-                                            (\m ->
-                                                List.map
-                                                    (\feed ->
-                                                        let
-                                                            preset =
-                                                                feed.preset
-                                                        in
-                                                        if preset.id == m.id then
-                                                            { feed
-                                                                | preset =
-                                                                    { preset | title = m.title }
-                                                                , alternate = m.alternate
-                                                            }
-
-                                                        else
-                                                            feed
-                                                    )
-                                            )
-                                            model.filter.feeds
-
                                 events =
                                     (case polling of
                                         AutoRefresh ->
-                                            Util.mergeBy .id model.events entries
+                                            List.mergeBy .id model.events entries
 
                                         Backfill _ ->
-                                            Util.mergeBy .id model.events entries
+                                            List.mergeBy .id model.events entries
 
                                         _ ->
                                             entries ++ model.events
@@ -804,7 +740,7 @@ update msg model =
                                             )
                             in
                             ( { model
-                                | filter = { filter | feeds = feeds }
+                                | filter = model.filter |> Filter.applyFeedMeta meta
                                 , latestNumberedPage =
                                     if url == "latest.json" then
                                         next
@@ -813,7 +749,7 @@ update msg model =
                                         model.latestNumberedPage
                                 , gotPages = model.gotPages |> Set.insert url
                                 , events = events
-                                , searchSuggestions = searchTagsFromEvents events
+                                , searchSuggestions = Search.suggestions .name events
                                 , pendingFeed =
                                     if polling == Initial || polling == Manual then
                                         next
@@ -924,7 +860,7 @@ update msg model =
             ( { model | errors = err :: model.errors }, Cmd.none )
 
         LinkClicked (Browser.Internal url) ->
-            case url.path |> Util.stripPrefix model.env.url.path of
+            case url.path |> String.stripPrefix model.env.url.path of
                 Just "COPYING" ->
                     ( { model | mode = About AboutCopying }
                     , case model.copying of
@@ -944,9 +880,9 @@ update msg model =
         UrlChanged url ->
             let
                 query =
-                    parseQuery url
+                    Query.parseUrl url
             in
-            ( { model | filter = Filter query.q (model.filter.feeds |> applyQueryToFeeds query) }
+            ( { model | filter = Filter query.q (model.filter.feeds |> Query.applyToFeeds query) }
             , Cmd.none
             )
 
@@ -991,44 +927,6 @@ getCopying =
     Http.get { url = "COPYING", expect = Http.expectString AboutGotCopying }
 
 
-searchTagsFromEvents : List Event -> List String
-searchTagsFromEvents events =
-    events
-        |> List.concatMap (searchTags << .name)
-        |> Util.cardinalities
-        |> Dict.groupKeysBy normalizeSearchTerm
-        |> Dict.values
-        |> List.filterMap
-            (\pairs ->
-                pairs
-                    -- Use the most common form among unnormalized terms.
-                    |> List.maximumBy Tuple.second
-                    -- This should never produce `Nothing` though.
-                    |> Maybe.map
-                        (\( tag, _ ) -> ( tag, pairs |> List.map Tuple.second |> List.sum ))
-            )
-        |> List.sortBy (Tuple.second >> negate)
-        |> List.map Tuple.first
-
-
-tagRe : Regex.Regex
-tagRe =
-    Regex.fromString "【([^】]*)】" |> Maybe.withDefault Regex.never
-
-
-slashesRe : Regex.Regex
-slashesRe =
-    Regex.fromString "[/／]" |> Maybe.withDefault Regex.never
-
-
-searchTags : String -> List String
-searchTags string =
-    Regex.find tagRe string
-        |> List.filterMap (\match -> List.head match.submatches |> Maybe.andThen identity)
-        |> List.concatMap (Regex.split slashesRe)
-        |> List.map String.trim
-
-
 
 -- SUBSCRIPTIONS
 
@@ -1037,7 +935,7 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     let
         subs =
-            [ onKeyDown <| D.map KeyDown keyDecoder
+            [ onKeyDown <| D.map KeyDown KeyboardEvent.keyDecoder
             , Browser.Events.onClick <| D.succeed ClosePopup
             , onVisibilityChange VisibilityChanged
             ]
@@ -1078,39 +976,6 @@ subscriptions model =
                 subs2
     in
     Sub.batch subs3
-
-
-keyDecoder : D.Decoder String
-keyDecoder =
-    D.field "code" D.string
-        |> D.andThen
-            (\code ->
-                -- Special-casing for digit keys because we want to match on combinations like
-                -- `<S-1>`, which maps to `key` value of `!` on US QWERTY layout for example.
-                case code |> Util.stripPrefix "Digit" of
-                    Just n ->
-                        D.succeed n
-
-                    Nothing ->
-                        D.field "key" D.string |> D.map String.toUpper
-            )
-        |> D.andThen (appendModifier "shiftKey" "S-")
-        |> D.andThen (appendModifier "metaKey" "M-")
-        |> D.andThen (appendModifier "ctrlKey" "C-")
-        |> D.andThen (appendModifier "altKey" "A-")
-
-
-appendModifier : String -> String -> String -> D.Decoder String
-appendModifier field prefix key =
-    D.oneOf [ D.field field D.bool, D.succeed False ]
-        |> D.map
-            (\value ->
-                if value then
-                    prefix ++ key
-
-                else
-                    key
-            )
 
 
 
@@ -1297,7 +1162,7 @@ viewSearch translations suggestions q =
                 , ariaKeyshortcuts "S"
                 , onInput SearchInput
                 , Html.Events.stopPropagationOn "keydown"
-                    (keyDecoder
+                    (KeyboardEvent.keyDecoder
                         |> D.map
                             (\key ->
                                 case key of
@@ -1403,7 +1268,7 @@ viewMain { translations, features, tz, observances } now activePopup pendingFeed
                 )
          in
          ((upcoming ++ (Now ongoing :: past))
-            |> Util.groupBy
+            |> List.groupBy
                 (\item ->
                     case item of
                         TimelineEvent ( _, event ) ->
@@ -1895,25 +1760,7 @@ eventIsShown filter feedChecked event =
                 |> List.any (\feed -> feed.checked && (event.members |> List.member feed.preset.id))
            )
     )
-        && searchMatches filter.q event
-
-
-searchMatches : String -> Event -> Bool
-searchMatches q event =
-    let
-        name =
-            event.name |> normalizeSearchTerm
-    in
-    String.isEmpty q
-        || (normalizeSearchTerm q
-                |> String.words
-                |> List.all (\term -> name |> String.contains term)
-           )
-
-
-normalizeSearchTerm : String -> String
-normalizeSearchTerm text =
-    text |> String.toUpper |> String.replace "＃" "#"
+        && Search.matches filter.q event.name
 
 
 viewEventMember : Bool -> Feed -> Html Msg

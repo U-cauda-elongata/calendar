@@ -1,10 +1,6 @@
-module Util exposing (cardinalities, groupBy, mergeBy, stripPrefix)
+module Util.List exposing (cardinalities, groupBy, mergeBy)
 
 import Dict exposing (Dict)
-
-
-
--- LIST
 
 
 cardinalities : List comparable -> Dict comparable Int
@@ -70,16 +66,3 @@ mergeBy f old new =
                     acc
             )
             old
-
-
-
--- STRING
-
-
-stripPrefix : String -> String -> Maybe String
-stripPrefix prefix s =
-    if String.startsWith prefix s then
-        Just <| String.dropLeft (String.length prefix) s
-
-    else
-        Nothing

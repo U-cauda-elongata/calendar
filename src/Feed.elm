@@ -1,4 +1,4 @@
-module Feed exposing (Feed, Preset, decoder)
+module Feed exposing (Feed, Meta, Preset, decoder)
 
 import Duration
 import Event exposing (Event)

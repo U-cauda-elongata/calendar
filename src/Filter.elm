@@ -1,4 +1,13 @@
-module Filter exposing (Feed, Filter, clear, clearFeeds, isActive, toQueryString, toggleFeed)
+module Filter exposing
+    ( Feed
+    , Filter
+    , applyFeedMeta
+    , clear
+    , clearFeeds
+    , isActive
+    , toQueryString
+    , toggleFeed
+    )
 
 import Feed
 import List.Extra as List
@@ -76,3 +85,32 @@ toQueryString { q, feeds } =
 
         else
             Url.Builder.string "q" q :: queries
+
+
+applyFeedMeta : List Feed.Meta -> Filter -> Filter
+applyFeedMeta meta filter =
+    let
+        feeds =
+            meta
+                |> List.foldl
+                    (\m ->
+                        List.map
+                            (\feed ->
+                                let
+                                    preset =
+                                        feed.preset
+                                in
+                                if preset.id == m.id then
+                                    { feed
+                                        | preset =
+                                            { preset | title = m.title }
+                                        , alternate = m.alternate
+                                    }
+
+                                else
+                                    feed
+                            )
+                    )
+                    filter.feeds
+    in
+    { filter | feeds = feeds }
