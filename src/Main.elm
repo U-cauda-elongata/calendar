@@ -1261,8 +1261,7 @@ viewDrawer translations expanded mode searchSuggestions filter =
                             False
                 , ariaHaspopup "dialog"
                 , ariaLabelledby labelId
-                , Html.Events.stopPropagationOn "click" <|
-                    D.succeed ( SetMode <| About AboutMain, True )
+                , Html.Events.onClick <| SetMode <| About AboutMain
                 ]
                 [ Icon.about [ Svg.Attributes.class "drawer-icon", ariaLabelledby labelId ]
                 , span [ id labelId, class "drawer-button-label" ]
