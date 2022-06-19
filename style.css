@@ -590,6 +590,21 @@ main {
 	display: list-item;
 }
 
+.about-links {
+	display: grid;
+	grid-template-columns: auto 1fr;
+}
+
+.about-links > dt {
+	grid-column: 1;
+	display: list-item;
+	margin-left: 40px;
+}
+
+.about-links > dd {
+	grid-column: 2;
+}
+
 .dialog-title-bar {
 	display: flex;
 	border-bottom: solid var(--border-width) var(--border-color);

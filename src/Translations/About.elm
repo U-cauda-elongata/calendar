@@ -105,3 +105,23 @@ links translations =
 linksCustom : Translations -> (String -> a) -> List a
 linksCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "about.links" []
+
+
+twitterDesc : Translations -> String
+twitterDesc translations =
+    t translations "about.twitterDesc"
+
+
+twitterDescCustom : Translations -> (String -> a) -> List a
+twitterDescCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "about.twitterDesc" []
+
+
+gitHubDesc : Translations -> String
+gitHubDesc translations =
+    t translations "about.gitHubDesc"
+
+
+gitHubDescCustom : Translations -> (String -> a) -> List a
+gitHubDescCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "about.gitHubDesc" []

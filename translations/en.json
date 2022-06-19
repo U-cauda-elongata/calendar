@@ -59,7 +59,9 @@
 		"appeal": "Last of all, it's my pleasure if you support Kemono Friends and Kemono Friends V Project by subscribing to the YouTube channels, liking the linked live streamings, sending (super) chats, posting comments, following Twitter accounts of the streamers, et cetera!",
 		"licenseHeading": "License of the site",
 		"licenseBody": "For copyright notice of the website itself, including thirdparty software used by it, see {{copying}} file.",
-		"links": "Links"
+		"links": "Links",
+		"twitterDesc": "Provides updates on streaming schedule and shares relevant Tweets from collabed streamers",
+		"gitHubDesc": "Hosts the source code of the site"
 	},
 	"help": {
 		"title": "Keyboard shortcuts",

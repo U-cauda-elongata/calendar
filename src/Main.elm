@@ -1943,13 +1943,21 @@ viewAboutDialogMain translations =
     , h3 [] [ text <| TAbout.licenseHeading translations ]
     , p [] (TAbout.licenseBodyCustom translations text <| a [ href "COPYING" ] [ text "COPYING" ])
     , h3 [] [ text <| TAbout.links translations ]
-    , ul []
-        [ li []
+    , dl [ class "about-links" ]
+        [ dt []
+            [ a [ href "https://twitter.com/KFVP_pipitor" ]
+                [ Icon.twitter [ Svg.Attributes.class "social-icon", ariaLabel "Twitter" ]
+                , text "Twitter"
+                ]
+            ]
+        , dd [] [ text <| TAbout.twitterDesc translations ]
+        , dt []
             [ a [ href "https://github.com/U-cauda-elongata/calendar" ]
                 [ Icon.gitHub [ Svg.Attributes.class "social-icon", ariaLabel "GitHub" ]
                 , text "GitHub"
                 ]
             ]
+        , dd [] [ text <| TAbout.gitHubDesc translations ]
         ]
     ]
 
