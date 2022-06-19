@@ -78,10 +78,8 @@ closeDialog =
 gitHub : List (Attribute msg) -> Svg msg
 gitHub attrs =
     svg
-        (class "a"
-            :: xmlns "http://www.w3.org/2000/svg"
+        (xmlns "http://www.w3.org/2000/svg"
             :: viewBox "0 0 24 28"
-            :: ariaLabel "GitHub"
             :: role "img"
             :: attrs
         )
