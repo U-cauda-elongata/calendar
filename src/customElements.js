@@ -94,7 +94,7 @@ customElements.define('intl-time', class extends HTMLElement {
 
 		// Set the inner HTML to something like `12<span class="time-separator">:</span>00 AM`.
 		//
-		// Reuse `<span>` elements from a previous `update()` call if possible, in order to:
+		// Reuse nodes from a previous `update()` call if possible, in order to:
 		//
 		// - Prevent CSS animation of the element from resetting
 		// - Prevent screen readers from announcing a change, which is not the case in fact

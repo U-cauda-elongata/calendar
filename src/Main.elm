@@ -670,7 +670,8 @@ update msg model =
 
         SearchFocus value ->
             ( { model | searchFocused = value }
-            , -- Prevent `.drawer` to scroll into the search input before the transition completes.
+            , -- Prevent the drawer from scrolling into the search field before the transition
+              -- completes.
               Dom.setViewportOf drawerId 0 0 |> Task.attempt handleDomResult
             )
 
