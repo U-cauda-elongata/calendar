@@ -6,6 +6,7 @@ import Regex exposing (Regex)
 import Time exposing (Posix)
 import Util.Dict as Dict
 import Util.List as List
+import Util.String as String
 
 
 matches : String -> String -> Bool
@@ -144,4 +145,4 @@ searchTags string =
 
 normalize : String -> String
 normalize text =
-    text |> String.toUpper |> String.replace "＃" "#"
+    text |> String.toUpper |> String.toHalfWidth
