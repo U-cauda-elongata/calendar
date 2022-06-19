@@ -649,6 +649,7 @@ main {
 
 .kbd-help-dl {
 	display: grid;
+	grid-template-columns: auto 1fr;
 }
 
 .kbd-help-dl > dt {
