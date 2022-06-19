@@ -64,7 +64,7 @@ function listener() {
 			if (feedBottom) {
 				const viewportBottom = scrollY + document.documentElement.clientHeight;
 				if (viewportBottom > feedBottom.offsetTop) {
-					app.ports.onScrollToBottom.send(null);
+					app.ports.onScrollToBottom.send();
 				}
 			}
 			ticking = false;

@@ -81,7 +81,7 @@ port copy : String -> Cmd msg
 port share : ShareData -> Cmd msg
 
 
-port onScrollToBottom : (() -> msg) -> Sub msg
+port onScrollToBottom : (D.Value -> msg) -> Sub msg
 
 
 port removeScrollEventListener : () -> Cmd msg
@@ -1044,7 +1044,7 @@ subscriptions model =
         subs2 =
             case model.pendingFeed of
                 OneMore url ->
-                    onScrollToBottom (\() -> GetFeed url) :: subs
+                    onScrollToBottom (\_ -> GetFeed url) :: subs
 
                 _ ->
                     subs
