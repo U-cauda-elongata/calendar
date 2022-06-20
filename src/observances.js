@@ -4,35 +4,35 @@ const observances = [
 		key: "African Penguin and Humboldt Penguin's debut anniversary",
 		month: 3,
 		date: 26,
-		sinceYear: 2021,
+		sinceYear: 2022,
 	},
 	{
 		// <https://www.youtube.com/watch?v=MGYIVKqHW-Q>
 		key: "Island fox's debut anniversary",
 		month: 5,
 		date: 11,
-		sinceYear: 2021,
+		sinceYear: 2022,
 	},
 	{
 		// <https://www.youtube.com/watch?v=vYx4QBSQnZ8>
 		key: "Coyote's debut anniversary",
 		month: 11,
 		date: 5,
-		sinceYear: 2021,
+		sinceYear: 2022,
 	},
 	{
 		// <https://www.youtube.com/watch?v=Xb9qg_122yg>
 		key: "Dire Wolf's debut anniversary",
 		month: 2,
 		date: 19,
-		sinceYear: 2022,
+		sinceYear: 2023,
 	},
 	{
 		// <https://www.youtube.com/watch?v=5iY_mXCBOPs>
 		key: "Caracal's debut anniversary",
 		month: 4,
 		date: 28,
-		sinceYear: 2022,
+		sinceYear: 2023,
 	},
 	{
 		// <https://www.worldanimalday.org.uk/>
