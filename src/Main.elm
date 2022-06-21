@@ -65,6 +65,9 @@ main =
 port setLang : String -> Cmd msg
 
 
+port preventScrollFocus : String -> Cmd msg
+
+
 port slideViewportInto : String -> Cmd msg
 
 
@@ -520,7 +523,8 @@ update msg model =
                         ( "N", ( False, ( False, ( False, False ) ) ) ) ->
                             ( model
                             , Cmd.batch
-                                [ Dom.focus nowSectionId |> Task.attempt handleDomResult
+                                [ -- Set `preventScroll` to avoid halting the sliding animation.
+                                  preventScrollFocus nowSectionId
                                 , slideViewportInto nowSectionId
                                 ]
                             )

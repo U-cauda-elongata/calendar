@@ -16,6 +16,13 @@ app.ports.setLang.subscribe(lang => {
 	h.classList.add('lang-confirmed');
 });
 
+app.ports.preventScrollFocus.subscribe(id => {
+	const node = document.getElementById(id);
+	if (node) {
+		node.focus({ preventScroll: true });
+	}
+});
+
 app.ports.slideViewportInto.subscribe(id => {
 	const node = document.getElementById(id);
 	if (node) {
