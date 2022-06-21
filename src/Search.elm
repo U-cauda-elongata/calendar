@@ -27,7 +27,7 @@ the texts ordered by how they are "trending" at the specified period of time.
 
 "Trendiness" of a tag is determined by the number of occurence in the past 7 days divided by that
 of the previous 7 days. If the tag has not appeared in the past 14 days but has appeared before
-that, it has trendingness of zero.
+that, it has trendiness of zero.
 
 -}
 suggestions : (a -> String) -> (a -> Posix) -> Posix -> List a -> List String
@@ -65,6 +65,9 @@ suggestions getText getTime now xs =
         mergedRecent =
             Dict.mergeTuple (countTags current) (countTags recent)
 
+        sumSecond pairs =
+            pairs |> List.map Tuple.second |> List.sum |> toFloat
+
         head =
             mergedRecent
                 |> Dict.values
@@ -86,14 +89,11 @@ suggestions getText getTime now xs =
                             |> Maybe.map
                                 (\( tag, _ ) ->
                                     let
-                                        sum =
-                                            List.map Tuple.second >> List.sum >> toFloat
-
                                         scp =
-                                            sum cp
+                                            sumSecond cp
 
                                         srp =
-                                            sum rp
+                                            sumSecond rp
 
                                         trendiness =
                                             -- Add ones to avoid `Infinity`.
@@ -112,14 +112,7 @@ suggestions getText getTime now xs =
                     (\pairs ->
                         pairs
                             |> List.maximumBy Tuple.second
-                            |> Maybe.map
-                                (\( tag, _ ) ->
-                                    let
-                                        sum =
-                                            pairs |> List.map Tuple.second |> List.sum |> toFloat
-                                    in
-                                    ( tag, ( 0, -sum ) )
-                                )
+                            |> Maybe.map (\( tag, _ ) -> ( tag, ( 0, -(sumSecond pairs) ) ))
                     )
     in
     (head ++ tail) |> List.sortBy Tuple.second |> List.map Tuple.first
