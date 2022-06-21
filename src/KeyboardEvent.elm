@@ -1,11 +1,30 @@
-module KeyboardEvent exposing (keyDecoder)
+module KeyboardEvent exposing (Key, keyDecoder, toTuple)
 
 import Json.Decode as D
 import Util.String as String
 
 
-keyDecoder : D.Decoder String
+type alias Key =
+    { key : String
+    , alt : Bool
+    , ctrl : Bool
+    , meta : Bool
+    , shift : Bool
+    }
+
+
+keyDecoder : D.Decoder Key
 keyDecoder =
+    D.map5 Key
+        codeDecoder
+        (D.field "altKey" D.bool)
+        (D.field "ctrlKey" D.bool)
+        (D.field "metaKey" D.bool)
+        (D.field "shiftKey" D.bool)
+
+
+codeDecoder : D.Decoder String
+codeDecoder =
     D.field "code" D.string
         |> D.andThen
             (\code ->
@@ -18,20 +37,11 @@ keyDecoder =
                     Nothing ->
                         D.field "key" D.string |> D.map String.toUpper
             )
-        |> D.andThen (appendModifier "shiftKey" "S-")
-        |> D.andThen (appendModifier "metaKey" "M-")
-        |> D.andThen (appendModifier "ctrlKey" "C-")
-        |> D.andThen (appendModifier "altKey" "A-")
 
 
-appendModifier : String -> String -> String -> D.Decoder String
-appendModifier field prefix key =
-    D.oneOf [ D.field field D.bool, D.succeed False ]
-        |> D.map
-            (\value ->
-                if value then
-                    prefix ++ key
-
-                else
-                    key
-            )
+{-| Elm's patterns can match against tuple values but cannot match against record fields like
+`{ foo = _ }`, so here is a workaround.
+-}
+toTuple : Key -> ( String, ( Bool, ( Bool, ( Bool, Bool ) ) ) )
+toTuple key =
+    ( key.key, ( key.alt, ( key.ctrl, ( key.meta, key.shift ) ) ) )

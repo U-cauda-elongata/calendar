@@ -298,7 +298,7 @@ type Msg
     | SearchInput String
     | ToggleFeedFilter Int
     | HideOtherFeeds Int
-    | KeyDown String
+    | KeyDown KeyboardEvent.Key
     | VisibilityChanged Visibility
     | SearchConfirm
     | SearchClear
@@ -452,144 +452,100 @@ update msg model =
             let
                 setStatus status ( m, cmd ) =
                     ( { m | status = Just status }, Cmd.batch [ clearStatus, cmd ] )
-
-                toggle i =
-                    let
-                        ret =
-                            update (ToggleFeedFilter i) model
-                    in
-                    model.filter.feeds
-                        |> List.getAt i
-                        |> Maybe.map
-                            (\feed ->
-                                ret
-                                    |> setStatus
-                                        (if feed.checked then
-                                            TStatus.showingFeed model.env.translations
-                                                feed.preset.title
-
-                                         else
-                                            TStatus.hidingFeed model.env.translations
-                                                feed.preset.title
-                                        )
-                            )
-                        |> Maybe.withDefault ret
-
-                hideOthers i =
-                    let
-                        ret =
-                            update (HideOtherFeeds i) model
-                    in
-                    model.filter.feeds
-                        |> List.getAt i
-                        |> Maybe.map
-                            (\feed ->
-                                ret
-                                    |> setStatus
-                                        (TStatus.showingOnly model.env.translations
-                                            feed.preset.title
-                                        )
-                            )
-                        |> Maybe.withDefault ret
             in
-            case key of
-                "N" ->
-                    ( model
-                    , Cmd.batch
-                        [ Dom.focus nowSectionId |> Task.attempt handleDomResult
-                        , slideViewportInto nowSectionId
-                        ]
-                    )
+            case String.toInt key.key of
+                Just 0 ->
+                    case ( key.alt, ( key.ctrl, ( key.meta, key.shift ) ) ) of
+                        ( False, ( False, ( False, False ) ) ) ->
+                            update ClearFeedFilter model
+                                |> setStatus (TStatus.clearFeedFilter model.env.translations)
 
-                "S" ->
-                    ( model, Dom.focus searchInputId |> Task.attempt handleDomResult )
+                        ( False, ( False, ( False, True ) ) ) ->
+                            update ClearFilter model
+                                |> setStatus (TStatus.clearFilter model.env.translations)
 
-                "S-S" ->
-                    ( model, Dom.focus searchInputId |> Task.attempt handleDomResult )
+                        _ ->
+                            ( model, Cmd.none )
 
-                "X" ->
-                    update (HamburgerChecked <| not model.drawerExpanded) model
+                Just n ->
+                    let
+                        i =
+                            n - 1
+                    in
+                    case ( key.alt, ( key.ctrl, ( key.meta, key.shift ) ) ) of
+                        ( False, ( False, ( False, False ) ) ) ->
+                            let
+                                ret =
+                                    update (ToggleFeedFilter i) model
+                            in
+                            model.filter.feeds
+                                |> List.getAt i
+                                |> Maybe.map
+                                    (\feed ->
+                                        ret
+                                            |> setStatus
+                                                (if feed.checked then
+                                                    TStatus.showingFeed model.env.translations
+                                                        feed.preset.title
 
-                "0" ->
-                    update ClearFeedFilter model
-                        |> setStatus (TStatus.clearFeedFilter model.env.translations)
+                                                 else
+                                                    TStatus.hidingFeed model.env.translations
+                                                        feed.preset.title
+                                                )
+                                    )
+                                |> Maybe.withDefault ret
 
-                "S-0" ->
-                    update ClearFilter model
-                        |> setStatus (TStatus.clearFilter model.env.translations)
+                        ( False, ( False, ( False, True ) ) ) ->
+                            let
+                                ret =
+                                    update (HideOtherFeeds i) model
+                            in
+                            model.filter.feeds
+                                |> List.getAt i
+                                |> Maybe.map
+                                    (\feed ->
+                                        ret
+                                            |> setStatus
+                                                (TStatus.showingOnly model.env.translations
+                                                    feed.preset.title
+                                                )
+                                    )
+                                |> Maybe.withDefault ret
 
-                "1" ->
-                    toggle 0
+                        _ ->
+                            ( model, Cmd.none )
 
-                "S-1" ->
-                    hideOthers 0
-
-                "2" ->
-                    toggle 1
-
-                "S-2" ->
-                    hideOthers 1
-
-                "3" ->
-                    toggle 2
-
-                "S-3" ->
-                    hideOthers 2
-
-                "4" ->
-                    toggle 3
-
-                "S-4" ->
-                    hideOthers 3
-
-                "5" ->
-                    toggle 4
-
-                "S-5" ->
-                    hideOthers 4
-
-                "6" ->
-                    toggle 5
-
-                "S-6" ->
-                    hideOthers 5
-
-                "7" ->
-                    toggle 6
-
-                "S-7" ->
-                    hideOthers 6
-
-                "8" ->
-                    toggle 7
-
-                "S-8" ->
-                    hideOthers 7
-
-                "9" ->
-                    toggle 8
-
-                "S-9" ->
-                    hideOthers 8
-
-                "?" ->
-                    update (SetMode Help) model
-
-                "S-?" ->
-                    update (SetMode Help) model
-
-                "ESCAPE" ->
-                    update CloseWidgets model
-                        |> Tuple.mapSecond
-                            (\cmd ->
-                                Cmd.batch
-                                    [ cmd
-                                    , Dom.blur searchInputId |> Task.attempt handleDomResult
-                                    ]
+                Nothing ->
+                    case KeyboardEvent.toTuple key of
+                        ( "N", ( False, ( False, ( False, False ) ) ) ) ->
+                            ( model
+                            , Cmd.batch
+                                [ Dom.focus nowSectionId |> Task.attempt handleDomResult
+                                , slideViewportInto nowSectionId
+                                ]
                             )
 
-                _ ->
-                    ( model, Cmd.none )
+                        ( "S", ( False, ( False, ( False, _ ) ) ) ) ->
+                            ( model, Dom.focus searchInputId |> Task.attempt handleDomResult )
+
+                        ( "X", ( False, ( False, ( False, False ) ) ) ) ->
+                            update (HamburgerChecked <| not model.drawerExpanded) model
+
+                        ( "?", ( False, ( False, ( False, _ ) ) ) ) ->
+                            update (SetMode Help) model
+
+                        ( "ESCAPE", ( False, ( False, ( False, False ) ) ) ) ->
+                            update CloseWidgets model
+                                |> Tuple.mapSecond
+                                    (\cmd ->
+                                        Cmd.batch
+                                            [ cmd
+                                            , Dom.blur searchInputId |> Task.attempt handleDomResult
+                                            ]
+                                    )
+
+                        _ ->
+                            ( model, Cmd.none )
 
         VisibilityChanged visibility ->
             ( { model | visibility = visibility }
@@ -1166,11 +1122,11 @@ viewSearch translations suggestions q =
                     (KeyboardEvent.keyDecoder
                         |> D.map
                             (\key ->
-                                case key of
-                                    "ENTER" ->
+                                case KeyboardEvent.toTuple key of
+                                    ( "ENTER", ( False, ( False, ( False, False ) ) ) ) ->
                                         SearchConfirm
 
-                                    "ESCAPE" ->
+                                    ( "ESCAPE", ( False, ( False, ( False, False ) ) ) ) ->
                                         SearchClear
 
                                     _ ->
