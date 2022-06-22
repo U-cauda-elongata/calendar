@@ -1,9 +1,7 @@
 module Feed exposing (Feed, Meta, Preset, decoder)
 
-import Duration
 import Event exposing (Event)
 import Json.Decode as D
-import Time
 
 
 type alias Feed =
@@ -32,7 +30,7 @@ decoder : D.Decoder Feed
 decoder =
     D.map3 Feed
         (D.oneOf [ D.field "meta" (D.list metaDecoder), D.succeed [] ])
-        (D.field "entries" <| D.list eventDecoder)
+        (D.field "entries" <| D.list Event.decoder)
         (D.maybe <| D.field "next" D.string)
 
 
@@ -42,22 +40,3 @@ metaDecoder =
         (D.field "id" D.string)
         (D.field "title" D.string)
         (D.field "alternate" D.string)
-
-
-eventDecoder : D.Decoder Event
-eventDecoder =
-    D.map Event (D.field "id" D.string)
-        |> D.andThen (\f -> D.map f <| D.field "feed" D.string)
-        |> D.andThen (\f -> D.map f <| D.field "name" D.string)
-        |> D.andThen (\f -> D.map f <| D.oneOf [ D.field "live" D.bool, D.succeed False ])
-        |> D.andThen (\f -> D.map f <| D.oneOf [ D.field "upcoming" D.bool, D.succeed False ])
-        |> D.andThen
-            (\f ->
-                D.map f (D.field "time" D.int |> D.map (\time -> Time.millisToPosix <| time * 1000))
-            )
-        |> D.andThen
-            (\f -> D.map f <| D.maybe (D.field "duration" D.int |> D.map Duration.fromMillis))
-        |> D.andThen (\f -> D.map f <| D.maybe <| D.field "link" D.string)
-        |> D.andThen (\f -> D.map f <| D.maybe <| D.field "thumbnail" D.string)
-        |> D.andThen
-            (\f -> D.map f <| D.oneOf [ D.field "members" <| D.list D.string, D.succeed [] ])

@@ -9,32 +9,15 @@ groupKeysBy :
     (comparable1 -> comparable2)
     -> Dict comparable1 a
     -> Dict comparable2 (List ( comparable1, a ))
-groupKeysBy f dict =
-    dict
-        |> Dict.foldl
-            (\k v acc ->
-                acc
-                    |> Dict.update (f k)
-                        (\list ->
-                            case list of
-                                Just l ->
-                                    Just <| ( k, v ) :: l
-
-                                Nothing ->
-                                    Just [ ( k, v ) ]
-                        )
-            )
-            Dict.empty
+groupKeysBy f =
+    Dict.foldl
+        (\k v -> Dict.update (f k) (Just << (::) ( k, v ) << Maybe.withDefault []))
+        Dict.empty
 
 
 mergeSum : Dict comparable number -> Dict comparable number -> Dict comparable number
-mergeSum xs ys =
-    Dict.merge (\k x -> Dict.insert k x)
-        (\k x y -> Dict.insert k (x + y))
-        (\k y -> Dict.insert k y)
-        xs
-        ys
-        Dict.empty
+mergeSum =
+    Dict.foldl (\k x -> Dict.update k (Just << (+) x << Maybe.withDefault 0))
 
 
 mergeTuple : Dict comparable a -> Dict comparable b -> Dict comparable ( Maybe a, Maybe b )

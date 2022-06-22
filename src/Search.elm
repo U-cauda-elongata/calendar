@@ -56,11 +56,10 @@ suggestions getText getTime now xs =
             in
             ( c, r, p )
 
-        countTags list =
-            list
-                |> List.concatMap (searchTags << getText)
-                |> List.cardinalities
-                |> Dict.groupKeysBy normalize
+        countTags =
+            List.concatMap (searchTags << getText)
+                >> List.cardinalities
+                >> Dict.groupKeysBy normalize
 
         mergedRecent =
             Dict.mergeTuple (countTags current) (countTags recent)
@@ -71,18 +70,12 @@ suggestions getText getTime now xs =
         head =
             mergedRecent
                 |> Dict.values
+                |> List.map (Tuple.mapBoth (Maybe.withDefault []) (Maybe.withDefault []))
                 |> List.filterMap
                     (\( currentPairs, recentPairs ) ->
-                        let
-                            cp =
-                                currentPairs |> Maybe.withDefault []
-
-                            rp =
-                                recentPairs |> Maybe.withDefault []
-                        in
                         -- Use the most commonly-used form among unnormalized tags (rather than the
                         -- "most trendy form", which does not even make sense).
-                        Dict.mergeSum (Dict.fromList cp) (Dict.fromList rp)
+                        Dict.mergeSum (Dict.fromList currentPairs) (Dict.fromList recentPairs)
                             |> Dict.toList
                             |> List.maximumBy Tuple.second
                             -- This should never produce `Nothing` though.
@@ -90,10 +83,10 @@ suggestions getText getTime now xs =
                                 (\( tag, _ ) ->
                                     let
                                         scp =
-                                            sumSecond cp
+                                            sumSecond currentPairs
 
                                         srp =
-                                            sumSecond rp
+                                            sumSecond recentPairs
 
                                         trendiness =
                                             -- Add ones to avoid `Infinity`.
@@ -115,7 +108,7 @@ suggestions getText getTime now xs =
                             |> Maybe.map (\( tag, _ ) -> ( tag, ( 0, -(sumSecond pairs) ) ))
                     )
     in
-    (head ++ tail) |> List.sortBy Tuple.second |> List.map Tuple.first
+    head ++ tail |> List.sortBy Tuple.second |> List.map Tuple.first
 
 
 tagRe : Regex
@@ -129,13 +122,13 @@ slashesRe =
 
 
 searchTags : String -> List String
-searchTags string =
-    Regex.find tagRe string
-        |> List.filterMap (\match -> List.head match.submatches |> Maybe.andThen identity)
-        |> List.concatMap (Regex.split slashesRe)
-        |> List.map String.trim
+searchTags =
+    Regex.find tagRe
+        >> List.filterMap (\match -> match.submatches |> List.head |> Maybe.andThen identity)
+        >> List.concatMap (Regex.split slashesRe)
+        >> List.map String.trim
 
 
 normalize : String -> String
-normalize text =
-    text |> String.toUpper |> String.toHalfWidth
+normalize =
+    String.toUpper >> String.toHalfWidth

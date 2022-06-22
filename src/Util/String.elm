@@ -12,7 +12,7 @@ stripPrefix prefix s =
 
 toHalfWidth : String -> String
 toHalfWidth s =
-    -- This could be written more neatly like `replace h1 f1 >> replace h2 f2 >> ...`,
+    -- This could be written more neatly like `replace f1 h1 >> replace f2 h2 >> ...`,
     -- but this will result in significantly smaller minified output than its alternatives.
     s
         |> String.replace "\u{3000}" " "
