@@ -335,7 +335,11 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         HamburgerChecked value ->
-            ( { model | drawerExpanded = value }, Cmd.none )
+            ( { model | drawerExpanded = value }
+            , -- Blur the menu item to deactivate `:focus-within` state of `.drawer`, which keeps
+              -- the drawer expanded.
+              Dom.blur hamburgerLabelButtonId |> Task.attempt handleDomResult
+            )
 
         ClearFilter ->
             ( model
@@ -1008,6 +1012,11 @@ aboutButtonId =
     "about-button"
 
 
+hamburgerLabelButtonId : String
+hamburgerLabelButtonId =
+    "hamburger-label-button"
+
+
 hamburgerLabelId : String
 hamburgerLabelId =
     "hamburger-label"
@@ -1028,7 +1037,8 @@ viewDrawer translations expanded mode searchSuggestions filter =
         , ariaLabel <| T.filterMenuLabel translations
         ]
         [ button
-            [ class "drawer-labelled-button"
+            [ id hamburgerLabelButtonId
+            , class "drawer-labelled-button"
             , class "unstyle"
             , ariaDescribedby hamburgerDescriptionId
             , onClick <| HamburgerChecked <| not expanded
