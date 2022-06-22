@@ -3,6 +3,7 @@
 	"hamburgerDescription": "This will toggle visual expansion status of the toolbar menu. Screen readers can always navigate to the toolbar regardless of its visual status.",
 	"filterMenuLabel": "Filter tools",
 	"expandMenu": "Expand menu",
+	"collapseMenu": "Collapse menu",
 	"clearFilter": "Clear filters",
 	"search": "Search",
 	"feedFilterLabel": "Channels",

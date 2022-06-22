@@ -969,16 +969,23 @@ view model =
             ]
             [ header [ class "app-title" ]
                 [ h1 [] [ text <| T.title model.env.translations ] ]
-            , button
-                [ class "hamburger"
+            , let
+                iconId =
+                    "hamburger-icon"
+              in
+              button
+                [ id iconId
+                , class "hamburger"
                 , class "unstyle"
                 , classList [ ( "filter-active", Filter.isActive model.filter ) ]
-                , ariaLabelledby hamburgerLabelId
+                , ariaLabelledby <| iconId
                 , ariaDescribedby hamburgerDescriptionId
                 , ariaPressed drawerExpanded
                 , onClick <| HamburgerChecked <| not drawerExpanded
                 ]
-                [ Icon.hamburger [ ariaLabelledby hamburgerLabelId ] ]
+                [ Icon.hamburger
+                    [ Svg.Attributes.id iconId, ariaLabel <| T.expandMenu model.env.translations ]
+                ]
             , div [ id drawerId, class "drawer" ]
                 [ lazy5 viewDrawer
                     model.env.translations
@@ -1040,11 +1047,13 @@ viewDrawer translations expanded mode searchSuggestions filter =
             [ id hamburgerLabelButtonId
             , class "drawer-labelled-button"
             , class "unstyle"
+            , ariaLabel <| T.expandMenu translations
             , ariaDescribedby hamburgerDescriptionId
+            , ariaPressed <| expanded
             , onClick <| HamburgerChecked <| not expanded
             ]
             [ span [ id hamburgerLabelId, class "hamburger-label", class "drawer-button-label" ]
-                [ text <| T.expandMenu translations ]
+                [ text <| T.collapseMenu translations ]
             , span [ id hamburgerDescriptionId, hidden True ]
                 [ text <| T.hamburgerDescription translations ]
             ]
