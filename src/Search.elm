@@ -25,9 +25,9 @@ matches needle haystack =
 {-| Takes a list of items each having a text and associated time, and returns a list of "tags" in
 the texts ordered by how they are "trending" at the specified period of time.
 
-"Trendiness" of a tag is determined by the number of occurence in the past 7 days divided by that
-of the previous 7 days. If the tag has not appeared in the past 14 days but has appeared before
-that, it has trendiness of zero.
+"Trendiness" of a tag in a time window is defined as the number of occurence in the given window
+divided by that of the previous window. If the tag has not appeared in the two windows but has
+appeared before that, it has a trendiness of zero.
 
 -}
 suggestions : (a -> String) -> (a -> Posix) -> Posix -> List a -> List String
@@ -36,22 +36,22 @@ suggestions getText getTime now xs =
         getTimeMs =
             Time.posixToMillis << getTime
 
-        week =
+        window =
             7 * 24 * 60 * 60 * 1000
 
-        weekBefore =
-            Time.posixToMillis now - week
+        threshold =
+            Time.posixToMillis now - window
 
         ( current, recent, past ) =
             let
                 ( c, tail1 ) =
                     xs
-                        |> List.splitWhen (\x -> getTimeMs x < weekBefore)
+                        |> List.splitWhen (\x -> getTimeMs x < threshold)
                         |> Maybe.withDefault ( xs, [] )
 
                 ( r, p ) =
                     tail1
-                        |> List.splitWhen (\x -> getTimeMs x < weekBefore - week)
+                        |> List.splitWhen (\x -> getTimeMs x < threshold - window)
                         |> Maybe.withDefault ( xs, [] )
             in
             ( c, r, p )
