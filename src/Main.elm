@@ -1299,20 +1299,15 @@ viewMain { translations, features, tz, observances } now activePopup pendingFeed
                             -- focusable in order to make it keyboard-navigable.
                             [ button
                                 [ class "load-more-feed-button"
-                                , class "fine-pointer"
                                 , class "unstyle"
                                 , ariaLabel <| T.loadMoreLabel translations
                                 , onClick <| GetFeed url
                                 ]
-                                [ text <| T.clickToLoadMore translations ]
-                            , button
-                                [ class "load-more-feed-button"
-                                , class "no-fine-pointer"
-                                , class "unstyle"
-                                , ariaLabel <| T.loadMoreLabel translations
-                                , onClick <| GetFeed url
+                                [ span [ class "fine-pointer" ]
+                                    [ text <| T.clickToLoadMore translations ]
+                                , span [ class "no-fine-pointer" ]
+                                    [ text <| T.tapToLoadMore translations ]
                                 ]
-                                [ text <| T.tapToLoadMore translations ]
                             ]
 
                         Retry url ->
