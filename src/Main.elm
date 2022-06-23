@@ -1668,6 +1668,13 @@ viewEventPopup features translations expanded event =
             ]
             -- TODO: Add an icon.
             [ text "…" ]
+        , button
+            [ class "popup-backdrop-button"
+            , class "unstyle"
+            , hidden <| not expanded
+            , ariaHidden True
+            ]
+            []
         , menu
             [ id popupId, class "popup", class "unstyle", ariaLabel <| TShare.share translations ]
             -- TODO: Add icons to list items too.

@@ -459,13 +459,28 @@ main {
 	cursor: pointer;
 }
 
+.popup-backdrop-button {
+	position: fixed;
+	z-index: 3;
+	inset: 0;
+	outline-offset: -3px;
+	padding: initial;
+	width: 100vw;
+	height: 100vh;
+	-webkit-backdrop-filter: brightness(.6);
+	backdrop-filter: brightness(.6);
+}
+
 .popup {
-	position: absolute;
+	position: fixed;
 	z-index: 3; /* Put it above everything else except the modal dialog. */
-	right: 0;
-	width: max-content;
+	/* TODO: Animate expansion/collapse. */
+	inset: auto 0 0 0;
+	width: 100vw;
 	background-color: var(--background-color);
 	border: solid var(--border-width) var(--border-color);
+	border-left: none;
+	border-right: none;
 }
 
 .popup-toggle[aria-expanded="false"] ~ .popup {
@@ -474,7 +489,7 @@ main {
 
 .popup button {
 	cursor: pointer;
-	padding: var(--margin-unit);
+	padding: calc(2 * var(--margin-unit));
 	width: 100%;
 	text-align: initial;
 }
@@ -666,8 +681,8 @@ main {
 	grid-column: 2;
 }
 
-/* Always show icons in the drawer. */
 @media (min-width: 480px) {
+	/* Always show icons in the drawer. */
 	:root {
 		--drawer-width: 240px;
 		--event-width: calc(100vw - 2 * var(--border-width) - var(--hamburger-length));
@@ -721,6 +736,22 @@ main {
 			transition: none;
 		}
 	}
+
+	/* Make the popup float near the allipsis. */
+	.popup-backdrop-button {
+		display: none;
+	}
+
+	.popup {
+		position: absolute;
+		inset: auto 0 auto auto;
+		border: solid var(--border-width) var(--border-color);
+		width: max-content;
+	}
+
+	.popup button {
+		padding: var(--margin-unit);
+	}
 }
 
 /* Make the modal dialog smaller. */
@@ -759,7 +790,7 @@ main {
 	}
 
 	.popup {
-		/* TODO: Prevent the popup to shrink when the ellipsis is on far right of the viewport. */
-		right: auto;
+		/* TODO: Prevent overflowing when the ellipsis is on far right of the viewport. */
+		inset: auto;
 	}
 }
