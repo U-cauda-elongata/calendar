@@ -20,11 +20,12 @@ jobs:
       - name: Install dependencies
         run: |
           pip install brotli fonttools
+          npm install --location=global elm-optimize-level-2
           npm install --location=global uglify-js
       - name: Build
         run: |
           rm app.js NikumaruFont.*.woff2 || true
-          make app.js fonts
+          make ELM_MAKE=elm-optimize-level-2 ELMFLAGS= app.js fonts
           git add -- app.js *.woff2 \*.woff2
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
