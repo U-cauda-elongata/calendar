@@ -1226,11 +1226,7 @@ viewMain { translations, features, tz, observances } now activePopup pendingFeed
                         )
 
             anyEventIsShown =
-                feedAndEvents
-                    |> List.any
-                        (\( feed, event ) ->
-                            eventIsShown filter feed.checked event
-                        )
+                feedAndEvents |> List.any (\( feed, event ) -> Event.isShown filter feed event)
 
             ( ongoing, ( upcoming, past ) ) =
                 let
@@ -1369,7 +1365,7 @@ viewKeyedDateSection translations features observances now activePopup filter da
                         (\item ->
                             case item of
                                 TimelineEvent ( feed, event ) ->
-                                    eventIsShown filter feed.checked event
+                                    Event.isShown filter feed event
 
                                 Now _ ->
                                     True
@@ -1411,9 +1407,7 @@ viewKeyedDateSection translations features observances now activePopup filter da
                                   if
                                     ongoing_items
                                         |> List.any
-                                            (\( feed, event ) ->
-                                                eventIsShown filter feed.checked event
-                                            )
+                                            (\( feed, event ) -> Event.isShown filter feed event)
                                   then
                                     section [ id nowSectionId, class "ongoing", tabindex -1 ]
                                         [ header [ class "now" ]
@@ -1614,7 +1608,7 @@ viewKeyedEvent translations features now activePopup filter feed event =
     in
     ( eventId
     , li
-        [ hidden <| not <| eventIsShown filter feed.checked event ]
+        [ hidden <| not <| Event.isShown filter feed event ]
         [ article
             [ class "event"
             , ariaLabelledby headingId
@@ -1733,17 +1727,6 @@ viewShareEvent translations event =
         [ class "unstyle", onClick <| Share event.name event.link ]
         [ text <| TShare.shareVia translations ]
     ]
-
-
-eventIsShown : Filter -> Bool -> Event -> Bool
-eventIsShown filter feedChecked event =
-    (feedChecked
-        || -- Check that any of the members' feed is checked.
-           (filter.feeds
-                |> List.any (\feed -> feed.checked && (event.members |> List.member feed.preset.id))
-           )
-    )
-        && Search.matches filter.q event.name
 
 
 viewEventMember : Bool -> Feed -> Html Msg

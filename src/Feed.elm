@@ -1,6 +1,6 @@
 module Feed exposing (Feed, Meta, Preset, decoder)
 
-import Event exposing (Event)
+import EventCore as Event exposing (Event)
 import Json.Decode as D
 
 
