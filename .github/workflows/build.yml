@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install brotli fonttools
-          npm install -g uglify-js
+          npm install --location=global uglify-js
       - name: Build
         run: |
           rm app.js NikumaruFont.*.woff2 || true
@@ -28,7 +28,7 @@ jobs:
           git add -- app.js *.woff2 \*.woff2
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: Build
+          commit_message: 'chore(ci): build'
           commit_author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
       - uses: benc-uk/workflow-dispatch@4c044c1613fabbe5250deadc65452d54c4ad4fc7
         with:
