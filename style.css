@@ -609,7 +609,7 @@ main {
 }
 
 .about-links > dd {
-	grid-column: 2;
+	grid-column: 1;
 }
 
 .dialog-title-bar {
@@ -751,6 +751,11 @@ main {
 
 	.popup button {
 		padding: var(--margin-unit);
+	}
+
+	/* Show links and descriptions in two columns, which would be too large in mobile viewports. */
+	.about-links > dd {
+		grid-column: 2;
 	}
 }
 
