@@ -1133,35 +1133,33 @@ viewSearch translations suggestions q =
     in
     [ label [ class "search-label", title labelText ]
         [ Icon.search [ Svg.Attributes.class "drawer-icon", ariaLabel labelText ]
-        , div [ class "search-container" ]
-            [ input
-                [ id searchInputId
-                , type_ "search"
-                , value q
-                , list datalistId
-                , ariaKeyshortcuts "S"
-                , onInput SearchInput
-                , Html.Events.stopPropagationOn "keydown"
-                    (KeyboardEvent.keyDecoder
-                        |> D.map
-                            (\key ->
-                                case KeyboardEvent.toTuple key of
-                                    ( "ENTER", ( False, ( False, ( False, False ) ) ) ) ->
-                                        SearchConfirm
+        , input
+            [ id searchInputId
+            , type_ "search"
+            , value q
+            , list datalistId
+            , ariaKeyshortcuts "S"
+            , onInput SearchInput
+            , Html.Events.stopPropagationOn "keydown"
+                (KeyboardEvent.keyDecoder
+                    |> D.map
+                        (\key ->
+                            case KeyboardEvent.toTuple key of
+                                ( "ENTER", ( False, ( False, ( False, False ) ) ) ) ->
+                                    SearchConfirm
 
-                                    ( "ESCAPE", ( False, ( False, ( False, False ) ) ) ) ->
-                                        SearchClear
+                                ( "ESCAPE", ( False, ( False, ( False, False ) ) ) ) ->
+                                    SearchClear
 
-                                    _ ->
-                                        NoOp
-                            )
-                        |> D.map (\msg -> ( msg, True ))
-                    )
-                , onFocus <| SearchFocus True
-                , onBlur <| SearchFocus False
-                ]
-                []
+                                _ ->
+                                    NoOp
+                        )
+                    |> D.map (\msg -> ( msg, True ))
+                )
+            , onFocus <| SearchFocus True
+            , onBlur <| SearchFocus False
             ]
+            []
         ]
     , datalist [ id datalistId ] (suggestions |> List.map (\term -> option [ value term ] []))
     ]

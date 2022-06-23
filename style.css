@@ -106,6 +106,7 @@ hr {
 
 .app-title {
 	display: flex;
+	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
 	margin-left: calc(var(--hamburger-length) + 2 * var(--border-width));
@@ -116,10 +117,6 @@ hr {
 
 .app-title:lang(en) {
 	font-family: NikumaruFontEn, sans-serif;
-}
-
-.app-title > h1 {
-	align-self: center;
 }
 
 .lang-confirmed .app-title:lang(ja) {
@@ -144,8 +141,6 @@ hr {
 }
 
 .drawer-button-label {
-	align-self: center;
-	margin-left: var(--margin-unit);
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -229,6 +224,7 @@ hr {
 
 .drawer-labelled-button {
 	display: flex;
+	align-items: center;
 	padding: 0;
 	width: 100%;
 	height: calc(var(--hamburger-length) + var(--border-width));
@@ -242,6 +238,7 @@ hr {
 
 .drawer-icon {
 	flex-shrink: 0;
+	margin-right: var(--margin-unit);
 	width: calc(var(--border-width) + var(--hamburger-length));
 	height: calc(var(--border-width) + var(--hamburger-length));
 	overflow: hidden;
@@ -271,17 +268,13 @@ hr {
 
 .search-label {
 	display: flex;
+	align-items: center;
 }
 
 .search-label > svg {
 	cursor: pointer;
 	fill: var(--background-color);
 	stroke: currentColor;
-}
-
-.search-label > .search-container {
-	align-self: center;
-	margin-left: var(--margin-unit);
 }
 
 .filter-button .avatar > img {
@@ -580,7 +573,6 @@ main {
 .modal {
 	display: flex;
 	flex-direction: column;
-	align-self: center;
 	height: 100vh;
 	background-color: var(--background-color);
 	color: var(--color);
@@ -607,6 +599,7 @@ main {
 
 .dialog-title-bar {
 	display: flex;
+	align-items: center;
 	border-bottom: solid var(--border-width) var(--border-color);
 	padding: 0 calc(2 * var(--margin-unit));
 	height: var(--hamburger-length);
@@ -617,7 +610,6 @@ main {
 	padding: initial;
 	width: 16px;
 	height: 16px;
-	align-self: center;
 	cursor: pointer;
 	stroke: currentColor;
 }
@@ -628,7 +620,6 @@ main {
 
 .dialog-title {
 	flex-grow: 1;
-	align-self: center;
 	text-align: center;
 }
 
