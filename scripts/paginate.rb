@@ -26,13 +26,8 @@ require 'set'
     entry['feed'] = feed_id
     entry['name'] = e['name']
     entry['live'] = e['live'] if e['live']
-    entry['scheduledTime'] = e['scheduledTime'] if e['scheduledTime']
-    if e['time']
-      entry['time'] = e['time']
-    else
-      entry['upcoming'] = true
-      entry['time'] = e['scheduledTime']
-    end
+    entry['upcoming'] = e['upcoming'] if e['upcoming']
+    entry['time'] = e['time']
     entry['duration'] = e['duration'] if e['duration']
     entry['link'] = e['link'] if e['link']
     entry['thumbnail'] = e['thumbnail'] if e['thumbnail']
@@ -60,13 +55,30 @@ entries.each do |entry|
   end
 end
 
+entries.sort_by! do |entry|
+  -entry['time']
+end
+
 # Group multiple streams corresponding to a single collab.
-# Here a collab is defined as a set of streams that are/were scheduled for a same time, referring to
-# each other with `@`-mentions.
-entries.group_by do |entry|
-  entry.delete('scheduledTime')
-end.each_pair do |time, simul_entries|
-  next if not time or simul_entries.length <= 1
+# Here a collab is defined as a set of streams that are scheduled for/started at around a same time,
+# referring to each other with `@`-mentions.
+entry_groups = []
+until entries.empty?
+  first = entries.pop
+
+  simul_entries = [first]
+  until entries.empty?
+    if entries.last['time'] - first['time'] <= 10 * 60
+      simul_entries.unshift(entries.pop)
+    else
+      break
+    end
+  end
+
+  if simul_entries.length <= 1
+    entry_groups.unshift(first)
+    next
+  end
 
   # Factorize the streams into weakly connected components in a graph of `@`-mentions:
   graph = simul_entries.map do |entry|
@@ -103,29 +115,20 @@ end.each_pair do |time, simul_entries|
         entry['feed'] == feed
       end
     end
-    if collab_entries.length > 1
-      collab_entries[1..].each do |entry|
-        entries.delete(entry)
-      end
-      entries[entries.find_index(collab_entries.first)] = collab_entries
-      collab_entries.sort_by! do |entry|
-        -entry['time']
-      end
-    end
-  end
-end
 
-entries.sort_by! do |entry_or_collab|
-  -if entry_or_collab.is_a?(Array)
-    entry_or_collab.last['time']
-  else
-    entry_or_collab['time']
+    entry_groups.unshift(
+      if collab_entries.length > 1
+        collab_entries
+      else
+        collab_entries.first
+      end
+    )
   end
 end
 
 # Like `Enumerable#each_slice(PAGE_SIZE).to_a`, but splits by the size of flattened page instead.
 pages = [[]]
-entries.reverse_each do |entry_or_collab|
+entry_groups.reverse_each do |entry_or_collab|
   prepend_to_existing = if entry_or_collab.is_a?(Array)
     # Allow excess of up to half the length to make the page sizes around `PAGE_SIZE` by average.
     pages.first.flatten.length + entry_or_collab.length / 2 <= PAGE_SIZE

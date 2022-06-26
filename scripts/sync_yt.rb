@@ -170,12 +170,12 @@ items.each do |video|
   live = video['liveStreamingDetails']
   if live
     entry['live'] = true
-    entry['scheduledTime'] = Time.iso8601(live['scheduledStartTime']).to_i
     start_time = live['actualStartTime']
     if start_time
       entry['time'] = Time.iso8601(start_time).to_i
     else
-      entry.delete('time')
+      entry['upcoming'] = true
+      entry['time'] = Time.iso8601(live['scheduledStartTime']).to_i
     end
   end
 end
