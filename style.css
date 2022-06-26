@@ -720,7 +720,7 @@ main {
 
 	.timeline {
 		/* This is fine since overflow would only occur when the drawer is expanded. */
-		overflow-inline: hidden;
+		overflow-x: hidden;
 	}
 
 	@media (prefers-reduced-motion) {
