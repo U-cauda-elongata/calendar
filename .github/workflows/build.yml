@@ -11,8 +11,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: refs/heads/gh-pages
       - name: Setup Elm
         uses: mpizenberg/elm-tooling-action@e8d4d23a71ba5993d67ca18531438991e3b4e28d
         with:
@@ -24,13 +28,25 @@ jobs:
           npm install --location=global uglify-js
       - name: Build
         run: |
-          rm app.js NikumaruFont.*.woff2 || true
-          make ELM_MAKE=elm-optimize-level-2 ELMFLAGS= app.js fonts
+          git fetch --no-tags --depth=1 origin refs/heads/main
+          git reset FETCH_HEAD
+          git checkout .
+          git add feed/ || true
+
+          rm app.js || true
+          make ELM_MAKE=elm-optimize-level-2 ELMFLAGS= app.js
+
+          rm NikumaruFont.*.woff2 || true
+          make fonts
+
           git add -- app.js *.woff2 \*.woff2
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: 'chore(ci): build'
+          commit_message: 'chore(ci): squash & build'
+          branch: gh-pages
+          file_pattern: ''
           commit_author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+          push_options: '--force'
       - uses: benc-uk/workflow-dispatch@4c044c1613fabbe5250deadc65452d54c4ad4fc7
         with:
           workflow: 3609993
