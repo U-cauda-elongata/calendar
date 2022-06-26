@@ -246,6 +246,8 @@ hr {
 
 .avatar {
 	border-radius: 50%;
+	overflow: hidden;
+	white-space: normal;
 }
 
 @media (prefers-contrast: more) {
