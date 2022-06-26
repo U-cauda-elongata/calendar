@@ -42,7 +42,7 @@ end.to_h
 entries.each do |entry|
   description = entry.delete('description')
   members = description.each_line.filter_map do |line|
-    match = line.match(/^\s*[@＠](.+?)\s*$/)
+    match = line.match(/.*[@＠](.+?)\s*$/)
     if match
       id = title_to_id[match[1]]
       id unless id == entry['feed']
