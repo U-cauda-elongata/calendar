@@ -12,7 +12,7 @@
 		'ヒラギノ角ゴ Pro W4',
 		'Hiragino Kaku Gothic Pro',
 		'メイリオ',
-		'Meiryo',
+		Meiryo,
 		sans-serif;
 	background-color: var(--background-color);
 	color: var(--color);
@@ -64,7 +64,7 @@ li {
 	display: block;
 }
 
-/* Sometimes we wayt to use the default style, and sometimes not.
+/* Sometimes we want to use the default style, and sometimes not.
  * Use the `unstyle` class to opt out of the default style in such cases. */
 .unstyle:where(button) {
 	appearance: none;

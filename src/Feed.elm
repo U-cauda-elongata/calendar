@@ -29,7 +29,7 @@ type alias Preset =
 decoder : D.Decoder Feed
 decoder =
     D.map3 Feed
-        (D.oneOf [ D.field "meta" (D.list metaDecoder), D.succeed [] ])
+        (D.oneOf [ D.field "meta" <| D.list metaDecoder, D.succeed [] ])
         -- TODO: Implement some fancy representations for collab streams.
         (D.field "entry_groups"
             (D.list (D.oneOf [ Event.decoder |> D.map List.singleton, D.list Event.decoder ])

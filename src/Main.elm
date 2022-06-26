@@ -100,7 +100,7 @@ type alias ShareData =
 
 
 type alias Model =
-    { -- FIelds not used by `view`:
+    { -- Fields not used by `view`:
       -- Set this to `True` once the first feed request completes, in order to prevent subsequent
       -- requests from causing the initial `slideViewportInto` to be called again.
       initialized : Bool
@@ -649,8 +649,7 @@ update msg model =
                             Help ->
                                 Cmd.batch
                                     [ showModal helpDialogId
-                                    , Dom.focus helpCloseButtonId
-                                        |> Task.attempt handleDomResult
+                                    , Dom.focus helpCloseButtonId |> Task.attempt handleDomResult
                                     ]
                         ]
             )
@@ -679,7 +678,7 @@ update msg model =
             ( { model | activePopup = Nothing }, Cmd.none )
 
         GotFeed polling url result ->
-            -- XXX: #lm prohibits shadowing.
+            -- XXX: Elm prohibits shadowing.
             let
                 ( model2, cmd ) =
                     case result of
@@ -908,7 +907,7 @@ subscriptions model =
         subs2 =
             case model.pendingFeed of
                 OneMore url ->
-                    onScrollToBottom (\_ -> GetFeed url) :: subs
+                    onScrollToBottom (always <| GetFeed url) :: subs
 
                 _ ->
                     subs
@@ -1265,9 +1264,7 @@ viewMain { translations, features, tz, observances } now activePopup pendingFeed
          )
             ++ [ ( "empty"
                  , div
-                    [ class "empty-result"
-                    , hidden <| busy || anyEventIsShown
-                    ]
+                    [ class "empty-result", hidden <| busy || anyEventIsShown ]
                     (let
                         pre =
                             p [] [ text <| T.emptyResultPre translations ]
@@ -1368,18 +1365,17 @@ viewKeyedDateSection translations features observances now activePopup filter da
                 )
         ]
         [ header [ class "date-heading" ]
-            [ h2 []
-                (let
+            [ h2 [] <|
+                let
                     viewDate =
                         intlDate [] date
-                 in
-                 case observances |> Observance.get translations date of
+                in
+                case observances |> Observance.get translations date of
                     [] ->
                         [ viewDate ]
 
                     xs ->
                         [ viewDate, text <| ": " ++ String.join ", " xs ]
-                )
             ]
         , Keyed.ul [ class "timeline", class "unstyle" ]
             (items
@@ -1406,12 +1402,7 @@ viewKeyedDateSection translations features observances now activePopup filter da
                                   then
                                     section [ id nowSectionId, class "ongoing", tabindex -1 ]
                                         [ header [ class "now" ]
-                                            [ h2 []
-                                                (T.ongoingCustom translations
-                                                    text
-                                                    viewTime
-                                                )
-                                            ]
+                                            [ h2 [] <| T.ongoingCustom translations text viewTime ]
                                         , Keyed.ul [ class "timeline", class "unstyle" ]
                                             (ongoing_items
                                                 |> List.map
@@ -1423,9 +1414,7 @@ viewKeyedDateSection translations features observances now activePopup filter da
 
                                   else
                                     h2 [ id nowSectionId, class "now", tabindex -1 ] <|
-                                        T.nowSeparatorCustom translations
-                                            text
-                                            viewTime
+                                        T.nowSeparatorCustom translations text viewTime
                                 )
                     )
             )

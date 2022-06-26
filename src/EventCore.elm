@@ -29,13 +29,19 @@ decoder =
         |> D.andThen (\f -> D.map f <| D.field "name" D.string)
         |> D.andThen (\f -> D.map f <| D.oneOf [ D.field "live" D.bool, D.succeed False ])
         |> D.andThen (\f -> D.map f <| D.oneOf [ D.field "upcoming" D.bool, D.succeed False ])
-        |> D.andThen
-            (\f ->
-                D.map f (D.field "time" D.int |> D.map (\time -> Time.millisToPosix <| time * 1000))
-            )
-        |> D.andThen
-            (\f -> D.map f <| D.maybe (D.field "duration" D.int |> D.map Duration.fromMillis))
+        |> D.andThen (\f -> D.map f <| D.field "time" posixSecondDecoder)
+        |> D.andThen (\f -> D.map f <| D.maybe <| D.field "duration" durationDecoder)
         |> D.andThen (\f -> D.map f <| D.maybe <| D.field "link" D.string)
         |> D.andThen (\f -> D.map f <| D.maybe <| D.field "thumbnail" D.string)
         |> D.andThen
             (\f -> D.map f <| D.oneOf [ D.field "members" <| D.list D.string, D.succeed [] ])
+
+
+posixSecondDecoder : D.Decoder Time.Posix
+posixSecondDecoder =
+    D.int |> D.map (\time -> Time.millisToPosix <| time * 1000)
+
+
+durationDecoder : D.Decoder Duration
+durationDecoder =
+    D.int |> D.map Duration.fromMillis
