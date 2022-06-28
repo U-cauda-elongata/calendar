@@ -37,6 +37,7 @@
 	src:
 		local('07にくまるフォント'),
 		url('NikumaruFont.en.woff2') format('woff2');
+	font-display: swap;
 }
 
 @font-face {
@@ -44,6 +45,7 @@
 	src:
 		local('07にくまるフォント'),
 		url('NikumaruFont.ja.woff2') format('woff2');
+	font-display: swap;
 }
 
 [hidden] {
