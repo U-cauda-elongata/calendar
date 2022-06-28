@@ -67,12 +67,8 @@ until entries.empty?
   first = entries.pop
 
   simul_entries = [first]
-  until entries.empty?
-    if entries.last['time'] - first['time'] <= 10 * 60
-      simul_entries.unshift(entries.pop)
-    else
-      break
-    end
+  until entries.empty? or entries.last['time'] - first['time'] > 10 * 60
+    simul_entries.unshift(entries.pop)
   end
 
   if simul_entries.length <= 1
@@ -86,7 +82,7 @@ until entries.empty?
   end.to_h
 
   # Convert the graph into an undirected graph.
-  graph.each do |vertice, neighbors|
+  graph.each_pair do |vertice, neighbors|
     neighbors.each do |n|
       graph[n].add(vertice)
     end
@@ -129,8 +125,7 @@ until entries.empty?
 end
 
 # Like `Enumerable#each_slice(PAGE_SIZE).to_a`, but splits by the size of flattened page instead.
-pages = [[]]
-entry_groups.reverse_each do |entry_or_collab|
+pages = entry_groups.reverse_each.with_object([[]]) do |entry_or_collab, pages|
   prepend_to_existing = if entry_or_collab.is_a?(Array)
     # Allow excess of up to half the length to make the page sizes around `PAGE_SIZE` by average.
     pages.first.flatten.length + entry_or_collab.length / 2 <= PAGE_SIZE
@@ -151,9 +146,8 @@ if pages[1] and pages[0].flatten.length < PAGE_SIZE
 end
 
 FileUtils.mkdir_p('feed')
-page = pages.shift
 file = 'latest.json'
-while page
+while page = pages.shift
   STDERR.puts "Writing #{page.flatten.length} entries to `#{file}`..."
   open("feed/#{file}", 'w') do |out|
     json = {}
@@ -164,6 +158,5 @@ while page
     json['next'] = file = "#{pages.length}.json" unless pages.empty?
     json['entry_groups'] = page
     JSON.dump(json, out)
-    page = pages.shift
   end
 end

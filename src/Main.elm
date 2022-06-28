@@ -1540,12 +1540,14 @@ viewKeyedEvent translations features now activePopup filter feed event =
             in
             case event.duration of
                 Just duration ->
+                    -- Video or ended live stream:
                     let
                         viewDuration =
                             time [ datetime <| Duration.toDatetime duration, role "time" ]
                                 (Duration.render duration)
                     in
                     if event.live then
+                        -- Live stream:
                         ( TEvent.startedAtCustom translations text viewTime
                         , TEventDescription.endedLiveCustom translations
                             text
@@ -1555,6 +1557,7 @@ viewKeyedEvent translations features now activePopup filter feed event =
                         )
 
                     else
+                        -- Video:
                         ( TEvent.uploadedAtCustom translations text viewTime
                         , TEventDescription.videoCustom translations
                             text
@@ -1564,11 +1567,14 @@ viewKeyedEvent translations features now activePopup filter feed event =
                         )
 
                 Nothing ->
+                    -- Unfinished live stream:
+                    let
+                        viewEta =
+                            intlReltime [] eta
+                    in
                     if event.upcoming then
+                        -- Upcoming live stream:
                         let
-                            viewEta =
-                                intlReltime [] eta
-
                             viewStartsIn =
                                 if Duration.isNegative eta then
                                     TEvent.dueCustom translations text viewEta
@@ -1588,11 +1594,8 @@ viewKeyedEvent translations features now activePopup filter feed event =
                         )
 
                     else
-                        let
-                            viewEta =
-                                intlReltime [] eta
-                        in
-                        ( TEvent.timeWithEtaCustom translations text viewTime viewEta
+                        -- Ongoing live stream:
+                        ( TEvent.startedAtCustom translations text viewTime
                         , TEventDescription.ongoingLiveCustom translations
                             text
                             (text <| T.members translations feed.preset memberPresets)
@@ -1664,7 +1667,7 @@ viewEventPopup features translations expanded event =
             []
         , menu
             [ id popupId, class "popup", class "unstyle", ariaLabel <| TShare.share translations ]
-            -- TODO: Add icons to list items too.
+            -- TODO: Add icons to the list items too.
             (let
                 items =
                     []

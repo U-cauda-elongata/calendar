@@ -1,10 +1,10 @@
-module Util.List exposing (cardinalities, groupBy, mergeBy)
+module Util.List exposing (countEquals, groupBy, mergeBy)
 
 import Dict exposing (Dict)
 
 
-cardinalities : List comparable -> Dict comparable Int
-cardinalities =
+countEquals : List comparable -> Dict comparable Int
+countEquals =
     List.foldl (\v -> Dict.update v (\n -> Just <| 1 + Maybe.withDefault 0 n)) Dict.empty
 
 

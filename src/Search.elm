@@ -58,7 +58,7 @@ suggestions getText getTime now xs =
 
         countTags =
             List.concatMap (searchTags << getText)
-                >> List.cardinalities
+                >> List.countEquals
                 >> Dict.groupKeysBy normalize
 
         mergedRecent =
