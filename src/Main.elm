@@ -980,8 +980,7 @@ view model =
                     "hamburger-icon"
               in
               button
-                [ id iconId
-                , class "hamburger"
+                [ class "hamburger"
                 , class "unstyle"
                 , classList [ ( "filter-active", Filter.isActive model.filter ) ]
                 , ariaLabelledby <| iconId
