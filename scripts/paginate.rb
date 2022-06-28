@@ -116,13 +116,15 @@ until entries.empty?
       end
     end
 
-    entry_groups.unshift(
-      if collab_entries.length > 1
-        collab_entries
-      else
-        collab_entries.first
-      end
-    )
+    if collab_members.length > 1
+      entry_groups.unshift(collab_entries)
+    elsif collab_entries.length > 1
+      # A single user uploading multiple videos around a same time,
+      # which may not necessarily be relevant to each other.
+      entry_groups.unshift(*collab_entries)
+    else
+      entry_groups.unshift(collab_entries.first)
+    end
   end
 end
 
