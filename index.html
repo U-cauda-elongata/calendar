@@ -6,7 +6,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<!-- Don't send query parts, which may include sensitive data on super rare occasions. -->
 	<meta name="referrer" content="origin" />
+	<link href="light.css" rel="preload" as="style" media="not (prefers-color-scheme: dark)" />
+	<link href="dark.css" rel="preload" as="style" media="(prefers-color-scheme: dark)" />
 	<link href="style.css" rel="stylesheet" />
+	<link href="feed/latest.json" rel="preload" as="fetch" />
+	<script src="app.js" defer=""></script>
 	<meta name="description" content="けものフレンズ／けもＶの公式 YouTube 配信を一覧するツール" />
 	<meta name="keywords" content="けものフレンズ,けもフレ,けものフレンズVぷろじぇくと,けもV,ケープペンギン,ケプ子,African Penguin,フンボルトペンギン,フルル,Humboldt Penguin,シマハイイロギツネ,シマハイ,Island Fox,コヨーテ,Coyote,Coyo,ダイアウルフ,Dire Wolf,カラカル,Caracal,YouTube" />
 	<meta property="og:title" name="twitter:title" content="けものフレンズ配信カレンダー" />
@@ -18,7 +22,6 @@
 	<meta name="twitter:creator" content="@U_caudaElongata" />
 	<meta name="twitter:creator:id" content="1037918258052005888" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<script src="app.js" defer></script>
 </head>
 <body>
 	<noscript>このページの内容を表示するには JavaScript を有効にする必要があります。</noscript>
