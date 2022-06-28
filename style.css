@@ -550,7 +550,7 @@ main {
 	margin: var(--margin-unit);
 }
 
-.error-log a {
+.error-log :any-link {
 	color: #0FF;
 }
 

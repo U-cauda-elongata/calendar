@@ -16,8 +16,12 @@
 	}
 }
 
-a {
+:link {
 	color: #0FF;
+}
+
+:visited {
+	color: #F0F;
 }
 
 @media (prefers-contrast: more) {
