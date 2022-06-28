@@ -17,6 +17,16 @@ titleCustom translations nonPlaceholderLift =
     customTr translations Curly nonPlaceholderLift "title" []
 
 
+shortTitle : Translations -> String
+shortTitle translations =
+    t translations "shortTitle"
+
+
+shortTitleCustom : Translations -> (String -> a) -> List a
+shortTitleCustom translations nonPlaceholderLift =
+    customTr translations Curly nonPlaceholderLift "shortTitle" []
+
+
 hamburgerDescription : Translations -> String
 hamburgerDescription translations =
     t translations "hamburgerDescription"

@@ -7,6 +7,6 @@ translations="$3"
 for tr in "$translations"/*.json; do
 	lang="${tr#"$translations"/}"
 	lang="${lang%.json}"
-	pyftsubset "$in" --text="$(jq .title "$tr")" --layout-features='' --flavor=woff2 \
+	pyftsubset "$in" --text="$(jq -r '.title + .shortTitle' "$tr")" --layout-features='' --flavor=woff2 \
 		--output-file="$outstem.$lang.woff2"
 done

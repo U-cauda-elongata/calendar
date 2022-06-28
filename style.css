@@ -84,6 +84,10 @@ hr {
 	border-top: solid var(--border-width) var(--border-color);
 }
 
+.wide-viewport {
+	display: none;
+}
+
 .fine-pointer {
 	display: none;
 }
@@ -690,6 +694,26 @@ main {
 		--event-width: calc(100vw - 2 * var(--border-width) - var(--hamburger-length));
 	}
 
+	.wide-viewport {
+		display: unset;
+	}
+
+	.narrow-viewport {
+		display: none;
+	}
+
+	.drawer-expanded {
+		--event-width: calc(100vw - 2 (--border-width) - var(--drawer-width));
+	}
+
+	.drawer-expanded .wide-viewport {
+		display: none;
+	}
+
+	.drawer-expanded .narrow-viewport {
+		display: unset;
+	}
+
 	.hamburger.filter-active {
 		background-color: var(--background-color);
 	}
@@ -785,6 +809,18 @@ main {
 @media (min-width: 680px) {
 	:root {
 		--event-width: 280px;
+	}
+
+	.drawer-expanded {
+		--event-width: unset;
+	}
+
+	.drawer-expanded .wide-viewport {
+		display: unset;
+	}
+
+	.drawer-expanded .narrow-viewport {
+		display: none;
 	}
 
 	.timeline > li {

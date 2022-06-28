@@ -211,6 +211,7 @@ init flags url key =
             , translations =
                 I18Next.fromTree
                     [ ( "title", I18Next.string "" )
+                    , ( "shortTitle", I18Next.string "" )
                     , ( "nowSeparator", I18Next.string "{{time}}" )
                     ]
             , tz = Time.utc
@@ -967,7 +968,13 @@ view model =
             , ariaHidden <| model.mode /= None
             ]
             [ header [ class "app-title" ]
-                [ h1 [] [ text <| T.title model.env.translations ] ]
+                [ h1 []
+                    [ span [ class "wide-viewport" ]
+                        [ text <| T.title model.env.translations ]
+                    , span [ class "narrow-viewport" ]
+                        [ text <| T.shortTitle model.env.translations ]
+                    ]
+                ]
             , let
                 iconId =
                     "hamburger-icon"
