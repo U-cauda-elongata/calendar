@@ -1049,19 +1049,21 @@ viewDrawer : Translations -> Bool -> Mode -> List String -> Filter -> Html Msg
 viewDrawer translations expanded mode searchSuggestions filter =
     menu
         [ class "drawer-menu", class "unstyle" ]
-        [ button
-            [ id hamburgerLabelButtonId
-            , class "drawer-labelled-button"
-            , class "unstyle"
-            , ariaLabel <| T.expandMenu translations
-            , ariaDescribedby hamburgerDescriptionId
-            , ariaPressed <| expanded
-            , onClick <| HamburgerChecked <| not expanded
-            ]
-            [ span [ id hamburgerLabelId, class "hamburger-label", class "drawer-button-label" ]
-                [ text <| T.collapseMenu translations ]
-            , span [ id hamburgerDescriptionId, hidden True ]
-                [ text <| T.hamburgerDescription translations ]
+        [ li []
+            [ button
+                [ id hamburgerLabelButtonId
+                , class "drawer-labelled-button"
+                , class "unstyle"
+                , ariaLabel <| T.expandMenu translations
+                , ariaDescribedby hamburgerDescriptionId
+                , ariaPressed <| expanded
+                , onClick <| HamburgerChecked <| not expanded
+                ]
+                [ span [ id hamburgerLabelId, class "hamburger-label", class "drawer-button-label" ]
+                    [ text <| T.collapseMenu translations ]
+                , span [ id hamburgerDescriptionId, hidden True ]
+                    [ text <| T.hamburgerDescription translations ]
+                ]
             ]
         , let
             labelId =
