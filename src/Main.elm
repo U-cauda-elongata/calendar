@@ -991,7 +991,13 @@ view model =
                 [ Icon.hamburger
                     [ Svg.Attributes.id iconId, ariaLabel <| T.expandMenu model.env.translations ]
                 ]
-            , div [ id drawerId, class "drawer" ]
+            , div
+                [ id drawerId
+                , class "drawer"
+                , role "toolbar"
+                , ariaOrientation "vertical"
+                , ariaLabel <| T.filterMenuLabel model.env.translations
+                ]
                 [ lazy5 viewDrawer
                     model.env.translations
                     drawerExpanded
@@ -1042,12 +1048,7 @@ hamburgerDescriptionId =
 viewDrawer : Translations -> Bool -> Mode -> List String -> Filter -> Html Msg
 viewDrawer translations expanded mode searchSuggestions filter =
     menu
-        [ class "drawer-menu"
-        , class "unstyle"
-        , role "toolbar"
-        , ariaOrientation "vertical"
-        , ariaLabel <| T.filterMenuLabel translations
-        ]
+        [ class "drawer-menu", class "unstyle" ]
         [ button
             [ id hamburgerLabelButtonId
             , class "drawer-labelled-button"
