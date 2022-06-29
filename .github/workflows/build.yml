@@ -31,7 +31,7 @@ jobs:
           git fetch --no-tags --depth=1 origin refs/heads/main
           git reset FETCH_HEAD
           git checkout .
-          git add feed/ || true
+          git add data/ feed/ || true
 
           rm app.js || true
           make ELM_MAKE=elm-optimize-level-2 ELMFLAGS= app.js
