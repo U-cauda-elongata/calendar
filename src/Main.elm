@@ -279,9 +279,14 @@ getTranslations lang =
 getFeed : PollingKind -> String -> Cmd Msg
 getFeed polling url =
     Http.get
-        { url = Url.Builder.relative [ "feed", url ] []
+        { url = resolveFeedUrl url
         , expect = Http.expectJson (GotFeed polling url) Feed.decoder
         }
+
+
+resolveFeedUrl : String -> String
+resolveFeedUrl path =
+    Url.Builder.relative [ "feed", path ] []
 
 
 
@@ -1781,10 +1786,15 @@ viewError translations errIdx err =
                 [ text "Retry" ]
             ]
 
-        FeedHttpError url e ->
+        FeedHttpError path e ->
             TError.httpCustom translations
                 text
-                (a [ href url ] [ text url ])
+                (let
+                    url =
+                        resolveFeedUrl path
+                 in
+                 a [ href url ] [ text url ]
+                )
                 (text <| httpErrorToString e)
                 ++ [ button
                         [ class "dismiss-error"
