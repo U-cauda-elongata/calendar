@@ -208,11 +208,12 @@ hr {
 	min-height: 100vh;
 }
 
-.drawer-menu > li {
+.drawer-menu > * + li {
 	margin-top: var(--margin-unit);
 }
 
 .drawer-menu > hr {
+	margin: var(--margin-unit) 0 0 0;
 	width: 100%;
 }
 
@@ -294,8 +295,8 @@ hr {
 	padding: initial;
 }
 
-.feed-filter > ul > li {
-	margin: var(--margin-unit) 0;
+.feed-filter > ul > li + li {
+	margin-top: var(--margin-unit);
 }
 
 .about-button {
