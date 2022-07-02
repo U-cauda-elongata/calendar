@@ -530,49 +530,45 @@ update msg model =
 
                 Nothing ->
                     if not key.alt && not key.ctrl && not key.meta then
-                        case key.key of
-                            "N" ->
-                                if key.shift then
-                                    ( model, Cmd.none )
+                        if key.key == "?" then
+                            update (SetMode Help) model
 
-                                else
+                        else if key.shift then
+                            ( model, Cmd.none )
+
+                        else
+                            case key.key of
+                                "N" ->
                                     ( model
                                     , Cmd.batch
-                                        [ -- Set `preventScroll` to avoid halting the sliding animation.
+                                        [ -- Set `preventScroll` to avoid halting the sliding
+                                          -- animation.
                                           preventScrollFocus nowSectionId
                                         , slideViewportInto nowSectionId
                                         ]
                                     )
 
-                            "S" ->
-                                ( model, Dom.focus searchInputId |> Task.attempt handleDomResult )
+                                "S" ->
+                                    ( model
+                                    , Dom.focus searchInputId |> Task.attempt handleDomResult
+                                    )
 
-                            "X" ->
-                                if key.shift then
-                                    ( model, Cmd.none )
-
-                                else
+                                "X" ->
                                     update (HamburgerChecked <| not model.drawerExpanded) model
 
-                            "?" ->
-                                update (SetMode Help) model
-
-                            "ESCAPE" ->
-                                if key.shift then
-                                    ( model, Cmd.none )
-
-                                else
+                                "ESCAPE" ->
                                     update CloseWidgets model
                                         |> Tuple.mapSecond
                                             (\cmd ->
                                                 Cmd.batch
                                                     [ cmd
-                                                    , Dom.blur searchInputId |> Task.attempt handleDomResult
+                                                    , Dom.blur searchInputId
+                                                        |> Task.attempt handleDomResult
                                                     ]
                                             )
 
-                            _ ->
-                                ( model, Cmd.none )
+                                _ ->
+                                    ( model, Cmd.none )
 
                     else
                         ( model, Cmd.none )
