@@ -143,6 +143,7 @@ type alias Env =
     , -- Base URL of the app.
       url : Url
     , features : Features
+    , lang : String
     , translations : Translations
     , tz : Time.Zone
     , observances : Observance.Table
@@ -199,6 +200,9 @@ init flags url key =
         baseUrl =
             { url | query = Nothing }
 
+        lang =
+            selectLanguage flags.languages
+
         observances =
             D.decodeValue Observance.decoder flags.observances
     in
@@ -210,6 +214,7 @@ init flags url key =
             { key = key
             , url = baseUrl
             , features = flags.features
+            , lang = lang
             , translations =
                 I18Next.fromTree
                     [ ( "title", I18Next.string "" )
@@ -240,7 +245,7 @@ init flags url key =
       }
     , Cmd.batch
         [ Time.here |> Task.perform SetTimeZone
-        , getTranslations <| selectLanguage flags.languages
+        , getTranslations lang
         , Time.now |> Task.perform Tick
         , replaceQuery key baseUrl filter
         , getFeed Initial "latest.json"
@@ -1489,7 +1494,7 @@ viewKeyedEvent env now activePopup filter feed event =
         eventHeader =
             let
                 heading =
-                    h3 [ id headingId, lang feed.preset.lang ] [ text event.name ]
+                    h3 [ id headingId ] [ text event.name ]
 
                 headerContent =
                     case event.thumbnail of
@@ -1640,13 +1645,18 @@ viewKeyedEvent env now activePopup filter feed event =
         [ hidden <| not <| Event.isShown filter feed event ]
         [ article
             [ class "event"
+            , lang feed.preset.lang
             , ariaLabelledby headingId
-            , ariaDescribedby descriptionId
+            , -- XXX: The `lang` attribute (feed's language) applies to the description
+              -- (UA language) too. At least VoiceOver on Safari with English as the primary
+              -- language seems to read the description as English, but the behavior in other
+              -- environments is untested.
+              ariaDescribedby descriptionId
             ]
-            (div [ class "event-padding" ] [ div [] viewTimeInfo, eventHeader ]
+            (div [ class "event-padding" ] [ div [ lang env.lang ] viewTimeInfo, eventHeader ]
                 :: ul [ class "event-members" ]
                     (viewEventMember True feed :: (members |> List.map (viewEventMember False)))
-                :: div [ id descriptionId, hidden True ] description
+                :: div [ id descriptionId, lang env.lang, hidden True ] description
                 :: (if env.features.copy || env.features.share then
                         List.singleton <|
                             lazy3 viewEventPopup env (activePopup == Just event.id) event
@@ -1666,7 +1676,7 @@ viewEventPopup env expanded event =
             "popup-" ++ event.id
     in
     div
-        [ class "popup-container" ]
+        [ class "popup-container", lang env.lang ]
         [ button
             [ class "popup-toggle"
             , class "unstyle"
