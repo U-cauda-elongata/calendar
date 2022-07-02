@@ -1431,11 +1431,11 @@ viewKeyedDateSection env now activePopup filter date items =
                     (\item ->
                         let
                             partialViewKeyedEvent =
-                                viewKeyedEvent env now activePopup filter
+                                viewKeyedEvent env now filter
                         in
                         case item of
                             TimelineEvent ( feed, event ) ->
-                                partialViewKeyedEvent feed event
+                                partialViewKeyedEvent (activePopup == Just event.id) feed event
 
                             Now ongoing_items ->
                                 ( "now"
@@ -1455,7 +1455,10 @@ viewKeyedDateSection env now activePopup filter date items =
                                             (ongoing_items
                                                 |> List.map
                                                     (\( feed, event ) ->
-                                                        partialViewKeyedEvent feed event
+                                                        partialViewKeyedEvent
+                                                            (activePopup == Just event.id)
+                                                            feed
+                                                            event
                                                     )
                                             )
                                         ]
@@ -1470,15 +1473,13 @@ viewKeyedDateSection env now activePopup filter date items =
     )
 
 
-viewKeyedEvent :
-    Env
-    -> Time.Posix
-    -> Maybe String
-    -> Filter
-    -> Feed
-    -> Event
-    -> ( String, Html Msg )
-viewKeyedEvent env now activePopup filter feed event =
+viewKeyedEvent : Env -> Time.Posix -> Filter -> Bool -> Feed -> Event -> ( String, Html Msg )
+viewKeyedEvent env now filter popupExpanded feed event =
+    ( event.id, lazy6 viewEvent env now filter popupExpanded feed event )
+
+
+viewEvent : Env -> Time.Posix -> Filter -> Bool -> Feed -> Event -> Html Msg
+viewEvent env now filter popupExpanded feed event =
     let
         eventId =
             "event-" ++ event.id
@@ -1640,8 +1641,7 @@ viewKeyedEvent env now activePopup filter feed event =
                             viewEta
                         )
     in
-    ( eventId
-    , li
+    li
         [ hidden <| not <| Event.isShown filter feed event ]
         [ article
             [ class "event"
@@ -1659,14 +1659,13 @@ viewKeyedEvent env now activePopup filter feed event =
                 :: div [ id descriptionId, lang env.lang, hidden True ] description
                 :: (if env.features.copy || env.features.share then
                         List.singleton <|
-                            lazy3 viewEventPopup env (activePopup == Just event.id) event
+                            lazy3 viewEventPopup env popupExpanded event
 
                     else
                         []
                    )
             )
         ]
-    )
 
 
 viewEventPopup : Env -> Bool -> Event.Event -> Html Msg
