@@ -1254,7 +1254,7 @@ type TimelineItem
 
 
 viewMain : Env -> Time.Posix -> Maybe String -> PendingFeed -> Filter -> List Event -> Html Msg
-viewMain { translations, features, tz, observances } now activePopup pendingFeed filter events =
+viewMain env now activePopup pendingFeed filter events =
     let
         busy =
             pendingFeed == Loading
@@ -1292,16 +1292,14 @@ viewMain { translations, features, tz, observances } now activePopup pendingFeed
                 (\item ->
                     case item of
                         TimelineEvent ( _, event ) ->
-                            Date.fromPosix tz event.time
+                            Date.fromPosix env.tz event.time
 
                         Now _ ->
-                            Date.fromPosix tz now
+                            Date.fromPosix env.tz now
                 )
             |> List.map
                 (\( date, items ) ->
-                    viewKeyedDateSection translations
-                        features
-                        observances
+                    viewKeyedDateSection env
                         now
                         activePopup
                         filter
@@ -1314,13 +1312,13 @@ viewMain { translations, features, tz, observances } now activePopup pendingFeed
                     [ class "empty-result", hidden <| busy || anyEventIsShown ]
                     (let
                         pre =
-                            p [] [ text <| T.emptyResultPre translations ]
+                            p [] [ text <| T.emptyResultPre env.translations ]
 
                         post =
                             p [ hidden <| pendingFeed /= Done ]
-                                [ text <| T.emptyResultPost translations ]
+                                [ text <| T.emptyResultPost env.translations ]
                      in
-                     case T.emptyResultKidding translations of
+                     case T.emptyResultKidding env.translations of
                         "" ->
                             [ pre, post ]
 
@@ -1344,13 +1342,13 @@ viewMain { translations, features, tz, observances } now activePopup pendingFeed
                             [ button
                                 [ class "load-more-feed-button"
                                 , class "unstyle"
-                                , ariaLabel <| T.loadMoreLabel translations
+                                , ariaLabel <| T.loadMoreLabel env.translations
                                 , onClick <| GetFeed url
                                 ]
                                 [ span [ class "fine-pointer" ]
-                                    [ text <| T.clickToLoadMore translations ]
+                                    [ text <| T.clickToLoadMore env.translations ]
                                 , span [ class "no-fine-pointer" ]
-                                    [ text <| T.tapToLoadMore translations ]
+                                    [ text <| T.tapToLoadMore env.translations ]
                                 ]
                             ]
 
@@ -1358,20 +1356,20 @@ viewMain { translations, features, tz, observances } now activePopup pendingFeed
                             [ button
                                 [ class "load-more-feed-button"
                                 , class "unstyle"
-                                , ariaLabel <| T.retryLoadingLabel translations
+                                , ariaLabel <| T.retryLoadingLabel env.translations
                                 , onClick <| RetryGetFeed url
                                 ]
-                                [ text <| T.retryLoading translations ]
+                                [ text <| T.retryLoading env.translations ]
                             ]
 
                         Loading ->
-                            [ text <| T.loading translations ]
+                            [ text <| T.loading env.translations ]
 
                         Done ->
                             [ div []
-                                [ p [] [ text <| T.noMoreItems translations ]
+                                [ p [] [ text <| T.noMoreItems env.translations ]
                                 , p [ hidden <| Filter.isActive filter ]
-                                    [ text <| T.noMoreItemsGibberish translations ]
+                                    [ text <| T.noMoreItemsGibberish env.translations ]
                                 ]
                             ]
                  )
@@ -1385,16 +1383,14 @@ nowSectionId =
 
 
 viewKeyedDateSection :
-    Translations
-    -> Features
-    -> Observance.Table
+    Env
     -> Time.Posix
     -> Maybe String
     -> Filter
     -> Date
     -> List TimelineItem
     -> ( String, Html Msg )
-viewKeyedDateSection translations features observances now activePopup filter date items =
+viewKeyedDateSection env now activePopup filter date items =
     ( Date.toIsoString date
     , section
         [ hidden <|
@@ -1417,7 +1413,7 @@ viewKeyedDateSection translations features observances now activePopup filter da
                     viewDate =
                         intlDate [] date
                 in
-                case observances |> Observance.get translations date of
+                case env.observances |> Observance.get env.translations date of
                     [] ->
                         [ viewDate ]
 
@@ -1430,7 +1426,7 @@ viewKeyedDateSection translations features observances now activePopup filter da
                     (\item ->
                         let
                             partialViewKeyedEvent =
-                                viewKeyedEvent translations features now activePopup filter
+                                viewKeyedEvent env now activePopup filter
                         in
                         case item of
                             TimelineEvent ( feed, event ) ->
@@ -1449,7 +1445,7 @@ viewKeyedDateSection translations features observances now activePopup filter da
                                   then
                                     section [ id nowSectionId, class "ongoing", tabindex -1 ]
                                         [ header [ class "now" ]
-                                            [ h2 [] <| T.ongoingCustom translations text viewTime ]
+                                            [ h2 [] <| T.ongoingCustom env.translations text viewTime ]
                                         , Keyed.ul [ class "timeline", class "unstyle" ]
                                             (ongoing_items
                                                 |> List.map
@@ -1461,7 +1457,7 @@ viewKeyedDateSection translations features observances now activePopup filter da
 
                                   else
                                     h2 [ id nowSectionId, class "now", tabindex -1 ] <|
-                                        T.nowSeparatorCustom translations text viewTime
+                                        T.nowSeparatorCustom env.translations text viewTime
                                 )
                     )
             )
@@ -1470,15 +1466,14 @@ viewKeyedDateSection translations features observances now activePopup filter da
 
 
 viewKeyedEvent :
-    Translations
-    -> Features
+    Env
     -> Time.Posix
     -> Maybe String
     -> Filter
     -> Feed
     -> Event
     -> ( String, Html Msg )
-viewKeyedEvent translations features now activePopup filter feed event =
+viewKeyedEvent env now activePopup filter feed event =
     let
         eventId =
             "event-" ++ event.id
@@ -1586,20 +1581,20 @@ viewKeyedEvent translations features now activePopup filter feed event =
                     in
                     if event.live then
                         -- Live stream:
-                        ( TEvent.startedAtCustom translations text viewTime
-                        , TEventDescription.endedLiveCustom translations
+                        ( TEvent.startedAtCustom env.translations text viewTime
+                        , TEventDescription.endedLiveCustom env.translations
                             text
-                            (text <| T.members translations feed.preset memberPresets)
+                            (text <| T.members env.translations feed.preset memberPresets)
                             viewTime
                             viewDuration
                         )
 
                     else
                         -- Video:
-                        ( TEvent.uploadedAtCustom translations text viewTime
-                        , TEventDescription.videoCustom translations
+                        ( TEvent.uploadedAtCustom env.translations text viewTime
+                        , TEventDescription.videoCustom env.translations
                             text
-                            (text <| T.members translations feed.preset memberPresets)
+                            (text <| T.members env.translations feed.preset memberPresets)
                             viewTime
                             viewDuration
                         )
@@ -1615,28 +1610,28 @@ viewKeyedEvent translations features now activePopup filter feed event =
                         let
                             viewStartsIn =
                                 if Duration.isNegative eta then
-                                    TEvent.dueCustom translations text viewEta
+                                    TEvent.dueCustom env.translations text viewEta
 
                                 else
                                     [ viewEta ]
                         in
-                        ( TEvent.timeWithEtaCustom translations
+                        ( TEvent.timeWithEtaCustom env.translations
                             (text >> List.singleton)
                             [ viewTime ]
                             viewStartsIn
                             |> List.concat
-                        , TEventDescription.scheduledLiveCustom translations
+                        , TEventDescription.scheduledLiveCustom env.translations
                             text
-                            (text <| T.members translations feed.preset memberPresets)
+                            (text <| T.members env.translations feed.preset memberPresets)
                             viewEta
                         )
 
                     else
                         -- Ongoing live stream:
-                        ( TEvent.startedAtCustom translations text viewTime
-                        , TEventDescription.ongoingLiveCustom translations
+                        ( TEvent.startedAtCustom env.translations text viewTime
+                        , TEventDescription.ongoingLiveCustom env.translations
                             text
-                            (text <| T.members translations feed.preset memberPresets)
+                            (text <| T.members env.translations feed.preset memberPresets)
                             viewEta
                         )
     in
@@ -1652,13 +1647,9 @@ viewKeyedEvent translations features now activePopup filter feed event =
                 :: ul [ class "event-members" ]
                     (viewEventMember True feed :: (members |> List.map (viewEventMember False)))
                 :: div [ id descriptionId, hidden True ] description
-                :: (if features.copy || features.share then
+                :: (if env.features.copy || env.features.share then
                         List.singleton <|
-                            lazy4 viewEventPopup
-                                features
-                                translations
-                                (activePopup == Just event.id)
-                                event
+                            lazy3 viewEventPopup env (activePopup == Just event.id) event
 
                     else
                         []
@@ -1668,8 +1659,8 @@ viewKeyedEvent translations features now activePopup filter feed event =
     )
 
 
-viewEventPopup : Features -> Translations -> Bool -> Event.Event -> Html Msg
-viewEventPopup features translations expanded event =
+viewEventPopup : Env -> Bool -> Event.Event -> Html Msg
+viewEventPopup env expanded event =
     let
         popupId =
             "popup-" ++ event.id
@@ -1692,7 +1683,7 @@ viewEventPopup features translations expanded event =
                         OpenPopup event.id
                     , True
                     )
-            , ariaLabel <| TShare.share translations
+            , ariaLabel <| TShare.share env.translations
             ]
             -- TODO: Add an icon.
             [ text "…" ]
@@ -1704,23 +1695,27 @@ viewEventPopup features translations expanded event =
             ]
             []
         , menu
-            [ id popupId, class "popup", class "unstyle", ariaLabel <| TShare.share translations ]
+            [ id popupId
+            , class "popup"
+            , class "unstyle"
+            , ariaLabel <| TShare.share env.translations
+            ]
             -- TODO: Add icons to the list items too.
             (let
                 items =
                     []
 
                 items2 =
-                    if features.share then
-                        li [] (viewShareEvent translations event) :: items
+                    if env.features.share then
+                        li [] (viewShareEvent env.translations event) :: items
 
                     else
                         items
 
                 items3 =
-                    if features.copy then
-                        li [] (viewCopyEventTimestamp translations event)
-                            :: li [] (viewCopyEvent translations event)
+                    if env.features.copy then
+                        li [] (viewCopyEventTimestamp env.translations event)
+                            :: li [] (viewCopyEvent env.translations event)
                             :: items2
 
                     else
