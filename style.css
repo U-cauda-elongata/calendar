@@ -781,19 +781,21 @@ main {
 		background: none;
 	}
 
-	@supports (backdrop-filter: blur(5px)) or (-webkit-backdrop-filter: blur(5px)) {
+	@supports (backdrop-filter: brightness(.6) blur(2px))
+	or (-webkit-backdrop-filter: brightness(.6) blur(2px)) {
 		.modal-backdrop[open] {
-			-webkit-backdrop-filter: blur(5px);
-			backdrop-filter: blur(5px);
+			-webkit-backdrop-filter: brightness(.6) blur(2px);
+			backdrop-filter: brightness(.6) blur(2px);
 		}
 	}
 
-	@supports not ((backdrop-filter: blur(5px)) or (-webkit-backdrop-filter: blur(5px))) {
+	@supports not ((backdrop-filter: brightness(.6) blur(2px))
+	or (-webkit-backdrop-filter: brightness(.6) blur(2px))) {
 		/* XXX: On Gecko, the filter ignores fixed state of backdrop elements like the drawer,
 		 * by spec.
 		 * <https://stackoverflow.com/a/52937920> */
 		.modal-backdrop[open] ~ .primary-window {
-			filter: blur(5px);
+			filter: brightness(.6) blur(2px);
 		}
 	}
 
