@@ -116,7 +116,9 @@ type alias Model =
     , pendingFeed : PendingFeed
     , errors : List Error
     , -- An ephemeral message to be announced by screen readers.
-      status : Maybe String
+      -- The `Int` is meant to be an identifier of the message, which is used to determine the
+      -- correct message to clear in scheduled tasks.
+      status : Maybe ( Int, String )
 
     -- Widgets:
     , drawerExpanded : Bool
@@ -316,7 +318,7 @@ type Msg
     | Refresh
     | SetMode Mode
     | CloseWidgets
-    | ClearStatus
+    | ClearStatus Int
     | AboutBackToMain
     | AboutGotCopying (Result Http.Error String)
     | AboutRetryGetCopying
@@ -464,7 +466,11 @@ update msg model =
         KeyDown key ->
             let
                 setStatus status ( m, cmd ) =
-                    ( { m | status = Just status }, Cmd.batch [ clearStatus, cmd ] )
+                    let
+                        seq =
+                            m.status |> Maybe.map ((+) 1 << Tuple.first) |> Maybe.withDefault 0
+                    in
+                    ( { m | status = Just ( seq, status ) }, Cmd.batch [ clearStatus seq, cmd ] )
             in
             case String.toInt key.key of
                 Just 0 ->
@@ -675,8 +681,17 @@ update msg model =
         CloseWidgets ->
             update (SetMode None) { model | activePopup = Nothing }
 
-        ClearStatus ->
-            ( { model | status = Nothing }, Cmd.none )
+        ClearStatus seq ->
+            ( -- Clear the status only if `seq` matches, because another task may have overwritten
+              -- the status (with a different `seq`) before this `ClearStatus` message is issued,
+              -- which is not meant to be cleared by this message.
+              if model.status |> Maybe.map (\( s, _ ) -> s == seq) |> Maybe.withDefault False then
+                { model | status = Nothing }
+
+              else
+                model
+            , Cmd.none
+            )
 
         AboutBackToMain ->
             ( { model | mode = About AboutMain }, Cmd.none )
@@ -899,9 +914,9 @@ handleDomResult result =
             ReportError <| Unexpected <| "Node not found: " ++ id
 
 
-clearStatus : Cmd Msg
-clearStatus =
-    Process.sleep 1000 |> Task.perform (always ClearStatus)
+clearStatus : Int -> Cmd Msg
+clearStatus seq =
+    Process.sleep 1000 |> Task.perform (always <| ClearStatus seq)
 
 
 getCopying : Cmd Msg
@@ -1035,7 +1050,9 @@ view model =
             ]
         , div
             [ role "status"
-            , model.status |> Maybe.map ariaLabel |> Maybe.withDefault (hidden True)
+            , model.status
+                |> Maybe.map (ariaLabel << Tuple.second)
+                |> Maybe.withDefault (hidden True)
             ]
             []
         ]
