@@ -1475,7 +1475,7 @@ viewKeyedEvent translations features now activePopup filter feed event =
                                             [ class "event-thumbnail"
                                             , loading "lazy"
                                             , src thumb
-                                            , alt <| T.thumbnailAlt translations
+                                            , alt event.name
                                             ]
                                             []
                                  in
