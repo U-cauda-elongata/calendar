@@ -810,6 +810,7 @@ main {
 		position: absolute;
 		inset: auto 0 auto auto;
 		border: solid var(--border-width) var(--border-color);
+		border-radius: 5px;
 		width: max-content;
 	}
 
@@ -896,6 +897,7 @@ main {
 	.event {
 		margin: calc(2 * var(--margin-unit));
 		border: solid var(--border-width) var(--border-color);
+		border-radius: 10px;
 	}
 
 	.popup {
