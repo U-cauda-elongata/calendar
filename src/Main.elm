@@ -1748,7 +1748,7 @@ viewShareEvent translations event =
 
 viewEventMember : Bool -> Feed -> Html Msg
 viewEventMember isAuthor feed =
-    li [ class "event-member", lang feed.preset.lang ]
+    li [ lang feed.preset.lang ]
         [ a
             (href feed.alternate
                 :: (if isAuthor then

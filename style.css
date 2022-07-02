@@ -201,17 +201,15 @@ hr {
 .drawer-menu {
 	display: flex;
 	flex-direction: column;
+	box-sizing: padding-box;
 	margin: initial;
+	padding-bottom: var(--margin-unit);
 	width: var(--drawer-width);
 	min-height: 100vh;
 }
 
 .drawer-menu > li {
 	margin-top: var(--margin-unit);
-}
-
-.drawer-menu > li:last-child {
-	margin-bottom: var(--margin-unit);
 }
 
 .drawer-menu > hr {
@@ -461,18 +459,14 @@ main {
 	white-space: nowrap;
 }
 
+.event-members > li + li {
+	margin-left: var(--margin-unit);
+}
+
 .event-members .avatar {
 	display: block;
 	width: 60px;
 	height: 60px;
-}
-
-.event-member {
-	margin-left: var(--margin-unit);
-}
-
-.event-member:first-child {
-	margin-left: 0;
 }
 
 .popup-container {
