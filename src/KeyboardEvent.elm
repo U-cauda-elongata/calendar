@@ -1,4 +1,4 @@
-module KeyboardEvent exposing (Key, keyDecoder, toTuple)
+module KeyboardEvent exposing (Key, keyDecoder)
 
 import Json.Decode as D
 import Util.String as String
@@ -37,11 +37,3 @@ codeDecoder =
                     Nothing ->
                         D.field "key" D.string |> D.map String.toUpper
             )
-
-
-{-| Elm's patterns can match against tuple values but cannot match against record fields like
-`{ foo = _ }`, so here is a workaround.
--}
-toTuple : Key -> ( String, ( Bool, ( Bool, ( Bool, Bool ) ) ) )
-toTuple key =
-    ( key.key, ( key.alt, ( key.ctrl, ( key.meta, key.shift ) ) ) )

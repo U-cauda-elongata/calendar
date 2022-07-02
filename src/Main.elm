@@ -468,25 +468,42 @@ update msg model =
             in
             case String.toInt key.key of
                 Just 0 ->
-                    case ( key.alt, ( key.ctrl, ( key.meta, key.shift ) ) ) of
-                        ( False, ( False, ( False, False ) ) ) ->
-                            update ClearFeedFilter model
-                                |> setStatus (TStatus.clearFeedFilter model.env.translations)
-
-                        ( False, ( False, ( False, True ) ) ) ->
+                    if not key.alt && not key.ctrl && not key.meta then
+                        if key.shift then
                             update ClearFilter model
                                 |> setStatus (TStatus.clearFilter model.env.translations)
 
-                        _ ->
-                            ( model, Cmd.none )
+                        else
+                            update ClearFeedFilter model
+                                |> setStatus (TStatus.clearFeedFilter model.env.translations)
+
+                    else
+                        ( model, Cmd.none )
 
                 Just n ->
                     let
                         i =
                             n - 1
                     in
-                    case ( key.alt, ( key.ctrl, ( key.meta, key.shift ) ) ) of
-                        ( False, ( False, ( False, False ) ) ) ->
+                    if not key.alt && not key.ctrl && not key.meta then
+                        if key.shift then
+                            let
+                                ret =
+                                    update (HideOtherFeeds i) model
+                            in
+                            model.filter.feeds
+                                |> List.getAt i
+                                |> Maybe.map
+                                    (\feed ->
+                                        ret
+                                            |> setStatus
+                                                (TStatus.showingOnly model.env.translations
+                                                    feed.preset.title
+                                                )
+                                    )
+                                |> Maybe.withDefault ret
+
+                        else
                             let
                                 ret =
                                     update (ToggleFeedFilter i) model
@@ -508,58 +525,57 @@ update msg model =
                                     )
                                 |> Maybe.withDefault ret
 
-                        ( False, ( False, ( False, True ) ) ) ->
-                            let
-                                ret =
-                                    update (HideOtherFeeds i) model
-                            in
-                            model.filter.feeds
-                                |> List.getAt i
-                                |> Maybe.map
-                                    (\feed ->
-                                        ret
-                                            |> setStatus
-                                                (TStatus.showingOnly model.env.translations
-                                                    feed.preset.title
-                                                )
-                                    )
-                                |> Maybe.withDefault ret
-
-                        _ ->
-                            ( model, Cmd.none )
+                    else
+                        ( model, Cmd.none )
 
                 Nothing ->
-                    case KeyboardEvent.toTuple key of
-                        ( "N", ( False, ( False, ( False, False ) ) ) ) ->
-                            ( model
-                            , Cmd.batch
-                                [ -- Set `preventScroll` to avoid halting the sliding animation.
-                                  preventScrollFocus nowSectionId
-                                , slideViewportInto nowSectionId
-                                ]
-                            )
+                    if not key.alt && not key.ctrl && not key.meta then
+                        case key.key of
+                            "N" ->
+                                if key.shift then
+                                    ( model, Cmd.none )
 
-                        ( "S", ( False, ( False, ( False, _ ) ) ) ) ->
-                            ( model, Dom.focus searchInputId |> Task.attempt handleDomResult )
-
-                        ( "X", ( False, ( False, ( False, False ) ) ) ) ->
-                            update (HamburgerChecked <| not model.drawerExpanded) model
-
-                        ( "?", ( False, ( False, ( False, _ ) ) ) ) ->
-                            update (SetMode Help) model
-
-                        ( "ESCAPE", ( False, ( False, ( False, False ) ) ) ) ->
-                            update CloseWidgets model
-                                |> Tuple.mapSecond
-                                    (\cmd ->
-                                        Cmd.batch
-                                            [ cmd
-                                            , Dom.blur searchInputId |> Task.attempt handleDomResult
-                                            ]
+                                else
+                                    ( model
+                                    , Cmd.batch
+                                        [ -- Set `preventScroll` to avoid halting the sliding animation.
+                                          preventScrollFocus nowSectionId
+                                        , slideViewportInto nowSectionId
+                                        ]
                                     )
 
-                        _ ->
-                            ( model, Cmd.none )
+                            "S" ->
+                                ( model, Dom.focus searchInputId |> Task.attempt handleDomResult )
+
+                            "X" ->
+                                if key.shift then
+                                    ( model, Cmd.none )
+
+                                else
+                                    update (HamburgerChecked <| not model.drawerExpanded) model
+
+                            "?" ->
+                                update (SetMode Help) model
+
+                            "ESCAPE" ->
+                                if key.shift then
+                                    ( model, Cmd.none )
+
+                                else
+                                    update CloseWidgets model
+                                        |> Tuple.mapSecond
+                                            (\cmd ->
+                                                Cmd.batch
+                                                    [ cmd
+                                                    , Dom.blur searchInputId |> Task.attempt handleDomResult
+                                                    ]
+                                            )
+
+                            _ ->
+                                ( model, Cmd.none )
+
+                    else
+                        ( model, Cmd.none )
 
         VisibilityChanged visibility ->
             ( { model | visibility = visibility }
@@ -1157,15 +1173,19 @@ viewSearch translations suggestions q =
                 (KeyboardEvent.keyDecoder
                     |> D.map
                         (\key ->
-                            case KeyboardEvent.toTuple key of
-                                ( "ENTER", ( False, ( False, ( False, False ) ) ) ) ->
-                                    SearchConfirm
+                            if not key.alt && not key.ctrl && not key.meta && not key.shift then
+                                case key.key of
+                                    "ENTER" ->
+                                        SearchConfirm
 
-                                ( "ESCAPE", ( False, ( False, ( False, False ) ) ) ) ->
-                                    SearchClear
+                                    "ESCAPE" ->
+                                        SearchClear
 
-                                _ ->
-                                    NoOp
+                                    _ ->
+                                        NoOp
+
+                            else
+                                NoOp
                         )
                     |> D.map (\msg -> ( msg, True ))
                 )
