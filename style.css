@@ -14,7 +14,7 @@
 		'メイリオ',
 		Meiryo,
 		sans-serif;
-	background-color: var(--background-color);
+	background-color: rgb(var(--background-color-rgb));
 	color: var(--color);
 	--active-filter-background-color: #0FF;
 	--active-filter-border-color: #008080;
@@ -23,12 +23,6 @@
 	--hamburger-length: 50px;
 	--drawer-width: 100vw;
 	--event-width: 100vw;
-}
-
-@media (prefers-contrast: more) {
-	:root {
-		--translucent-background-color: var(--background-color);
-	}
 }
 
 /* Same font as the header of KemoV's official website. */
@@ -142,7 +136,7 @@ hr {
 	height: var(--hamburger-length);
 	border: var(--border-width) solid var(--border-color);
 	cursor: pointer;
-	background-color: var(--background-color);
+	background-color: rgb(var(--background-color-rgb));
 	stroke: var(--color);
 }
 
@@ -175,7 +169,7 @@ hr {
 	 * drawer content when it is collapsed. */
 	overflow-y: scroll;
 	overscroll-behavior-y: contain;
-	background-color: var(--background-color);
+	background-color: rgb(var(--background-color-rgb));
 	/* Hide the drawer visually, but not from screen readers, since the whole point of a drawer
 	 * widget is to save display space, which is irrelevant to screen reader users. */
 	left: calc(-1 * var(--drawer-width) - var(--border-width) - 2 * var(--margin-unit));
@@ -281,7 +275,7 @@ hr {
 
 .search-label > svg {
 	cursor: pointer;
-	fill: var(--background-color);
+	fill: rgb(var(--background-color-rgb));
 	stroke: currentColor;
 }
 
@@ -307,7 +301,7 @@ hr {
 }
 
 .about-button {
-	fill: var(--background-color);
+	fill: rgb(var(--background-color-rgb));
 	stroke: currentColor;
 }
 
@@ -332,7 +326,7 @@ main {
 	z-index: 1; /* Put it above `.event-thumbnail-container`. */
 	top: 0;
 	text-align: center;
-	background-color: var(--background-color);
+	background-color: rgb(var(--background-color-rgb));
 	border-bottom: solid var(--border-width) var(--border-color);
 	break-after: avoid-page;
 }
@@ -423,14 +417,21 @@ main {
 	inset: auto 0 0 auto;
 	border-top-left-radius: 5px;
 	padding: 0 calc(var(--margin-unit) / 2);
-	background-color: var(--translucent-background-color);
+	background-color: rgba(var(--background-color-rgb), .3);
 	-webkit-backdrop-filter: blur(5px);
 	backdrop-filter: blur(5px);
 	color: var(--color);
 }
 
-@media (prefers-contrast: more) {
+@supports not ((backdrop-filter: blur(5px)) or (-webkit-backdrop-filter: blur(5px))) {
 	.event-duration {
+		background-color: rgba(var(--background-color-rgb), .8);
+	}
+}
+
+@media (prefers-contrast: more) {
+   .event-duration	{
+	   background-color: rgb(var(--background-color-rgb));
 		-webkit-backdrop-filter: none;
 		backdrop-filter: none;
 	}
@@ -485,7 +486,7 @@ main {
 	/* TODO: Animate expansion/collapse. */
 	inset: auto 0 0 0;
 	width: 100vw;
-	background-color: var(--background-color);
+	background-color: rgb(var(--background-color-rgb));
 	border: solid var(--border-width) var(--border-color);
 	border-left: none;
 	border-right: none;
@@ -571,7 +572,7 @@ main {
 	height: 100vh;
 	max-height: initial;
 	padding: 0;
-	background-color: var(--background-color);
+	background-color: rgb(var(--background-color-rgb));
 }
 
 .modal-backdrop:not([open]) {
@@ -582,7 +583,7 @@ main {
 	display: flex;
 	flex-direction: column;
 	height: 100vh;
-	background-color: var(--background-color);
+	background-color: rgb(var(--background-color-rgb));
 	color: var(--color);
 }
 
@@ -702,7 +703,7 @@ main {
 	}
 
 	.hamburger.filter-active {
-		background-color: var(--background-color);
+		background-color: rgb(var(--background-color-rgb));
 	}
 
 	.primary-window > *:not(.hamburger, .drawer) {
