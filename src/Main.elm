@@ -709,8 +709,8 @@ update msg model =
         AboutRetryGetCopying ->
             ( model, getCopying )
 
-        OpenPopup idx ->
-            ( { model | activePopup = Just idx }, Cmd.none )
+        OpenPopup eventId ->
+            ( { model | activePopup = Just eventId }, Cmd.none )
 
         ClosePopup ->
             ( { model | activePopup = Nothing }, Cmd.none )
