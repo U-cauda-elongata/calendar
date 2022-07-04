@@ -710,7 +710,9 @@ update msg model =
             ( model, getCopying )
 
         OpenPopup eventId ->
-            ( { model | activePopup = Just eventId }, Cmd.none )
+            ( { model | activePopup = Just eventId }
+            , Dom.focus (firstOfPopup eventId) |> Task.attempt handleDomResult
+            )
 
         ClosePopup ->
             ( { model | activePopup = Nothing }, Cmd.none )
@@ -1682,6 +1684,11 @@ viewEvent env now filter popupExpanded feed event =
         ]
 
 
+firstOfPopup : String -> String
+firstOfPopup eventId =
+    "popupmenubtn-" ++ eventId
+
+
 viewEventPopup : Env -> Bool -> Event.Event -> Html Msg
 viewEventPopup env expanded event =
     let
@@ -1724,17 +1731,58 @@ viewEventPopup env expanded event =
             [ id popupId, class "popup", class "unstyle", ariaLabel shareLabel ]
             -- TODO: Add icons to the list items too.
             (let
+                firstId =
+                    firstOfPopup event.id
+
                 items =
                     if env.features.share then
-                        [ li [] (viewShareEvent env.translations event) ]
+                        [ -- "Share via…"
+                          li
+                            []
+                            [ button
+                                (let
+                                    attrs =
+                                        [ class "unstyle", onClick <| Share event.name event.link ]
+                                 in
+                                 if env.features.copy then
+                                    attrs
+
+                                 else
+                                    id firstId :: attrs
+                                )
+                                [ text <| TShare.shareVia env.translations ]
+                            ]
+                        ]
 
                     else
                         []
 
                 items2 =
                     if env.features.copy then
-                        li [] (viewCopyEvent env.translations event)
-                            :: li [] (viewCopyEventTimestamp env.translations event)
+                        -- "Copy title and URL"
+                        li []
+                            [ button
+                                [ id firstId
+                                , class "unstyle"
+                                , onClick <|
+                                    Copy
+                                        (event.link
+                                            |> Maybe.map (\link -> event.name ++ "\n" ++ link)
+                                            |> Maybe.withDefault event.name
+                                        )
+                                ]
+                                [ text <| TShare.copyTitleAndUrl env.translations ]
+                            ]
+                            :: -- "Copy timestamp"
+                               li []
+                                [ button
+                                    [ class "unstyle"
+                                    , onClick <|
+                                        Copy <|
+                                            (String.fromInt <| Time.posixToMillis event.time // 1000)
+                                    ]
+                                    [ text <| TShare.copyTimestamp env.translations ]
+                                ]
                             :: items
 
                     else
@@ -1743,38 +1791,6 @@ viewEventPopup env expanded event =
              items2
             )
         ]
-
-
-viewCopyEvent : Translations -> Event.Event -> List (Html Msg)
-viewCopyEvent translations event =
-    let
-        copyText =
-            event.link
-                |> Maybe.map (\link -> event.name ++ "\n" ++ link)
-                |> Maybe.withDefault event.name
-    in
-    [ button
-        [ class "unstyle", onClick <| Copy copyText ]
-        [ text <| TShare.copyTitleAndUrl translations ]
-    ]
-
-
-viewCopyEventTimestamp : Translations -> Event.Event -> List (Html Msg)
-viewCopyEventTimestamp translations event =
-    [ button
-        [ class "unstyle"
-        , onClick <| Copy <| String.fromInt <| Time.posixToMillis event.time // 1000
-        ]
-        [ text <| TShare.copyTimestamp translations ]
-    ]
-
-
-viewShareEvent : Translations -> Event.Event -> List (Html Msg)
-viewShareEvent translations event =
-    [ button
-        [ class "unstyle", onClick <| Share event.name event.link ]
-        [ text <| TShare.shareVia translations ]
-    ]
 
 
 viewEventMember : Bool -> Feed -> Html Msg
