@@ -1010,7 +1010,8 @@ view model =
             ]
             [ header [ class "app-title" ]
                 [ h1 [ class "wide-viewport" ] [ text longTitle ]
-                , h1 [ class "narrow-viewport" ] [ text <| T.shortTitle model.env.translations ]
+                , h1 [ class "narrow-viewport" ]
+                    [ abbr [ title longTitle ] [ text <| T.shortTitle model.env.translations ] ]
                 ]
             , let
                 iconId =
