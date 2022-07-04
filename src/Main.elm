@@ -1733,8 +1733,8 @@ viewEventPopup env expanded event =
 
                 items2 =
                     if env.features.copy then
-                        li [] (viewCopyEventTimestamp env.translations event)
-                            :: li [] (viewCopyEvent env.translations event)
+                        li [] (viewCopyEvent env.translations event)
+                            :: li [] (viewCopyEventTimestamp env.translations event)
                             :: items
 
                     else
