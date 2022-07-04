@@ -991,7 +991,11 @@ drawerId =
 
 view : Model -> Document Msg
 view model =
-    { title = T.title model.env.translations
+    let
+        longTitle =
+            T.title model.env.translations
+    in
+    { title = longTitle
     , body =
         [ lazy3 viewAboutDialog model.mode model.copying model.env.translations
         , lazy2 viewHelpDialog model.env.translations model.mode
@@ -1006,8 +1010,7 @@ view model =
             ]
             [ header [ class "app-title" ]
                 [ h1 []
-                    [ span [ class "wide-viewport" ]
-                        [ text <| T.title model.env.translations ]
+                    [ span [ class "wide-viewport" ] [ text longTitle ]
                     , span [ class "narrow-viewport" ]
                         [ text <| T.shortTitle model.env.translations ]
                     ]
@@ -1109,11 +1112,15 @@ viewDrawer translations expanded mode searchSuggestions filter =
                 "filter-clear-button-label"
           in
           li []
-            [ button
+            [ let
+                labelText =
+                    T.clearFilter translations
+              in
+              button
                 [ class "drawer-labelled-button"
                 , class "filter-clear-button"
                 , class "unstyle"
-                , title <| T.clearFilter translations
+                , title labelText
                 , disabled <| not <| Filter.isActive filter
                 , onClick ClearFilter
                 , ariaKeyshortcuts "Shift+0"
@@ -1122,8 +1129,7 @@ viewDrawer translations expanded mode searchSuggestions filter =
                 -- Using `Html.Attributes.class` function here would cause an exception
                 -- (in pure Elm, wow!) of setting getter-only property `className`.
                 [ Icon.clear [ Svg.Attributes.class "drawer-icon", ariaLabelledby labelId ]
-                , span [ id labelId, class "drawer-button-label" ]
-                    [ text <| T.clearFilter translations ]
+                , span [ id labelId, class "drawer-button-label" ] [ text labelText ]
                 ]
             ]
         , li [] <| viewSearch translations searchSuggestions filter.q
@@ -1673,6 +1679,9 @@ viewEventPopup env expanded event =
     let
         popupId =
             "popup-" ++ event.id
+
+        shareLabel =
+            TShare.share env.translations
     in
     div
         [ class "popup-container", lang env.lang ]
@@ -1692,7 +1701,7 @@ viewEventPopup env expanded event =
                         OpenPopup event.id
                     , True
                     )
-            , ariaLabel <| TShare.share env.translations
+            , ariaLabel shareLabel
             ]
             -- TODO: Add an icon.
             [ text "…" ]
@@ -1704,11 +1713,7 @@ viewEventPopup env expanded event =
             ]
             []
         , menu
-            [ id popupId
-            , class "popup"
-            , class "unstyle"
-            , ariaLabel <| TShare.share env.translations
-            ]
+            [ id popupId, class "popup", class "unstyle", ariaLabel shareLabel ]
             -- TODO: Add icons to the list items too.
             (let
                 items =
@@ -1881,6 +1886,9 @@ viewAboutDialog mode copying translations =
     let
         headingId =
             "about-heading"
+
+        titleText =
+            TAbout.title translations
     in
     dialog
         [ id aboutDialogId
@@ -1899,7 +1907,7 @@ viewAboutDialog mode copying translations =
                     , class "modal-back-button"
                     , class "unstyle"
                     , disabled <| mode == About AboutMain
-                    , ariaLabel <| T.goBackTo translations <| TAbout.title translations
+                    , ariaLabel <| T.goBackTo translations titleText
                     , onClick AboutBackToMain
                     ]
                     [ Icon.backButton ]
@@ -1910,7 +1918,7 @@ viewAboutDialog mode copying translations =
                                 "COPYING"
 
                             _ ->
-                                TAbout.title translations
+                                titleText
                     ]
                 , button
                     [ id aboutCloseButtonId
