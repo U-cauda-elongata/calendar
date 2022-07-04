@@ -33,12 +33,8 @@ jobs:
           git checkout .
           git add data/ feed/ || true
 
-          rm app.js || true
-          make ELM_MAKE=elm-optimize-level-2 ELMFLAGS= app.js
-
-          rm NikumaruFont.*.woff2 || true
-          make fonts
-
+          rm -- *.woff2 || true
+          make --always-make ELM_MAKE=elm-optimize-level-2 ELMFLAGS= app.js fonts
           git add -- app.js *.woff2 \*.woff2
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
