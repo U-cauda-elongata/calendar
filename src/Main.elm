@@ -1055,11 +1055,21 @@ view model =
                 ]
             ]
         , div
-            [ role "status"
-            , model.status
-                |> Maybe.map (ariaLabel << Tuple.second)
-                |> Maybe.withDefault (hidden True)
-            ]
+            (let
+                attrs =
+                    [ role "status"
+                    , ariaLive "polite"
+                    ]
+             in
+             case
+                model.status
+             of
+                Just ( _, status ) ->
+                    ariaLabel status :: attrs
+
+                Nothing ->
+                    attrs
+            )
             []
         ]
     }
