@@ -1725,25 +1725,22 @@ viewEventPopup env expanded event =
             -- TODO: Add icons to the list items too.
             (let
                 items =
-                    []
-
-                items2 =
                     if env.features.share then
-                        li [] (viewShareEvent env.translations event) :: items
+                        [ li [] (viewShareEvent env.translations event) ]
 
                     else
-                        items
+                        []
 
-                items3 =
+                items2 =
                     if env.features.copy then
                         li [] (viewCopyEventTimestamp env.translations event)
                             :: li [] (viewCopyEvent env.translations event)
-                            :: items2
+                            :: items
 
                     else
-                        items2
+                        items
              in
-             items3
+             items2
             )
         ]
 
