@@ -4,12 +4,12 @@
 	<meta charset="utf-8" />
 	<title>けものフレンズ配信カレンダー</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<!-- Don't send query parts, which may include sensitive data on super rare occasions. -->
+	<!-- Never send query parts, which may include sensitive data on super rare occasions. -->
 	<meta name="referrer" content="origin" />
+	<link href="feed/latest.json" rel="preload" as="fetch" />
 	<link href="light.css" rel="preload" as="style" media="not (prefers-color-scheme: dark)" />
 	<link href="dark.css" rel="preload" as="style" media="(prefers-color-scheme: dark)" />
 	<link href="style.css" rel="stylesheet" />
-	<link href="feed/latest.json" rel="preload" as="fetch" />
 	<script src="app.js" defer=""></script>
 	<meta name="description" content="けものフレンズ／けもＶの公式 YouTube 配信を一覧するツール" />
 	<meta name="keywords" content="けものフレンズ,けもフレ,けものフレンズVぷろじぇくと,けもV,ケープペンギン,ケープペンギンちゃんねる,ケプ子,African Penguin,フンボルトペンギン,フンボルトペンギンちゃんねる,フルル,Humboldt Penguin,シマハイイロギツネ,シマハイシン,シマハイ,Island Fox,コヨーテ,howlcast,Coyote,Coyo,ダイアウルフ,ダイアはここにいる,Dire Wolf,カラカル,カラ騒ぎ,Caracal,VTuber,YouTube" />
