@@ -192,7 +192,7 @@ hr {
 		transition-property: z-index,opacity;
 	}
 
-	.drawer-expanded >  .drawer, .drawer-container:focus-within {
+	.drawer-expanded > .drawer, .drawer-container:focus-within {
 		z-index: 2;
 		opacity: 1;
 	}
@@ -445,8 +445,8 @@ main {
 }
 
 @media (prefers-contrast: more) {
-   .event-duration	{
-	   background-color: rgb(var(--background-color-rgb));
+	.event-duration {
+		background-color: rgb(var(--background-color-rgb));
 		-webkit-backdrop-filter: none;
 		backdrop-filter: none;
 	}
