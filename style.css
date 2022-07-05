@@ -749,7 +749,7 @@ main {
 	}
 
 	.drawer-expanded {
-		--event-width: calc(100vw - 2 (--border-width) - var(--drawer-width));
+		--event-width: calc(100vw - 2 * (--border-width) - var(--drawer-width));
 	}
 
 	.drawer-expanded .wide-viewport {
