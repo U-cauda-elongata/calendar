@@ -78,11 +78,11 @@
 		"kbdQuestion": "このヘルプを表示する"
 	},
 	"status": {
-		"clearFeedFilter": "全てのチャンネルを表示します。",
-		"clearFilter": "全てのフィルターをクリアーしました。",
-		"showingFeed": "チャンネル「{{title}}」を表示します。",
-		"hidingFeed": "チャンネル「{{title}}」を非表示にします。",
-		"showingOnly": "チャンネル「{{title}}」のみを表示します。"
+		"clearFeedFilter": "全てのチャンネルを表示します",
+		"clearFilter": "全てのフィルターをクリアーしました",
+		"showingFeed": "チャンネル「{{title}}」を表示します",
+		"hidingFeed": "チャンネル「{{title}}」を非表示にします",
+		"showingOnly": "チャンネル「{{title}}」のみを表示します"
 	},
 	"observance": {
 		"African Penguin and Humboldt Penguin's debut anniversary": "ケープペンギン・フンボルトペンギンのデビュー記念日",

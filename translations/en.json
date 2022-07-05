@@ -77,10 +77,10 @@
 		"kbdQuestion": "Show this help"
 	},
 	"status": {
-		"clearFeedFilter": "Showing all the channels.",
-		"clearFilter": "Cleared all the filters.",
-		"showingFeed": "Showing channel: {{title}}.",
-		"hidingFeed": "Hiding channel: {{title}}.",
-		"showingOnly": "Showing only channel: {{title}}."
+		"clearFeedFilter": "Showing all the channels",
+		"clearFilter": "Cleared all the filters",
+		"showingFeed": "Showing channel: {{title}}",
+		"hidingFeed": "Hiding channel: {{title}}",
+		"showingOnly": "Showing only channel: {{title}}"
 	}
 }
