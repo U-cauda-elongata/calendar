@@ -28,6 +28,7 @@ import Process
 import Query
 import Search
 import Set exposing (Set)
+import Status exposing (Status)
 import Svg.Attributes
 import Task
 import Time
@@ -38,7 +39,6 @@ import Translations.Event as TEvent
 import Translations.Event.Description as TEventDescription
 import Translations.Help as THelp
 import Translations.Share as TShare
-import Translations.Status as TStatus
 import TranslationsExt as T
 import Url exposing (Url)
 import Url.Builder
@@ -118,7 +118,7 @@ type alias Model =
     , -- An ephemeral message to be announced by screen readers.
       -- The `Int` is meant to be an identifier of the message, which is used to determine the
       -- correct message to clear in scheduled tasks.
-      status : Maybe ( Int, String )
+      status : Maybe ( Int, Status )
 
     -- Widgets:
     , drawerExpanded : Bool
@@ -481,12 +481,10 @@ update msg model =
                 Just 0 ->
                     if not key.alt && not key.ctrl && not key.meta then
                         if key.shift then
-                            update ClearFilter model
-                                |> setStatus (TStatus.clearFilter model.env.translations)
+                            update ClearFilter model |> setStatus Status.ClearFilter
 
                         else
-                            update ClearFeedFilter model
-                                |> setStatus (TStatus.clearFeedFilter model.env.translations)
+                            update ClearFeedFilter model |> setStatus Status.ClearFeedFilter
 
                     else
                         ( model, Cmd.none )
@@ -505,13 +503,7 @@ update msg model =
                             model.filter.feeds
                                 |> List.getAt i
                                 |> Maybe.map
-                                    (\feed ->
-                                        ret
-                                            |> setStatus
-                                                (TStatus.showingOnly model.env.translations
-                                                    feed.preset.title
-                                                )
-                                    )
+                                    (\feed -> ret |> setStatus (Status.HideOtherFeeds feed))
                                 |> Maybe.withDefault ret
 
                         else
@@ -526,12 +518,10 @@ update msg model =
                                         ret
                                             |> setStatus
                                                 (if feed.checked then
-                                                    TStatus.showingFeed model.env.translations
-                                                        feed.preset.title
+                                                    Status.ShowFeed feed
 
                                                  else
-                                                    TStatus.hidingFeed model.env.translations
-                                                        feed.preset.title
+                                                    Status.HideFeed feed
                                                 )
                                     )
                                 |> Maybe.withDefault ret
@@ -1056,23 +1046,13 @@ view model =
                 , lazy2 viewErrorLog model.env.translations model.errors
                 ]
             ]
-        , div
-            (let
-                attrs =
-                    [ role "status"
-                    , ariaLive "polite"
-                    ]
-             in
-             case
-                model.status
-             of
+        , div [ class "sr-only", role "status", ariaLive "polite" ] <|
+            case model.status of
                 Just ( _, status ) ->
-                    ariaLabel status :: attrs
+                    Status.view model.env.translations status
 
                 Nothing ->
-                    attrs
-            )
-            []
+                    []
         ]
     }
 

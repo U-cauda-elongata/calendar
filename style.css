@@ -84,6 +84,15 @@ hr {
 	border-top: solid var(--border-width) var(--border-color);
 }
 
+.sr-only {
+	clip-path: inset(0 100% 100% 0);
+	margin: -1px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	user-select: none;
+}
+
 .wide-viewport {
 	display: none;
 }
