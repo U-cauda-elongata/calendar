@@ -1046,7 +1046,7 @@ view model =
                 , lazy2 viewErrorLog model.env.translations model.errors
                 ]
             ]
-        , div [ class "sr-only", role "status", ariaLive "polite" ] <|
+        , div [ class "sr-only", role "status" ] <|
             case model.status of
                 Just ( _, status ) ->
                     Status.view model.env.translations status
