@@ -199,11 +199,10 @@ hr {
 	}
 }
 
+/* I wish we could write something like `@supports ... or @media ...`. */
 @media (prefers-contrast: more) {
 	.drawer {
 		background-color: rgb(var(--background-color-rgb));
-		-webkit-backdrop-filter: none;
-		backdrop-filter: none;
 	}
 }
 
@@ -366,8 +365,6 @@ main {
 @media (prefers-contrast: more) {
 	.date-heading {
 		background-color: rgb(var(--background-color-rgb));
-		-webkit-backdrop-filter: none;
-		backdrop-filter: none;
 	}
 }
 
@@ -472,8 +469,6 @@ main {
 @media (prefers-contrast: more) {
 	.event-duration {
 		background-color: rgb(var(--background-color-rgb));
-		-webkit-backdrop-filter: none;
-		backdrop-filter: none;
 	}
 }
 
@@ -539,8 +534,6 @@ main {
 @media (prefers-contrast: more) {
 	.popup {
 		background-color: rgb(var(--background-color-rgb));
-		-webkit-backdrop-filter: none;
-		backdrop-filter: none;
 	}
 }
 
@@ -678,8 +671,6 @@ main {
 @media (prefers-contrast: more) {
 	.dialog-title-bar {
 		background-color: rgb(var(--background-color-rgb));
-		-webkit-backdrop-filter: none;
-		backdrop-filter: none;
 	}
 }
 
