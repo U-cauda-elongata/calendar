@@ -182,13 +182,29 @@ hr {
 	 * drawer content when it is collapsed. */
 	overflow-y: scroll;
 	overscroll-behavior-y: contain;
-	background-color: rgb(var(--background-color-rgb));
+	background-color: rgba(var(--background-color-rgb), .8);
+	-webkit-backdrop-filter: blur(50px);
+	backdrop-filter: blur(50px);
 	/* Hide the drawer visually, but not from screen readers, since the whole point of a drawer
 	 * widget is to save display space, which is irrelevant to screen reader users. */
 	left: calc(-1 * var(--drawer-width) - var(--border-width) - 2 * var(--margin-unit));
 	transition: left .2s;
 	/* XXX: Should we include `user-select: none` here? That would improve experience for
 	 * sighted users a bit, but might be confusing for screen reader users. */
+}
+
+@supports not ((backdrop-filter: blur(50px)) or (-webkit-backdrop-filter: blur(50px))) {
+	.drawer {
+		background-color: rgb(var(--background-color-rgb));
+	}
+}
+
+@media (prefers-contrast: more) {
+	.drawer {
+		background-color: rgb(var(--background-color-rgb));
+		-webkit-backdrop-filter: none;
+		backdrop-filter: none;
+	}
 }
 
 .drawer-expanded > .drawer, .drawer:focus-within {
@@ -441,13 +457,13 @@ main {
 	inset: auto 0 0 auto;
 	border-top-left-radius: 5px;
 	padding: 0 calc(var(--margin-unit) / 2);
-	background-color: rgba(var(--background-color-rgb), .3);
-	-webkit-backdrop-filter: blur(5px);
-	backdrop-filter: blur(5px);
+	background-color: rgba(var(--background-color-rgb), .4);
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
 	color: var(--color);
 }
 
-@supports not ((backdrop-filter: blur(5px)) or (-webkit-backdrop-filter: blur(5px))) {
+@supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
 	.event-duration {
 		background-color: rgba(var(--background-color-rgb), .8);
 	}
@@ -506,15 +522,15 @@ main {
 	/* TODO: Animate expansion/collapse. */
 	inset: auto 0 0 0;
 	width: 100vw;
-	background-color: rgba(var(--background-color-rgb), .9);
-	-webkit-backdrop-filter: blur(20px);
-	backdrop-filter: blur(20px);
+	background-color: rgba(var(--background-color-rgb), .5);
+	-webkit-backdrop-filter: blur(50px);
+	backdrop-filter: blur(50px);
 	border: solid var(--border-width) var(--border-color);
 	border-left: none;
 	border-right: none;
 }
 
-@supports not ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px))) {
+@supports not ((backdrop-filter: blur(50px)) or (-webkit-backdrop-filter: blur(50px))) {
 	.popup {
 		background-color: rgb(var(--background-color-rgb));
 	}
@@ -648,12 +664,12 @@ main {
 	padding: 0 calc(2 * var(--margin-unit));
 	height: var(--hamburger-length);
 	flex-shrink: 0;
-	background-color: rgba(var(--background-color-rgb), .9);
-	-webkit-backdrop-filter: blur(20px);
-	backdrop-filter: blur(20px);
+	background-color: rgba(var(--background-color-rgb), .8);
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
 }
 
-@supports not ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px))) {
+@supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
 	.dialog-title-bar {
 		background-color: rgb(var(--background-color-rgb));
 	}
@@ -772,6 +788,7 @@ main {
 		left: initial;
 		/* Visually hide labels and the search input inside it by default. */
 		width: calc(var(--hamburger-length) + var(--border-width));
+		background-color: rgb(var(--background-color-rgb));
 		overflow-x: hidden;
 		transition-property: width;
 	}
