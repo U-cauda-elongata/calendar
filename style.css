@@ -329,10 +329,6 @@ main {
 	flex-grow: 1;
 }
 
-.timeline > li {
-	display: inline-block;
-}
-
 .date-heading {
 	position: sticky;
 	z-index: 1; /* Put it above `.event-thumbnail-container`. */
@@ -899,6 +895,7 @@ main {
 	}
 
 	.timeline > li {
+		display: inline-block;
 		vertical-align: top;
 	}
 
