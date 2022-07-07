@@ -153,13 +153,13 @@ hr {
 	stroke: var(--color);
 }
 
-.drawer-button-label {
+.drawer-item-label {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
 
-.drawer-labelled-button:is([aria-checked="false"], :disabled) .drawer-button-label {
+.drawer-item:is([aria-checked="false"], :disabled) .drawer-item-label {
 	color: var(--disabled-button-color);
 }
 
@@ -231,17 +231,14 @@ hr {
 	flex-direction: column;
 	box-sizing: padding-box;
 	margin: initial;
-	padding-bottom: var(--margin-unit);
+	padding-bottom: calc(var(--margin-unit) / 2);
 	width: var(--drawer-width);
 	min-height: 100vh;
 }
 
-.drawer-menu > * + li {
-	margin-top: var(--margin-unit);
-}
-
 .drawer-menu > hr {
-	margin: var(--margin-unit) 0 0 0;
+	margin-top: calc(var(--margin-unit) / 2);
+	margin-bottom: calc(var(--margin-unit) / 2);
 	width: 100%;
 }
 
@@ -249,17 +246,17 @@ hr {
 	stroke-linecap: round;
 }
 
-.drawer-labelled-button {
+.drawer-item {
 	display: flex;
 	align-items: center;
 	padding: 0;
 	width: 100%;
-	height: calc(var(--hamburger-length) + var(--border-width));
+	min-height: calc(var(--hamburger-length) + 2 * var(--border-width));
 	text-align: left;
 	font-size: inherit;
 }
 
-.drawer-labelled-button:not(:disabled) {
+button.drawer-item:not(:disabled) {
 	cursor: pointer;
 }
 
@@ -269,6 +266,8 @@ hr {
 	width: calc(var(--border-width) + var(--hamburger-length));
 	height: calc(var(--border-width) + var(--hamburger-length));
 	overflow: hidden;
+	margin-top: calc(var(--margin-unit) / 2);
+	margin-bottom: calc(var(--margin-unit) / 2);
 }
 
 .avatar {
@@ -295,11 +294,6 @@ hr {
 	stroke: var(--disabled-button-stroke);
 }
 
-.search-label {
-	display: flex;
-	align-items: center;
-}
-
 .search-label > svg {
 	cursor: pointer;
 	fill: rgb(var(--background-color-rgb));
@@ -321,10 +315,6 @@ hr {
 
 .feed-filter > ul {
 	padding: initial;
-}
-
-.feed-filter > ul > li + li {
-	margin-top: var(--margin-unit);
 }
 
 .about-button {

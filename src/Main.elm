@@ -1084,14 +1084,14 @@ viewDrawer translations expanded mode searchSuggestions filter =
         [ li []
             [ button
                 [ id hamburgerLabelButtonId
-                , class "drawer-labelled-button"
+                , class "drawer-item"
                 , class "unstyle"
                 , ariaLabel <| T.expandMenu translations
                 , ariaDescribedby hamburgerDescriptionId
                 , ariaPressed <| expanded
                 , onClick <| HamburgerChecked <| not expanded
                 ]
-                [ span [ id hamburgerLabelId, class "hamburger-label", class "drawer-button-label" ]
+                [ span [ id hamburgerLabelId, class "hamburger-label", class "drawer-item-label" ]
                     [ text <| T.collapseMenu translations ]
                 , span [ id hamburgerDescriptionId, hidden True ]
                     [ text <| T.hamburgerDescription translations ]
@@ -1107,7 +1107,7 @@ viewDrawer translations expanded mode searchSuggestions filter =
                     T.clearFilter translations
               in
               button
-                [ class "drawer-labelled-button"
+                [ class "drawer-item"
                 , class "filter-clear-button"
                 , class "unstyle"
                 , title labelText
@@ -1119,7 +1119,7 @@ viewDrawer translations expanded mode searchSuggestions filter =
                 -- Using `Html.Attributes.class` function here would cause an exception
                 -- (in pure Elm, wow!) of setting getter-only property `className`.
                 [ Icon.clear [ Svg.Attributes.class "drawer-icon", ariaLabelledby labelId ]
-                , span [ id labelId, class "drawer-button-label" ] [ text labelText ]
+                , span [ id labelId, class "drawer-item-label" ] [ text labelText ]
                 ]
             ]
         , li [] <| viewSearch translations searchSuggestions filter.q
@@ -1136,7 +1136,7 @@ viewDrawer translations expanded mode searchSuggestions filter =
           li []
             [ button
                 [ id aboutButtonId
-                , class "drawer-labelled-button"
+                , class "drawer-item"
                 , class "about-button"
                 , class "unstyle"
                 , title labelText
@@ -1153,7 +1153,7 @@ viewDrawer translations expanded mode searchSuggestions filter =
                 , Html.Events.onClick <| SetMode <| About AboutMain
                 ]
                 [ Icon.about [ Svg.Attributes.class "drawer-icon", ariaLabelledby labelId ]
-                , span [ id labelId, class "drawer-button-label" ]
+                , span [ id labelId, class "drawer-item-label" ]
                     [ text <| labelText ]
                 ]
             ]
@@ -1174,7 +1174,7 @@ viewSearch translations suggestions q =
         datalistId =
             "searchlist"
     in
-    [ label [ class "search-label", title labelText ]
+    [ label [ class "search-label", class "drawer-item", title labelText ]
         [ Icon.search [ Svg.Attributes.class "drawer-icon", ariaLabel labelText ]
         , input
             [ id searchInputId
@@ -1225,7 +1225,7 @@ viewFeedFilter translations feeds =
                         in
                         li [ lang feed.preset.lang ]
                             [ button
-                                [ class "drawer-labelled-button"
+                                [ class "drawer-item"
                                 , class "filter-button"
                                 , class "unstyle"
                                 , role "switch"
@@ -1240,7 +1240,7 @@ viewFeedFilter translations feeds =
                                 [ div
                                     [ class "avatar", class "drawer-icon" ]
                                     [ img [ src feed.preset.icon, alt feed.preset.title ] [] ]
-                                , span [ id labelId, class "drawer-button-label" ]
+                                , span [ id labelId, class "drawer-item-label" ]
                                     [ text feed.preset.title ]
                                 ]
                             ]
