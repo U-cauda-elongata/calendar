@@ -1700,76 +1700,75 @@ viewEventPopup env expanded event =
             ]
             -- TODO: Add an icon.
             [ text "…" ]
-        , button
-            [ class "popup-backdrop-button"
-            , class "unstyle"
-            , hidden <| not expanded
-            , ariaHidden True
-            ]
-            []
-        , menu
-            [ id popupId, class "popup", class "unstyle", ariaLabel shareLabel ]
-            -- TODO: Add icons to the list items too.
-            (let
-                firstId =
-                    firstOfPopup event.id
+        , div [ class "popup-backdrop" ]
+            [ button [ class "popup-backdrop-button", class "unstyle", ariaHidden True ] []
+            , menu
+                [ id popupId, class "popup", class "unstyle", ariaLabel shareLabel ]
+                -- TODO: Add icons to the list items too.
+                (let
+                    firstId =
+                        firstOfPopup event.id
 
-                items =
-                    if env.features.share then
-                        [ -- "Share via…"
-                          li
-                            []
-                            [ button
-                                (let
-                                    attrs =
-                                        [ class "unstyle", onClick <| Share event.name event.link ]
-                                 in
-                                 if env.features.copy then
-                                    attrs
-
-                                 else
-                                    id firstId :: attrs
-                                )
-                                [ text <| TShare.shareVia env.translations ]
-                            ]
-                        ]
-
-                    else
-                        []
-
-                items2 =
-                    if env.features.copy then
-                        -- "Copy title and URL"
-                        li []
-                            [ button
-                                [ id firstId
-                                , class "unstyle"
-                                , onClick <|
-                                    Copy
-                                        (event.link
-                                            |> Maybe.map (\link -> event.name ++ "\n" ++ link)
-                                            |> Maybe.withDefault event.name
-                                        )
-                                ]
-                                [ text <| TShare.copyTitleAndUrl env.translations ]
-                            ]
-                            :: -- "Copy timestamp"
-                               li []
+                    items =
+                        if env.features.share then
+                            [ -- "Share via…"
+                              li
+                                []
                                 [ button
-                                    [ class "unstyle"
-                                    , onClick <|
-                                        Copy <|
-                                            (String.fromInt <| Time.posixToMillis event.time // 1000)
-                                    ]
-                                    [ text <| TShare.copyTimestamp env.translations ]
-                                ]
-                            :: items
+                                    (let
+                                        attrs =
+                                            [ class "unstyle"
+                                            , onClick <| Share event.name event.link
+                                            ]
+                                     in
+                                     if env.features.copy then
+                                        attrs
 
-                    else
-                        items
-             in
-             items2
-            )
+                                     else
+                                        id firstId :: attrs
+                                    )
+                                    [ text <| TShare.shareVia env.translations ]
+                                ]
+                            ]
+
+                        else
+                            []
+
+                    items2 =
+                        if env.features.copy then
+                            -- "Copy title and URL"
+                            li []
+                                [ button
+                                    [ id firstId
+                                    , class "unstyle"
+                                    , onClick <|
+                                        Copy
+                                            (event.link
+                                                |> Maybe.map (\link -> event.name ++ "\n" ++ link)
+                                                |> Maybe.withDefault event.name
+                                            )
+                                    ]
+                                    [ text <| TShare.copyTitleAndUrl env.translations ]
+                                ]
+                                :: -- "Copy timestamp"
+                                   li []
+                                    [ button
+                                        [ class "unstyle"
+                                        , onClick <|
+                                            Copy <|
+                                                String.fromInt
+                                                    (Time.posixToMillis event.time // 1000)
+                                        ]
+                                        [ text <| TShare.copyTimestamp env.translations ]
+                                    ]
+                                :: items
+
+                        else
+                            items
+                 in
+                 items2
+                )
+            ]
         ]
 
 

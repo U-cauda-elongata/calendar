@@ -489,24 +489,31 @@ main {
 	cursor: pointer;
 }
 
-.popup-backdrop-button {
+.popup-backdrop {
+	display: flex;
+	flex-direction: column;
 	position: fixed;
 	z-index: 3;
 	inset: 0;
-	outline-offset: -3px;
-	padding: initial;
 	width: 100vw;
 	height: 100vh;
+}
+
+.popup-toggle[aria-expanded="false"] ~ .popup-backdrop {
+	display: none;
+}
+
+.popup-backdrop-button {
+	flex-grow: 1;
+	outline-offset: -3px;
+	padding: initial;
+	width: 100%;
 	-webkit-backdrop-filter: brightness(.6);
 	backdrop-filter: brightness(.6);
 }
 
 .popup {
-	position: fixed;
-	z-index: 3; /* Put it above everything else except the modal dialog. */
-	/* TODO: Animate expansion/collapse. */
-	inset: auto 0 0 0;
-	width: 100vw;
+	width: 100%;
 	background-color: rgba(var(--background-color-rgb), .5);
 	-webkit-backdrop-filter: blur(50px);
 	backdrop-filter: blur(50px);
@@ -525,10 +532,6 @@ main {
 	.popup {
 		background-color: rgb(var(--background-color-rgb));
 	}
-}
-
-.popup-toggle[aria-expanded="false"] ~ .popup {
-	display: none;
 }
 
 .popup button {
@@ -802,14 +805,19 @@ main {
 		}
 	}
 
+	.popup-backdrop {
+		position: absolute;
+		inset: auto 0 auto auto;
+		width: auto;
+		height: auto;
+	}
+
 	/* Make the popup float near the allipsis. */
 	.popup-backdrop-button {
 		display: none;
 	}
 
 	.popup {
-		position: absolute;
-		inset: auto 0 auto auto;
 		border: solid var(--border-width) var(--border-color);
 		border-radius: 5px;
 		width: max-content;
