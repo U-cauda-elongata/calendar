@@ -16,7 +16,7 @@
 			"scheduledLive": "{{members}}により配信予定、{{eta}}に開始",
 			"ongoingLive": "{{members}}により配信中、{{eta}}に開始",
 			"endedLive": "{{members}}により行われたライブ配信、{{time}}に開始、長さ{{duration}}",
-			"video": "{{members}}による動画、{{time}}にアップロード、長さ{{duration}}",
+			"video": "{{members}}が{{time}}にアップロード、長さ{{duration}}",
 			"twoMembers": "{{author}}と{{member}}",
 			"moreThanTwoMembers": "{{author}}他{{n}}名"
 		},
