@@ -217,7 +217,7 @@ init flags url key =
             , lang = lang
             , translations =
                 I18Next.fromTree
-                    [ ( "title", I18Next.string "" )
+                    [ ( "title", I18Next.string "けものフレンズ配信カレンダー" )
                     , ( "shortTitle", I18Next.string "" )
                     , ( "nowSeparator", I18Next.string "{{time}}" )
                     ]
