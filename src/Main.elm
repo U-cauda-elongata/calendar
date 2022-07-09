@@ -1701,8 +1701,7 @@ viewEventPopup env expanded event =
             -- TODO: Add an icon.
             [ text "…" ]
         , div [ class "popup-backdrop" ]
-            [ button [ class "popup-backdrop-button", class "unstyle", ariaHidden True ] []
-            , menu
+            [ menu
                 [ id popupId, class "popup", class "unstyle", ariaLabel shareLabel ]
                 -- TODO: Add icons to the list items too.
                 (let

@@ -503,10 +503,9 @@ main {
 	display: none;
 }
 
-.popup-backdrop-button {
+.popup-backdrop::before {
+	content: "";
 	flex-grow: 1;
-	outline-offset: -3px;
-	padding: initial;
 	width: 100%;
 	-webkit-backdrop-filter: brightness(.6);
 	backdrop-filter: brightness(.6);
