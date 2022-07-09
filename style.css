@@ -811,7 +811,7 @@ main {
 		height: auto;
 	}
 
-	/* Make the popup float near the allipsis. */
+	/* Make the popup float near the ellipsis. */
 	.popup-backdrop-button {
 		display: none;
 	}

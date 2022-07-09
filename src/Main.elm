@@ -857,12 +857,11 @@ update msg model =
             case url.path |> String.stripPrefix model.env.url.path of
                 Just "COPYING" ->
                     ( { model | mode = About AboutCopying }
-                    , case model.copying of
-                        Just _ ->
-                            Cmd.none
+                    , if model.copying == Nothing then
+                        getCopying
 
-                        Nothing ->
-                            getCopying
+                      else
+                        Cmd.none
                     )
 
                 _ ->
@@ -989,7 +988,7 @@ view model =
     in
     { title = longTitle
     , body =
-        [ lazy3 viewAboutDialog model.mode model.copying model.env.translations
+        [ lazy3 viewAboutDialog model.env.translations model.mode model.copying
         , lazy2 viewHelpDialog model.env.translations model.mode
         , let
             drawerExpanded =
@@ -1153,8 +1152,7 @@ viewDrawer translations expanded mode searchSuggestions filter =
                 , Html.Events.onClick <| SetMode <| About AboutMain
                 ]
                 [ Icon.about [ Svg.Attributes.class "drawer-icon", ariaLabelledby labelId ]
-                , span [ id labelId, class "drawer-item-label" ]
-                    [ text <| labelText ]
+                , span [ id labelId, class "drawer-item-label" ] [ text <| labelText ]
                 ]
             ]
         ]
@@ -1880,8 +1878,8 @@ aboutDialogId =
     "about"
 
 
-viewAboutDialog : Mode -> Maybe (Result Http.Error (Html Msg)) -> Translations -> Html Msg
-viewAboutDialog mode copying translations =
+viewAboutDialog : Translations -> Mode -> Maybe (Result Http.Error (Html Msg)) -> Html Msg
+viewAboutDialog translations mode copying =
     let
         headingId =
             "about-heading"
@@ -1912,12 +1910,11 @@ viewAboutDialog mode copying translations =
                     [ Icon.backButton ]
                 , h2 [ id headingId, class "dialog-title" ]
                     [ text <|
-                        case mode of
-                            About AboutCopying ->
-                                "COPYING"
+                        if mode == About AboutCopying then
+                            "COPYING"
 
-                            _ ->
-                                titleText
+                        else
+                            titleText
                     ]
                 , button
                     [ id aboutCloseButtonId
@@ -2019,7 +2016,7 @@ viewHelpDialog translations mode =
         , ariaModal True
         , ariaLabelledby headingId
         ]
-        [ div [ class "modal", Html.Events.stopPropagationOn "click" <| D.succeed ( NoOp, True ) ]
+        [ div [ class "modal" ]
             [ header [ class "dialog-title-bar" ]
                 [ h2 [ id headingId, class "dialog-title" ]
                     [ text <| THelp.title translations ]
