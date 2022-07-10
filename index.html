@@ -4,6 +4,18 @@
 	<meta charset="utf-8" />
 	<title>けものフレンズ配信カレンダー</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="color-scheme" content="light dark" />
+	<style>
+		:root {
+			background-color: rgb(var(--background-color-rgb));
+			--background-color-rgb: 255, 255, 255;
+		}
+		@media (prefers-color-scheme: dark) {
+			:root {
+				--background-color-rgb: 0, 0, 0;
+			}
+		}
+	</style>
 	<!-- Never send query parts, which may include sensitive data on super rare occasions. -->
 	<meta name="referrer" content="origin" />
 	<link href="feed/latest.json" rel="preload" as="fetch" crossorigin="" />

@@ -14,7 +14,6 @@
 		'メイリオ',
 		Meiryo,
 		sans-serif;
-	background-color: rgb(var(--background-color-rgb));
 	color: var(--color);
 	--active-filter-background-color: #0FF;
 	--active-filter-border-color: #008080;
