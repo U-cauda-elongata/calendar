@@ -1934,6 +1934,14 @@ viewAboutDialog translations mode copying =
         , button
             [ class "modal-backdrop-button"
             , class "unstyle"
+            , hidden <| mode == About AboutMain
+            , ariaLabel <| T.goBackTo translations <| TAbout.title translations
+            , onClick AboutBackToMain
+            ]
+            [ Icon.backButton ]
+        , button
+            [ class "modal-backdrop-button"
+            , class "unstyle"
             , ariaLabel <| T.srCloseDialog translations
             , onClick <| SetMode None
             ]
