@@ -25,14 +25,16 @@ class Feed
     title = REXML::XPath.first(doc, '/a:feed/a:title/text()', NS).value
     entries = REXML::XPath.match(doc, '/a:feed/a:entry', NS).map do |entry|
       id = REXML::XPath.first(entry, './y:videoId/text()', NS).value
-      group = REXML::XPath.first(entry, './m:group', NS)
-      [id, {
+      value = {
         name: REXML::XPath.first(entry, './a:title/text()', NS).value,
         time: Time.iso8601(REXML::XPath.first(entry, './a:published/text()', NS).value).to_i,
         link: "https://www.youtube.com/watch?v=#{id}",
         thumbnail: "https://img.youtube.com/vi/#{id}/mqdefault.jpg",
-        description: REXML::XPath.first(group, './m:description/text()', NS).value,
-      }]
+      }
+      group = REXML::XPath.first(entry, './m:group', NS)
+      description = REXML::XPath.first(group, './m:description/text()', NS)&.value
+      value[:description] = description if description
+      [id, value]
     end.to_h
 
     new(alternate, title, entries)

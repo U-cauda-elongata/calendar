@@ -43,6 +43,7 @@ end.to_h
 # Detect collab members by `@`-mentions in the description.
 entries.each do |entry|
   description = entry.delete('description')
+  break unless description
   members = description.each_line.filter_map do |line|
     match = line.match(/.*[@＠](.+?)\s*$/)
     if match
