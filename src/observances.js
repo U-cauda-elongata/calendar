@@ -35,6 +35,19 @@ const observances = [
 		sinceYear: 2023,
 	},
 	{
+		// XXX: Needs a reliable source. One under `pref.nagasaki.jp` domain would be preferable.
+		key: "Island Day",
+		month: 7,
+		date: 1,
+	},
+	{
+		// <https://twitter.com/Shimahai_KEMOV/status/1553691109486133248>
+		key: "Shimahai Day",
+		month: 7,
+		date: 1,
+		sinceYear: 2022,
+	},
+	{
 		// <https://www.worldanimalday.org.uk/>
 		key: "World Animal Day",
 		month: 9,
