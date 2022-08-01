@@ -35,6 +35,13 @@ const observances = [
 		sinceYear: 2023,
 	},
 	{
+		// <https://twitter.com/Hululu_KEMOV/status/1489987405566427143>
+		key: "Hululu Day",
+		month: 1,
+		date: 6,
+		sinceYear: 2022,
+	},
+	{
 		// XXX: Needs a reliable source. One under `pref.nagasaki.jp` domain would be preferable.
 		key: "Island Day",
 		month: 7,
