@@ -39,7 +39,7 @@ const feeds = [
 		id: "yt:channel:UCNObi6xvj6QeZ0g7BhAbF7w",
 		title: "ジェネット / Large-spotted Genet",
 		lang: "ja",
-		icon: "https://yt3.ggpht.com/qC2D9mBgEcXQWqzf7mG0g5T5JTa_-H8OjDpOvcYLrm1vrIboL52ytoGFvZTUoSjJaCQ94wo0XQ=s60",
+		icon: "https://yt3.ggpht.com/F6Ohg12s3EWoWndeHE75L9t6SSCUz3fldo5eXuvWKgnAIp6cJtBgKu2bcjLUEo2tdzO4hlIy=s60",
 	},
 	{
 		id: "yt:channel:UCYa58DdXGAGMJQHqTxi-isA",
