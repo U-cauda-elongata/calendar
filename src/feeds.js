@@ -36,6 +36,18 @@ const feeds = [
 		icon: "https://yt3.ggpht.com/PfYRtTGfYRkpluFsqAjYgSERbvu7wQ-pNpRARUeSTvka1pa-t3rFgb4DhxNuhDikmz-BP8WLgw=s60",
 	},
 	{
+		id: "yt:channel:UCNObi6xvj6QeZ0g7BhAbF7w",
+		title: "ジェネット / Large-spotted Genet",
+		lang: "ja",
+		icon: "https://yt3.ggpht.com/qC2D9mBgEcXQWqzf7mG0g5T5JTa_-H8OjDpOvcYLrm1vrIboL52ytoGFvZTUoSjJaCQ94wo0XQ=s60",
+	},
+	{
+		id: "yt:channel:UCYa58DdXGAGMJQHqTxi-isA",
+		title: "ジョフロイネコ / Geoffroy’s Cat",
+		lang: "ja",
+		icon: "https://yt3.ggpht.com/qC2D9mBgEcXQWqzf7mG0g5T5JTa_-H8OjDpOvcYLrm1vrIboL52ytoGFvZTUoSjJaCQ94wo0XQ=s60",
+	},
+	{
 		id: "yt:channel:UCEcMIuGR8WO2TwL9XIpjKtw",
 		title: "ケープペンギン / African Penguin",
 		lang: "ja",
