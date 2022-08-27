@@ -5,9 +5,10 @@ on:
       - main
     paths:
       - Makefile
-      - '**.elm'
       - elm.json
-      - 'src/**.otf'
+      - 'src/**'
+  workflow_dispatch: {}
+
 jobs:
   build:
     runs-on: ubuntu-latest
