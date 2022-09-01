@@ -48,6 +48,24 @@ const feeds = [
 		icon: "https://yt3.ggpht.com/qC2D9mBgEcXQWqzf7mG0g5T5JTa_-H8OjDpOvcYLrm1vrIboL52ytoGFvZTUoSjJaCQ94wo0XQ=s60",
 	},
 	{
+		id: "yt:channel:UCnyE-wD1pE2GZOxA6OHjW9g",
+		title: "ウサギコウモリ / Brown Long-eared Bat",
+		lang: "ja",
+		icon: "https://yt3.ggpht.com/mXoIytpI8YNV_Zy2-0w321XTvoLdkqf7Uw9SKpYmfqq40zuoGeUNcs6vZfcJHvtuPGkKWRVpOg=s60",
+	},
+	{
+		id: "yt:channel:UCtJSUW-5FnwfaivXpluABWA",
+		title: "ジャングルキャット / Jungle Cat",
+		lang: "ja",
+		icon: "https://yt3.ggpht.com/SwzdmxFAnvpDq7mnKTFmIILkQ-nsEfWol9ALoLJZ4gWUG0xb1Be2lf6jUiOaGgXFYxQXcbdH9w=s60",
+	},
+	{
+		id: "yt:channel:UCKob71cjOlyYF5bgvtGuNKQ",
+		title: "シマリス / Siberian Chipmunk",
+		lang: "ja",
+		icon: "https://yt3.ggpht.com/x6ftrixLrF0GGGBnkDwWQEjkUqswTuUGrxBZLvRY47-9woj9B7Q9tfkY19yZWiYYpWW6OcqB2Q=s60",
+	},
+	{
 		id: "yt:channel:UCEcMIuGR8WO2TwL9XIpjKtw",
 		title: "ケープペンギン / African Penguin",
 		lang: "ja",
