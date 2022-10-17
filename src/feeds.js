@@ -51,7 +51,7 @@ const feeds = [
 		id: "yt:channel:UCnyE-wD1pE2GZOxA6OHjW9g",
 		title: "ウサギコウモリ / Brown Long-eared Bat",
 		lang: "ja",
-		icon: "https://yt3.ggpht.com/mXoIytpI8YNV_Zy2-0w321XTvoLdkqf7Uw9SKpYmfqq40zuoGeUNcs6vZfcJHvtuPGkKWRVpOg=s60",
+		icon: "https://yt3.ggpht.com/xmwgkDPO8SWQvm_XgGV-hwwFD3kHbOuxSW01FylectI7NyeEtafp_GXRmbWaa9sMJp6PeakT=s60",
 	},
 	{
 		id: "yt:channel:UCtJSUW-5FnwfaivXpluABWA",
