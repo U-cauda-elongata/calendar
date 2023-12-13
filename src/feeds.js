@@ -6,6 +6,12 @@ const feeds = [
 		icon: "https://yt3.ggpht.com/ryEtopDlUPjueM1j3UufZ3UrGCpuYxc5tdeX5-pTlkjygXqbw7j29bFIPu8uCy4NzHAM1EetmLM=s60",
 	},
 	{
+		id: "yt:channel:UCrMKWvQuyFL1dckG2RLInDQ",
+		title: "パークスタッフ / Park Staff",
+		lang: "ja",
+		icon: "https://yt3.googleusercontent.com/phX9Lg0o-onftJgEhuwDMqSEP5CUbTu0nBlVnPF9HqF114s6k1Yd411zuWz8gscqWByzDmmYhQ=s60",
+	},
+	{
 		id: "yt:channel:UCmYO-WfY7Tasry4D1YB4LJw",
 		title: "フンボルトペンギン / Humboldt Penguin",
 		lang: "ja",
