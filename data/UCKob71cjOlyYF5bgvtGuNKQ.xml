@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i3.ytimg.com/vi/B5gqGFFH2p0/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="300" average="5.00" min="1" max="5"/>
-    <media:statistics views="1658"/>
+    <media:starRating count="302" average="5.00" min="1" max="5"/>
+    <media:statistics views="1661"/>
    </media:community>
   </media:group>
  </entry>
@@ -108,7 +108,7 @@
 配信者のためのコメントアプリ「わんコメ」https://onecomme.com</media:description>
    <media:community>
     <media:starRating count="284" average="5.00" min="1" max="5"/>
-    <media:statistics views="1272"/>
+    <media:statistics views="1273"/>
    </media:community>
   </media:group>
  </entry>
@@ -131,7 +131,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="250" average="5.00" min="1" max="5"/>
-    <media:statistics views="1198"/>
+    <media:statistics views="1200"/>
    </media:community>
   </media:group>
  </entry>
@@ -237,7 +237,7 @@ CM:ツクウルフルちゃま作@kemopuffin</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="321" average="5.00" min="1" max="5"/>
-    <media:statistics views="1284"/>
+    <media:statistics views="1290"/>
    </media:community>
   </media:group>
  </entry>
@@ -315,7 +315,7 @@ CM:ツクウルフルちゃま作@kemopuffin</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="197" average="5.00" min="1" max="5"/>
-    <media:statistics views="703"/>
+    <media:statistics views="704"/>
    </media:community>
   </media:group>
  </entry>
@@ -404,7 +404,7 @@ CM:ツクウルフルちゃま作@kemopuffin</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="235" average="5.00" min="1" max="5"/>
-    <media:statistics views="853"/>
+    <media:statistics views="855"/>
    </media:community>
   </media:group>
  </entry>
@@ -427,7 +427,7 @@ CM:ツクウルフルちゃま作@kemopuffin</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="298" average="5.00" min="1" max="5"/>
-    <media:statistics views="1749"/>
+    <media:statistics views="1750"/>
    </media:community>
   </media:group>
  </entry>
