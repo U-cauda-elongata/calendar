@@ -28,7 +28,7 @@
    <media:thumbnail url="https://i3.ytimg.com/vi/B5gqGFFH2p0/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="315" average="5.00" min="1" max="5"/>
+    <media:starRating count="314" average="5.00" min="1" max="5"/>
     <media:statistics views="1682"/>
    </media:community>
   </media:group>
@@ -51,7 +51,7 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/sBMBdHFlnpY/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="190" average="5.00" min="1" max="5"/>
+    <media:starRating count="189" average="5.00" min="1" max="5"/>
     <media:statistics views="606"/>
    </media:community>
   </media:group>
@@ -292,7 +292,7 @@ CM:ツクウルフルちゃま作@kemopuffin</media:description>
 CM:ツクウルフルちゃま作@kemopuffin</media:description>
    <media:community>
     <media:starRating count="244" average="5.00" min="1" max="5"/>
-    <media:statistics views="1281"/>
+    <media:statistics views="1280"/>
    </media:community>
   </media:group>
  </entry>
