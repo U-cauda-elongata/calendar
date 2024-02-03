@@ -28,7 +28,7 @@
    <media:thumbnail url="https://i3.ytimg.com/vi/B5gqGFFH2p0/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="311" average="5.00" min="1" max="5"/>
+    <media:starRating count="309" average="5.00" min="1" max="5"/>
     <media:statistics views="1667"/>
    </media:community>
   </media:group>
@@ -51,7 +51,7 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/sBMBdHFlnpY/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="187" average="5.00" min="1" max="5"/>
+    <media:starRating count="186" average="5.00" min="1" max="5"/>
     <media:statistics views="598"/>
    </media:community>
   </media:group>
@@ -130,8 +130,8 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/owt7Fcvpwmk/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="253" average="5.00" min="1" max="5"/>
-    <media:statistics views="1209"/>
+    <media:starRating count="252" average="5.00" min="1" max="5"/>
+    <media:statistics views="1208"/>
    </media:community>
   </media:group>
  </entry>
@@ -153,7 +153,7 @@
    <media:thumbnail url="https://i1.ytimg.com/vi/xRPoFaERhEs/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="377" average="5.00" min="1" max="5"/>
+    <media:starRating count="376" average="5.00" min="1" max="5"/>
     <media:statistics views="2241"/>
    </media:community>
   </media:group>
@@ -236,7 +236,7 @@ CM:ツクウルフルちゃま作@kemopuffin</media:description>
    <media:thumbnail url="https://i3.ytimg.com/vi/fpYiw4KerGw/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="324" average="5.00" min="1" max="5"/>
+    <media:starRating count="323" average="5.00" min="1" max="5"/>
     <media:statistics views="1299"/>
    </media:community>
   </media:group>
@@ -315,7 +315,7 @@ CM:ツクウルフルちゃま作@kemopuffin</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="198" average="5.00" min="1" max="5"/>
-    <media:statistics views="721"/>
+    <media:statistics views="719"/>
    </media:community>
   </media:group>
  </entry>
@@ -403,7 +403,7 @@ CM:ツクウルフルちゃま作@kemopuffin</media:description>
    <media:thumbnail url="https://i2.ytimg.com/vi/9fRvSgK4m34/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="236" average="5.00" min="1" max="5"/>
+    <media:starRating count="235" average="5.00" min="1" max="5"/>
     <media:statistics views="856"/>
    </media:community>
   </media:group>
@@ -426,7 +426,7 @@ CM:ツクウルフルちゃま作@kemopuffin</media:description>
    <media:thumbnail url="https://i4.ytimg.com/vi/SVmeW695bik/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="299" average="5.00" min="1" max="5"/>
+    <media:starRating count="298" average="5.00" min="1" max="5"/>
     <media:statistics views="1754"/>
    </media:community>
   </media:group>
@@ -505,7 +505,7 @@ CM:ツクウルフルちゃま作@kemopuffin</media:description>
    <media:thumbnail url="https://i2.ytimg.com/vi/eyMIrBxGHM8/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="295" average="5.00" min="1" max="5"/>
+    <media:starRating count="294" average="5.00" min="1" max="5"/>
     <media:statistics views="1088"/>
    </media:community>
   </media:group>
@@ -562,7 +562,7 @@ CM:ツクウルフルちゃま作@kemopuffin</media:description>
 CM:ツクウルフルちゃま作@kemopuffin</media:description>
    <media:community>
     <media:starRating count="199" average="5.00" min="1" max="5"/>
-    <media:statistics views="1636"/>
+    <media:statistics views="1634"/>
    </media:community>
   </media:group>
  </entry>
