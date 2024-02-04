@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/WEUMzd8M-BE/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="212" average="5.00" min="1" max="5"/>
-    <media:statistics views="1654"/>
+    <media:starRating count="213" average="5.00" min="1" max="5"/>
+    <media:statistics views="1644"/>
    </media:community>
   </media:group>
  </entry>
@@ -89,8 +89,8 @@
 マナーを守って一緒に楽しい配信にしていきましょう！
 ご理解とご協力をお願いします！</media:description>
    <media:community>
-    <media:starRating count="430" average="5.00" min="1" max="5"/>
-    <media:statistics views="2069"/>
+    <media:starRating count="429" average="5.00" min="1" max="5"/>
+    <media:statistics views="2067"/>
    </media:community>
   </media:group>
  </entry>
@@ -214,7 +214,7 @@
 ご理解とご協力をお願いします！</media:description>
    <media:community>
     <media:starRating count="304" average="5.00" min="1" max="5"/>
-    <media:statistics views="1411"/>
+    <media:statistics views="1410"/>
    </media:community>
   </media:group>
  </entry>
