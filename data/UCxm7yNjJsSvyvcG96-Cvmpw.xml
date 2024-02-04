@@ -29,7 +29,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="212" average="5.00" min="1" max="5"/>
-    <media:statistics views="1613"/>
+    <media:statistics views="1620"/>
    </media:community>
   </media:group>
  </entry>
@@ -305,8 +305,8 @@
    <media:thumbnail url="https://i2.ytimg.com/vi/9X2YXJULY2E/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="258" average="5.00" min="1" max="5"/>
-    <media:statistics views="4572"/>
+    <media:starRating count="259" average="5.00" min="1" max="5"/>
+    <media:statistics views="4573"/>
    </media:community>
   </media:group>
  </entry>
