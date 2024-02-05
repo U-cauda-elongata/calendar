@@ -260,7 +260,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="237" average="5.00" min="1" max="5"/>
-    <media:statistics views="5800"/>
+    <media:statistics views="5801"/>
    </media:community>
   </media:group>
  </entry>
@@ -415,7 +415,7 @@ https://onecomme.com/
    <media:description></media:description>
    <media:community>
     <media:starRating count="332" average="5.00" min="1" max="5"/>
-    <media:statistics views="3781"/>
+    <media:statistics views="3780"/>
    </media:community>
   </media:group>
  </entry>
