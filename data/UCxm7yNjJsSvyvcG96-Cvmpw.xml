@@ -11,6 +11,29 @@
  </author>
  <published>2022-05-19T11:18:46+00:00</published>
  <entry>
+  <id>yt:video:sB4Z1dWtqXU</id>
+  <yt:videoId>sB4Z1dWtqXU</yt:videoId>
+  <yt:channelId>UCxm7yNjJsSvyvcG96-Cvmpw</yt:channelId>
+  <title>ゲリラスイカゲーム！【縦型配信 #shorts #short #カラカル】</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=sB4Z1dWtqXU"/>
+  <author>
+   <name>カラカル / Caracal</name>
+   <uri>https://www.youtube.com/channel/UCxm7yNjJsSvyvcG96-Cvmpw</uri>
+  </author>
+  <published>2024-02-09T03:27:20+00:00</published>
+  <updated>2024-02-09T03:27:37+00:00</updated>
+  <media:group>
+   <media:title>ゲリラスイカゲーム！【縦型配信 #shorts #short #カラカル】</media:title>
+   <media:content url="https://www.youtube.com/v/sB4Z1dWtqXU?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i4.ytimg.com/vi/sB4Z1dWtqXU/hqdefault.jpg" width="480" height="360"/>
+   <media:description></media:description>
+   <media:community>
+    <media:starRating count="62" average="5.00" min="1" max="5"/>
+    <media:statistics views="2"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
   <id>yt:video:H34cDfst1hY</id>
   <yt:videoId>H34cDfst1hY</yt:videoId>
   <yt:channelId>UCxm7yNjJsSvyvcG96-Cvmpw</yt:channelId>
@@ -62,7 +85,7 @@
 ご理解とご協力をお願いします！</media:description>
    <media:community>
     <media:starRating count="294" average="5.00" min="1" max="5"/>
-    <media:statistics views="1268"/>
+    <media:statistics views="1269"/>
    </media:community>
   </media:group>
  </entry>
@@ -571,29 +594,6 @@ https://onecomme.com/
    <media:community>
     <media:starRating count="558" average="5.00" min="1" max="5"/>
     <media:statistics views="2634"/>
-   </media:community>
-  </media:group>
- </entry>
- <entry>
-  <id>yt:video:TXv5quG5CeU</id>
-  <yt:videoId>TXv5quG5CeU</yt:videoId>
-  <yt:channelId>UCxm7yNjJsSvyvcG96-Cvmpw</yt:channelId>
-  <title>よくばりimomushiセット！【縦型配信 #shorts #short】</title>
-  <link rel="alternate" href="https://www.youtube.com/watch?v=TXv5quG5CeU"/>
-  <author>
-   <name>カラカル / Caracal</name>
-   <uri>https://www.youtube.com/channel/UCxm7yNjJsSvyvcG96-Cvmpw</uri>
-  </author>
-  <published>2024-01-12T13:03:40+00:00</published>
-  <updated>2024-01-13T07:16:23+00:00</updated>
-  <media:group>
-   <media:title>よくばりimomushiセット！【縦型配信 #shorts #short】</media:title>
-   <media:content url="https://www.youtube.com/v/TXv5quG5CeU?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
-   <media:thumbnail url="https://i1.ytimg.com/vi/TXv5quG5CeU/hqdefault.jpg" width="480" height="360"/>
-   <media:description></media:description>
-   <media:community>
-    <media:starRating count="332" average="5.00" min="1" max="5"/>
-    <media:statistics views="4375"/>
    </media:community>
   </media:group>
  </entry>
