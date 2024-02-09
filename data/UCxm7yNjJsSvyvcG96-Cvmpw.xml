@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/sB4Z1dWtqXU/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="217" average="5.00" min="1" max="5"/>
-    <media:statistics views="1843"/>
+    <media:starRating count="218" average="5.00" min="1" max="5"/>
+    <media:statistics views="1846"/>
    </media:community>
   </media:group>
  </entry>
@@ -148,7 +148,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="229" average="5.00" min="1" max="5"/>
-    <media:statistics views="1834"/>
+    <media:statistics views="1833"/>
    </media:community>
   </media:group>
  </entry>
