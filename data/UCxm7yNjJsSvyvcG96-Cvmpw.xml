@@ -28,7 +28,7 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/sB4Z1dWtqXU/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="88" average="5.00" min="1" max="5"/>
+    <media:starRating count="78" average="5.00" min="1" max="5"/>
     <media:statistics views="4"/>
    </media:community>
   </media:group>
@@ -124,7 +124,7 @@
 
 おといあわせはこちらまで→info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="164" average="5.00" min="1" max="5"/>
+    <media:starRating count="163" average="5.00" min="1" max="5"/>
     <media:statistics views="435"/>
    </media:community>
   </media:group>
