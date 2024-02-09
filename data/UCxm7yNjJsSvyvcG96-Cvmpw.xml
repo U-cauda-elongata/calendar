@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/sB4Z1dWtqXU/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="135" average="5.00" min="1" max="5"/>
-    <media:statistics views="9"/>
+    <media:starRating count="147" average="5.00" min="1" max="5"/>
+    <media:statistics views="28"/>
    </media:community>
   </media:group>
  </entry>
@@ -85,7 +85,7 @@
 ご理解とご協力をお願いします！</media:description>
    <media:community>
     <media:starRating count="294" average="5.00" min="1" max="5"/>
-    <media:statistics views="1272"/>
+    <media:statistics views="1273"/>
    </media:community>
   </media:group>
  </entry>
@@ -593,7 +593,7 @@ https://onecomme.com/
 ご理解とご協力をお願いします！</media:description>
    <media:community>
     <media:starRating count="558" average="5.00" min="1" max="5"/>
-    <media:statistics views="2634"/>
+    <media:statistics views="2635"/>
    </media:community>
   </media:group>
  </entry>
