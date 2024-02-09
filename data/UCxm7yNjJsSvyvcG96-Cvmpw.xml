@@ -29,7 +29,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="213" average="5.00" min="1" max="5"/>
-    <media:statistics views="1833"/>
+    <media:statistics views="1825"/>
    </media:community>
   </media:group>
  </entry>
@@ -85,7 +85,7 @@
 ご理解とご協力をお願いします！</media:description>
    <media:community>
     <media:starRating count="296" average="5.00" min="1" max="5"/>
-    <media:statistics views="1296"/>
+    <media:statistics views="1295"/>
    </media:community>
   </media:group>
  </entry>
@@ -209,7 +209,7 @@
 ご理解とご協力をお願いします！</media:description>
    <media:community>
     <media:starRating count="447" average="5.00" min="1" max="5"/>
-    <media:statistics views="2152"/>
+    <media:statistics views="2150"/>
    </media:community>
   </media:group>
  </entry>
@@ -379,7 +379,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="238" average="5.00" min="1" max="5"/>
-    <media:statistics views="5813"/>
+    <media:statistics views="5812"/>
    </media:community>
   </media:group>
  </entry>
