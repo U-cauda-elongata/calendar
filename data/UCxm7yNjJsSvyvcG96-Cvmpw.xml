@@ -28,7 +28,7 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/sB4Z1dWtqXU/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="223" average="5.00" min="1" max="5"/>
+    <media:starRating count="224" average="5.00" min="1" max="5"/>
     <media:statistics views="1935"/>
    </media:community>
   </media:group>
@@ -85,7 +85,7 @@
 ご理解とご協力をお願いします！</media:description>
    <media:community>
     <media:starRating count="297" average="5.00" min="1" max="5"/>
-    <media:statistics views="1316"/>
+    <media:statistics views="1318"/>
    </media:community>
   </media:group>
  </entry>
@@ -125,7 +125,7 @@
 おといあわせはこちらまで→info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="171" average="5.00" min="1" max="5"/>
-    <media:statistics views="474"/>
+    <media:statistics views="473"/>
    </media:community>
   </media:group>
  </entry>
@@ -488,7 +488,7 @@ https://onecomme.com/
 文字起こし</media:description>
    <media:community>
     <media:starRating count="410" average="5.00" min="1" max="5"/>
-    <media:statistics views="2615"/>
+    <media:statistics views="2617"/>
    </media:community>
   </media:group>
  </entry>
