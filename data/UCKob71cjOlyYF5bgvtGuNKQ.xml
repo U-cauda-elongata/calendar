@@ -61,7 +61,7 @@
 
 配信者のためのコメントアプリ「わんコメ」https://onecomme.com</media:description>
    <media:community>
-    <media:starRating count="16" average="5.00" min="1" max="5"/>
+    <media:starRating count="17" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -537,7 +537,7 @@ CM:ツクウルフルちゃま作@kemopuffin</media:description>
    <media:thumbnail url="https://i4.ytimg.com/vi/owt7Fcvpwmk/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="279" average="5.00" min="1" max="5"/>
+    <media:starRating count="280" average="5.00" min="1" max="5"/>
     <media:statistics views="1349"/>
    </media:community>
   </media:group>
@@ -644,7 +644,7 @@ CM:ツクウルフルちゃま作@kemopuffin</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="342" average="5.00" min="1" max="5"/>
-    <media:statistics views="1416"/>
+    <media:statistics views="1417"/>
    </media:community>
   </media:group>
  </entry>
