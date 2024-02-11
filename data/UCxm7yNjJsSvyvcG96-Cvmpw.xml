@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/_aTfV539cw0/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="103" average="5.00" min="1" max="5"/>
-    <media:statistics views="20"/>
+    <media:starRating count="116" average="5.00" min="1" max="5"/>
+    <media:statistics views="24"/>
    </media:community>
   </media:group>
  </entry>
@@ -51,8 +51,8 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/oeI5i-Ex7YE/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="145" average="5.00" min="1" max="5"/>
-    <media:statistics views="649"/>
+    <media:starRating count="146" average="5.00" min="1" max="5"/>
+    <media:statistics views="821"/>
    </media:community>
   </media:group>
  </entry>
@@ -74,7 +74,7 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/sB4Z1dWtqXU/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="226" average="5.00" min="1" max="5"/>
+    <media:starRating count="227" average="5.00" min="1" max="5"/>
     <media:statistics views="1971"/>
    </media:community>
   </media:group>
