@@ -29,7 +29,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="184" average="5.00" min="1" max="5"/>
-    <media:statistics views="2286"/>
+    <media:statistics views="2282"/>
    </media:community>
   </media:group>
  </entry>
@@ -52,7 +52,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="154" average="5.00" min="1" max="5"/>
-    <media:statistics views="1597"/>
+    <media:statistics views="1593"/>
    </media:community>
   </media:group>
  </entry>
@@ -402,7 +402,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="248" average="5.00" min="1" max="5"/>
-    <media:statistics views="4517"/>
+    <media:statistics views="4515"/>
    </media:community>
   </media:group>
  </entry>
@@ -471,7 +471,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="259" average="5.00" min="1" max="5"/>
-    <media:statistics views="4578"/>
+    <media:statistics views="4577"/>
    </media:community>
   </media:group>
  </entry>
