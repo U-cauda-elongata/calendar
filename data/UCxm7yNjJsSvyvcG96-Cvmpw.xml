@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/oeI5i-Ex7YE/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="48" average="5.00" min="1" max="5"/>
-    <media:statistics views="3"/>
+    <media:starRating count="72" average="5.00" min="1" max="5"/>
+    <media:statistics views="8"/>
    </media:community>
   </media:group>
  </entry>
@@ -108,7 +108,7 @@
 ご理解とご協力をお願いします！</media:description>
    <media:community>
     <media:starRating count="298" average="5.00" min="1" max="5"/>
-    <media:statistics views="1333"/>
+    <media:statistics views="1335"/>
    </media:community>
   </media:group>
  </entry>
