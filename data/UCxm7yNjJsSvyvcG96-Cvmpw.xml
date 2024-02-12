@@ -28,7 +28,7 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/_aTfV539cw0/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="195" average="5.00" min="1" max="5"/>
+    <media:starRating count="194" average="5.00" min="1" max="5"/>
     <media:statistics views="2416"/>
    </media:community>
   </media:group>
@@ -52,7 +52,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="161" average="5.00" min="1" max="5"/>
-    <media:statistics views="1693"/>
+    <media:statistics views="1692"/>
    </media:community>
   </media:group>
  </entry>
@@ -534,7 +534,7 @@ https://onecomme.com/
 文字起こし</media:description>
    <media:community>
     <media:starRating count="410" average="5.00" min="1" max="5"/>
-    <media:statistics views="2651"/>
+    <media:statistics views="2648"/>
    </media:community>
   </media:group>
  </entry>
