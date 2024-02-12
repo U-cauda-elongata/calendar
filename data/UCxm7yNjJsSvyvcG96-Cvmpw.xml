@@ -29,7 +29,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="198" average="5.00" min="1" max="5"/>
-    <media:statistics views="2472"/>
+    <media:statistics views="2473"/>
    </media:community>
   </media:group>
  </entry>
@@ -471,7 +471,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="259" average="5.00" min="1" max="5"/>
-    <media:statistics views="4578"/>
+    <media:statistics views="4581"/>
    </media:community>
   </media:group>
  </entry>
