@@ -29,7 +29,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="200" average="5.00" min="1" max="5"/>
-    <media:statistics views="2409"/>
+    <media:statistics views="2410"/>
    </media:community>
   </media:group>
  </entry>
@@ -52,7 +52,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="164" average="5.00" min="1" max="5"/>
-    <media:statistics views="1661"/>
+    <media:statistics views="1662"/>
    </media:community>
   </media:group>
  </entry>
@@ -75,7 +75,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="229" average="5.00" min="1" max="5"/>
-    <media:statistics views="1996"/>
+    <media:statistics views="1997"/>
    </media:community>
   </media:group>
  </entry>
