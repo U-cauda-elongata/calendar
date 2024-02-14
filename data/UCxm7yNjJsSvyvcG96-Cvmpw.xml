@@ -45,8 +45,8 @@
 
 おといあわせはこちらまで→info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="18" average="5.00" min="1" max="5"/>
-    <media:statistics views="28"/>
+    <media:starRating count="26" average="5.00" min="1" max="5"/>
+    <media:statistics views="40"/>
    </media:community>
   </media:group>
  </entry>
@@ -68,8 +68,8 @@
    <media:thumbnail url="https://i3.ytimg.com/vi/ncsa40N6yCQ/hqdefault.jpg" width="480" height="360"/>
    <media:description>バ・レンタイン</media:description>
    <media:community>
-    <media:starRating count="189" average="5.00" min="1" max="5"/>
-    <media:statistics views="125"/>
+    <media:starRating count="193" average="5.00" min="1" max="5"/>
+    <media:statistics views="175"/>
    </media:community>
   </media:group>
  </entry>
@@ -116,7 +116,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="204" average="5.00" min="1" max="5"/>
-    <media:statistics views="2457"/>
+    <media:statistics views="2458"/>
    </media:community>
   </media:group>
  </entry>
