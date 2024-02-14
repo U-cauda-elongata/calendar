@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i3.ytimg.com/vi/ncsa40N6yCQ/hqdefault.jpg" width="480" height="360"/>
    <media:description>バ・レンタイン</media:description>
    <media:community>
-    <media:starRating count="110" average="5.00" min="1" max="5"/>
-    <media:statistics views="6"/>
+    <media:starRating count="153" average="5.00" min="1" max="5"/>
+    <media:statistics views="11"/>
    </media:community>
   </media:group>
  </entry>
@@ -76,7 +76,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="204" average="5.00" min="1" max="5"/>
-    <media:statistics views="2450"/>
+    <media:statistics views="2451"/>
    </media:community>
   </media:group>
  </entry>
@@ -99,7 +99,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="165" average="5.00" min="1" max="5"/>
-    <media:statistics views="1672"/>
+    <media:statistics views="1673"/>
    </media:community>
   </media:group>
  </entry>
@@ -178,7 +178,7 @@
 ご理解とご協力をお願いします！</media:description>
    <media:community>
     <media:starRating count="302" average="5.00" min="1" max="5"/>
-    <media:statistics views="1356"/>
+    <media:statistics views="1357"/>
    </media:community>
   </media:group>
  </entry>
