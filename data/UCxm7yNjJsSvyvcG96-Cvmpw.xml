@@ -11,6 +11,30 @@
  </author>
  <published>2022-05-19T11:18:46+00:00</published>
  <entry>
+  <id>yt:video:kEdUta5lL_E</id>
+  <yt:videoId>kEdUta5lL_E</yt:videoId>
+  <yt:channelId>UCxm7yNjJsSvyvcG96-Cvmpw</yt:channelId>
+  <title>【unravel two】フルル！任せたよ！！！【#カラフル探検隊】</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=kEdUta5lL_E"/>
+  <author>
+   <name>カラカル / Caracal</name>
+   <uri>https://www.youtube.com/channel/UCxm7yNjJsSvyvcG96-Cvmpw</uri>
+  </author>
+  <published>2024-02-14T10:51:31+00:00</published>
+  <updated>2024-02-15T12:02:26+00:00</updated>
+  <media:group>
+   <media:title>【unravel two】フルル！任せたよ！！！【#カラフル探検隊】</media:title>
+   <media:content url="https://www.youtube.com/v/kEdUta5lL_E?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i4.ytimg.com/vi/kEdUta5lL_E/hqdefault.jpg" width="480" height="360"/>
+   <media:description>@humboldtpenguin2619 
+頼みましたぞフンボルト君！</media:description>
+   <media:community>
+    <media:starRating count="79" average="5.00" min="1" max="5"/>
+    <media:statistics views="1"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
   <id>yt:video:voTVvM1DhjM</id>
   <yt:videoId>voTVvM1DhjM</yt:videoId>
   <yt:channelId>UCxm7yNjJsSvyvcG96-Cvmpw</yt:channelId>
@@ -69,31 +93,7 @@
    <media:description>バ・レンタイン</media:description>
    <media:community>
     <media:starRating count="246" average="5.00" min="1" max="5"/>
-    <media:statistics views="1834"/>
-   </media:community>
-  </media:group>
- </entry>
- <entry>
-  <id>yt:video:kEdUta5lL_E</id>
-  <yt:videoId>kEdUta5lL_E</yt:videoId>
-  <yt:channelId>UCxm7yNjJsSvyvcG96-Cvmpw</yt:channelId>
-  <title>【unravel two】フルル！任せたよ！！！【#カラフル探検隊】</title>
-  <link rel="alternate" href="https://www.youtube.com/watch?v=kEdUta5lL_E"/>
-  <author>
-   <name>カラカル / Caracal</name>
-   <uri>https://www.youtube.com/channel/UCxm7yNjJsSvyvcG96-Cvmpw</uri>
-  </author>
-  <published>2024-02-14T10:51:31+00:00</published>
-  <updated>2024-02-15T06:21:58+00:00</updated>
-  <media:group>
-   <media:title>【unravel two】フルル！任せたよ！！！【#カラフル探検隊】</media:title>
-   <media:content url="https://www.youtube.com/v/kEdUta5lL_E?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
-   <media:thumbnail url="https://i4.ytimg.com/vi/kEdUta5lL_E/hqdefault.jpg" width="480" height="360"/>
-   <media:description>@humboldtpenguin2619 
-頼みましたぞフンボルト君！</media:description>
-   <media:community>
-    <media:starRating count="44" average="5.00" min="1" max="5"/>
-    <media:statistics views="0"/>
+    <media:statistics views="1836"/>
    </media:community>
   </media:group>
  </entry>
