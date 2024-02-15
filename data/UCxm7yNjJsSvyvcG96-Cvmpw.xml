@@ -29,8 +29,8 @@
    <media:description>@humboldtpenguin2619 
 頼みましたぞフンボルト君！</media:description>
    <media:community>
-    <media:starRating count="245" average="5.00" min="1" max="5"/>
-    <media:statistics views="228"/>
+    <media:starRating count="244" average="5.00" min="1" max="5"/>
+    <media:statistics views="215"/>
    </media:community>
   </media:group>
  </entry>
@@ -93,7 +93,7 @@
    <media:description>バ・レンタイン</media:description>
    <media:community>
     <media:starRating count="247" average="5.00" min="1" max="5"/>
-    <media:statistics views="1857"/>
+    <media:statistics views="1856"/>
    </media:community>
   </media:group>
  </entry>
@@ -162,7 +162,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="231" average="5.00" min="1" max="5"/>
-    <media:statistics views="2016"/>
+    <media:statistics views="2014"/>
    </media:community>
   </media:group>
  </entry>
