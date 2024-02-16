@@ -93,7 +93,7 @@
    <media:description>バ・レンタイン</media:description>
    <media:community>
     <media:starRating count="255" average="5.00" min="1" max="5"/>
-    <media:statistics views="1914"/>
+    <media:statistics views="1912"/>
    </media:community>
   </media:group>
  </entry>
@@ -162,7 +162,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="232" average="5.00" min="1" max="5"/>
-    <media:statistics views="2027"/>
+    <media:statistics views="2025"/>
    </media:community>
   </media:group>
  </entry>
@@ -342,7 +342,7 @@
 ご理解とご協力をお願いします！</media:description>
    <media:community>
     <media:starRating count="453" average="5.00" min="1" max="5"/>
-    <media:statistics views="2223"/>
+    <media:statistics views="2221"/>
    </media:community>
   </media:group>
  </entry>
