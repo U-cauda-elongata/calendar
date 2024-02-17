@@ -11,30 +11,6 @@
  </author>
  <published>2022-05-19T11:18:46+00:00</published>
  <entry>
-  <id>yt:video:NUWqWAYl8Tg</id>
-  <yt:videoId>NUWqWAYl8Tg</yt:videoId>
-  <yt:channelId>UCxm7yNjJsSvyvcG96-Cvmpw</yt:channelId>
-  <title>【2番線】よし脱出するぞー！【#カラフ騒ぎ/＃けもV】</title>
-  <link rel="alternate" href="https://www.youtube.com/watch?v=NUWqWAYl8Tg"/>
-  <author>
-   <name>カラカル / Caracal</name>
-   <uri>https://www.youtube.com/channel/UCxm7yNjJsSvyvcG96-Cvmpw</uri>
-  </author>
-  <published>2024-02-17T02:03:06+00:00</published>
-  <updated>2024-02-17T02:03:11+00:00</updated>
-  <media:group>
-   <media:title>【2番線】よし脱出するぞー！【#カラフ騒ぎ/＃けもV】</media:title>
-   <media:content url="https://www.youtube.com/v/NUWqWAYl8Tg?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
-   <media:thumbnail url="https://i3.ytimg.com/vi/NUWqWAYl8Tg/hqdefault.jpg" width="480" height="360"/>
-   <media:description>@humboldtpenguin26198番出口風らしい🐱
-https://store.steampowered.com/app/2699510/2__Nibansen/?l=japanese</media:description>
-   <media:community>
-    <media:starRating count="2" average="5.00" min="1" max="5"/>
-    <media:statistics views="0"/>
-   </media:community>
-  </media:group>
- </entry>
- <entry>
   <id>yt:video:kEdUta5lL_E</id>
   <yt:videoId>kEdUta5lL_E</yt:videoId>
   <yt:channelId>UCxm7yNjJsSvyvcG96-Cvmpw</yt:channelId>
@@ -537,6 +513,29 @@ https://store.steampowered.com/app/2699510/2__Nibansen/?l=japanese</media:descri
    <media:community>
     <media:starRating count="238" average="5.00" min="1" max="5"/>
     <media:statistics views="5815"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:LkDJu7HO1XE</id>
+  <yt:videoId>LkDJu7HO1XE</yt:videoId>
+  <yt:channelId>UCxm7yNjJsSvyvcG96-Cvmpw</yt:channelId>
+  <title>imomushi日和！！【縦型配信 #shorts #short】</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=LkDJu7HO1XE"/>
+  <author>
+   <name>カラカル / Caracal</name>
+   <uri>https://www.youtube.com/channel/UCxm7yNjJsSvyvcG96-Cvmpw</uri>
+  </author>
+  <published>2024-01-26T09:07:37+00:00</published>
+  <updated>2024-01-27T06:54:05+00:00</updated>
+  <media:group>
+   <media:title>imomushi日和！！【縦型配信 #shorts #short】</media:title>
+   <media:content url="https://www.youtube.com/v/LkDJu7HO1XE?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i1.ytimg.com/vi/LkDJu7HO1XE/hqdefault.jpg" width="480" height="360"/>
+   <media:description></media:description>
+   <media:community>
+    <media:starRating count="73" average="5.00" min="1" max="5"/>
+    <media:statistics views="354"/>
    </media:community>
   </media:group>
  </entry>
