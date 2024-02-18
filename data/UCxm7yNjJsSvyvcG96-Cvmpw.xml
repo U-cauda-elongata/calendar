@@ -11,30 +11,6 @@
  </author>
  <published>2022-05-19T11:18:46+00:00</published>
  <entry>
-  <id>yt:video:vOCUqerk8fE</id>
-  <yt:videoId>vOCUqerk8fE</yt:videoId>
-  <yt:channelId>UCxm7yNjJsSvyvcG96-Cvmpw</yt:channelId>
-  <title>【スイカゲーム】二人でダブルスイカをつくろう！いいよー！【#カラまよ】</title>
-  <link rel="alternate" href="https://www.youtube.com/watch?v=vOCUqerk8fE"/>
-  <author>
-   <name>カラカル / Caracal</name>
-   <uri>https://www.youtube.com/channel/UCxm7yNjJsSvyvcG96-Cvmpw</uri>
-  </author>
-  <published>2024-02-18T13:11:42+00:00</published>
-  <updated>2024-02-18T13:11:47+00:00</updated>
-  <media:group>
-   <media:title>【スイカゲーム】二人でダブルスイカをつくろう！いいよー！【#カラまよ】</media:title>
-   <media:content url="https://www.youtube.com/v/vOCUqerk8fE?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
-   <media:thumbnail url="https://i3.ytimg.com/vi/vOCUqerk8fE/hqdefault.jpg" width="480" height="360"/>
-   <media:description>@irodorimayoi 
-つくるよー１．２．３！！</media:description>
-   <media:community>
-    <media:starRating count="3" average="5.00" min="1" max="5"/>
-    <media:statistics views="0"/>
-   </media:community>
-  </media:group>
- </entry>
- <entry>
   <id>yt:video:NUWqWAYl8Tg</id>
   <yt:videoId>NUWqWAYl8Tg</yt:videoId>
   <yt:channelId>UCxm7yNjJsSvyvcG96-Cvmpw</yt:channelId>
@@ -54,7 +30,7 @@
 https://store.steampowered.com/app/2699510/2__Nibansen/?l=japanese</media:description>
    <media:community>
     <media:starRating count="268" average="5.00" min="1" max="5"/>
-    <media:statistics views="1347"/>
+    <media:statistics views="1343"/>
    </media:community>
   </media:group>
  </entry>
@@ -118,7 +94,7 @@ https://store.steampowered.com/app/2699510/2__Nibansen/?l=japanese</media:descri
 おといあわせはこちらまで→info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="145" average="5.00" min="1" max="5"/>
-    <media:statistics views="676"/>
+    <media:statistics views="673"/>
    </media:community>
   </media:group>
  </entry>
@@ -329,7 +305,7 @@ https://store.steampowered.com/app/2699510/2__Nibansen/?l=japanese</media:descri
    <media:description></media:description>
    <media:community>
     <media:starRating count="229" average="5.00" min="1" max="5"/>
-    <media:statistics views="1852"/>
+    <media:statistics views="1850"/>
    </media:community>
   </media:group>
  </entry>
@@ -538,6 +514,29 @@ https://store.steampowered.com/app/2699510/2__Nibansen/?l=japanese</media:descri
    <media:community>
     <media:starRating count="249" average="5.00" min="1" max="5"/>
     <media:statistics views="4519"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:43cl3eulmxY</id>
+  <yt:videoId>43cl3eulmxY</yt:videoId>
+  <yt:channelId>UCxm7yNjJsSvyvcG96-Cvmpw</yt:channelId>
+  <title>imomushi日和！！【縦型配信 #shorts #short】</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=43cl3eulmxY"/>
+  <author>
+   <name>カラカル / Caracal</name>
+   <uri>https://www.youtube.com/channel/UCxm7yNjJsSvyvcG96-Cvmpw</uri>
+  </author>
+  <published>2024-01-26T10:59:04+00:00</published>
+  <updated>2024-01-27T06:50:49+00:00</updated>
+  <media:group>
+   <media:title>imomushi日和！！【縦型配信 #shorts #short】</media:title>
+   <media:content url="https://www.youtube.com/v/43cl3eulmxY?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i1.ytimg.com/vi/43cl3eulmxY/hqdefault.jpg" width="480" height="360"/>
+   <media:description></media:description>
+   <media:community>
+    <media:starRating count="238" average="5.00" min="1" max="5"/>
+    <media:statistics views="5816"/>
    </media:community>
   </media:group>
  </entry>
