@@ -29,7 +29,7 @@
    <media:description>@irodorimayoi 
 つくるよー１．２．３！！</media:description>
    <media:community>
-    <media:starRating count="300" average="5.00" min="1" max="5"/>
+    <media:starRating count="299" average="5.00" min="1" max="5"/>
     <media:statistics views="454"/>
    </media:community>
   </media:group>
@@ -72,7 +72,7 @@
 おといあわせはこちらまで→info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="117" average="5.00" min="1" max="5"/>
-    <media:statistics views="307"/>
+    <media:statistics views="286"/>
    </media:community>
   </media:group>
  </entry>
