@@ -11,6 +11,30 @@
  </author>
  <published>2022-05-19T11:18:46+00:00</published>
  <entry>
+  <id>yt:video:vOCUqerk8fE</id>
+  <yt:videoId>vOCUqerk8fE</yt:videoId>
+  <yt:channelId>UCxm7yNjJsSvyvcG96-Cvmpw</yt:channelId>
+  <title>【スイカゲーム】二人でダブルスイカをつくろう！いいよー！【#カラまよ】</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=vOCUqerk8fE"/>
+  <author>
+   <name>カラカル / Caracal</name>
+   <uri>https://www.youtube.com/channel/UCxm7yNjJsSvyvcG96-Cvmpw</uri>
+  </author>
+  <published>2024-02-18T13:11:42+00:00</published>
+  <updated>2024-02-19T10:59:24+00:00</updated>
+  <media:group>
+   <media:title>【スイカゲーム】二人でダブルスイカをつくろう！いいよー！【#カラまよ】</media:title>
+   <media:content url="https://www.youtube.com/v/vOCUqerk8fE?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i3.ytimg.com/vi/vOCUqerk8fE/hqdefault.jpg" width="480" height="360"/>
+   <media:description>@irodorimayoi 
+つくるよー１．２．３！！</media:description>
+   <media:community>
+    <media:starRating count="84" average="5.00" min="1" max="5"/>
+    <media:statistics views="0"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
   <id>yt:video:BnSQP2kWdFg</id>
   <yt:videoId>BnSQP2kWdFg</yt:videoId>
   <yt:channelId>UCxm7yNjJsSvyvcG96-Cvmpw</yt:channelId>
@@ -47,32 +71,8 @@
 
 おといあわせはこちらまで→info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="49" average="5.00" min="1" max="5"/>
-    <media:statistics views="64"/>
-   </media:community>
-  </media:group>
- </entry>
- <entry>
-  <id>yt:video:vOCUqerk8fE</id>
-  <yt:videoId>vOCUqerk8fE</yt:videoId>
-  <yt:channelId>UCxm7yNjJsSvyvcG96-Cvmpw</yt:channelId>
-  <title>【スイカゲーム】二人でダブルスイカをつくろう！いいよー！【#カラまよ】</title>
-  <link rel="alternate" href="https://www.youtube.com/watch?v=vOCUqerk8fE"/>
-  <author>
-   <name>カラカル / Caracal</name>
-   <uri>https://www.youtube.com/channel/UCxm7yNjJsSvyvcG96-Cvmpw</uri>
-  </author>
-  <published>2024-02-18T13:11:42+00:00</published>
-  <updated>2024-02-19T06:07:32+00:00</updated>
-  <media:group>
-   <media:title>【スイカゲーム】二人でダブルスイカをつくろう！いいよー！【#カラまよ】</media:title>
-   <media:content url="https://www.youtube.com/v/vOCUqerk8fE?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
-   <media:thumbnail url="https://i3.ytimg.com/vi/vOCUqerk8fE/hqdefault.jpg" width="480" height="360"/>
-   <media:description>@irodorimayoi 
-つくるよー１．２．３！！</media:description>
-   <media:community>
-    <media:starRating count="38" average="5.00" min="1" max="5"/>
-    <media:statistics views="0"/>
+    <media:starRating count="54" average="5.00" min="1" max="5"/>
+    <media:statistics views="76"/>
    </media:community>
   </media:group>
  </entry>
@@ -96,7 +96,7 @@
 https://store.steampowered.com/app/2699510/2__Nibansen/?l=japanese</media:description>
    <media:community>
     <media:starRating count="270" average="5.00" min="1" max="5"/>
-    <media:statistics views="1341"/>
+    <media:statistics views="1343"/>
    </media:community>
   </media:group>
  </entry>
@@ -206,7 +206,7 @@ https://store.steampowered.com/app/2699510/2__Nibansen/?l=japanese</media:descri
    <media:description></media:description>
    <media:community>
     <media:starRating count="207" average="5.00" min="1" max="5"/>
-    <media:statistics views="2501"/>
+    <media:statistics views="2502"/>
    </media:community>
   </media:group>
  </entry>
@@ -252,7 +252,7 @@ https://store.steampowered.com/app/2699510/2__Nibansen/?l=japanese</media:descri
    <media:description></media:description>
    <media:community>
     <media:starRating count="233" average="5.00" min="1" max="5"/>
-    <media:statistics views="2044"/>
+    <media:statistics views="2045"/>
    </media:community>
   </media:group>
  </entry>
