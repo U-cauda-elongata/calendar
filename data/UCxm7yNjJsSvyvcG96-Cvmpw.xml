@@ -28,7 +28,7 @@
    <media:thumbnail url="https://i3.ytimg.com/vi/nnWstXleVAg/hqdefault.jpg" width="480" height="360"/>
    <media:description>お手紙だいすきー！ナニナニ？</media:description>
    <media:community>
-    <media:starRating count="68" average="5.00" min="1" max="5"/>
+    <media:starRating count="69" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -69,7 +69,7 @@
 おといあわせはこちらまで→info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="138" average="5.00" min="1" max="5"/>
-    <media:statistics views="509"/>
+    <media:statistics views="510"/>
    </media:community>
   </media:group>
  </entry>
@@ -92,8 +92,8 @@
    <media:description>@irodorimayoi 
 つくるよー１．２．３！！</media:description>
    <media:community>
-    <media:starRating count="346" average="5.00" min="1" max="5"/>
-    <media:statistics views="1913"/>
+    <media:starRating count="347" average="5.00" min="1" max="5"/>
+    <media:statistics views="1914"/>
    </media:community>
   </media:group>
  </entry>
@@ -269,7 +269,7 @@ https://store.steampowered.com/app/2699510/2__Nibansen/?l=japanese</media:descri
    <media:description></media:description>
    <media:community>
     <media:starRating count="209" average="5.00" min="1" max="5"/>
-    <media:statistics views="2512"/>
+    <media:statistics views="2513"/>
    </media:community>
   </media:group>
  </entry>
