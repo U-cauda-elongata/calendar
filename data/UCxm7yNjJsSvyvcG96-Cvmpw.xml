@@ -28,7 +28,7 @@
    <media:thumbnail url="https://i3.ytimg.com/vi/nnWstXleVAg/hqdefault.jpg" width="480" height="360"/>
    <media:description>お手紙だいすきー！ナニナニ？</media:description>
    <media:community>
-    <media:starRating count="88" average="5.00" min="1" max="5"/>
+    <media:starRating count="89" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -135,7 +135,7 @@
 おといあわせはこちらまで→info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="243" average="5.00" min="1" max="5"/>
-    <media:statistics views="1349"/>
+    <media:statistics views="1350"/>
    </media:community>
   </media:group>
  </entry>
