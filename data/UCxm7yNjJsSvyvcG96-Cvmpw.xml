@@ -28,7 +28,7 @@
    <media:thumbnail url="https://i3.ytimg.com/vi/nnWstXleVAg/hqdefault.jpg" width="480" height="360"/>
    <media:description>お手紙だいすきー！ナニナニ？</media:description>
    <media:community>
-    <media:starRating count="100" average="5.00" min="1" max="5"/>
+    <media:starRating count="101" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -68,7 +68,7 @@
 
 おといあわせはこちらまで→info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="144" average="5.00" min="1" max="5"/>
+    <media:starRating count="145" average="5.00" min="1" max="5"/>
     <media:statistics views="536"/>
    </media:community>
   </media:group>
@@ -93,7 +93,7 @@
 つくるよー１．２．３！！</media:description>
    <media:community>
     <media:starRating count="349" average="5.00" min="1" max="5"/>
-    <media:statistics views="1951"/>
+    <media:statistics views="1952"/>
    </media:community>
   </media:group>
  </entry>
@@ -135,7 +135,7 @@
 おといあわせはこちらまで→info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="245" average="5.00" min="1" max="5"/>
-    <media:statistics views="1372"/>
+    <media:statistics views="1373"/>
    </media:community>
   </media:group>
  </entry>
