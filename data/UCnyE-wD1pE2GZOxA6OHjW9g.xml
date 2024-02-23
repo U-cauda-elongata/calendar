@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i3.ytimg.com/vi/BaOR-0MXyXs/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="225" average="5.00" min="1" max="5"/>
-    <media:statistics views="588"/>
+    <media:starRating count="224" average="5.00" min="1" max="5"/>
+    <media:statistics views="562"/>
    </media:community>
   </media:group>
  </entry>
@@ -152,7 +152,7 @@ https://twitter.com/Usako_KEMOV
 ♔∴∵∴♔∴∵∴♔∴∵∴♔∴</media:description>
    <media:community>
     <media:starRating count="246" average="5.00" min="1" max="5"/>
-    <media:statistics views="1422"/>
+    <media:statistics views="1421"/>
    </media:community>
   </media:group>
  </entry>
@@ -875,7 +875,7 @@ https://twitter.com/Usako_KEMOV
 ♔∴∵∴♔∴∵∴♔∴∵∴♔∴∵∴♔∴∵∴♔</media:description>
    <media:community>
     <media:starRating count="254" average="5.00" min="1" max="5"/>
-    <media:statistics views="1610"/>
+    <media:statistics views="1609"/>
    </media:community>
   </media:group>
  </entry>
@@ -1437,7 +1437,7 @@ https://twitter.com/Usako_KEMOV
 ♔∴∵∴♔∴∵∴♔∴∵∴♔∴</media:description>
    <media:community>
     <media:starRating count="331" average="5.00" min="1" max="5"/>
-    <media:statistics views="1740"/>
+    <media:statistics views="1738"/>
    </media:community>
   </media:group>
  </entry>
