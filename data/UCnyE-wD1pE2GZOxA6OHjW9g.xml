@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i3.ytimg.com/vi/BaOR-0MXyXs/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="170" average="5.00" min="1" max="5"/>
-    <media:statistics views="242"/>
+    <media:starRating count="182" average="5.00" min="1" max="5"/>
+    <media:statistics views="252"/>
    </media:community>
   </media:group>
  </entry>
@@ -1332,7 +1332,7 @@ https://twitter.com/Usako_KEMOV
 キキ！
 ♔∴∵∴♔∴∵∴♔∴∵∴♔∴∵∴♔∴∵∴♔</media:description>
    <media:community>
-    <media:starRating count="259" average="5.00" min="1" max="5"/>
+    <media:starRating count="260" average="5.00" min="1" max="5"/>
     <media:statistics views="1986"/>
    </media:community>
   </media:group>
