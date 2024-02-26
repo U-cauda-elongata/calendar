@@ -65,7 +65,7 @@
 
 配信者のためのコメントアプリ「わんコメ」https://onecomme.com</media:description>
    <media:community>
-    <media:starRating count="3" average="5.00" min="1" max="5"/>
+    <media:starRating count="9" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -121,8 +121,8 @@
 
 配信者のためのコメントアプリ「わんコメ」https://onecomme.com</media:description>
    <media:community>
-    <media:starRating count="255" average="5.00" min="1" max="5"/>
-    <media:statistics views="47"/>
+    <media:starRating count="258" average="5.00" min="1" max="5"/>
+    <media:statistics views="69"/>
    </media:community>
   </media:group>
  </entry>
@@ -831,7 +831,7 @@ https://store.steampowered.com/app/2674190/_/?l=japanese
 CM:ツクウルフルちゃま作@kemopuffin</media:description>
    <media:community>
     <media:starRating count="395" average="5.00" min="1" max="5"/>
-    <media:statistics views="7742"/>
+    <media:statistics views="7743"/>
    </media:community>
   </media:group>
  </entry>
