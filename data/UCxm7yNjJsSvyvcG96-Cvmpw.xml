@@ -28,7 +28,7 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/w5LLZSRjQzg/hqdefault.jpg" width="480" height="360"/>
    <media:description>サインダイスキー！</media:description>
    <media:community>
-    <media:starRating count="63" average="5.00" min="1" max="5"/>
+    <media:starRating count="64" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -53,7 +53,7 @@
 おーーーーーーーーリスっ🐿</media:description>
    <media:community>
     <media:starRating count="382" average="5.00" min="1" max="5"/>
-    <media:statistics views="2196"/>
+    <media:statistics views="2199"/>
    </media:community>
   </media:group>
  </entry>
@@ -185,7 +185,7 @@ https://kemovproject.stores.jp/</media:description>
 おといあわせはこちらまで→info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="277" average="5.00" min="1" max="5"/>
-    <media:statistics views="1791"/>
+    <media:statistics views="1792"/>
    </media:community>
   </media:group>
  </entry>
@@ -365,7 +365,7 @@ https://store.steampowered.com/app/2699510/2__Nibansen/?l=japanese</media:descri
    <media:description></media:description>
    <media:community>
     <media:starRating count="236" average="5.00" min="1" max="5"/>
-    <media:statistics views="2073"/>
+    <media:statistics views="2074"/>
    </media:community>
   </media:group>
  </entry>
