@@ -74,7 +74,7 @@ https://kemono-friends.jp/
 
 #どうぶつ日記　#けものフレンズ</media:description>
    <media:community>
-    <media:starRating count="193" average="5.00" min="1" max="5"/>
+    <media:starRating count="195" average="5.00" min="1" max="5"/>
     <media:statistics views="800"/>
    </media:community>
   </media:group>
@@ -138,7 +138,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="596" average="5.00" min="1" max="5"/>
-    <media:statistics views="15489"/>
+    <media:statistics views="15498"/>
    </media:community>
   </media:group>
  </entry>
@@ -201,7 +201,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="420" average="5.00" min="1" max="5"/>
-    <media:statistics views="7892"/>
+    <media:statistics views="7893"/>
    </media:community>
   </media:group>
  </entry>
@@ -459,7 +459,7 @@ https://kemono-friends-3.jp/dmg/
    <uri>https://www.youtube.com/channel/UCEOugXOAfa-HRmRjKbH8z3Q</uri>
   </author>
   <published>2024-01-25T05:00:13+00:00</published>
-  <updated>2024-01-25T12:32:08+00:00</updated>
+  <updated>2024-02-27T23:26:23+00:00</updated>
   <media:group>
    <media:title>『けものフレンズ３』フレンズ紹介PV ステラーカイギュウ</media:title>
    <media:content url="https://www.youtube.com/v/H3VkFWPW7XQ?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -505,7 +505,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="387" average="5.00" min="1" max="5"/>
-    <media:statistics views="4512"/>
+    <media:statistics views="4513"/>
    </media:community>
   </media:group>
  </entry>
