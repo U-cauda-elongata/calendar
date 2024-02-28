@@ -75,7 +75,7 @@ https://kemono-friends.jp/
 #どうぶつ日記　#けものフレンズ</media:description>
    <media:community>
     <media:starRating count="193" average="5.00" min="1" max="5"/>
-    <media:statistics views="799"/>
+    <media:statistics views="800"/>
    </media:community>
   </media:group>
  </entry>
@@ -90,7 +90,7 @@ https://kemono-friends.jp/
    <uri>https://www.youtube.com/channel/UCEOugXOAfa-HRmRjKbH8z3Q</uri>
   </author>
   <published>2024-02-18T05:00:06+00:00</published>
-  <updated>2024-02-18T05:00:06+00:00</updated>
+  <updated>2024-02-28T06:17:59+00:00</updated>
   <media:group>
    <media:title>『けものフレンズ３』フレンズ紹介PVギロロ</media:title>
    <media:content url="https://www.youtube.com/v/AGBPf00-KSU?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -138,7 +138,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="596" average="5.00" min="1" max="5"/>
-    <media:statistics views="15476"/>
+    <media:statistics views="15483"/>
    </media:community>
   </media:group>
  </entry>
@@ -201,7 +201,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="420" average="5.00" min="1" max="5"/>
-    <media:statistics views="7889"/>
+    <media:statistics views="7890"/>
    </media:community>
   </media:group>
  </entry>
@@ -759,7 +759,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="330" average="5.00" min="1" max="5"/>
-    <media:statistics views="4353"/>
+    <media:statistics views="4354"/>
    </media:community>
   </media:group>
  </entry>
