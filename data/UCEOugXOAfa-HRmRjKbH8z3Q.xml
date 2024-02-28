@@ -74,7 +74,7 @@ https://kemono-friends.jp/
 
 #どうぶつ日記　#けものフレンズ</media:description>
    <media:community>
-    <media:starRating count="8" average="5.00" min="1" max="5"/>
+    <media:starRating count="7" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -137,8 +137,8 @@ https://kemono-friends-3.jp/dmg/
 　https://twitter.com/kemono_friends3
 ----------------------------------------</media:description>
    <media:community>
-    <media:starRating count="569" average="5.00" min="1" max="5"/>
-    <media:statistics views="13928"/>
+    <media:starRating count="568" average="5.00" min="1" max="5"/>
+    <media:statistics views="13923"/>
    </media:community>
   </media:group>
  </entry>
@@ -201,7 +201,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="413" average="5.00" min="1" max="5"/>
-    <media:statistics views="7349"/>
+    <media:statistics views="7345"/>
    </media:community>
   </media:group>
  </entry>
@@ -444,7 +444,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="233" average="5.00" min="1" max="5"/>
-    <media:statistics views="1620"/>
+    <media:statistics views="1618"/>
    </media:community>
   </media:group>
  </entry>
