@@ -45,8 +45,8 @@
 
 おといあわせはこちらまで→info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="100" average="5.00" min="1" max="5"/>
-    <media:statistics views="531"/>
+    <media:starRating count="99" average="5.00" min="1" max="5"/>
+    <media:statistics views="509"/>
    </media:community>
   </media:group>
  </entry>
@@ -68,7 +68,7 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/w5LLZSRjQzg/hqdefault.jpg" width="480" height="360"/>
    <media:description>サインダイスキー！</media:description>
    <media:community>
-    <media:starRating count="69" average="5.00" min="1" max="5"/>
+    <media:starRating count="68" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -313,7 +313,7 @@ https://store.steampowered.com/app/2699510/2__Nibansen/?l=japanese</media:descri
 おといあわせはこちらまで→info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="188" average="5.00" min="1" max="5"/>
-    <media:statistics views="956"/>
+    <media:statistics views="955"/>
    </media:community>
   </media:group>
  </entry>
