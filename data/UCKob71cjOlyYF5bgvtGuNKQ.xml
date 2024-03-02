@@ -21,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCKob71cjOlyYF5bgvtGuNKQ</uri>
   </author>
   <published>2024-03-02T10:21:55+00:00</published>
-  <updated>2024-03-02T10:21:58+00:00</updated>
+  <updated>2024-03-02T11:10:15+00:00</updated>
   <media:group>
    <media:title>【Lethal Company】これはホラー？？【#シマシマフルンダカラ】</media:title>
    <media:content url="https://www.youtube.com/v/ebV6dGYFVAs?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -66,8 +66,8 @@
 
 配信者のためのコメントアプリ「わんコメ」https://onecomme.com</media:description>
    <media:community>
-    <media:starRating count="56" average="5.00" min="1" max="5"/>
-    <media:statistics views="0"/>
+    <media:starRating count="105" average="5.00" min="1" max="5"/>
+    <media:statistics views="5"/>
    </media:community>
   </media:group>
  </entry>
@@ -123,7 +123,7 @@
 配信者のためのコメントアプリ「わんコメ」https://onecomme.com</media:description>
    <media:community>
     <media:starRating count="349" average="5.00" min="1" max="5"/>
-    <media:statistics views="2041"/>
+    <media:statistics views="2047"/>
    </media:community>
   </media:group>
  </entry>
