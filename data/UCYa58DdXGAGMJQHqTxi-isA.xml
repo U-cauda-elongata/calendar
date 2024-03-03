@@ -87,8 +87,8 @@
    <media:thumbnail url="https://i3.ytimg.com/vi/nBungLSPlC8/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="66" average="5.00" min="1" max="5"/>
-    <media:statistics views="206"/>
+    <media:starRating count="64" average="5.00" min="1" max="5"/>
+    <media:statistics views="205"/>
    </media:community>
   </media:group>
  </entry>
