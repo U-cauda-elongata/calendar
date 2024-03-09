@@ -61,7 +61,7 @@
 
 配信者のためのコメントアプリ「わんコメ」https://onecomme.com</media:description>
    <media:community>
-    <media:starRating count="22" average="5.00" min="1" max="5"/>
+    <media:starRating count="20" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -133,7 +133,7 @@
    <uri>https://www.youtube.com/channel/UCKob71cjOlyYF5bgvtGuNKQ</uri>
   </author>
   <published>2024-03-06T11:31:03+00:00</published>
-  <updated>2024-03-09T03:22:50+00:00</updated>
+  <updated>2024-03-06T12:36:58+00:00</updated>
   <media:group>
    <media:title>リスナーちゃまのみんなへ僕から大切なお知らせ！</media:title>
    <media:content url="https://www.youtube.com/v/zRXyUdz2Juc?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -172,7 +172,7 @@
 ご理解とご協力をお願いします！</media:description>
    <media:community>
     <media:starRating count="1040" average="5.00" min="1" max="5"/>
-    <media:statistics views="7144"/>
+    <media:statistics views="7143"/>
    </media:community>
   </media:group>
  </entry>
