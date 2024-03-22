@@ -121,7 +121,7 @@
 
 配信者のためのコメントアプリ「わんコメ」https://onecomme.com</media:description>
    <media:community>
-    <media:starRating count="555" average="5.00" min="1" max="5"/>
+    <media:starRating count="556" average="5.00" min="1" max="5"/>
     <media:statistics views="3175"/>
    </media:community>
   </media:group>
@@ -517,7 +517,7 @@
 配信者のためのコメントアプリ「わんコメ」https://onecomme.com</media:description>
    <media:community>
     <media:starRating count="361" average="5.00" min="1" max="5"/>
-    <media:statistics views="2242"/>
+    <media:statistics views="2243"/>
    </media:community>
   </media:group>
  </entry>
