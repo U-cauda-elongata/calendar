@@ -39,9 +39,9 @@ The subsetted font files `NikumaruFont.en.woff2` and `NikumaruFont.ja.woff2` are
 Additionally, the minified source distribution `app.js` includes thirdparty libraries with the
 following license terms:
 
-## ChristophP/elm-i18next 4.2.0
+## ChristophP/elm-i18next 4.2.1
 
-> Copyright <YEAR> <COPYRIGHT HOLDER>
+> Copyright (c) 2017 Christoph Pölt
 > 
 > Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 > 
@@ -308,7 +308,7 @@ following license terms:
 > OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 > OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-## elm-community/list-extra 8.5.2
+## elm-community/list-extra 8.7.0
 
 > The MIT License (MIT)
 > 

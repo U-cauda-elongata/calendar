@@ -7,7 +7,7 @@ all: app.js NikumaruFont.en.woff2 COPYING
 src/Translations.elm: translations/en.json
 	npx elm-i18next-gen --source translations/en.json --target src/ --type both --overwrite
 
-build/elm.js: src/Translations.elm src/*.elm src/*/*.elm src/*/*/*.elm
+build/elm.js: elm.json src/Translations.elm src/*.elm src/*/*.elm src/*/*/*.elm
 	$(ELM_MAKE) $(ELMFLAGS) --output=build/elm.js src/Main.elm
 
 app.js: elm.json build/elm.js src/customElements.js src/feeds.js src/observances.js src/init.js src/notice.js
@@ -25,7 +25,8 @@ NikumaruFont.en.woff2: scripts/ftsubset.sh translations/*.json src/07にくま�
 
 NikumaruFont.ja.woff2: NikumaruFont.en.woff2
 
-COPYING: scripts/collect_licenses.sh src/COPYING.in elm.json
+# Build `elm.js` first to make `elm` unpack the packages, including the `LICENSE` files.
+COPYING: scripts/collect_licenses.sh src/COPYING.in elm.json build/elm.js
 	cp src/COPYING.in COPYING
 	./scripts/collect_licenses.sh >> COPYING
 
