@@ -6,6 +6,7 @@ on:
     paths:
       - Makefile
       - elm.json
+      - 'public/**'
       - 'src/**'
       - 'vite.config.js'
   workflow_dispatch: {}
