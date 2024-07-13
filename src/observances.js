@@ -108,3 +108,5 @@ const observances = [
 		sinceYear: 2018,
 	},
 ];
+
+export default observances;

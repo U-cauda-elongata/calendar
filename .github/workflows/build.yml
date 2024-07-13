@@ -7,6 +7,7 @@ on:
       - Makefile
       - elm.json
       - 'src/**'
+      - 'vite.config.js'
   workflow_dispatch: {}
 
 jobs:
@@ -16,8 +17,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: refs/heads/gh-pages
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install
       - name: Setup Elm
         uses: mpizenberg/elm-tooling-action@e8d4d23a71ba5993d67ca18531438991e3b4e28d
         with:
@@ -25,18 +26,17 @@ jobs:
       - name: Install dependencies
         run: |
           pip install brotli fonttools
-          npm install --location=global elm-optimize-level-2
-          npm install --location=global uglify-js
       - name: Build
         run: |
-          git fetch --no-tags --depth=1 origin refs/heads/main
-          git reset FETCH_HEAD
-          git checkout .
-          git add data/ feed/ || true
+          rm -r docs/ || true
+          rm public/*.woff2 || true
+          make --always-make fonts docs/index.html
+          git add docs/
 
-          rm -- *.woff2 || true
-          make --always-make ELM_MAKE=elm-optimize-level-2 ELMFLAGS= app.js fonts
-          git add -- app.js *.woff2 \*.woff2
+          git fetch --no-tags --depth=1 origin refs/heads/gh-pages
+          git checkout FETCH_HEAD data/ || true
+          git checkout FETCH_HEAD docs/feed/ || true
+          git switch -c gh-pages
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: 'chore(ci): squash & build'

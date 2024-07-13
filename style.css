@@ -29,7 +29,7 @@
 	font-family: NikumaruFontEn;
 	src:
 		local('07にくまるフォント'),
-		url('NikumaruFont.en.woff2') format('woff2');
+		url('/NikumaruFont.en.woff2') format('woff2');
 	font-display: swap;
 }
 
@@ -37,7 +37,7 @@
 	font-family: NikumaruFontJa;
 	src:
 		local('07にくまるフォント'),
-		url('NikumaruFont.ja.woff2') format('woff2');
+		url('/NikumaruFont.ja.woff2') format('woff2');
 	font-display: swap;
 }
 

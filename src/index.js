@@ -1,3 +1,8 @@
+import { Elm } from './Main.elm';
+import './customElements';
+import feeds from './feeds';
+import observances from './observances';
+
 const app = Elm.Main.init({
 	flags: {
 		features: {

@@ -150,7 +150,7 @@ FileUtils.mkdir_p('feed')
 file = 'latest.json'
 while page = pages.shift
   STDERR.puts "Writing #{page.flatten.length} entries to `#{file}`..."
-  open("feed/#{file}", 'w') do |out|
+  open("docs/feed/#{file}", 'w') do |out|
     json = {}
     if meta
       json['meta'] = meta

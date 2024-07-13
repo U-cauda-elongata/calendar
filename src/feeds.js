@@ -78,3 +78,5 @@ const feeds = [
 		icon: "https://yt3.ggpht.com/ytc/AKedOLSiSzCCyj5TBipvNgNcz0NrPZbvJZmZQU9JUFE-=s60",
 	},
 ];
+
+export default feeds;
