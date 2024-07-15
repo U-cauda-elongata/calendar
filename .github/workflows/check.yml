@@ -1,0 +1,25 @@
+name: Check
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - Makefile
+      - elm.json
+      - package.json
+      - pnpm-lock.yaml
+      - 'src/**'
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install
+      - name: Setup Elm
+        uses: mpizenberg/elm-tooling-action@v1.6
+        with:
+          cache-key: elm-home-${{ hashFiles('elm-tooling.json', 'elm.json') }}
+      - run: make --always-make check

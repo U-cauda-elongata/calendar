@@ -10,6 +10,7 @@ module Filter exposing
     )
 
 import Feed
+import InteropDefinitions exposing (PresetFeedMeta)
 import List.Extra as List
 import Url.Builder
 
@@ -17,7 +18,7 @@ import Url.Builder
 type alias Feed =
     { checked : Bool
     , alternate : String
-    , preset : Feed.Preset
+    , preset : PresetFeedMeta
     }
 
 

@@ -23,23 +23,25 @@ customElements.define('intl-date', class extends HTMLElement {
 			return;
 		}
 
-		const year = this.dataset.year;
-		const month = this.dataset.month;
-		const day = this.dataset.day;
-		const date = new Date(year, month, day);
+		// The custom element is only created by `Elements.elm`, which always sets these properties.
+		const year = this.dataset.year!;
+		const month = this.dataset.month!;
+		const day = this.dataset.day!;
+		const date = new Date(+year, +month, +day);
 
 		const lang = this.getAttribute('lang');
-		const opts = {
+		const opts: Intl.DateTimeFormatOptions = {
 			month: 'long',
 			day: 'numeric',
 			weekday: 'short',
 		};
-		if (new Date().getYear() != date.getYear()) {
+		if (new Date().getFullYear() != date.getFullYear()) {
 			opts.year = 'numeric';
 		}
 		const fmt = new Intl.DateTimeFormat(lang ?? 'default', opts);
 
-		const time = this.firstChild;
+		// The only child of the custom element is `<time>`, appended by `connectedCallback`.
+		const time = this.firstChild as HTMLTimeElement;
 		if (lang) {
 			time.removeAttribute('lang');
 		} else {
@@ -75,7 +77,8 @@ customElements.define('intl-time', class extends HTMLElement {
 			return;
 		}
 
-		const date = new Date(+this.dataset.timestamp);
+		const timestamp = this.dataset.timestamp!;
+		const date = new Date(+timestamp);
 
 		const lang = this.getAttribute('lang');
 		const fmt = new Intl.DateTimeFormat(lang ?? 'default', {
@@ -83,7 +86,7 @@ customElements.define('intl-time', class extends HTMLElement {
 			minute: 'numeric',
 		});
 
-		const time = this.firstChild;
+		const time = this.firstChild as HTMLTimeElement;
 		if (lang) {
 			time.removeAttribute('lang');
 		} else {
@@ -117,7 +120,7 @@ customElements.define('intl-time', class extends HTMLElement {
 				const node = nodes.shift();
 				if (node) {
 					// Note: `node` is always a separator element, followed by a text node.
-					const text = nodes.shift();
+					const text = nodes.shift()!;
 					if (text.nodeValue != part) {
 						text.replaceWith(part);
 					}
@@ -158,13 +161,13 @@ customElements.define('intl-reltime', class extends HTMLElement {
 			return;
 		}
 
-		const value = this.dataset.value;
-		const unit = this.dataset.unit;
+		const value = +this.dataset.value!;
+		const unit = this.dataset.unit as Intl.RelativeTimeFormatUnit;
 
 		const lang = this.getAttribute('lang');
 		const fmt = new Intl.RelativeTimeFormat(lang ?? 'default');
 
-		const time = this.firstChild;
+		const time = this.firstChild as HTMLTimeElement;
 		if (lang) {
 			time.removeAttribute('lang');
 		} else {

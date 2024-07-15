@@ -1,4 +1,4 @@
-module Feed exposing (Feed, Meta, Preset, decoder)
+module Feed exposing (Feed, Meta, decoder)
 
 import EventCore as Event exposing (Event)
 import Json.Decode as D
@@ -15,14 +15,6 @@ type alias Meta =
     { id : String
     , title : String
     , alternate : String
-    }
-
-
-type alias Preset =
-    { id : String
-    , title : String
-    , lang : String
-    , icon : String
     }
 
 

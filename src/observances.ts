@@ -1,4 +1,4 @@
-const observances = [
+export default [
 	{
 		// <https://www.youtube.com/watch?v=Gxia9tP6jWM>
 		key: "African Penguin and Humboldt Penguin's debut anniversary",
@@ -108,5 +108,3 @@ const observances = [
 		sinceYear: 2018,
 	},
 ];
-
-export default observances;

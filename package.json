@@ -12,8 +12,12 @@
   },
   "license": "GPL-3.0-only",
   "devDependencies": {
+    "@eslint/js": "^9.7.0",
     "elm-i18next-gen": "^1.1.0",
     "elm-tooling": "^1.8.0",
+    "eslint": "9.x",
+    "globals": "^15.8.0",
+    "typescript-eslint": "^7.16.1",
     "vite": "^5.3.3",
     "vite-plugin-elm": "^3.0.1",
     "vite-plugin-html": "^3.2.2"

@@ -1,4 +1,4 @@
-const feeds = [
+export default [
 	{
 		id: "yt:channel:UCEOugXOAfa-HRmRjKbH8z3Q",
 		title: "けものフレンズプロジェクト公式",
@@ -78,5 +78,3 @@ const feeds = [
 		icon: "https://yt3.ggpht.com/ytc/AKedOLSiSzCCyj5TBipvNgNcz0NrPZbvJZmZQU9JUFE-=s60",
 	},
 ];
-
-export default feeds;

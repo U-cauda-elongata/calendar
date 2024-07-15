@@ -1,4 +1,4 @@
-port module Main exposing (main)
+module Main exposing (main)
 
 import Attributes exposing (..)
 import Browser exposing (Document)
@@ -19,7 +19,10 @@ import Html.Lazy exposing (..)
 import Http
 import I18Next exposing (Translations, translationsDecoder)
 import Icon
+import InteropDefinitions as ID exposing (Features, Flags, ShareData)
+import InteropPorts as IP exposing (decodeFlags)
 import Json.Decode as D
+import Json.Encode as E
 import KeyboardEvent
 import List.Extra as List
 import Markdown
@@ -46,7 +49,7 @@ import Util.List as List
 import Util.String as String
 
 
-main : Program Flags Model Msg
+main : Program D.Value Model Msg
 main =
     Browser.application
         { init = init
@@ -56,43 +59,6 @@ main =
         , onUrlRequest = LinkClicked
         , onUrlChange = UrlChanged
         }
-
-
-
--- PORTS
-
-
-port setLang : String -> Cmd msg
-
-
-port preventScrollFocus : String -> Cmd msg
-
-
-port slideViewportInto : String -> Cmd msg
-
-
-port showModal : String -> Cmd msg
-
-
-port close : String -> Cmd msg
-
-
-port copy : String -> Cmd msg
-
-
-port share : ShareData -> Cmd msg
-
-
-port onScrollToBottom : (D.Value -> msg) -> Sub msg
-
-
-port removeScrollEventListener : () -> Cmd msg
-
-
-type alias ShareData =
-    { title : String
-    , url : Maybe String
-    }
 
 
 
@@ -180,17 +146,17 @@ type Error
     | Unexpected String
 
 
-type alias Flags =
-    { features : Features
-    , languages : List String
-    , feeds : List Feed.Preset
-    , observances : D.Value
-    }
-
-
-init : Flags -> Url -> Nav.Key -> ( Model, Cmd Msg )
-init flags url key =
+init : D.Value -> Url -> Nav.Key -> ( Model, Cmd Msg )
+init flagsJson url key =
     let
+        flags =
+            case decodeFlags flagsJson of
+                Err _ ->
+                    Flags (Features False False) [] [] (E.list E.object [])
+
+                Ok f ->
+                    f
+
         query =
             Query.parseUrl url
 
@@ -457,7 +423,9 @@ update msg model =
                         env =
                             model.env
                     in
-                    ( { model | env = { env | translations = translations } }, setLang lang )
+                    ( { model | env = { env | translations = translations } }
+                    , ID.SetLang lang |> IP.fromElm
+                    )
 
                 Err err ->
                     model |> update (ReportError (TranslationsHttpError lang err))
@@ -544,8 +512,8 @@ update msg model =
                                     , Cmd.batch
                                         [ -- Set `preventScroll` to avoid halting the sliding
                                           -- animation.
-                                          preventScrollFocus nowSectionId
-                                        , slideViewportInto nowSectionId
+                                          ID.PreventScrollFocus nowSectionId |> IP.fromElm
+                                        , ID.SlideViewportInto nowSectionId |> IP.fromElm
                                         ]
                                     )
 
@@ -637,7 +605,7 @@ update msg model =
 
                 ( About _, None ) ->
                     Cmd.batch
-                        [ close aboutDialogId
+                        [ ID.Close aboutDialogId |> IP.fromElm
                         , Dom.focus aboutButtonId |> Task.attempt handleDomResult
                         ]
 
@@ -651,23 +619,23 @@ update msg model =
                                 Cmd.none
 
                             About _ ->
-                                close aboutDialogId
+                                ID.Close aboutDialogId |> IP.fromElm
 
                             Help ->
-                                close helpDialogId
+                                ID.Close helpDialogId |> IP.fromElm
                         , case mode of
                             None ->
                                 Cmd.none
 
                             About _ ->
                                 Cmd.batch
-                                    [ showModal aboutDialogId
+                                    [ ID.ShowModal aboutDialogId |> IP.fromElm
                                     , Dom.focus aboutCloseButtonId |> Task.attempt handleDomResult
                                     ]
 
                             Help ->
                                 Cmd.batch
-                                    [ showModal helpDialogId
+                                    [ ID.ShowModal helpDialogId |> IP.fromElm
                                     , Dom.focus helpCloseButtonId |> Task.attempt handleDomResult
                                     ]
                         ]
@@ -788,7 +756,7 @@ update msg model =
                                                     []
 
                                         Nothing ->
-                                            [ removeScrollEventListener () ]
+                                            [ ID.RemoveScrollEventListener |> IP.fromElm ]
 
                                 cmds2 =
                                     if
@@ -821,7 +789,7 @@ update msg model =
                 -- is large enough to contain current time. If KemoV becomes big enough to fill up
                 -- the first page with upcoming streams in the future, then we should revisit this!
                 ( { model2 | initialized = True }
-                , Cmd.batch [ cmd, slideViewportInto nowSectionId ]
+                , Cmd.batch [ cmd, ID.SlideViewportInto nowSectionId |> IP.fromElm ]
                 )
 
         RetryGetFeed url ->
@@ -842,10 +810,10 @@ update msg model =
                 }
 
         Copy text ->
-            ( model, copy text )
+            ( model, ID.Copy text |> IP.fromElm )
 
         Share title url ->
-            ( model, share <| ShareData title url )
+            ( model, ShareData title url |> ID.Share |> IP.fromElm )
 
         NoOp ->
             ( model, Cmd.none )
@@ -936,7 +904,18 @@ subscriptions model =
         subs2 =
             case model.pendingFeed of
                 OneMore url ->
-                    onScrollToBottom (always <| GetFeed url) :: subs
+                    (IP.toElm
+                        |> Sub.map
+                            (\result ->
+                                case result of
+                                    Ok ID.OnScrollToBottom ->
+                                        GetFeed url
+
+                                    Err e ->
+                                        ReportError <| Unexpected <| D.errorToString e
+                            )
+                    )
+                        :: subs
 
                 _ ->
                     subs
