@@ -79,8 +79,8 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="127" average="5.00" min="1" max="5"/>
-    <media:statistics views="452"/>
+    <media:starRating count="159" average="5.00" min="1" max="5"/>
+    <media:statistics views="706"/>
    </media:community>
   </media:group>
  </entry>
@@ -153,7 +153,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="230" average="5.00" min="1" max="5"/>
-    <media:statistics views="1068"/>
+    <media:statistics views="1071"/>
    </media:community>
   </media:group>
  </entry>
@@ -244,7 +244,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
   </author>
   <published>2024-07-19T18:39:15+00:00</published>
-  <updated>2024-07-21T00:18:52+00:00</updated>
+  <updated>2024-07-21T20:06:47+00:00</updated>
   <media:group>
    <media:title>【RUST】First time playing RUST! Let's make friends! #猫鯖rust【#Coyote / #KemoV】</media:title>
    <media:content url="https://www.youtube.com/v/22tJBKJUk_I?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -302,7 +302,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="330" average="5.00" min="1" max="5"/>
-    <media:statistics views="1916"/>
+    <media:statistics views="1918"/>
    </media:community>
   </media:group>
  </entry>
@@ -959,7 +959,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="432" average="5.00" min="1" max="5"/>
-    <media:statistics views="4658"/>
+    <media:statistics views="4659"/>
    </media:community>
   </media:group>
  </entry>
