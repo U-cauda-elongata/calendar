@@ -21,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
   </author>
   <published>2024-07-24T02:54:21+00:00</published>
-  <updated>2024-07-24T07:18:13+00:00</updated>
+  <updated>2024-07-24T13:16:02+00:00</updated>
   <media:group>
    <media:title>【RUST】My House is ... Coyover?! #猫鯖rust【#Coyote / #KemoV】</media:title>
    <media:content url="https://www.youtube.com/v/dRbb9n2GT1g?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -78,8 +78,8 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="43" average="5.00" min="1" max="5"/>
-    <media:statistics views="0"/>
+    <media:starRating count="124" average="5.00" min="1" max="5"/>
+    <media:statistics views="284"/>
    </media:community>
   </media:group>
  </entry>
@@ -164,7 +164,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="155" average="5.00" min="1" max="5"/>
-    <media:statistics views="1024"/>
+    <media:statistics views="1025"/>
    </media:community>
   </media:group>
  </entry>
@@ -547,7 +547,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="198" average="5.00" min="1" max="5"/>
-    <media:statistics views="1216"/>
+    <media:statistics views="1217"/>
    </media:community>
   </media:group>
  </entry>
@@ -947,7 +947,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="291" average="5.00" min="1" max="5"/>
-    <media:statistics views="1328"/>
+    <media:statistics views="1329"/>
    </media:community>
   </media:group>
  </entry>
