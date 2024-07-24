@@ -78,7 +78,7 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="2" average="5.00" min="1" max="5"/>
+    <media:starRating count="21" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -94,7 +94,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
   </author>
   <published>2024-07-23T17:38:53+00:00</published>
-  <updated>2024-07-23T18:45:51+00:00</updated>
+  <updated>2024-07-24T06:32:48+00:00</updated>
   <media:group>
    <media:title>【TEKKEN 8】Lidia is here! TEKKEN TUESDAY【#Coyote / #KemoV】#tekken #鉄拳8</media:title>
    <media:content url="https://www.youtube.com/v/-V5m1huMcqA?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -164,7 +164,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="155" average="5.00" min="1" max="5"/>
-    <media:statistics views="981"/>
+    <media:statistics views="1001"/>
    </media:community>
   </media:group>
  </entry>
@@ -238,7 +238,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="222" average="5.00" min="1" max="5"/>
-    <media:statistics views="1791"/>
+    <media:statistics views="1795"/>
    </media:community>
   </media:group>
  </entry>
@@ -459,8 +459,8 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="331" average="5.00" min="1" max="5"/>
-    <media:statistics views="1920"/>
+    <media:starRating count="332" average="5.00" min="1" max="5"/>
+    <media:statistics views="1921"/>
    </media:community>
   </media:group>
  </entry>
