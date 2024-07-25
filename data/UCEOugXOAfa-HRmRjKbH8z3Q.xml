@@ -66,8 +66,8 @@ https://kemono-friends-3.jp/dmg/
 　https://twitter.com/kemono_friends3
 ----------------------------------------</media:description>
    <media:community>
-    <media:starRating count="159" average="5.00" min="1" max="5"/>
-    <media:statistics views="668"/>
+    <media:starRating count="158" average="5.00" min="1" max="5"/>
+    <media:statistics views="660"/>
    </media:community>
   </media:group>
  </entry>
@@ -126,8 +126,8 @@ https://kemono-friends-3.jp/dmg/
 　https://twitter.com/kemono_friends3
 ----------------------------------------</media:description>
    <media:community>
-    <media:starRating count="258" average="5.00" min="1" max="5"/>
-    <media:statistics views="1375"/>
+    <media:starRating count="255" average="5.00" min="1" max="5"/>
+    <media:statistics views="1360"/>
    </media:community>
   </media:group>
  </entry>
@@ -453,7 +453,7 @@ https://kemono-friends-3.jp/dmg/
    <uri>https://www.youtube.com/channel/UCEOugXOAfa-HRmRjKbH8z3Q</uri>
   </author>
   <published>2024-06-14T05:00:18+00:00</published>
-  <updated>2024-07-23T15:46:47+00:00</updated>
+  <updated>2024-07-18T06:56:13+00:00</updated>
   <media:group>
    <media:title>『けものフレンズ３』フレンズ紹介PV バイソン</media:title>
    <media:content url="https://www.youtube.com/v/ZCyttGd1koY?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -499,7 +499,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="255" average="5.00" min="1" max="5"/>
-    <media:statistics views="2328"/>
+    <media:statistics views="2326"/>
    </media:community>
   </media:group>
  </entry>
