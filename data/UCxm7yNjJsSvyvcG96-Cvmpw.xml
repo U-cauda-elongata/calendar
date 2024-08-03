@@ -28,7 +28,7 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/Owp5hi84M_Y/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="479" average="5.00" min="1" max="5"/>
+    <media:starRating count="480" average="5.00" min="1" max="5"/>
     <media:statistics views="3338"/>
    </media:community>
   </media:group>
@@ -145,7 +145,7 @@ https://www.minecraft.net/ja-jp
 ご理解とご協力をお願いします！</media:description>
    <media:community>
     <media:starRating count="330" average="5.00" min="1" max="5"/>
-    <media:statistics views="1500"/>
+    <media:statistics views="1503"/>
    </media:community>
   </media:group>
  </entry>
@@ -201,7 +201,7 @@ https://www.minecraft.net/ja-jp
 ご理解とご協力をお願いします！</media:description>
    <media:community>
     <media:starRating count="294" average="5.00" min="1" max="5"/>
-    <media:statistics views="1397"/>
+    <media:statistics views="1399"/>
    </media:community>
   </media:group>
  </entry>
@@ -241,7 +241,7 @@ https://www.youtube.com/watch?v=BhMuL8iN29A&amp;t=3336s
 #わたしの一番かわいいところ #歌ってみた #フルーツジッパー #FRUITSZIPPER</media:description>
    <media:community>
     <media:starRating count="270" average="5.00" min="1" max="5"/>
-    <media:statistics views="1184"/>
+    <media:statistics views="1187"/>
    </media:community>
   </media:group>
  </entry>
@@ -289,7 +289,7 @@ https://www.youtube.com/watch?v=BhMuL8iN29A&amp;t=3336s
 #PERFECTHUMAN #歌ってみた #オリエンタルラジオ #RADIOFISH</media:description>
    <media:community>
     <media:starRating count="242" average="5.00" min="1" max="5"/>
-    <media:statistics views="862"/>
+    <media:statistics views="864"/>
    </media:community>
   </media:group>
  </entry>
@@ -585,7 +585,7 @@ https://store.steampowered.com/app/2933870/_/?l=japanese
 ご理解とご協力をお願いします！</media:description>
    <media:community>
     <media:starRating count="341" average="5.00" min="1" max="5"/>
-    <media:statistics views="1446"/>
+    <media:statistics views="1447"/>
    </media:community>
   </media:group>
  </entry>
