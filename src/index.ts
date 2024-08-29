@@ -92,7 +92,11 @@ app.ports.interopFromElm.subscribe((fromElm) => {
 				const node = document.getElementById(fromElm.data);
 				if (node) {
 					requestAnimationFrame(() => {
-						node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+						const options: ScrollIntoViewOptions = { block: 'center' };
+						if (!matchMedia('(prefers-reduced-motion)').matches) {
+							options.behavior = 'smooth';
+						}
+						node.scrollIntoView(options);
 					});
 				}
 			}
