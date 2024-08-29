@@ -20,21 +20,21 @@ const app = Elm.Main.init({
 let ticking = false;
 let feedBottom: HTMLElement | null;
 function listener() {
-    if (!ticking) {
-        requestAnimationFrame(() => {
-            feedBottom = feedBottom || document.getElementById('feedBottom');
-            if (feedBottom) {
-                const viewportBottom = scrollY + document.documentElement.clientHeight;
-                if (viewportBottom > feedBottom.offsetTop) {
-                    app.ports.interopToElm.send({
-                        tag: 'OnScrollToBottom',
-                    });
-                }
-            }
-            ticking = false;
-        });
-        ticking = true;
-    }
+	if (!ticking) {
+		requestAnimationFrame(() => {
+			feedBottom = feedBottom || document.getElementById('feedBottom');
+			if (feedBottom) {
+				const viewportBottom = scrollY + document.documentElement.clientHeight;
+				if (viewportBottom > feedBottom.offsetTop) {
+					app.ports.interopToElm.send({
+						tag: 'OnScrollToBottom',
+					});
+				}
+			}
+			ticking = false;
+		});
+		ticking = true;
+	}
 }
 addEventListener('scroll', listener);
 
