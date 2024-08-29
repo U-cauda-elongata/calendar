@@ -378,7 +378,7 @@ main {
  * [^2]: <https://www.w3.org/TR/WCAG21/#dfn-general-flash-and-red-flash-thresholds>
  */
 :root {
-	animation: 2s flash infinite;
+	animation: 2s flash steps(2) infinite;
 }
 
 .flashing-time .time-separator {
@@ -390,12 +390,6 @@ main {
 @keyframes flash {
 	from {
 		--flash-opacity: 1;
-	}
-	49.99999% {
-		--flash-opacity: 1;
-	}
-	50% {
-		--flash-opacity: 0;
 	}
 	to {
 		--flash-opacity: 0;
