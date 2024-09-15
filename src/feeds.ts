@@ -3,7 +3,7 @@ export default [
 		id: "yt:channel:UCEOugXOAfa-HRmRjKbH8z3Q",
 		title: "けものフレンズプロジェクト公式",
 		lang: "ja",
-		icon: "https://yt3.ggpht.com/ryEtopDlUPjueM1j3UufZ3UrGCpuYxc5tdeX5-pTlkjygXqbw7j29bFIPu8uCy4NzHAM1EetmLM=s60",
+		icon: "https://yt3.googleusercontent.com/qXk8L8kI7-cGKXCRRdEy3Td9fOZ7bjxg5AxX7Zc3zxzHQXy9d8PjcFzM8p_JOOnBu7Ay0Zdy5g=s60",
 	},
 	{
 		id: "yt:channel:UCrMKWvQuyFL1dckG2RLInDQ",
