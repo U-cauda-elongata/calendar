@@ -2,7 +2,7 @@ ELM_MAKE ?= elm make
 ELMFLAGS ?= --optimize
 UGLIFYJS ?= uglifyjs
 
-all: docs/index.html NikumaruFont.en.woff2 COPYING
+all: docs/index.html public/NikumaruFont.en.woff2 COPYING
 
 src/Translations.elm: public/translations/en.json
 	pnpx elm-i18next-gen --source public/translations/en.json --target src/ --type both --overwrite
