@@ -63,9 +63,9 @@ li {
 	display: block;
 }
 
-/* Sometimes we want to use the default style, and sometimes not.
- * Use the `unstyle` class to opt out of the default style in such cases. */
-.unstyle:where(button) {
+/* We don't want the default style in most cases, but sometimes we need it.
+ * Use the `native` class to opt in the default style when needed. */
+button:where(:not(.native)) {
 	appearance: none;
 	border: none;
 	color: inherit;
@@ -73,7 +73,7 @@ li {
 	font-family: inherit;
 }
 
-.unstyle:where(menu, ol, ul) {
+menu:where(:not(.native)), ol:where(:not(.native)), ul:where(:not(.native)) {
 	margin: initial;
 	padding: initial;
 }

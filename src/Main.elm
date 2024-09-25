@@ -989,7 +989,6 @@ view model =
               in
               button
                 [ class "hamburger"
-                , class "unstyle"
                 , classList [ ( "filter-active", Filter.isActive model.filter ) ]
                 , ariaLabelledby <| iconId
                 , ariaDescribedby hamburgerDescriptionId
@@ -1058,12 +1057,11 @@ hamburgerDescriptionId =
 viewDrawer : Translations -> Bool -> Mode -> List String -> Filter -> Html Msg
 viewDrawer translations expanded mode searchSuggestions filter =
     menu
-        [ class "drawer-menu", class "unstyle" ]
+        [ class "drawer-menu" ]
         [ li []
             [ button
                 [ id hamburgerLabelButtonId
                 , class "drawer-item"
-                , class "unstyle"
                 , ariaLabel <| T.expandMenu translations
                 , ariaDescribedby hamburgerDescriptionId
                 , ariaPressed <| expanded
@@ -1087,7 +1085,6 @@ viewDrawer translations expanded mode searchSuggestions filter =
               button
                 [ class "drawer-item"
                 , class "filter-clear-button"
-                , class "unstyle"
                 , title labelText
                 , disabled <| not <| Filter.isActive filter
                 , onClick ClearFilter
@@ -1116,7 +1113,6 @@ viewDrawer translations expanded mode searchSuggestions filter =
                 [ id aboutButtonId
                 , class "drawer-item"
                 , class "about-button"
-                , class "unstyle"
                 , title labelText
                 , ariaControls aboutDialogId
                 , ariaExpanded <|
@@ -1192,7 +1188,7 @@ viewSearch translations suggestions q =
 viewFeedFilter : Translations -> List Feed -> Html Msg
 viewFeedFilter translations feeds =
     li [ class "feed-filter" ]
-        [ ul [ ariaLabel <| T.feedFilterLabel translations ]
+        [ ul [ class "native", ariaLabel <| T.feedFilterLabel translations ]
             (feeds
                 |> List.indexedMap
                     (\i feed ->
@@ -1204,7 +1200,6 @@ viewFeedFilter translations feeds =
                             [ button
                                 [ class "drawer-item"
                                 , class "filter-button"
-                                , class "unstyle"
                                 , role "switch"
                                 , title feed.preset.title
                                 , onClick <| ToggleFeedFilter i
@@ -1319,7 +1314,6 @@ viewMain env now activePopup pendingFeed filter events =
                             -- focusable in order to make it keyboard-navigable.
                             [ button
                                 [ class "load-more-feed-button"
-                                , class "unstyle"
                                 , ariaLabel <| T.loadMoreLabel env.translations
                                 , onClick <| GetFeed url
                                 ]
@@ -1333,7 +1327,6 @@ viewMain env now activePopup pendingFeed filter events =
                         Retry url ->
                             [ button
                                 [ class "load-more-feed-button"
-                                , class "unstyle"
                                 , ariaLabel <| T.retryLoadingLabel env.translations
                                 , onClick <| RetryGetFeed url
                                 ]
@@ -1398,7 +1391,7 @@ viewKeyedDateSection env now activePopup filter date items =
                     xs ->
                         [ viewDate, text <| ": " ++ String.join ", " xs ]
             ]
-        , Keyed.ul [ class "timeline", class "unstyle" ]
+        , Keyed.ul [ class "timeline" ]
             (items
                 |> List.map
                     (\item ->
@@ -1424,7 +1417,7 @@ viewKeyedDateSection env now activePopup filter date items =
                                     section [ id nowSectionId, class "ongoing", tabindex -1 ]
                                         [ header [ class "now" ]
                                             [ h2 [] <| T.ongoingCustom env.translations text viewTime ]
-                                        , Keyed.ul [ class "timeline", class "unstyle" ]
+                                        , Keyed.ul [ class "timeline" ]
                                             (ongoing_items
                                                 |> List.map
                                                     (\( feed, event ) ->
@@ -1627,7 +1620,7 @@ viewEvent env now filter popupExpanded feed event =
               ariaDescribedby descriptionId
             ]
             (div [ class "event-padding" ] [ div [ lang env.lang ] viewTimeInfo, eventHeader ]
-                :: ul [ class "event-members" ]
+                :: ul [ class "event-members", class "native" ]
                     (viewEventMember True feed :: (members |> List.map (viewEventMember False)))
                 :: div [ id descriptionId, lang env.lang, hidden True ] description
                 :: (if env.features.copy || env.features.share then
@@ -1659,7 +1652,6 @@ viewEventPopup env expanded event =
         [ class "popup-container", lang env.lang ]
         [ button
             [ class "popup-toggle"
-            , class "unstyle"
             , ariaHaspopup "menu"
             , ariaControls popupId
             , ariaExpanded expanded
@@ -1679,7 +1671,7 @@ viewEventPopup env expanded event =
             [ text "…" ]
         , div [ class "popup-backdrop" ]
             [ menu
-                [ id popupId, class "popup", class "unstyle", ariaLabel shareLabel ]
+                [ id popupId, class "popup", ariaLabel shareLabel ]
                 -- TODO: Add icons to the list items too.
                 (let
                     firstId =
@@ -1693,9 +1685,7 @@ viewEventPopup env expanded event =
                                 [ button
                                     (let
                                         attrs =
-                                            [ class "unstyle"
-                                            , onClick <| Share event.name event.link
-                                            ]
+                                            [ onClick <| Share event.name event.link ]
                                      in
                                      if env.features.copy then
                                         attrs
@@ -1716,7 +1706,6 @@ viewEventPopup env expanded event =
                             li []
                                 [ button
                                     [ id firstId
-                                    , class "unstyle"
                                     , onClick <|
                                         Copy
                                             (event.link
@@ -1729,8 +1718,7 @@ viewEventPopup env expanded event =
                                 :: -- "Copy timestamp"
                                    li []
                                     [ button
-                                        [ class "unstyle"
-                                        , onClick <|
+                                        [ onClick <|
                                             Copy <|
                                                 String.fromInt
                                                     (Time.posixToMillis event.time // 1000)
@@ -1776,7 +1764,6 @@ viewErrorLog : Translations -> List Error -> Html Msg
 viewErrorLog translations errors =
     ul
         [ class "error-log"
-        , class "unstyle"
         , role "log"
         , ariaLive "assertive"
         , ariaLabel <| TError.error translations
@@ -1798,7 +1785,6 @@ viewError translations errIdx err =
             , text <| ">: " ++ httpErrorToString e
             , button
                 [ class "dismiss-error"
-                , class "unstyle"
                 , onClick <| RetryGetTranslations lang errIdx
                 ]
                 [ text "Retry" ]
@@ -1816,7 +1802,6 @@ viewError translations errIdx err =
                 (text <| httpErrorToString e)
                 ++ [ button
                         [ class "dismiss-error"
-                        , class "unstyle"
                         , onClick <| DismissError errIdx
                         ]
                         [ text <| TError.dismiss translations ]
@@ -1881,7 +1866,6 @@ viewAboutDialog translations mode copying =
                 [ button
                     [ class "dialog-title-bar-button"
                     , class "modal-back-button"
-                    , class "unstyle"
                     , disabled <| mode == About AboutMain
                     , ariaLabel <| T.goBackTo translations titleText
                     , onClick AboutBackToMain
@@ -1898,7 +1882,6 @@ viewAboutDialog translations mode copying =
                 , button
                     [ id aboutCloseButtonId
                     , class "dialog-title-bar-button"
-                    , class "unstyle"
                     , ariaLabel <| T.closeDialog translations
                     , onClick <| SetMode None
                     ]
@@ -1912,7 +1895,6 @@ viewAboutDialog translations mode copying =
             ]
         , button
             [ class "modal-backdrop-button"
-            , class "unstyle"
             , hidden <| mode == About AboutMain
             , ariaLabel <| T.goBackTo translations <| TAbout.title translations
             , onClick AboutBackToMain
@@ -1920,7 +1902,6 @@ viewAboutDialog translations mode copying =
             [ Icon.backButton ]
         , button
             [ class "modal-backdrop-button"
-            , class "unstyle"
             , ariaLabel <| T.srCloseDialog translations
             , onClick <| SetMode None
             ]
@@ -1976,7 +1957,7 @@ viewAboutDialogCopying copying attrs =
             div (class "copying-error" :: attrs)
                 [ h3 [] [ text "Error" ]
                 , p [] [ text <| httpErrorToString err ]
-                , button [ onClick AboutRetryGetCopying ] [ text "Retry" ]
+                , button [ class "native", onClick AboutRetryGetCopying ] [ text "Retry" ]
                 ]
 
 
@@ -2010,7 +1991,6 @@ viewHelpDialog translations mode =
                 , button
                     [ id helpCloseButtonId
                     , class "dialog-title-bar-button"
-                    , class "unstyle"
                     , ariaLabel <| T.closeDialog translations
                     , onClick <| SetMode None
                     ]
@@ -2040,7 +2020,6 @@ viewHelpDialog translations mode =
             ]
         , button
             [ class "modal-backdrop-button"
-            , class "unstyle"
             , ariaLabel <| T.srCloseDialog translations
             , onClick <| SetMode None
             ]
