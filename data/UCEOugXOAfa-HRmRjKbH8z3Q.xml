@@ -21,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCEOugXOAfa-HRmRjKbH8z3Q</uri>
   </author>
   <published>2024-09-28T12:23:04+00:00</published>
-  <updated>2024-09-29T06:49:52+00:00</updated>
+  <updated>2024-09-29T08:56:15+00:00</updated>
   <media:group>
    <media:title>【舞台「けものフレンズ」】新作舞台トークショー！【#佐藤遥 / #野口真緒 / #岩田陽菜 / #村上大樹】</media:title>
    <media:content url="https://www.youtube.com/v/kZ-bQh5bk_I?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -67,7 +67,7 @@ https://kemono-friends-butai.jp/
 
 ©avex ©けものフレンズプロジェクト</media:description>
    <media:community>
-    <media:starRating count="87" average="5.00" min="1" max="5"/>
+    <media:starRating count="126" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -262,7 +262,7 @@ https://kemono-friends.jp/
 パンク町田先生</media:description>
    <media:community>
     <media:starRating count="947" average="5.00" min="1" max="5"/>
-    <media:statistics views="9835"/>
+    <media:statistics views="9841"/>
    </media:community>
   </media:group>
  </entry>
@@ -322,7 +322,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="269" average="5.00" min="1" max="5"/>
-    <media:statistics views="2409"/>
+    <media:statistics views="2415"/>
    </media:community>
   </media:group>
  </entry>
@@ -444,7 +444,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="297" average="5.00" min="1" max="5"/>
-    <media:statistics views="3171"/>
+    <media:statistics views="3178"/>
    </media:community>
   </media:group>
  </entry>
