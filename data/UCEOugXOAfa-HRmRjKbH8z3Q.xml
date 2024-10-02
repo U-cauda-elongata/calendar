@@ -21,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCEOugXOAfa-HRmRjKbH8z3Q</uri>
   </author>
   <published>2024-10-02T08:00:45+00:00</published>
-  <updated>2024-10-02T08:00:46+00:00</updated>
+  <updated>2024-10-02T09:00:19+00:00</updated>
   <media:group>
    <media:title>『けものフレンズ３』新イベント「ちょちょいと大江戸じゃぱりハロウィン」紹介PV</media:title>
    <media:content url="https://www.youtube.com/v/guweDFUIL2E?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -62,8 +62,8 @@ https://kemono-friends-3.jp/dmg/
 　 https://twitter.com/kemono_friends3
 ----------------------------------------</media:description>
    <media:community>
-    <media:starRating count="56" average="5.00" min="1" max="5"/>
-    <media:statistics views="184"/>
+    <media:starRating count="150" average="5.00" min="1" max="5"/>
+    <media:statistics views="550"/>
    </media:community>
   </media:group>
  </entry>
@@ -124,8 +124,8 @@ https://kemono-friends-butai.jp/
 
 ©avex ©けものフレンズプロジェクト</media:description>
    <media:community>
-    <media:starRating count="456" average="5.00" min="1" max="5"/>
-    <media:statistics views="2989"/>
+    <media:starRating count="458" average="5.00" min="1" max="5"/>
+    <media:statistics views="2996"/>
    </media:community>
   </media:group>
  </entry>
@@ -185,7 +185,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="368" average="5.00" min="1" max="5"/>
-    <media:statistics views="3366"/>
+    <media:statistics views="3369"/>
    </media:community>
   </media:group>
  </entry>
@@ -436,7 +436,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="140" average="5.00" min="1" max="5"/>
-    <media:statistics views="1001"/>
+    <media:statistics views="1002"/>
    </media:community>
   </media:group>
  </entry>
