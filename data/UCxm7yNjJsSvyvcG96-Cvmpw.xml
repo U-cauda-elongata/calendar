@@ -21,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCxm7yNjJsSvyvcG96-Cvmpw</uri>
   </author>
   <published>2024-10-07T23:40:38+00:00</published>
-  <updated>2024-10-07T23:40:44+00:00</updated>
+  <updated>2024-10-08T07:34:18+00:00</updated>
   <media:group>
    <media:title>【Pineapple on Pizza】パイナップルもピザもダイスキー！【#カラ騒ぎ/#けもV】</media:title>
    <media:content url="https://www.youtube.com/v/oCNrQL-uL5U?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -64,7 +64,7 @@ https://onecomme.com/generator/templates
 マナーを守って一緒に楽しい配信にしていきましょう！
 ご理解とご協力をお願いします！</media:description>
    <media:community>
-    <media:starRating count="3" average="5.00" min="1" max="5"/>
+    <media:starRating count="27" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -123,8 +123,8 @@ https://onecomme.com/generator/templates
 マナーを守って一緒に楽しい配信にしていきましょう！
 ご理解とご協力をお願いします！</media:description>
    <media:community>
-    <media:starRating count="345" average="5.00" min="1" max="5"/>
-    <media:statistics views="1482"/>
+    <media:starRating count="348" average="5.00" min="1" max="5"/>
+    <media:statistics views="1500"/>
    </media:community>
   </media:group>
  </entry>
@@ -324,7 +324,7 @@ https://onecomme.com/generator/templates
 ご理解とご協力をお願いします！</media:description>
    <media:community>
     <media:starRating count="315" average="5.00" min="1" max="5"/>
-    <media:statistics views="1315"/>
+    <media:statistics views="1316"/>
    </media:community>
   </media:group>
  </entry>
@@ -347,7 +347,7 @@ https://onecomme.com/generator/templates
    <media:description></media:description>
    <media:community>
     <media:starRating count="263" average="5.00" min="1" max="5"/>
-    <media:statistics views="1291"/>
+    <media:statistics views="1292"/>
    </media:community>
   </media:group>
  </entry>
@@ -720,7 +720,7 @@ https://store.steampowered.com/app/2896950/Trap_Trek_Ultimate_Other_Me/
    <media:description></media:description>
    <media:community>
     <media:starRating count="491" average="5.00" min="1" max="5"/>
-    <media:statistics views="3585"/>
+    <media:statistics views="3584"/>
    </media:community>
   </media:group>
  </entry>
