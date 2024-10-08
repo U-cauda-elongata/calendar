@@ -92,7 +92,7 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="3" average="5.00" min="1" max="5"/>
+    <media:starRating count="14" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -168,7 +168,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="294" average="5.00" min="1" max="5"/>
-    <media:statistics views="1160"/>
+    <media:statistics views="1164"/>
    </media:community>
   </media:group>
  </entry>
@@ -241,7 +241,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="258" average="5.00" min="1" max="5"/>
-    <media:statistics views="1008"/>
+    <media:statistics views="1009"/>
    </media:community>
   </media:group>
  </entry>
@@ -276,8 +276,8 @@ For Inquiries → info@kemono-friends.jp
 
  #envtuber</media:description>
    <media:community>
-    <media:starRating count="256" average="5.00" min="1" max="5"/>
-    <media:statistics views="791"/>
+    <media:starRating count="257" average="5.00" min="1" max="5"/>
+    <media:statistics views="798"/>
    </media:community>
   </media:group>
  </entry>
@@ -362,7 +362,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="186" average="5.00" min="1" max="5"/>
-    <media:statistics views="1044"/>
+    <media:statistics views="1045"/>
    </media:community>
   </media:group>
  </entry>
@@ -446,8 +446,8 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="167" average="5.00" min="1" max="5"/>
-    <media:statistics views="903"/>
+    <media:starRating count="166" average="5.00" min="1" max="5"/>
+    <media:statistics views="904"/>
    </media:community>
   </media:group>
  </entry>
@@ -625,7 +625,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
   </author>
   <published>2024-09-03T16:58:39+00:00</published>
-  <updated>2024-10-02T13:49:12+00:00</updated>
+  <updated>2024-10-08T11:33:43+00:00</updated>
   <media:group>
    <media:title>【TEKKEN 8】Anti-Dragunov TEKKEN TUESDAY【#Coyote / #KemoV】#tekken #鉄拳8</media:title>
    <media:content url="https://www.youtube.com/v/FCVa2P2COfY?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
