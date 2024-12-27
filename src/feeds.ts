@@ -69,7 +69,7 @@ export default [
 		id: "yt:channel:UCKob71cjOlyYF5bgvtGuNKQ",
 		title: "シマリス / Siberian Chipmunk",
 		lang: "ja",
-		icon: "https://yt3.ggpht.com/x6ftrixLrF0GGGBnkDwWQEjkUqswTuUGrxBZLvRY47-9woj9B7Q9tfkY19yZWiYYpWW6OcqB2Q=s60",
+		icon: "https://yt3.googleusercontent.com/AEo8xi-6_WDxJt3s0Zd-5YcibmtziIxJ1Nkx_pJATh4yDj3Q0I-_RZl26klky-JIeKUZIhp3VQ=s60",
 	},
 	{
 		id: "yt:channel:UCEcMIuGR8WO2TwL9XIpjKtw",
