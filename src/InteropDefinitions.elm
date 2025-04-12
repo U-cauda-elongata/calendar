@@ -56,7 +56,15 @@ type alias PresetFeedMeta =
     { id : String
     , title : String
     , lang : String
-    , icon : String
+    , icon :
+        Icon
+    }
+
+
+type alias Icon =
+    { url : String
+    , width : Int
+    , height : Int
     }
 
 
@@ -136,4 +144,12 @@ presetFeedMetaDecoder =
         (D.field "id" D.string)
         (D.field "title" D.string)
         (D.field "lang" D.string)
-        (D.field "icon" D.string)
+        (D.field "icon" iconDecoder)
+
+
+iconDecoder : Decoder Icon
+iconDecoder =
+    D.map3 Icon
+        (D.field "url" D.string)
+        (D.field "width" D.int)
+        (D.field "height" D.int)

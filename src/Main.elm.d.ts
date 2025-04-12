@@ -25,7 +25,7 @@ export type FromElm = { data : string; tag : "slideViewportInto" } | { data : st
 
 export type ToElm = { tag : "OnScrollToBottom" };
 
-export type Flags = ({ features : { copy : boolean; share : boolean } } & { languages : string[] } & { feeds : ({ id : string } & { title : string } & { lang : string } & { icon : string })[] } & { observances : JsonValue });
+export type Flags = ({ features : { copy : boolean; share : boolean } } & { languages : string[] } & { feeds : ({ id : string } & { title : string } & { lang : string } & { icon : { height : number; url : string; width : number } })[] } & { observances : JsonValue });
 
 export namespace Main {
   function init(options: { node?: HTMLElement | null; flags: Flags }): ElmApp;

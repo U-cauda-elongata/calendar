@@ -269,14 +269,20 @@ button.drawer-item:not(:disabled) {
 	margin-bottom: calc(var(--margin-unit) / 2);
 }
 
-.avatar {
+.avatar-container {
+	display: block;
 	border-radius: 50%;
 	overflow: hidden;
+}
+
+.avatar-container > img {
+	width: 100%;
+	height: auto;
 	white-space: normal;
 }
 
 @media (prefers-contrast: more) {
-	.drawer-icon.avatar {
+	.drawer-icon.avatar-container {
 		box-sizing: border-box;
 		border: solid var(--border-width) var(--border-color);
 	}
@@ -299,11 +305,7 @@ button.drawer-item:not(:disabled) {
 	stroke: currentColor;
 }
 
-.filter-button .avatar > img {
-	width: 100%;
-}
-
-.filter-button[aria-checked="false"] .avatar > img {
+.filter-button[aria-checked="false"] .avatar-container > img {
 	opacity: .4
 }
 
@@ -470,8 +472,7 @@ main {
 	margin-left: var(--margin-unit);
 }
 
-.event-members .avatar {
-	display: block;
+.event-members .avatar-container {
 	width: 60px;
 	height: 60px;
 }

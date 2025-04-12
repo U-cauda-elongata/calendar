@@ -1210,8 +1210,15 @@ viewFeedFilter translations feeds =
                                 , ariaLabelledby labelId
                                 ]
                                 [ div
-                                    [ class "avatar", class "drawer-icon" ]
-                                    [ img [ src feed.preset.icon, alt feed.preset.title ] [] ]
+                                    [ class "avatar-container", class "drawer-icon" ]
+                                    [ img
+                                        [ src feed.preset.icon.url
+                                        , width feed.preset.icon.width
+                                        , height feed.preset.icon.height
+                                        , alt feed.preset.title
+                                        ]
+                                        []
+                                    ]
                                 , span [ id labelId, class "drawer-item-label" ]
                                     [ text feed.preset.title ]
                                 ]
@@ -1740,7 +1747,8 @@ viewEventMember : Bool -> Feed -> Html Msg
 viewEventMember isAuthor feed =
     li [ lang feed.preset.lang ]
         [ a
-            (href feed.alternate
+            (class "avatar-container"
+                :: href feed.alternate
                 :: (if isAuthor then
                         [ rel "author" ]
 
@@ -1749,11 +1757,10 @@ viewEventMember isAuthor feed =
                    )
             )
             [ img
-                [ class "avatar"
-                , src feed.preset.icon
+                [ src feed.preset.icon.url
+                , width feed.preset.icon.width
+                , height feed.preset.icon.height
                 , alt feed.preset.title
-                , width 60
-                , height 60
                 ]
                 []
             ]
