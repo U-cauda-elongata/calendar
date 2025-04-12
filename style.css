@@ -301,7 +301,6 @@ button.drawer-item:not(:disabled) {
 
 .filter-button .avatar > img {
 	width: 100%;
-	height: 100%;
 }
 
 .filter-button[aria-checked="false"] .avatar > img {
