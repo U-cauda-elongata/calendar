@@ -92,7 +92,7 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="12" average="5.00" min="1" max="5"/>
+    <media:starRating count="22" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -444,8 +444,8 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="230" average="5.00" min="1" max="5"/>
-    <media:statistics views="986"/>
+    <media:starRating count="231" average="5.00" min="1" max="5"/>
+    <media:statistics views="987"/>
    </media:community>
   </media:group>
  </entry>
@@ -467,8 +467,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i2.ytimg.com/vi/YZl_TZm--_4/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="557" average="5.00" min="1" max="5"/>
-    <media:statistics views="4182"/>
+    <media:starRating count="558" average="5.00" min="1" max="5"/>
+    <media:statistics views="4185"/>
    </media:community>
   </media:group>
  </entry>
@@ -491,7 +491,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="533" average="5.00" min="1" max="5"/>
-    <media:statistics views="3349"/>
+    <media:statistics views="3351"/>
    </media:community>
   </media:group>
  </entry>
@@ -514,7 +514,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="886" average="5.00" min="1" max="5"/>
-    <media:statistics views="10280"/>
+    <media:statistics views="10286"/>
    </media:community>
   </media:group>
  </entry>
@@ -537,7 +537,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="641" average="5.00" min="1" max="5"/>
-    <media:statistics views="8763"/>
+    <media:statistics views="8766"/>
    </media:community>
   </media:group>
  </entry>
@@ -560,7 +560,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="627" average="5.00" min="1" max="5"/>
-    <media:statistics views="3859"/>
+    <media:statistics views="3862"/>
    </media:community>
   </media:group>
  </entry>
