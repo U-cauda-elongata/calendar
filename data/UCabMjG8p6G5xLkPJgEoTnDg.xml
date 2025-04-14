@@ -92,7 +92,7 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="25" average="5.00" min="1" max="5"/>
+    <media:starRating count="27" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -165,7 +165,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="410" average="5.00" min="1" max="5"/>
-    <media:statistics views="1570"/>
+    <media:statistics views="1576"/>
    </media:community>
   </media:group>
  </entry>
@@ -237,8 +237,8 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="997" average="5.00" min="1" max="5"/>
-    <media:statistics views="6272"/>
+    <media:starRating count="999" average="5.00" min="1" max="5"/>
+    <media:statistics views="6277"/>
    </media:community>
   </media:group>
  </entry>
@@ -260,8 +260,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i3.ytimg.com/vi/REG0Ps-nZ1A/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="553" average="5.00" min="1" max="5"/>
-    <media:statistics views="3744"/>
+    <media:starRating count="554" average="5.00" min="1" max="5"/>
+    <media:statistics views="3772"/>
    </media:community>
   </media:group>
  </entry>
@@ -514,7 +514,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="886" average="5.00" min="1" max="5"/>
-    <media:statistics views="10286"/>
+    <media:statistics views="10287"/>
    </media:community>
   </media:group>
  </entry>
@@ -668,7 +668,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="580" average="5.00" min="1" max="5"/>
-    <media:statistics views="5096"/>
+    <media:statistics views="5097"/>
    </media:community>
   </media:group>
  </entry>
