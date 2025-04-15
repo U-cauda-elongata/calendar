@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/GCmVNlL7jrA/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="325" average="5.00" min="1" max="5"/>
-    <media:statistics views="1944"/>
+    <media:starRating count="324" average="5.00" min="1" max="5"/>
+    <media:statistics views="1943"/>
    </media:community>
   </media:group>
  </entry>
@@ -37,16 +37,16 @@
   <id>yt:video:0L7QRTntjV8</id>
   <yt:videoId>0L7QRTntjV8</yt:videoId>
   <yt:channelId>UCabMjG8p6G5xLkPJgEoTnDg</yt:channelId>
-  <title>【TEKKEN 7】Tekken Tuesday: Tekken 7 in 2025【#Coyote / #KemoV】#tekken #鉄拳7</title>
+  <title>【TEKKEN 7】Tekken Tuesday: Tekken 7 in 2025【#Coyote / #KemoV】#tekken #鉄拳8</title>
   <link rel="alternate" href="https://www.youtube.com/watch?v=0L7QRTntjV8"/>
   <author>
    <name>コヨーテ / Coyote</name>
    <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
   </author>
   <published>2025-04-14T10:51:16+00:00</published>
-  <updated>2025-04-15T12:26:57+00:00</updated>
+  <updated>2025-04-15T07:15:07+00:00</updated>
   <media:group>
-   <media:title>【TEKKEN 7】Tekken Tuesday: Tekken 7 in 2025【#Coyote / #KemoV】#tekken #鉄拳7</media:title>
+   <media:title>【TEKKEN 7】Tekken Tuesday: Tekken 7 in 2025【#Coyote / #KemoV】#tekken #鉄拳8</media:title>
    <media:content url="https://www.youtube.com/v/0L7QRTntjV8?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
    <media:thumbnail url="https://i1.ytimg.com/vi/0L7QRTntjV8/hqdefault.jpg" width="480" height="360"/>
    <media:description>As promised, Tekken 7 again in 2025 with Coyodachi!
@@ -115,7 +115,7 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="40" average="5.00" min="1" max="5"/>
+    <media:starRating count="39" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
