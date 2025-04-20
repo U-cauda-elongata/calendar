@@ -14,14 +14,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
       - run: pnpm install
       - name: Setup Elm
-        uses: mpizenberg/elm-tooling-action@e8d4d23a71ba5993d67ca18531438991e3b4e28d
+        uses: mpizenberg/elm-tooling-action@v1.7
         with:
           cache-key: elm-home-${{ hashFiles('elm.json') }}
       - name: Install dependencies
@@ -32,8 +30,25 @@ jobs:
           rm -r docs/ || true
           rm public/*.woff2 || true
           make --always-make fonts docs/index.html
+      - uses: actions/upload-artifact@v4
+        with:
+          path: |
+            docs/
+          if-no-files-found: error
+  push:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+          path: docs
+      - run: |
           git add docs/
-
           git fetch --no-tags --depth=1 origin refs/heads/gh-pages
           git checkout FETCH_HEAD data/ || true
           git checkout FETCH_HEAD docs/feed/ || true
