@@ -56,8 +56,7 @@ type alias PresetFeedMeta =
     { id : String
     , title : String
     , lang : String
-    , icon :
-        Icon
+    , icon : Icon
     }
 
 
