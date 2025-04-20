@@ -84,8 +84,11 @@ until entries.empty?
   first = entries.pop
 
   simul_entries = [first]
+  simul_feeds = Set.new([first['feed']])
   until entries.empty? or entries.last['time'] - first['time'] > 10 * 60
-    simul_entries.unshift(entries.pop)
+    entry = entries.pop
+    simul_entries.unshift(entry)
+    simul_feeds.add(entry['feed'])
   end
 
   if simul_entries.length <= 1
@@ -95,7 +98,7 @@ until entries.empty?
 
   # Factorize the streams into weakly connected components in a graph of `@`-mentions:
   graph = simul_entries.map do |entry|
-    [entry['feed'], Set.new(entry['members'])]
+    [entry['feed'], simul_feeds.intersection(entry['members'] || [])]
   end.to_h
 
   # Convert the graph into an undirected graph.
