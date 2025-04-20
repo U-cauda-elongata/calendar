@@ -7,6 +7,22 @@ require 'fileutils'
 require 'json'
 require 'set'
 
+handle_to_id = {
+  'けものフレンズプロジェクト公式' => 'yt:channel:UCEOugXOAfa-HRmRjKbH8z3Q',
+  'parkstaff9305' => 'yt:channel:UCrMKWvQuyFL1dckG2RLInDQ',
+  'humboldtpenguin2619' => 'yt:channel:UCmYO-WfY7Tasry4D1YB4LJw',
+  'islandfox6864' => 'yt:channel:UCMpw36mXEu3SLsqdrJxUKNA',
+  'Coyote_KemoV' => 'yt:channel:UCabMjG8p6G5xLkPJgEoTnDg',
+  'direwolf8958' => 'yt:channel:UCdNBhcAohYjXlUVYsz8X2KQ',
+  'caracal4893' => 'yt:channel:UCxm7yNjJsSvyvcG96-Cvmpw',
+  'large-spottedgenet4617' => 'yt:channel:UCNObi6xvj6QeZ0g7BhAbF7w',
+  'geoffroyscat4196' => 'yt:channel:UCYa58DdXGAGMJQHqTxi-isA',
+  'brownlong-earedbat7015' => 'yt:channel:UCnyE-wD1pE2GZOxA6OHjW9g',
+  'junglecat3723' => 'yt:channel:UCtJSUW-5FnwfaivXpluABWA',
+  'siberianchipmunk5236' => 'yt:channel:UCKob71cjOlyYF5bgvtGuNKQ',
+  'africanpenguin6535' => 'yt:channel:UCEcMIuGR8WO2TwL9XIpjKtw',
+}
+
 (meta, entries) = Dir.glob('data/*.json').each_with_object([[], []]) do |file, (meta, entries)|
   feed = open(file) do |f|
     JSON.load(f)
@@ -36,9 +52,9 @@ require 'set'
   end
 end
 
-title_to_id = meta.map do |m|
-  [m['title'], m['id']]
-end.to_h
+meta.each do |m|
+  handle_to_id[m['title']] ||= m['id']
+end
 
 # Detect collab members by `@`-mentions in the description.
 entries.each do |entry|
@@ -47,7 +63,7 @@ entries.each do |entry|
   members = description.each_line.filter_map do |line|
     match = line.match(/.*[@＠](.+?)\s*$/)
     if match
-      id = title_to_id[match[1]]
+      id = handle_to_id[match[1]]
       id unless id == entry['feed']
     end
   end
