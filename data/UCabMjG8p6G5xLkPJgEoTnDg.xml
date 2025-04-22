@@ -11,6 +11,29 @@
  </author>
  <published>2021-11-29T09:08:59+00:00</published>
  <entry>
+  <id>yt:video:iW1weS9Ir9Q</id>
+  <yt:videoId>iW1weS9Ir9Q</yt:videoId>
+  <yt:channelId>UCabMjG8p6G5xLkPJgEoTnDg</yt:channelId>
+  <title>Fever! 💥 輝夜の城で踊りたい　#ラブライブ</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=iW1weS9Ir9Q"/>
+  <author>
+   <name>コヨーテ / Coyote</name>
+   <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
+  </author>
+  <published>2025-04-22T04:43:44+00:00</published>
+  <updated>2025-04-22T04:44:50+00:00</updated>
+  <media:group>
+   <media:title>Fever! 💥 輝夜の城で踊りたい　#ラブライブ</media:title>
+   <media:content url="https://www.youtube.com/v/iW1weS9Ir9Q?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i2.ytimg.com/vi/iW1weS9Ir9Q/hqdefault.jpg" width="480" height="360"/>
+   <media:description></media:description>
+   <media:community>
+    <media:starRating count="18" average="5.00" min="1" max="5"/>
+    <media:statistics views="100"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
   <id>yt:video:PRoXP6NY6zY</id>
   <yt:videoId>PRoXP6NY6zY</yt:videoId>
   <yt:channelId>UCabMjG8p6G5xLkPJgEoTnDg</yt:channelId>
@@ -820,31 +843,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i4.ytimg.com/vi/Cicc-OXh1K8/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="546" average="5.00" min="1" max="5"/>
+    <media:starRating count="547" average="5.00" min="1" max="5"/>
     <media:statistics views="3446"/>
-   </media:community>
-  </media:group>
- </entry>
- <entry>
-  <id>yt:video:goIT-5EOZ4k</id>
-  <yt:videoId>goIT-5EOZ4k</yt:videoId>
-  <yt:channelId>UCabMjG8p6G5xLkPJgEoTnDg</yt:channelId>
-  <title>明日の私に幸あれ ☀️ #shorts</title>
-  <link rel="alternate" href="https://www.youtube.com/watch?v=goIT-5EOZ4k"/>
-  <author>
-   <name>コヨーテ / Coyote</name>
-   <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
-  </author>
-  <published>2025-04-04T21:53:58+00:00</published>
-  <updated>2025-04-05T22:54:25+00:00</updated>
-  <media:group>
-   <media:title>明日の私に幸あれ ☀️ #shorts</media:title>
-   <media:content url="https://www.youtube.com/v/goIT-5EOZ4k?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
-   <media:thumbnail url="https://i4.ytimg.com/vi/goIT-5EOZ4k/hqdefault.jpg" width="480" height="360"/>
-   <media:description></media:description>
-   <media:community>
-    <media:starRating count="907" average="5.00" min="1" max="5"/>
-    <media:statistics views="10494"/>
    </media:community>
   </media:group>
  </entry>
