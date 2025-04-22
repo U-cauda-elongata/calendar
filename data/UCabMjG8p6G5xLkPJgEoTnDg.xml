@@ -90,8 +90,8 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="168" average="5.00" min="1" max="5"/>
-    <media:statistics views="447"/>
+    <media:starRating count="201" average="5.00" min="1" max="5"/>
+    <media:statistics views="590"/>
    </media:community>
   </media:group>
  </entry>
@@ -113,8 +113,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i2.ytimg.com/vi/iW1weS9Ir9Q/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="480" average="5.00" min="1" max="5"/>
-    <media:statistics views="2744"/>
+    <media:starRating count="493" average="5.00" min="1" max="5"/>
+    <media:statistics views="2892"/>
    </media:community>
   </media:group>
  </entry>
@@ -203,7 +203,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
   </author>
   <published>2025-04-20T16:09:29+00:00</published>
-  <updated>2025-04-20T17:25:33+00:00</updated>
+  <updated>2025-04-22T14:46:03+00:00</updated>
   <media:group>
    <media:title>【Minecraft】KemoV Collab Search for The Nether【#Coyote / #KemoV】</media:title>
    <media:content url="https://www.youtube.com/v/TFUqoQU_W38?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -591,7 +591,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="1020" average="5.00" min="1" max="5"/>
-    <media:statistics views="6665"/>
+    <media:statistics views="6671"/>
    </media:community>
   </media:group>
  </entry>
@@ -722,7 +722,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="604" average="5.00" min="1" max="5"/>
-    <media:statistics views="4015"/>
+    <media:statistics views="4019"/>
    </media:community>
   </media:group>
  </entry>
@@ -844,7 +844,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="548" average="5.00" min="1" max="5"/>
-    <media:statistics views="3465"/>
+    <media:statistics views="3467"/>
    </media:community>
   </media:group>
  </entry>
