@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i1.ytimg.com/vi/H3fW7lxAoig/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="150" average="5.00" min="1" max="5"/>
-    <media:statistics views="1253"/>
+    <media:starRating count="154" average="5.00" min="1" max="5"/>
+    <media:statistics views="1255"/>
    </media:community>
   </media:group>
  </entry>
@@ -208,15 +208,15 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
   </author>
   <published>2025-04-22T04:43:44+00:00</published>
-  <updated>2025-04-22T05:46:37+00:00</updated>
+  <updated>2025-04-24T08:12:07+00:00</updated>
   <media:group>
    <media:title>Fever! 💥 輝夜の城で踊りたい　#ラブライブ</media:title>
    <media:content url="https://www.youtube.com/v/iW1weS9Ir9Q?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
    <media:thumbnail url="https://i2.ytimg.com/vi/iW1weS9Ir9Q/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="713" average="5.00" min="1" max="5"/>
-    <media:statistics views="10734"/>
+    <media:starRating count="714" average="5.00" min="1" max="5"/>
+    <media:statistics views="10749"/>
    </media:community>
   </media:group>
  </entry>
@@ -446,7 +446,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="330" average="5.00" min="1" max="5"/>
-    <media:statistics views="1889"/>
+    <media:statistics views="1890"/>
    </media:community>
   </media:group>
  </entry>
