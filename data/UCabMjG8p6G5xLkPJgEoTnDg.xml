@@ -11,6 +11,29 @@
  </author>
  <published>2021-11-29T09:08:59+00:00</published>
  <entry>
+  <id>yt:video:g0eR15jKkvI</id>
+  <yt:videoId>g0eR15jKkvI</yt:videoId>
+  <yt:channelId>UCabMjG8p6G5xLkPJgEoTnDg</yt:channelId>
+  <title>けもののこどう 🐾 Kemono Friends V Project (本人) ver 1 #shorts #けものフレンズ</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=g0eR15jKkvI"/>
+  <author>
+   <name>コヨーテ / Coyote</name>
+   <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
+  </author>
+  <published>2025-04-30T17:06:13+00:00</published>
+  <updated>2025-04-30T17:07:19+00:00</updated>
+  <media:group>
+   <media:title>けもののこどう 🐾 Kemono Friends V Project (本人) ver 1 #shorts #けものフレンズ</media:title>
+   <media:content url="https://www.youtube.com/v/g0eR15jKkvI?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i4.ytimg.com/vi/g0eR15jKkvI/hqdefault.jpg" width="480" height="360"/>
+   <media:description></media:description>
+   <media:community>
+    <media:starRating count="34" average="5.00" min="1" max="5"/>
+    <media:statistics views="64"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
   <id>yt:video:9xkAyx3A0IA</id>
   <yt:videoId>9xkAyx3A0IA</yt:videoId>
   <yt:channelId>UCabMjG8p6G5xLkPJgEoTnDg</yt:channelId>
@@ -93,7 +116,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="197" average="5.00" min="1" max="5"/>
-    <media:statistics views="815"/>
+    <media:statistics views="820"/>
    </media:community>
   </media:group>
  </entry>
@@ -481,7 +504,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="2199" average="5.00" min="1" max="5"/>
-    <media:statistics views="51159"/>
+    <media:statistics views="51173"/>
    </media:community>
   </media:group>
  </entry>
@@ -879,30 +902,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="1021" average="5.00" min="1" max="5"/>
-    <media:statistics views="6827"/>
-   </media:community>
-  </media:group>
- </entry>
- <entry>
-  <id>yt:video:REG0Ps-nZ1A</id>
-  <yt:videoId>REG0Ps-nZ1A</yt:videoId>
-  <yt:channelId>UCabMjG8p6G5xLkPJgEoTnDg</yt:channelId>
-  <title>フルーツバスケット 🍒 #shorts</title>
-  <link rel="alternate" href="https://www.youtube.com/watch?v=REG0Ps-nZ1A"/>
-  <author>
-   <name>コヨーテ / Coyote</name>
-   <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
-  </author>
-  <published>2025-04-10T12:42:24+00:00</published>
-  <updated>2025-04-12T15:50:25+00:00</updated>
-  <media:group>
-   <media:title>フルーツバスケット 🍒 #shorts</media:title>
-   <media:content url="https://www.youtube.com/v/REG0Ps-nZ1A?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
-   <media:thumbnail url="https://i3.ytimg.com/vi/REG0Ps-nZ1A/hqdefault.jpg" width="480" height="360"/>
-   <media:description></media:description>
-   <media:community>
-    <media:starRating count="606" average="5.00" min="1" max="5"/>
-    <media:statistics views="4286"/>
+    <media:statistics views="6828"/>
    </media:community>
   </media:group>
  </entry>
