@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i2.ytimg.com/vi/YSDqkbCoVR4/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="355" average="5.00" min="1" max="5"/>
-    <media:statistics views="1191"/>
+    <media:starRating count="356" average="5.00" min="1" max="5"/>
+    <media:statistics views="1205"/>
    </media:community>
   </media:group>
  </entry>
