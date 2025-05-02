@@ -21,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCEOugXOAfa-HRmRjKbH8z3Q</uri>
   </author>
   <published>2025-05-01T05:00:31+00:00</published>
-  <updated>2025-05-01T05:00:31+00:00</updated>
+  <updated>2025-05-02T11:49:26+00:00</updated>
   <media:group>
    <media:title>『けものフレンズ３』新イベント「泳げ！光よりも速く！」紹介PV</media:title>
    <media:content url="https://www.youtube.com/v/OemhxLSLlEo?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -63,7 +63,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="146" average="5.00" min="1" max="5"/>
-    <media:statistics views="831"/>
+    <media:statistics views="837"/>
    </media:community>
   </media:group>
  </entry>
@@ -122,8 +122,8 @@ https://kemono-friends-3.jp/dmg/
 　https://twitter.com/kemono_friends3
 ----------------------------------------</media:description>
    <media:community>
-    <media:starRating count="184" average="5.00" min="1" max="5"/>
-    <media:statistics views="1287"/>
+    <media:starRating count="186" average="5.00" min="1" max="5"/>
+    <media:statistics views="1298"/>
    </media:community>
   </media:group>
  </entry>
@@ -283,8 +283,8 @@ https://kemono-friends-3.jp/dmg/
 　https://twitter.com/kemono_friends3
 ----------------------------------------</media:description>
    <media:community>
-    <media:starRating count="5109" average="5.00" min="1" max="5"/>
-    <media:statistics views="124478"/>
+    <media:starRating count="5113" average="5.00" min="1" max="5"/>
+    <media:statistics views="124540"/>
    </media:community>
   </media:group>
  </entry>
@@ -576,7 +576,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="264" average="5.00" min="1" max="5"/>
-    <media:statistics views="3020"/>
+    <media:statistics views="3021"/>
    </media:community>
   </media:group>
  </entry>
@@ -636,7 +636,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="240" average="5.00" min="1" max="5"/>
-    <media:statistics views="2429"/>
+    <media:statistics views="2430"/>
    </media:community>
   </media:group>
  </entry>
