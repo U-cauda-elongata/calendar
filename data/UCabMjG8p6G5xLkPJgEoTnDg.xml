@@ -124,8 +124,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i2.ytimg.com/vi/EHt0R0zDgBs/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="200" average="5.00" min="1" max="5"/>
-    <media:statistics views="513"/>
+    <media:starRating count="206" average="5.00" min="1" max="5"/>
+    <media:statistics views="532"/>
    </media:community>
   </media:group>
  </entry>
@@ -148,7 +148,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="1034" average="5.00" min="1" max="5"/>
-    <media:statistics views="5422"/>
+    <media:statistics views="5428"/>
    </media:community>
   </media:group>
  </entry>
@@ -171,7 +171,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="565" average="5.00" min="1" max="5"/>
-    <media:statistics views="2288"/>
+    <media:statistics views="2289"/>
    </media:community>
   </media:group>
  </entry>
@@ -646,7 +646,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="2284" average="5.00" min="1" max="5"/>
-    <media:statistics views="54586"/>
+    <media:statistics views="54596"/>
    </media:community>
   </media:group>
  </entry>
