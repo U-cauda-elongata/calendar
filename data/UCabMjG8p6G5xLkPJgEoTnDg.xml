@@ -21,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
   </author>
   <published>2025-05-03T08:13:07+00:00</published>
-  <updated>2025-05-03T08:19:20+00:00</updated>
+  <updated>2025-05-03T08:27:23+00:00</updated>
   <media:group>
    <media:title>【Coyo Day】5/4 Coyo Day 2025 Party!【#Coyote / #KemoV】</media:title>
    <media:content url="https://www.youtube.com/v/3Kq1aJO7ODo?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -39,6 +39,15 @@ RULES
 • Do not make any inappropriate or controversial customizations
 • Do not take inappropriate pictures or any images portraying explicit meanings
 • Must use Tekken 8’s Photo Mode
+
+Confirmed categories are:
+1) Most Creative
+2) Most Beautiful
+3) Funniest
+4) Coolest
+5) Cutest
+
+After viewing all submissions, Coyo and Coyodachi will decide the winners that suits best for each category.
 
 ▼△▼△▼△▼△▼△▼△▼△
 Opening screen Illustrator/animator: ツクウルフル様 (@kemopuffin)
@@ -92,7 +101,7 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="2" average="5.00" min="1" max="5"/>
+    <media:starRating count="6" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -115,8 +124,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i2.ytimg.com/vi/EHt0R0zDgBs/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="128" average="5.00" min="1" max="5"/>
-    <media:statistics views="298"/>
+    <media:starRating count="140" average="5.00" min="1" max="5"/>
+    <media:statistics views="324"/>
    </media:community>
   </media:group>
  </entry>
@@ -138,8 +147,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i2.ytimg.com/vi/YSDqkbCoVR4/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="1027" average="5.00" min="1" max="5"/>
-    <media:statistics views="5325"/>
+    <media:starRating count="1029" average="5.00" min="1" max="5"/>
+    <media:statistics views="5332"/>
    </media:community>
   </media:group>
  </entry>
@@ -161,8 +170,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i4.ytimg.com/vi/g0eR15jKkvI/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="562" average="5.00" min="1" max="5"/>
-    <media:statistics views="2248"/>
+    <media:starRating count="563" average="5.00" min="1" max="5"/>
+    <media:statistics views="2250"/>
    </media:community>
   </media:group>
  </entry>
@@ -637,7 +646,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="2282" average="5.00" min="1" max="5"/>
-    <media:statistics views="54463"/>
+    <media:statistics views="54476"/>
    </media:community>
   </media:group>
  </entry>
