@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i2.ytimg.com/vi/EHt0R0zDgBs/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="11" average="5.00" min="1" max="5"/>
-    <media:statistics views="16"/>
+    <media:starRating count="103" average="5.00" min="1" max="5"/>
+    <media:statistics views="253"/>
    </media:community>
   </media:group>
  </entry>
@@ -51,8 +51,8 @@
    <media:thumbnail url="https://i2.ytimg.com/vi/YSDqkbCoVR4/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="1020" average="5.00" min="1" max="5"/>
-    <media:statistics views="5290"/>
+    <media:starRating count="1025" average="5.00" min="1" max="5"/>
+    <media:statistics views="5311"/>
    </media:community>
   </media:group>
  </entry>
@@ -74,8 +74,8 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/g0eR15jKkvI/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="557" average="5.00" min="1" max="5"/>
-    <media:statistics views="2240"/>
+    <media:starRating count="560" average="5.00" min="1" max="5"/>
+    <media:statistics views="2247"/>
    </media:community>
   </media:group>
  </entry>
@@ -442,7 +442,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="203" average="5.00" min="1" max="5"/>
-    <media:statistics views="767"/>
+    <media:statistics views="768"/>
    </media:community>
   </media:group>
  </entry>
@@ -549,8 +549,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i2.ytimg.com/vi/iW1weS9Ir9Q/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="2279" average="5.00" min="1" max="5"/>
-    <media:statistics views="54429"/>
+    <media:starRating count="2280" average="5.00" min="1" max="5"/>
+    <media:statistics views="54444"/>
    </media:community>
   </media:group>
  </entry>
