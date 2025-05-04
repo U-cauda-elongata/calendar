@@ -11,29 +11,6 @@
  </author>
  <published>2021-11-29T09:08:59+00:00</published>
  <entry>
-  <id>yt:video:J5JoreEun4A</id>
-  <yt:videoId>J5JoreEun4A</yt:videoId>
-  <yt:channelId>UCabMjG8p6G5xLkPJgEoTnDg</yt:channelId>
-  <title>JKT48VのPiaちゃんと「けもののこどう」を踊ってみた　#jkt48v #kemov #けものフレンズ</title>
-  <link rel="alternate" href="https://www.youtube.com/watch?v=J5JoreEun4A"/>
-  <author>
-   <name>コヨーテ / Coyote</name>
-   <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
-  </author>
-  <published>2025-05-04T01:49:30+00:00</published>
-  <updated>2025-05-04T06:23:03+00:00</updated>
-  <media:group>
-   <media:title>JKT48VのPiaちゃんと「けもののこどう」を踊ってみた　#jkt48v #kemov #けものフレンズ</media:title>
-   <media:content url="https://www.youtube.com/v/J5JoreEun4A?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
-   <media:thumbnail url="https://i3.ytimg.com/vi/J5JoreEun4A/hqdefault.jpg" width="480" height="360"/>
-   <media:description></media:description>
-   <media:community>
-    <media:starRating count="317" average="5.00" min="1" max="5"/>
-    <media:statistics views="1112"/>
-   </media:community>
-  </media:group>
- </entry>
- <entry>
   <id>yt:video:3Kq1aJO7ODo</id>
   <yt:videoId>3Kq1aJO7ODo</yt:videoId>
   <yt:channelId>UCabMjG8p6G5xLkPJgEoTnDg</yt:channelId>
@@ -44,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
   </author>
   <published>2025-05-03T08:13:07+00:00</published>
-  <updated>2025-05-04T07:06:34+00:00</updated>
+  <updated>2025-05-04T14:15:16+00:00</updated>
   <media:group>
    <media:title>【Coyo Day】5/4 Coyo Day 2025 Party!【#Coyote / #KemoV】</media:title>
    <media:content url="https://www.youtube.com/v/3Kq1aJO7ODo?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -124,8 +101,31 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="52" average="5.00" min="1" max="5"/>
+    <media:starRating count="72" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:J5JoreEun4A</id>
+  <yt:videoId>J5JoreEun4A</yt:videoId>
+  <yt:channelId>UCabMjG8p6G5xLkPJgEoTnDg</yt:channelId>
+  <title>JKT48VのPiaちゃんと「けもののこどう」を踊ってみた　#jkt48v #kemov #けものフレンズ</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=J5JoreEun4A"/>
+  <author>
+   <name>コヨーテ / Coyote</name>
+   <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
+  </author>
+  <published>2025-05-04T01:49:30+00:00</published>
+  <updated>2025-05-04T06:23:03+00:00</updated>
+  <media:group>
+   <media:title>JKT48VのPiaちゃんと「けもののこどう」を踊ってみた　#jkt48v #kemov #けものフレンズ</media:title>
+   <media:content url="https://www.youtube.com/v/J5JoreEun4A?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i3.ytimg.com/vi/J5JoreEun4A/hqdefault.jpg" width="480" height="360"/>
+   <media:description></media:description>
+   <media:community>
+    <media:starRating count="323" average="5.00" min="1" max="5"/>
+    <media:statistics views="1139"/>
    </media:community>
   </media:group>
  </entry>
@@ -147,8 +147,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i2.ytimg.com/vi/EHt0R0zDgBs/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="457" average="5.00" min="1" max="5"/>
-    <media:statistics views="1484"/>
+    <media:starRating count="459" average="5.00" min="1" max="5"/>
+    <media:statistics views="1503"/>
    </media:community>
   </media:group>
  </entry>
@@ -170,8 +170,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i2.ytimg.com/vi/YSDqkbCoVR4/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="1099" average="5.00" min="1" max="5"/>
-    <media:statistics views="6090"/>
+    <media:starRating count="1100" average="5.00" min="1" max="5"/>
+    <media:statistics views="6131"/>
    </media:community>
   </media:group>
  </entry>
@@ -281,7 +281,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="204" average="5.00" min="1" max="5"/>
-    <media:statistics views="901"/>
+    <media:statistics views="902"/>
    </media:community>
   </media:group>
  </entry>
@@ -482,7 +482,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="528" average="5.00" min="1" max="5"/>
-    <media:statistics views="3312"/>
+    <media:statistics views="3314"/>
    </media:community>
   </media:group>
  </entry>
@@ -646,7 +646,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="270" average="5.00" min="1" max="5"/>
-    <media:statistics views="1514"/>
+    <media:statistics views="1515"/>
    </media:community>
   </media:group>
  </entry>
@@ -668,8 +668,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i2.ytimg.com/vi/iW1weS9Ir9Q/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="2293" average="5.00" min="1" max="5"/>
-    <media:statistics views="55122"/>
+    <media:starRating count="2292" average="5.00" min="1" max="5"/>
+    <media:statistics views="55130"/>
    </media:community>
   </media:group>
  </entry>
