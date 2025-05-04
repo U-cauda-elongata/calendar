@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i3.ytimg.com/vi/J5JoreEun4A/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="260" average="5.00" min="1" max="5"/>
-    <media:statistics views="750"/>
+    <media:starRating count="259" average="5.00" min="1" max="5"/>
+    <media:statistics views="749"/>
    </media:community>
   </media:group>
  </entry>
@@ -170,7 +170,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i2.ytimg.com/vi/YSDqkbCoVR4/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="1086" average="5.00" min="1" max="5"/>
+    <media:starRating count="1085" average="5.00" min="1" max="5"/>
     <media:statistics views="5923"/>
    </media:community>
   </media:group>
