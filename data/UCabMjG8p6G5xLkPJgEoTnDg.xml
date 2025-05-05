@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i1.ytimg.com/vi/4T87zju1Q7w/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="323" average="5.00" min="1" max="5"/>
-    <media:statistics views="2880"/>
+    <media:starRating count="337" average="5.00" min="1" max="5"/>
+    <media:statistics views="2935"/>
    </media:community>
   </media:group>
  </entry>
@@ -147,8 +147,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i3.ytimg.com/vi/J5JoreEun4A/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="473" average="5.00" min="1" max="5"/>
-    <media:statistics views="1859"/>
+    <media:starRating count="478" average="5.00" min="1" max="5"/>
+    <media:statistics views="1873"/>
    </media:community>
   </media:group>
  </entry>
@@ -170,8 +170,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i2.ytimg.com/vi/EHt0R0zDgBs/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="537" average="5.00" min="1" max="5"/>
-    <media:statistics views="1785"/>
+    <media:starRating count="542" average="5.00" min="1" max="5"/>
+    <media:statistics views="1801"/>
    </media:community>
   </media:group>
  </entry>
@@ -217,7 +217,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="603" average="5.00" min="1" max="5"/>
-    <media:statistics views="2582"/>
+    <media:statistics views="2591"/>
    </media:community>
   </media:group>
  </entry>
@@ -692,7 +692,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="2309" average="5.00" min="1" max="5"/>
-    <media:statistics views="55660"/>
+    <media:statistics views="55697"/>
    </media:community>
   </media:group>
  </entry>
