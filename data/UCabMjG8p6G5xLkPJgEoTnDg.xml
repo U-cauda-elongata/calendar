@@ -11,29 +11,6 @@
  </author>
  <published>2021-11-29T09:08:59+00:00</published>
  <entry>
-  <id>yt:video:PrxRLsRdNJE</id>
-  <yt:videoId>PrxRLsRdNJE</yt:videoId>
-  <yt:channelId>UCabMjG8p6G5xLkPJgEoTnDg</yt:channelId>
-  <title>けもののこどう Dance Collab with JKT48V’s Tana! 🕶️🐾 #jkt48v #けものフレンズ</title>
-  <link rel="alternate" href="https://www.youtube.com/watch?v=PrxRLsRdNJE"/>
-  <author>
-   <name>コヨーテ / Coyote</name>
-   <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
-  </author>
-  <published>2025-05-06T13:38:19+00:00</published>
-  <updated>2025-05-06T13:39:37+00:00</updated>
-  <media:group>
-   <media:title>けもののこどう Dance Collab with JKT48V’s Tana! 🕶️🐾 #jkt48v #けものフレンズ</media:title>
-   <media:content url="https://www.youtube.com/v/PrxRLsRdNJE?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
-   <media:thumbnail url="https://i1.ytimg.com/vi/PrxRLsRdNJE/hqdefault.jpg" width="480" height="360"/>
-   <media:description></media:description>
-   <media:community>
-    <media:starRating count="36" average="5.00" min="1" max="5"/>
-    <media:statistics views="1276"/>
-   </media:community>
-  </media:group>
- </entry>
- <entry>
   <id>yt:video:ODGWkj9INao</id>
   <yt:videoId>ODGWkj9INao</yt:videoId>
   <yt:channelId>UCabMjG8p6G5xLkPJgEoTnDg</yt:channelId>
@@ -44,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
   </author>
   <published>2025-05-05T18:36:21+00:00</published>
-  <updated>2025-05-06T07:46:00+00:00</updated>
+  <updated>2025-05-06T14:00:38+00:00</updated>
   <media:group>
    <media:title>【TEKKEN 8】Open Sessions with Coyodachi!【#Coyote / #KemoV】#tekken #鉄拳8</media:title>
    <media:content url="https://www.youtube.com/v/ODGWkj9INao?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -113,8 +90,31 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="28" average="5.00" min="1" max="5"/>
-    <media:statistics views="0"/>
+    <media:starRating count="47" average="5.00" min="1" max="5"/>
+    <media:statistics views="40"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:PrxRLsRdNJE</id>
+  <yt:videoId>PrxRLsRdNJE</yt:videoId>
+  <yt:channelId>UCabMjG8p6G5xLkPJgEoTnDg</yt:channelId>
+  <title>けもののこどう Dance Collab with JKT48V’s Tana! 🕶️🐾 #jkt48v #けものフレンズ</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=PrxRLsRdNJE"/>
+  <author>
+   <name>コヨーテ / Coyote</name>
+   <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
+  </author>
+  <published>2025-05-06T13:38:19+00:00</published>
+  <updated>2025-05-06T13:39:37+00:00</updated>
+  <media:group>
+   <media:title>けもののこどう Dance Collab with JKT48V’s Tana! 🕶️🐾 #jkt48v #けものフレンズ</media:title>
+   <media:content url="https://www.youtube.com/v/PrxRLsRdNJE?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i1.ytimg.com/vi/PrxRLsRdNJE/hqdefault.jpg" width="480" height="360"/>
+   <media:description></media:description>
+   <media:community>
+    <media:starRating count="64" average="5.00" min="1" max="5"/>
+    <media:statistics views="1903"/>
    </media:community>
   </media:group>
  </entry>
@@ -136,8 +136,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i1.ytimg.com/vi/4T87zju1Q7w/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="559" average="5.00" min="1" max="5"/>
-    <media:statistics views="4041"/>
+    <media:starRating count="562" average="5.00" min="1" max="5"/>
+    <media:statistics views="4051"/>
    </media:community>
   </media:group>
  </entry>
@@ -255,8 +255,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i3.ytimg.com/vi/J5JoreEun4A/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="539" average="5.00" min="1" max="5"/>
-    <media:statistics views="2089"/>
+    <media:starRating count="540" average="5.00" min="1" max="5"/>
+    <media:statistics views="2093"/>
    </media:community>
   </media:group>
  </entry>
@@ -301,8 +301,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i2.ytimg.com/vi/YSDqkbCoVR4/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="1137" average="5.00" min="1" max="5"/>
-    <media:statistics views="6769"/>
+    <media:starRating count="1140" average="5.00" min="1" max="5"/>
+    <media:statistics views="6774"/>
    </media:community>
   </media:group>
  </entry>
