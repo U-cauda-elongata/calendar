@@ -21,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
   </author>
   <published>2025-05-12T12:58:39+00:00</published>
-  <updated>2025-05-12T12:58:40+00:00</updated>
+  <updated>2025-05-12T13:10:21+00:00</updated>
   <media:group>
    <media:title>【TEKKEN 8】Ranked Matches from Mighty Ruler【#Coyote / #KemoV】#tekken #鉄拳8</media:title>
    <media:content url="https://www.youtube.com/v/PefFs_rMQbM?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -92,8 +92,8 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="0" average="0.00" min="1" max="5"/>
-    <media:statistics views="0"/>
+    <media:starRating count="33" average="5.00" min="1" max="5"/>
+    <media:statistics views="44"/>
    </media:community>
   </media:group>
  </entry>
@@ -201,7 +201,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="558" average="5.00" min="1" max="5"/>
-    <media:statistics views="4559"/>
+    <media:statistics views="4560"/>
    </media:community>
   </media:group>
  </entry>
@@ -343,7 +343,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="599" average="5.00" min="1" max="5"/>
-    <media:statistics views="2468"/>
+    <media:statistics views="2469"/>
    </media:community>
   </media:group>
  </entry>
