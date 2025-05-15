@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i2.ytimg.com/vi/uO2kxc1_XHQ/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="172" average="5.00" min="1" max="5"/>
-    <media:statistics views="992"/>
+    <media:starRating count="187" average="5.00" min="1" max="5"/>
+    <media:statistics views="1092"/>
    </media:community>
   </media:group>
  </entry>
@@ -98,7 +98,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="348" average="5.00" min="1" max="5"/>
-    <media:statistics views="2239"/>
+    <media:statistics views="2245"/>
    </media:community>
   </media:group>
  </entry>
@@ -566,7 +566,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="1177" average="5.00" min="1" max="5"/>
-    <media:statistics views="7160"/>
+    <media:statistics views="7162"/>
    </media:community>
   </media:group>
  </entry>
