@@ -74,7 +74,7 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="12" average="5.00" min="1" max="5"/>
+    <media:starRating count="14" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -169,8 +169,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i2.ytimg.com/vi/uO2kxc1_XHQ/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="228" average="5.00" min="1" max="5"/>
-    <media:statistics views="1456"/>
+    <media:starRating count="233" average="5.00" min="1" max="5"/>
+    <media:statistics views="1475"/>
    </media:community>
   </media:group>
  </entry>
@@ -239,7 +239,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="349" average="5.00" min="1" max="5"/>
-    <media:statistics views="2248"/>
+    <media:statistics views="2260"/>
    </media:community>
   </media:group>
  </entry>
@@ -638,7 +638,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="339" average="5.00" min="1" max="5"/>
-    <media:statistics views="1130"/>
+    <media:statistics views="1131"/>
    </media:community>
   </media:group>
  </entry>
@@ -706,8 +706,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i2.ytimg.com/vi/YSDqkbCoVR4/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="1180" average="5.00" min="1" max="5"/>
-    <media:statistics views="7178"/>
+    <media:starRating count="1181" average="5.00" min="1" max="5"/>
+    <media:statistics views="7184"/>
    </media:community>
   </media:group>
  </entry>
@@ -730,7 +730,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="630" average="5.00" min="1" max="5"/>
-    <media:statistics views="2816"/>
+    <media:statistics views="2818"/>
    </media:community>
   </media:group>
  </entry>
