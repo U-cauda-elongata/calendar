@@ -21,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
   </author>
   <published>2025-05-17T11:47:16+00:00</published>
-  <updated>2025-05-17T11:47:18+00:00</updated>
+  <updated>2025-05-17T13:16:26+00:00</updated>
   <media:group>
    <media:title>【Devil May Cry 5】Final Boss. 0 Revives.【#Coyote / #KemoV】</media:title>
    <media:content url="https://www.youtube.com/v/I3f8c_U8oDU?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -74,8 +74,8 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="16" average="5.00" min="1" max="5"/>
-    <media:statistics views="0"/>
+    <media:starRating count="44" average="5.00" min="1" max="5"/>
+    <media:statistics views="104"/>
    </media:community>
   </media:group>
  </entry>
@@ -786,7 +786,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="340" average="5.00" min="1" max="5"/>
-    <media:statistics views="1131"/>
+    <media:statistics views="1132"/>
    </media:community>
   </media:group>
  </entry>
@@ -809,7 +809,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="613" average="5.00" min="1" max="5"/>
-    <media:statistics views="2565"/>
+    <media:statistics views="2566"/>
    </media:community>
   </media:group>
  </entry>
