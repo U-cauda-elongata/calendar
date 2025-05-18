@@ -21,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
   </author>
   <published>2025-05-18T03:20:56+00:00</published>
-  <updated>2025-05-18T03:20:56+00:00</updated>
+  <updated>2025-05-18T03:42:35+00:00</updated>
   <media:group>
    <media:title>【Devil May Cry 5】Final Boss. 0 Revives.【#Coyote / #KemoV】</media:title>
    <media:content url="https://www.youtube.com/v/I3f8c_U8oDU?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -75,7 +75,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="146" average="5.00" min="1" max="5"/>
-    <media:statistics views="638"/>
+    <media:statistics views="640"/>
    </media:community>
   </media:group>
  </entry>
@@ -228,7 +228,7 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="16" average="5.00" min="1" max="5"/>
+    <media:starRating count="17" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -297,7 +297,7 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="22" average="5.00" min="1" max="5"/>
+    <media:starRating count="30" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -541,7 +541,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="702" average="5.00" min="1" max="5"/>
-    <media:statistics views="3220"/>
+    <media:statistics views="3224"/>
    </media:community>
   </media:group>
  </entry>
@@ -913,7 +913,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="694" average="5.00" min="1" max="5"/>
-    <media:statistics views="4955"/>
+    <media:statistics views="4958"/>
    </media:community>
   </media:group>
  </entry>
