@@ -159,7 +159,7 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="14" average="5.00" min="1" max="5"/>
+    <media:starRating count="15" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -228,7 +228,7 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="18" average="5.00" min="1" max="5"/>
+    <media:starRating count="19" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -540,8 +540,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i2.ytimg.com/vi/uO2kxc1_XHQ/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="694" average="5.00" min="1" max="5"/>
-    <media:statistics views="3167"/>
+    <media:starRating count="695" average="5.00" min="1" max="5"/>
+    <media:statistics views="3184"/>
    </media:community>
   </media:group>
  </entry>
@@ -610,7 +610,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="352" average="5.00" min="1" max="5"/>
-    <media:statistics views="2213"/>
+    <media:statistics views="2218"/>
    </media:community>
   </media:group>
  </entry>
@@ -889,7 +889,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i1.ytimg.com/vi/PrxRLsRdNJE/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="575" average="5.00" min="1" max="5"/>
+    <media:starRating count="576" average="5.00" min="1" max="5"/>
     <media:statistics views="4722"/>
    </media:community>
   </media:group>
@@ -912,8 +912,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i1.ytimg.com/vi/4T87zju1Q7w/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="693" average="5.00" min="1" max="5"/>
-    <media:statistics views="4949"/>
+    <media:starRating count="694" average="5.00" min="1" max="5"/>
+    <media:statistics views="4953"/>
    </media:community>
   </media:group>
  </entry>
