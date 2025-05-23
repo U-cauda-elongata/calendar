@@ -78,7 +78,7 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="2" average="5.00" min="1" max="5"/>
+    <media:starRating count="9" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -151,7 +151,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="586" average="5.00" min="1" max="5"/>
-    <media:statistics views="3020"/>
+    <media:statistics views="3023"/>
    </media:community>
   </media:group>
  </entry>
@@ -308,7 +308,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="391" average="5.00" min="1" max="5"/>
-    <media:statistics views="2748"/>
+    <media:statistics views="2750"/>
    </media:community>
   </media:group>
  </entry>
@@ -620,8 +620,8 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:thumbnail url="https://i4.ytimg.com/vi/3nZCaO-GXwY/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="569" average="5.00" min="1" max="5"/>
-    <media:statistics views="3310"/>
+    <media:starRating count="570" average="5.00" min="1" max="5"/>
+    <media:statistics views="3317"/>
    </media:community>
   </media:group>
  </entry>
@@ -690,7 +690,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="405" average="5.00" min="1" max="5"/>
-    <media:statistics views="2183"/>
+    <media:statistics views="2184"/>
    </media:community>
   </media:group>
  </entry>
@@ -976,7 +976,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="265" average="5.00" min="1" max="5"/>
-    <media:statistics views="1650"/>
+    <media:statistics views="1651"/>
    </media:community>
   </media:group>
  </entry>
