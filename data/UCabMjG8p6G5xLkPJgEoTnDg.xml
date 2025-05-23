@@ -78,7 +78,7 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="15" average="5.00" min="1" max="5"/>
+    <media:starRating count="18" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -151,7 +151,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="587" average="5.00" min="1" max="5"/>
-    <media:statistics views="3032"/>
+    <media:statistics views="3049"/>
    </media:community>
   </media:group>
  </entry>
@@ -999,7 +999,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="819" average="5.00" min="1" max="5"/>
-    <media:statistics views="3946"/>
+    <media:statistics views="3947"/>
    </media:community>
   </media:group>
  </entry>
