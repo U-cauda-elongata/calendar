@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i2.ytimg.com/vi/aVjE8FYSAZI/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="35" average="5.00" min="1" max="5"/>
-    <media:statistics views="335"/>
+    <media:starRating count="79" average="5.00" min="1" max="5"/>
+    <media:statistics views="572"/>
    </media:community>
   </media:group>
  </entry>
@@ -97,8 +97,8 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="488" average="5.00" min="1" max="5"/>
-    <media:statistics views="2545"/>
+    <media:starRating count="494" average="5.00" min="1" max="5"/>
+    <media:statistics views="2737"/>
    </media:community>
   </media:group>
  </entry>
@@ -166,7 +166,7 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="16" average="5.00" min="1" max="5"/>
+    <media:starRating count="18" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -316,7 +316,7 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="20" average="5.00" min="1" max="5"/>
+    <media:starRating count="25" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -463,7 +463,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="606" average="5.00" min="1" max="5"/>
-    <media:statistics views="3231"/>
+    <media:statistics views="3243"/>
    </media:community>
   </media:group>
  </entry>
@@ -933,7 +933,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="573" average="5.00" min="1" max="5"/>
-    <media:statistics views="3348"/>
+    <media:statistics views="3350"/>
    </media:community>
   </media:group>
  </entry>
