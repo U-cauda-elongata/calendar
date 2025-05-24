@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i2.ytimg.com/vi/aVjE8FYSAZI/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="100" average="5.00" min="1" max="5"/>
-    <media:statistics views="920"/>
+    <media:starRating count="111" average="5.00" min="1" max="5"/>
+    <media:statistics views="985"/>
    </media:community>
   </media:group>
  </entry>
@@ -97,8 +97,8 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="501" average="5.00" min="1" max="5"/>
-    <media:statistics views="2845"/>
+    <media:starRating count="503" average="5.00" min="1" max="5"/>
+    <media:statistics views="2905"/>
    </media:community>
   </media:group>
  </entry>
@@ -257,7 +257,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <uri>https://www.youtube.com/channel/UCabMjG8p6G5xLkPJgEoTnDg</uri>
   </author>
   <published>2025-05-23T17:16:35+00:00</published>
-  <updated>2025-05-24T07:16:42+00:00</updated>
+  <updated>2025-05-24T13:00:48+00:00</updated>
   <media:group>
    <media:title>【Content Warning &amp; 凸待ち】Two Fluffy &amp; One Orange + Call-Ins!【#Coyote / #KemoV】</media:title>
    <media:content url="https://www.youtube.com/v/DqmB6qPFJ-Y?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -316,7 +316,7 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="27" average="5.00" min="1" max="5"/>
+    <media:starRating count="34" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -462,8 +462,8 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="606" average="5.00" min="1" max="5"/>
-    <media:statistics views="3244"/>
+    <media:starRating count="607" average="5.00" min="1" max="5"/>
+    <media:statistics views="3250"/>
    </media:community>
   </media:group>
  </entry>
@@ -1002,7 +1002,7 @@ General: #CoyoteKemoV
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
     <media:starRating count="405" average="5.00" min="1" max="5"/>
-    <media:statistics views="2195"/>
+    <media:statistics views="2196"/>
    </media:community>
   </media:group>
  </entry>
