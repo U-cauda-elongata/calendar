@@ -1,0 +1,86 @@
+{
+	"title": "Kemono Friends Live Stream Calendar",
+	"shortTitle": "KF Live Stream Calendar",
+	"hamburgerDescription": "This will toggle visual expansion status of the toolbar. Screen readers can always navigate to the toolbar regardless of its visual status.",
+	"filterMenuLabel": "Filter tools",
+	"expandMenu": "Expand menu",
+	"collapseMenu": "Collapse menu",
+	"clearFilter": "Clear filters",
+	"search": "Search",
+	"feedFilterLabel": "Channels",
+	"nowSeparator": "Now: {{time}}",
+	"ongoing": "Live now: {{time}}",
+	"event": {
+		"description": {
+			"scheduledLive": "will be streamed by {{members}}, starts {{eta}}",
+			"ongoingLive": "streamed now by {{members}}, started {{eta}}",
+			"endedLive": "streamed by {{members}}, started at {{time}}, was live for {{duration}}",
+			"video": "uploaded by {{members}} at {{time}}, is {{duration}} in length",
+			"twoMembers": "{{author}} and {{member}}",
+			"moreThanTwoMembers": "{{author}} and {{n}} others"
+		},
+		"timeWithEta": "{{time}} ({{eta}})",
+		"due": "due {{duration}}",
+		"startedAt": "Started {{time}}",
+		"uploadedAt": "Uploaded {{time}}"
+	},
+	"thumbnailAlt": "Thumbnail image",
+	"share": {
+		"share": "Share",
+		"copyTitleAndUrl": "Copy title and URL",
+		"copyTimestamp": "Copy timestamp",
+		"shareVia": "Share via…"
+	},
+	"emptyResultPre": "No items to show.",
+	"emptyResultKidding": "",
+	"emptyResultPost": "Try changing search terms in the menu.",
+	"clickToLoadMore": "Click here to load more",
+	"tapToLoadMore": "Tap here to load more",
+	"loadMoreLabel": "Load more",
+	"retryLoading": "Retry loading",
+	"retryLoadingLabel": "Click here to retry loading",
+	"loading": "Loading…",
+	"noMoreItems": "No more items to load.",
+	"noMoreItemsGibberish": "You are at the very beginning of the history of KF YouTube channels, whew!",
+	"error": {
+		"error": "Errors",
+		"http": "Error retrieving <{{url}}>: {{msg}}",
+		"dismiss": "Dismiss",
+		"unexpected": "Unexpected error: {{msg}}"
+	},
+	"closeDialog": "Close",
+	"srCloseDialog": "Close the dialog",
+	"goBackTo": "Go back to \"{{section}}\"",
+	"about": {
+		"title": "About this site",
+		"introduction": "This website collects videos and live streamings of official YouTube channels of Kemono Friends and Kemono Friends V Project and displays them in a single place.",
+		"aboutAccuracy": "The live streaming schedules are retrieved at certain intervals, and they do not always reflect latest information. See each YouTube channel for the latest information.",
+		"disclaimer": "The website is an unofficial site and thus, neither of Kemono Friends Project nor its affiliates, of course, shall be liable for the website in any way. For complaints and/or feature requests (esp. translation fixes ;), contact the operator via the {{ghRepository}} of the website or any other means.",
+		"gitHubRepository": "GitHub repository",
+		"rights": "The contents displayed on the website, such as thumbnail images, are retrieved from the official YouTube channels of Kemono Friends and the contents belong to copyright holders of respective videos or live streamings.",
+		"appeal": "Last of all, it's my pleasure if you support Kemono Friends and Kemono Friends V Project by subscribing to the YouTube channels, liking the linked live streamings, sending (super) chats, posting comments, following Twitter accounts of the streamers, et cetera!",
+		"licenseHeading": "License of the site",
+		"licenseBody": "For copyright notice of the website itself, including thirdparty software used by it, see {{copying}} file.",
+		"links": "Links",
+		"twitterDesc": "Provides updates on streaming schedule and shares relevant Tweets from collabed streamers",
+		"gitHubDesc": "Hosts the source code of the site"
+	},
+	"help": {
+		"title": "Keyboard shortcuts",
+		"kbdN": "Jump to current time",
+		"kbdS": "Focus the search field",
+		"kbdX": "Expand/collapse the menu",
+		"kbdDigit": "Show/hide N-th channel in the menu (N is a number)",
+		"kbdSDigit": "Show only N-th channel in the menu (N is a number)",
+		"kbd0": "Show all the channels",
+		"kbdS0": "Clear all the filters (show all the channels and clear the search field)",
+		"kbdQuestion": "Show this help"
+	},
+	"status": {
+		"clearFeedFilter": "Showing all the channels",
+		"clearFilter": "Cleared all the filters",
+		"showingFeed": "Showing channel: {{title}}",
+		"hidingFeed": "Hiding channel: {{title}}",
+		"showingOnly": "Showing only channel: {{title}}"
+	}
+}
