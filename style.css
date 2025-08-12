@@ -442,10 +442,33 @@ main {
 	inset: auto 0 0 auto;
 	border-top-left-radius: 5px;
 	padding: 0 calc(var(--margin-unit) / 2);
-	background-color: rgba(var(--background-color-rgb), .4);
+	/*
+	 * In the worst case (the background image is completely white), the contrast ratio will be:
+	 *
+	 * (((a+0.055)/1.055)^2.4 + 0.05)/0.05
+	 *
+	 * where `a` is the alpha channel. To satisfy SC 1.4.6 (enhanced contrast ratio) of WCAG 2.1,
+	 * the ratio should be at least 7. Solving it for `a` yields approximately the following:
+	 *
+	 * a >= 0.5838
+	 */
+	background-color: rgba(var(--background-color-rgb), .584);
 	-webkit-backdrop-filter: blur(10px);
 	backdrop-filter: blur(10px);
 	color: var(--color);
+}
+
+@media (prefers-color-scheme: dark) {
+	/*
+	 * In the worst case (the background image is completely black), the contrast ratio will be:
+	 *
+	 * 1.05/((((1-a)+0.055)/1.055)^2.4 + 0.05)
+	 *
+	 * To satisfy SC 1.4.6, `a` should be approximately:
+	 *
+	 * a >= 0.6508
+	 */
+	background-color: rgba(var(--background-color-rgb), .651);
 }
 
 @supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
