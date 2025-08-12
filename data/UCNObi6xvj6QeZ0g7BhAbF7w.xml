@@ -54,7 +54,7 @@
 ・無許可URLの貼り付け
 を禁止します。</media:description>
    <media:community>
-    <media:starRating count="253" average="5.00" min="1" max="5"/>
+    <media:starRating count="254" average="5.00" min="1" max="5"/>
     <media:statistics views="895"/>
    </media:community>
   </media:group>
@@ -303,7 +303,7 @@ https://ryu-ga-gotoku.com/pirate/
 ・無許可URLの貼り付け
 を禁止します。</media:description>
    <media:community>
-    <media:starRating count="180" average="5.00" min="1" max="5"/>
+    <media:starRating count="181" average="5.00" min="1" max="5"/>
     <media:statistics views="713"/>
    </media:community>
   </media:group>
@@ -447,7 +447,7 @@ https://ryu-ga-gotoku.com/pirate/
 ご理解とご協力をお願いします！</media:description>
    <media:community>
     <media:starRating count="147" average="5.00" min="1" max="5"/>
-    <media:statistics views="558"/>
+    <media:statistics views="557"/>
    </media:community>
   </media:group>
  </entry>
