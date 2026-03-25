@@ -42,17 +42,6 @@ export default [
 		},
 	},
 	{
-		id: "yt:channel:UCabMjG8p6G5xLkPJgEoTnDg",
-		title: "コヨーテ / Coyote",
-		lang: "en",
-		// https://www.kemov-project.com/%E3%82%B3%E3%83%A8%E3%83%BC%E3%83%86
-		icon: {
-			url: "https://static.wixstatic.com/media/91d475_164f6bf8bf5640d5a48e2f061bba6556~mv2.png/v1/fill/w_60,h_74/.png",
-			width: 60,
-			height: 74,
-		},
-	},
-	{
 		id: "yt:channel:UCdNBhcAohYjXlUVYsz8X2KQ",
 		title: "ダイアウルフ / Dire Wolf",
 		lang: "ja",
@@ -103,6 +92,17 @@ export default [
 		// https://www.kemov-project.com/%E3%82%A6%E3%82%B5%E3%82%AE%E3%82%B3%E3%82%A6%E3%83%A2%E3%83%AA
 		icon: {
 			url: "https://static.wixstatic.com/media/91d475_b8c81443a64a4d7a8fb723bfd497bc0c~mv2.png/v1/fill/w_60,h_74/.png",
+			width: 60,
+			height: 74,
+		},
+	},
+	{
+		id: "yt:channel:UCabMjG8p6G5xLkPJgEoTnDg",
+		title: "コヨーテ / Coyote",
+		lang: "en",
+		// https://www.kemov-project.com/%E3%82%B3%E3%83%A8%E3%83%BC%E3%83%86
+		icon: {
+			url: "https://static.wixstatic.com/media/91d475_164f6bf8bf5640d5a48e2f061bba6556~mv2.png/v1/fill/w_60,h_74/.png",
 			width: 60,
 			height: 74,
 		},
