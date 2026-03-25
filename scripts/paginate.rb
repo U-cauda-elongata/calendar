@@ -165,7 +165,7 @@ if pages[1] and pages[0].flatten.length < PAGE_SIZE
   pages[0].unshift(*latest)
 end
 
-FileUtils.mkdir_p('feed')
+FileUtils.mkdir_p('docs/feed')
 file = 'latest.json'
 while page = pages.shift
   STDERR.puts "Writing #{page.flatten.length} entries to `#{file}`..."
