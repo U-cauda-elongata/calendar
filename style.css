@@ -148,7 +148,7 @@ hr {
 	height: var(--hamburger-length);
 	border: var(--border-width) solid var(--border-color);
 	cursor: pointer;
-	background-color: rgb(var(--background-color-rgb));
+	background-color: var(--background-color);
 	stroke: var(--color);
 }
 
@@ -181,7 +181,7 @@ hr {
 	 * drawer content when it is collapsed. */
 	overflow-y: scroll;
 	overscroll-behavior-y: contain;
-	background-color: rgba(var(--background-color-rgb), .8);
+	background-color: rgb(from var(--background-color) r g b / .8);
 	-webkit-backdrop-filter: blur(50px);
 	backdrop-filter: blur(50px);
 	/* Hide the drawer visually, but not from screen readers, since the whole point of a drawer
@@ -194,14 +194,14 @@ hr {
 
 @supports not ((backdrop-filter: blur(50px)) or (-webkit-backdrop-filter: blur(50px))) {
 	.drawer {
-		background-color: rgb(var(--background-color-rgb));
+		background-color: var(--background-color);
 	}
 }
 
 /* I wish we could write something like `@supports ... or @media ...`. */
 @media (prefers-contrast: more) {
 	.drawer {
-		background-color: rgb(var(--background-color-rgb));
+		background-color: var(--background-color);
 	}
 }
 
@@ -228,7 +228,6 @@ hr {
 .drawer-menu {
 	display: flex;
 	flex-direction: column;
-	box-sizing: padding-box;
 	margin: initial;
 	padding-bottom: calc(var(--margin-unit) / 2);
 	width: var(--drawer-width);
@@ -301,7 +300,7 @@ button.drawer-item:not(:disabled) {
 
 .search-label > svg {
 	cursor: pointer;
-	fill: rgb(var(--background-color-rgb));
+	fill: var(--background-color);
 	stroke: currentColor;
 }
 
@@ -318,7 +317,7 @@ button.drawer-item:not(:disabled) {
 }
 
 .about-button {
-	fill: rgb(var(--background-color-rgb));
+	fill: var(--background-color);
 	stroke: currentColor;
 }
 
@@ -339,7 +338,7 @@ main {
 	z-index: 1; /* Put it above `.event-thumbnail-container`. */
 	top: 0;
 	text-align: center;
-	background-color: rgba(var(--background-color-rgb), 0.8);
+	background-color: rgb(from var(--background-color) r g b / 0.8);
 	-webkit-backdrop-filter: blur(10px);
 	backdrop-filter: blur(10px);
 	border-bottom: solid var(--border-width) var(--border-color);
@@ -348,13 +347,13 @@ main {
 
 @supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
 	.date-heading {
-		background-color: rgb(var(--background-color-rgb));
+		background-color: var(--background-color);
 	}
 }
 
 @media (prefers-contrast: more) {
 	.date-heading {
-		background-color: rgb(var(--background-color-rgb));
+		background-color: var(--background-color);
 	}
 }
 
@@ -452,34 +451,36 @@ main {
 	 *
 	 * a >= 0.5838
 	 */
-	background-color: rgba(var(--background-color-rgb), .584);
+	background-color: rgb(from var(--background-color) r g b / .584);
 	-webkit-backdrop-filter: blur(10px);
 	backdrop-filter: blur(10px);
 	color: var(--color);
 }
 
 @media (prefers-color-scheme: dark) {
-	/*
-	 * In the worst case (the background image is completely black), the contrast ratio will be:
-	 *
-	 * 1.05/((((1-a)+0.055)/1.055)^2.4 + 0.05)
-	 *
-	 * To satisfy SC 1.4.6, `a` should be approximately:
-	 *
-	 * a >= 0.6508
-	 */
-	background-color: rgba(var(--background-color-rgb), .651);
+	.event-duration {
+		/*
+		 * In the worst case (the background image is completely black), the contrast ratio will be:
+		 *
+		 * 1.05/((((1-a)+0.055)/1.055)^2.4 + 0.05)
+		 *
+		 * To satisfy SC 1.4.6, `a` should be approximately:
+		 *
+		 * a >= 0.6508
+		 */
+		background-color: rgb(from var(--background-color) r g b / .651);
+	}
 }
 
 @supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
 	.event-duration {
-		background-color: rgba(var(--background-color-rgb), .8);
+		background-color: rgb(from var(--background-color) r g b / .8);
 	}
 }
 
 @media (prefers-contrast: more) {
 	.event-duration {
-		background-color: rgb(var(--background-color-rgb));
+		background-color: var(--background-color);
 	}
 }
 
@@ -533,7 +534,7 @@ main {
 
 .popup {
 	width: 100%;
-	background-color: rgba(var(--background-color-rgb), .5);
+	background-color: rgb(from var(--background-color) r g b / .5);
 	-webkit-backdrop-filter: blur(50px);
 	backdrop-filter: blur(50px);
 	border: solid var(--border-width) var(--border-color);
@@ -543,13 +544,13 @@ main {
 
 @supports not ((backdrop-filter: blur(50px)) or (-webkit-backdrop-filter: blur(50px))) {
 	.popup {
-		background-color: rgb(var(--background-color-rgb));
+		background-color: var(--background-color);
 	}
 }
 
 @media (prefers-contrast: more) {
 	.popup {
-		background-color: rgb(var(--background-color-rgb));
+		background-color: var(--background-color);
 	}
 }
 
@@ -669,20 +670,20 @@ main {
 	padding: 0 calc(2 * var(--margin-unit));
 	height: var(--hamburger-length);
 	flex-shrink: 0;
-	background-color: rgba(var(--background-color-rgb), .8);
+	background-color: rgb(from var(--background-color) r g b / .8);
 	-webkit-backdrop-filter: blur(10px);
 	backdrop-filter: blur(10px);
 }
 
 @supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
 	.dialog-title-bar {
-		background-color: rgb(var(--background-color-rgb));
+		background-color: var(--background-color);
 	}
 }
 
 @media (prefers-contrast: more) {
 	.dialog-title-bar {
-		background-color: rgb(var(--background-color-rgb));
+		background-color: var(--background-color);
 	}
 }
 
@@ -707,7 +708,7 @@ main {
 	padding: calc(2 * var(--margin-unit));
 	padding-top: 0;
 	height: 100%;
-	background-color: rgb(var(--background-color-rgb));
+	background-color: var(--background-color);
 	overflow-y: scroll;
 	overscroll-behavior: none contain;
 }
@@ -763,7 +764,7 @@ main {
 	}
 
 	.drawer-expanded {
-		--event-width: calc(100vw - 2 * (--border-width) - var(--drawer-width));
+		--event-width: calc(100vw - 2 * var(--border-width) - var(--drawer-width));
 	}
 
 	.drawer-expanded .wide-viewport {
@@ -775,7 +776,7 @@ main {
 	}
 
 	.hamburger.filter-active {
-		background-color: rgb(var(--background-color-rgb));
+		background-color: var(--background-color);
 	}
 
 	.primary-window > *:not(.hamburger, .drawer) {
@@ -791,7 +792,7 @@ main {
 		left: initial;
 		/* Visually hide labels and the search input inside it by default. */
 		width: calc(var(--hamburger-length) + var(--border-width));
-		background-color: rgb(var(--background-color-rgb));
+		background-color: var(--background-color);
 		overflow-x: hidden;
 		transition-property: width;
 	}
