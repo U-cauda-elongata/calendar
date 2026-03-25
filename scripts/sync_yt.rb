@@ -172,12 +172,16 @@ items.each do |video|
   live = video['liveStreamingDetails']
   if live
     entry['live'] = true
-    start_time = live['actualStartTime']
-    if start_time
+    if start_time = live['actualStartTime']
+      entry['time'] = Time.iso8601(start_time).to_i
+    elsif start_time = live['scheduledStartTime']
+      entry['upcoming'] = true
       entry['time'] = Time.iso8601(start_time).to_i
     else
-      entry['upcoming'] = true
-      entry['time'] = Time.iso8601(live['scheduledStartTime']).to_i
+      STDERR.puts "Skipping a livestream without time: #{video['id']} #{entry['name']}"
+      feeds.each_value do |feed|
+        feed.entries.delete video['id']
+      end
     end
   end
 end
