@@ -21,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCdNBhcAohYjXlUVYsz8X2KQ</uri>
   </author>
   <published>2026-05-26T10:01:56+00:00</published>
-  <updated>2026-05-26T10:02:02+00:00</updated>
+  <updated>2026-05-26T10:07:31+00:00</updated>
   <media:group>
    <media:title>【ぷるぐらっ！】ついに折り返し！釣りも極める！【#ダイアはここにいる】</media:title>
    <media:content url="https://www.youtube.com/v/XK2TA2pRWP4?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -76,8 +76,8 @@ https://www.youtube.com/@direwolf8958
 
 使用BGM：茶葉のぎか様</media:description>
    <media:community>
-    <media:starRating count="0" average="0.00" min="1" max="5"/>
-    <media:statistics views="0"/>
+    <media:starRating count="17" average="5.00" min="1" max="5"/>
+    <media:statistics views="38"/>
    </media:community>
   </media:group>
  </entry>
@@ -148,7 +148,7 @@ https://www.youtube.com/@direwolf8958
 使用BGM：茶葉のぎか様</media:description>
    <media:community>
     <media:starRating count="123" average="5.00" min="1" max="5"/>
-    <media:statistics views="716"/>
+    <media:statistics views="717"/>
    </media:community>
   </media:group>
  </entry>
