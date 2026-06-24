@@ -21,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCEOugXOAfa-HRmRjKbH8z3Q</uri>
   </author>
   <published>2026-06-24T05:35:23+00:00</published>
-  <updated>2026-06-24T05:35:28+00:00</updated>
+  <updated>2026-06-24T11:59:09+00:00</updated>
   <media:group>
    <media:title>「ちく☆たむのどうぶつ日記 生配信！！」#53</media:title>
    <media:content url="https://www.youtube.com/v/Q5LyPesgPsQ?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -86,8 +86,8 @@ https://kemono-friends.jp/
 
 #どうぶつ日記　#けものフレンズ</media:description>
    <media:community>
-    <media:starRating count="30" average="5.00" min="1" max="5"/>
-    <media:statistics views="0"/>
+    <media:starRating count="122" average="5.00" min="1" max="5"/>
+    <media:statistics views="313"/>
    </media:community>
   </media:group>
  </entry>
@@ -150,7 +150,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="359" average="5.00" min="1" max="5"/>
-    <media:statistics views="3588"/>
+    <media:statistics views="3604"/>
    </media:community>
   </media:group>
  </entry>
@@ -207,7 +207,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="200" average="5.00" min="1" max="5"/>
-    <media:statistics views="1297"/>
+    <media:statistics views="1302"/>
    </media:community>
   </media:group>
  </entry>
@@ -545,7 +545,7 @@ https://kemono-friends.jp/
 #どうぶつ日記　#けものフレンズ</media:description>
    <media:community>
     <media:starRating count="183" average="5.00" min="1" max="5"/>
-    <media:statistics views="964"/>
+    <media:statistics views="965"/>
    </media:community>
   </media:group>
  </entry>
@@ -608,7 +608,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="391" average="5.00" min="1" max="5"/>
-    <media:statistics views="4779"/>
+    <media:statistics views="4780"/>
    </media:community>
   </media:group>
  </entry>
@@ -727,7 +727,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="296" average="5.00" min="1" max="5"/>
-    <media:statistics views="3523"/>
+    <media:statistics views="3524"/>
    </media:community>
   </media:group>
  </entry>
@@ -790,7 +790,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="259" average="5.00" min="1" max="5"/>
-    <media:statistics views="3453"/>
+    <media:statistics views="3454"/>
    </media:community>
   </media:group>
  </entry>
@@ -863,7 +863,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="556" average="5.00" min="1" max="5"/>
-    <media:statistics views="10026"/>
+    <media:statistics views="10027"/>
    </media:community>
   </media:group>
  </entry>
