@@ -21,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCEOugXOAfa-HRmRjKbH8z3Q</uri>
   </author>
   <published>2026-07-16T09:00:30+00:00</published>
-  <updated>2026-07-17T20:34:50+00:00</updated>
+  <updated>2026-07-20T03:42:25+00:00</updated>
   <media:group>
    <media:title>『けものフレンズ３』紹介PV クォーターホースつきげ</media:title>
    <media:content url="https://www.youtube.com/v/AOnwMNomol8?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -69,7 +69,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="254" average="5.00" min="1" max="5"/>
-    <media:statistics views="2177"/>
+    <media:statistics views="2183"/>
    </media:community>
   </media:group>
  </entry>
@@ -126,7 +126,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="164" average="5.00" min="1" max="5"/>
-    <media:statistics views="967"/>
+    <media:statistics views="968"/>
    </media:community>
   </media:group>
  </entry>
@@ -275,8 +275,8 @@ https://kemono-friends-3.jp/dmg/
 
 ----------------------------------------</media:description>
    <media:community>
-    <media:starRating count="296" average="5.00" min="1" max="5"/>
-    <media:statistics views="3316"/>
+    <media:starRating count="297" average="5.00" min="1" max="5"/>
+    <media:statistics views="3317"/>
    </media:community>
   </media:group>
  </entry>
