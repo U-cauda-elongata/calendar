@@ -21,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCEOugXOAfa-HRmRjKbH8z3Q</uri>
   </author>
   <published>2026-08-06T09:00:22+00:00</published>
-  <updated>2026-08-07T10:10:29+00:00</updated>
+  <updated>2026-08-10T01:10:01+00:00</updated>
   <media:group>
    <media:title>『けものフレンズ３』紹介PV サンクリストバルゾウガメ</media:title>
    <media:content url="https://www.youtube.com/v/BaXW4_WCa9k?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -68,8 +68,8 @@ https://kemono-friends-3.jp/dmg/
 
 ----------------------------------------</media:description>
    <media:community>
-    <media:starRating count="228" average="5.00" min="1" max="5"/>
-    <media:statistics views="1553"/>
+    <media:starRating count="229" average="5.00" min="1" max="5"/>
+    <media:statistics views="1559"/>
    </media:community>
   </media:group>
  </entry>
@@ -132,7 +132,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="279" average="5.00" min="1" max="5"/>
-    <media:statistics views="3975"/>
+    <media:statistics views="3987"/>
    </media:community>
   </media:group>
  </entry>
@@ -938,7 +938,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="301" average="5.00" min="1" max="5"/>
-    <media:statistics views="3246"/>
+    <media:statistics views="3248"/>
    </media:community>
   </media:group>
  </entry>
