@@ -21,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCEOugXOAfa-HRmRjKbH8z3Q</uri>
   </author>
   <published>2026-08-20T09:00:37+00:00</published>
-  <updated>2026-08-20T09:00:40+00:00</updated>
+  <updated>2026-08-20T09:14:24+00:00</updated>
   <media:group>
    <media:title>『けものフレンズ３』紹介PV 東北イタコ</media:title>
    <media:content url="https://www.youtube.com/v/8OxVOz29rB8?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -78,8 +78,8 @@ https://kemono-friends-3.jp/dmg/
 　https://twitter.com/kemono_friends3
 ----------------------------------------</media:description>
    <media:community>
-    <media:starRating count="7" average="5.00" min="1" max="5"/>
-    <media:statistics views="2"/>
+    <media:starRating count="69" average="5.00" min="1" max="5"/>
+    <media:statistics views="236"/>
    </media:community>
   </media:group>
  </entry>
@@ -146,8 +146,8 @@ https://kemono-friends-3.jp/dmg/
 　https://twitter.com/kemono_friends3
 ----------------------------------------</media:description>
    <media:community>
-    <media:starRating count="11" average="5.00" min="1" max="5"/>
-    <media:statistics views="11"/>
+    <media:starRating count="54" average="5.00" min="1" max="5"/>
+    <media:statistics views="172"/>
    </media:community>
   </media:group>
  </entry>
@@ -423,7 +423,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="281" average="5.00" min="1" max="5"/>
-    <media:statistics views="4339"/>
+    <media:statistics views="4345"/>
    </media:community>
   </media:group>
  </entry>
@@ -486,7 +486,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="267" average="5.00" min="1" max="5"/>
-    <media:statistics views="2937"/>
+    <media:statistics views="2939"/>
    </media:community>
   </media:group>
  </entry>
