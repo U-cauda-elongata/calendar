@@ -75,7 +75,7 @@
 #カラ騒ぎ　#けもV　#けものフレンズ</media:description>
    <media:community>
     <media:starRating count="481" average="5.00" min="1" max="5"/>
-    <media:statistics views="2770"/>
+    <media:statistics views="2775"/>
    </media:community>
   </media:group>
  </entry>
@@ -694,7 +694,7 @@ https://kemono-friends-butai.jp
 #カラ騒ぎ　#けもV　#けものフレンズ</media:description>
    <media:community>
     <media:starRating count="577" average="5.00" min="1" max="5"/>
-    <media:statistics views="5043"/>
+    <media:statistics views="5044"/>
    </media:community>
   </media:group>
  </entry>
@@ -1010,8 +1010,8 @@ https://onecomme.com/generator/templates
    <media:thumbnail url="https://i1.ytimg.com/vi/LR3wzYcmvg8/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="239" average="5.00" min="1" max="5"/>
-    <media:statistics views="1100"/>
+    <media:starRating count="240" average="5.00" min="1" max="5"/>
+    <media:statistics views="1102"/>
    </media:community>
   </media:group>
  </entry>
