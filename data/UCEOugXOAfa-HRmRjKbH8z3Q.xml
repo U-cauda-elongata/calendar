@@ -125,8 +125,8 @@ https://kemono-friends-3.jp/dmg/
 
 ----------------------------------------</media:description>
    <media:community>
-    <media:starRating count="412" average="5.00" min="1" max="5"/>
-    <media:statistics views="11045"/>
+    <media:starRating count="413" average="5.00" min="1" max="5"/>
+    <media:statistics views="11059"/>
    </media:community>
   </media:group>
  </entry>
@@ -984,7 +984,7 @@ https://kemono-friends.jp/
    <uri>https://www.youtube.com/channel/UCEOugXOAfa-HRmRjKbH8z3Q</uri>
   </author>
   <published>2026-07-02T09:00:09+00:00</published>
-  <updated>2026-07-05T22:35:52+00:00</updated>
+  <updated>2026-08-31T16:54:08+00:00</updated>
   <media:group>
    <media:title>『けものフレンズ３』紹介PV エジプトルーセットオオコウモリ</media:title>
    <media:content url="https://www.youtube.com/v/2oWoU-KiFGk?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -1032,7 +1032,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="306" average="5.00" min="1" max="5"/>
-    <media:statistics views="4028"/>
+    <media:statistics views="4031"/>
    </media:community>
   </media:group>
  </entry>
