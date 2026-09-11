@@ -80,7 +80,7 @@ https://app-pay.jp/app/kemono-friends-3
 
 ----------------------------------------</media:description>
    <media:community>
-    <media:starRating count="41" average="5.00" min="1" max="5"/>
+    <media:starRating count="39" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -143,8 +143,8 @@ https://kemono-friends-3.jp/dmg/
 
 ----------------------------------------</media:description>
    <media:community>
-    <media:starRating count="257" average="5.00" min="1" max="5"/>
-    <media:statistics views="3238"/>
+    <media:starRating count="256" average="5.00" min="1" max="5"/>
+    <media:statistics views="3213"/>
    </media:community>
   </media:group>
  </entry>
@@ -264,7 +264,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="430" average="5.00" min="1" max="5"/>
-    <media:statistics views="11628"/>
+    <media:statistics views="11627"/>
    </media:community>
   </media:group>
  </entry>
