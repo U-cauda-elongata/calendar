@@ -21,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCEOugXOAfa-HRmRjKbH8z3Q</uri>
   </author>
   <published>2026-09-15T09:57:34+00:00</published>
-  <updated>2026-09-16T07:24:26+00:00</updated>
+  <updated>2026-09-16T10:59:52+00:00</updated>
   <media:group>
    <media:title>「ちく☆たむのどうぶつ日記 生配信！！」#55</media:title>
    <media:content url="https://www.youtube.com/v/epzfZgL-vFk?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -85,8 +85,8 @@ https://kemono-friends.jp/
 
 #どうぶつ日記　#けものフレンズ</media:description>
    <media:community>
-    <media:starRating count="29" average="5.00" min="1" max="5"/>
-    <media:statistics views="0"/>
+    <media:starRating count="59" average="5.00" min="1" max="5"/>
+    <media:statistics views="120"/>
    </media:community>
   </media:group>
  </entry>
@@ -161,7 +161,7 @@ https://app-pay.jp/app/kemono-friends-3
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="794" average="5.00" min="1" max="5"/>
-    <media:statistics views="16225"/>
+    <media:statistics views="16284"/>
    </media:community>
   </media:group>
  </entry>
