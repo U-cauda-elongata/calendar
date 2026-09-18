@@ -21,13 +21,13 @@
    <uri>https://www.youtube.com/channel/UCEOugXOAfa-HRmRjKbH8z3Q</uri>
   </author>
   <published>2026-09-18T08:00:21+00:00</published>
-  <updated>2026-09-18T08:00:22+00:00</updated>
+  <updated>2026-09-18T08:31:57+00:00</updated>
   <media:group>
    <media:title>『けものフレンズ３』新イベント「フレンズ超越☆私たちの、けもの道！」紹介PV</media:title>
    <media:content url="https://www.youtube.com/v/XCIv4w2x_bs?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
    <media:thumbnail url="https://i1.ytimg.com/vi/XCIv4w2x_bs/hqdefault.jpg" width="480" height="360"/>
    <media:description>好評配信中アプリ『けものフレンズ３』。
-9/17(木)より開催のイベント「フレンズ超越☆私たちの、けもの道！」予告映像公開中！
+9/18(金)より開催のイベント「フレンズ超越☆私たちの、けもの道！」予告映像公開中！
 
 #けもフレ３
 #けものフレンズ
@@ -62,8 +62,8 @@ https://kemono-friends-3.jp/dmg/
 　 https://twitter.com/kemono_friends3
 ----------------------------------------</media:description>
    <media:community>
-    <media:starRating count="19" average="5.00" min="1" max="5"/>
-    <media:statistics views="45"/>
+    <media:starRating count="90" average="5.00" min="1" max="5"/>
+    <media:statistics views="263"/>
    </media:community>
   </media:group>
  </entry>
@@ -125,8 +125,8 @@ https://kemono-friends-3.jp/dmg/
 
 ----------------------------------------</media:description>
    <media:community>
-    <media:starRating count="33" average="5.00" min="1" max="5"/>
-    <media:statistics views="58"/>
+    <media:starRating count="131" average="5.00" min="1" max="5"/>
+    <media:statistics views="366"/>
    </media:community>
   </media:group>
  </entry>
@@ -978,7 +978,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="282" average="5.00" min="1" max="5"/>
-    <media:statistics views="2863"/>
+    <media:statistics views="2864"/>
    </media:community>
   </media:group>
  </entry>
