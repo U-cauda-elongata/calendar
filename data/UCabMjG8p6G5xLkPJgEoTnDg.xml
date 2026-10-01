@@ -317,8 +317,8 @@ General: #CoyoteKemoV
 
 For Inquiries → info@kemono-friends.jp</media:description>
    <media:community>
-    <media:starRating count="2774" average="5.00" min="1" max="5"/>
-    <media:statistics views="20924"/>
+    <media:starRating count="2775" average="5.00" min="1" max="5"/>
+    <media:statistics views="20935"/>
    </media:community>
   </media:group>
  </entry>
@@ -341,7 +341,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description>Broadcasted live on Twitch -- Watch live at https://www.twitch.tv/coyote_kemov</media:description>
    <media:community>
     <media:starRating count="120" average="5.00" min="1" max="5"/>
-    <media:statistics views="918"/>
+    <media:statistics views="919"/>
    </media:community>
   </media:group>
  </entry>
@@ -833,7 +833,7 @@ For Inquiries → info@kemono-friends.jp</media:description>
    <media:description></media:description>
    <media:community>
     <media:starRating count="727" average="5.00" min="1" max="5"/>
-    <media:statistics views="4374"/>
+    <media:statistics views="4375"/>
    </media:community>
   </media:group>
  </entry>
