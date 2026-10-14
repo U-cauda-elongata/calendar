@@ -86,7 +86,7 @@ https://kemono-friends.jp/
 
 #どうぶつ日記　#けものフレンズ</media:description>
    <media:community>
-    <media:starRating count="3" average="5.00" min="1" max="5"/>
+    <media:starRating count="16" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -144,7 +144,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="236" average="5.00" min="1" max="5"/>
-    <media:statistics views="6063"/>
+    <media:statistics views="6074"/>
    </media:community>
   </media:group>
  </entry>
@@ -207,7 +207,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="371" average="5.00" min="1" max="5"/>
-    <media:statistics views="8393"/>
+    <media:statistics views="8404"/>
    </media:community>
   </media:group>
  </entry>
@@ -366,7 +366,7 @@ https://app-pay.jp/app/kemono-friends-3
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="823" average="5.00" min="1" max="5"/>
-    <media:statistics views="18413"/>
+    <media:statistics views="18415"/>
    </media:community>
   </media:group>
  </entry>
@@ -429,7 +429,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="340" average="5.00" min="1" max="5"/>
-    <media:statistics views="7682"/>
+    <media:statistics views="7687"/>
    </media:community>
   </media:group>
  </entry>
@@ -549,7 +549,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="443" average="5.00" min="1" max="5"/>
-    <media:statistics views="12384"/>
+    <media:statistics views="12389"/>
    </media:community>
   </media:group>
  </entry>
@@ -695,7 +695,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="225" average="5.00" min="1" max="5"/>
-    <media:statistics views="2765"/>
+    <media:statistics views="2767"/>
    </media:community>
   </media:group>
  </entry>
@@ -767,8 +767,8 @@ https://kemono-friends-3.jp/dmg/
 　https://twitter.com/kemono_friends3
 ----------------------------------------</media:description>
    <media:community>
-    <media:starRating count="548" average="5.00" min="1" max="5"/>
-    <media:statistics views="11862"/>
+    <media:starRating count="549" average="5.00" min="1" max="5"/>
+    <media:statistics views="11867"/>
    </media:community>
   </media:group>
  </entry>
@@ -841,7 +841,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="417" average="5.00" min="1" max="5"/>
-    <media:statistics views="6802"/>
+    <media:statistics views="6804"/>
    </media:community>
   </media:group>
  </entry>
@@ -909,7 +909,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="220" average="5.00" min="1" max="5"/>
-    <media:statistics views="2484"/>
+    <media:statistics views="2486"/>
    </media:community>
   </media:group>
  </entry>
@@ -1011,7 +1011,7 @@ https://kemono-friends.jp/
    <uri>https://www.youtube.com/channel/UCEOugXOAfa-HRmRjKbH8z3Q</uri>
   </author>
   <published>2026-08-13T05:00:31+00:00</published>
-  <updated>2026-10-05T03:52:21+00:00</updated>
+  <updated>2026-10-14T07:55:16+00:00</updated>
   <media:group>
    <media:title>『けものフレンズ３』紹介PV コビトカバ</media:title>
    <media:content url="https://www.youtube.com/v/fAR_6tWmruw?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -1059,7 +1059,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="281" average="5.00" min="1" max="5"/>
-    <media:statistics views="3043"/>
+    <media:statistics views="3044"/>
    </media:community>
   </media:group>
  </entry>
