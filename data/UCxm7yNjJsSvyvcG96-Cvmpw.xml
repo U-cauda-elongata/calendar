@@ -21,7 +21,7 @@
    <uri>https://www.youtube.com/channel/UCxm7yNjJsSvyvcG96-Cvmpw</uri>
   </author>
   <published>2026-10-19T17:26:09+00:00</published>
-  <updated>2026-10-20T12:42:03+00:00</updated>
+  <updated>2026-10-21T11:01:00+00:00</updated>
   <media:group>
    <media:title>【初コラボ】そうだ。配信タグを決めよう！！！【#けもV/#未定】</media:title>
    <media:content url="https://www.youtube.com/v/lF3w_D9A4DI?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -73,8 +73,8 @@
 
 #カラ騒ぎ　#けもV　#けものフレンズ</media:description>
    <media:community>
-    <media:starRating count="52" average="5.00" min="1" max="5"/>
-    <media:statistics views="0"/>
+    <media:starRating count="257" average="5.00" min="1" max="5"/>
+    <media:statistics views="668"/>
    </media:community>
   </media:group>
  </entry>
@@ -211,7 +211,7 @@
 #カラ騒ぎ　#けもV　#けものフレンズ</media:description>
    <media:community>
     <media:starRating count="292" average="5.00" min="1" max="5"/>
-    <media:statistics views="2888"/>
+    <media:statistics views="2890"/>
    </media:community>
   </media:group>
  </entry>
@@ -281,7 +281,7 @@
 #カラ騒ぎ　#けもV　#けものフレンズ</media:description>
    <media:community>
     <media:starRating count="327" average="5.00" min="1" max="5"/>
-    <media:statistics views="3325"/>
+    <media:statistics views="3328"/>
    </media:community>
   </media:group>
  </entry>
@@ -349,7 +349,7 @@
 #カラ騒ぎ　#けもV　#けものフレンズ</media:description>
    <media:community>
     <media:starRating count="463" average="5.00" min="1" max="5"/>
-    <media:statistics views="5586"/>
+    <media:statistics views="5591"/>
    </media:community>
   </media:group>
  </entry>
