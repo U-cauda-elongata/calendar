@@ -28,8 +28,8 @@
    <media:thumbnail url="https://i4.ytimg.com/vi/Wk8HVmRS4RI/hqdefault.jpg" width="480" height="360"/>
    <media:description></media:description>
    <media:community>
-    <media:starRating count="42" average="5.00" min="1" max="5"/>
-    <media:statistics views="190"/>
+    <media:starRating count="77" average="5.00" min="1" max="5"/>
+    <media:statistics views="559"/>
    </media:community>
   </media:group>
  </entry>
@@ -51,8 +51,8 @@
    <media:thumbnail url="https://i2.ytimg.com/vi/i3pX1VIS5IQ/hqdefault.jpg" width="480" height="360"/>
    <media:description>みんなもやってねー！やだよー！いいよー！</media:description>
    <media:community>
-    <media:starRating count="168" average="5.00" min="1" max="5"/>
-    <media:statistics views="339"/>
+    <media:starRating count="203" average="5.00" min="1" max="5"/>
+    <media:statistics views="475"/>
    </media:community>
   </media:group>
  </entry>
@@ -75,8 +75,8 @@
    <media:description>おまたせしました
 待ってないという意見はムシしますねー！</media:description>
    <media:community>
-    <media:starRating count="236" average="5.00" min="1" max="5"/>
-    <media:statistics views="618"/>
+    <media:starRating count="256" average="5.00" min="1" max="5"/>
+    <media:statistics views="816"/>
    </media:community>
   </media:group>
  </entry>
@@ -300,8 +300,8 @@ https://kemovproject.stores.jp/items/6adf22bc79dec775f2706504
 
 #カラ騒ぎ　#けもV　#けものフレンズ</media:description>
    <media:community>
-    <media:starRating count="551" average="5.00" min="1" max="5"/>
-    <media:statistics views="4351"/>
+    <media:starRating count="552" average="5.00" min="1" max="5"/>
+    <media:statistics views="4378"/>
    </media:community>
   </media:group>
  </entry>
@@ -438,7 +438,7 @@ https://kemovproject.stores.jp/items/6adf22bc79dec775f2706504
 #カラ騒ぎ　#けもV　#けものフレンズ</media:description>
    <media:community>
     <media:starRating count="349" average="5.00" min="1" max="5"/>
-    <media:statistics views="3669"/>
+    <media:statistics views="3667"/>
    </media:community>
   </media:group>
  </entry>
@@ -576,7 +576,7 @@ https://kemovproject.stores.jp/items/6adf22bc79dec775f2706504
 #カラ騒ぎ　#けもV　#けものフレンズ</media:description>
    <media:community>
     <media:starRating count="330" average="5.00" min="1" max="5"/>
-    <media:statistics views="3394"/>
+    <media:statistics views="3392"/>
    </media:community>
   </media:group>
  </entry>
@@ -713,7 +713,7 @@ https://kemovproject.stores.jp/items/6adf22bc79dec775f2706504
 #カラ騒ぎ　#けもV　#けものフレンズ</media:description>
    <media:community>
     <media:starRating count="490" average="5.00" min="1" max="5"/>
-    <media:statistics views="3216"/>
+    <media:statistics views="3215"/>
    </media:community>
   </media:group>
  </entry>
