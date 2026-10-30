@@ -29,7 +29,7 @@
    <media:description></media:description>
    <media:community>
     <media:starRating count="119" average="5.00" min="1" max="5"/>
-    <media:statistics views="861"/>
+    <media:statistics views="863"/>
    </media:community>
   </media:group>
  </entry>
@@ -52,7 +52,7 @@
    <media:description>みんなもやってねー！やだよー！いいよー！</media:description>
    <media:community>
     <media:starRating count="241" average="5.00" min="1" max="5"/>
-    <media:statistics views="846"/>
+    <media:statistics views="847"/>
    </media:community>
   </media:group>
  </entry>
@@ -75,7 +75,7 @@
    <media:description>おまたせしました
 待ってないという意見はムシしますねー！</media:description>
    <media:community>
-    <media:starRating count="278" average="5.00" min="1" max="5"/>
+    <media:starRating count="279" average="5.00" min="1" max="5"/>
     <media:statistics views="1194"/>
    </media:community>
   </media:group>
