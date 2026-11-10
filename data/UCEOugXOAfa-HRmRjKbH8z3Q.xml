@@ -75,8 +75,8 @@ https://kemono-friends-3.jp/dmg/
 
 ----------------------------------------</media:description>
    <media:community>
-    <media:starRating count="300" average="5.00" min="1" max="5"/>
-    <media:statistics views="5157"/>
+    <media:starRating count="301" average="5.00" min="1" max="5"/>
+    <media:statistics views="5163"/>
    </media:community>
   </media:group>
  </entry>
@@ -91,7 +91,7 @@ https://kemono-friends-3.jp/dmg/
    <uri>https://www.youtube.com/channel/UCEOugXOAfa-HRmRjKbH8z3Q</uri>
   </author>
   <published>2026-11-05T09:00:18+00:00</published>
-  <updated>2026-11-06T10:42:03+00:00</updated>
+  <updated>2026-11-08T22:01:55+00:00</updated>
   <media:group>
    <media:title>『けものフレンズ３』紹介PV  チュパカブラ</media:title>
    <media:content url="https://www.youtube.com/v/NN3F0fiLdno?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
@@ -146,7 +146,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="535" average="5.00" min="1" max="5"/>
-    <media:statistics views="12771"/>
+    <media:statistics views="12813"/>
    </media:community>
   </media:group>
  </entry>
@@ -396,7 +396,7 @@ https://kemono-friends-3.jp/dmg/
 ----------------------------------------</media:description>
    <media:community>
     <media:starRating count="180" average="5.00" min="1" max="5"/>
-    <media:statistics views="2920"/>
+    <media:statistics views="2921"/>
    </media:community>
   </media:group>
  </entry>
