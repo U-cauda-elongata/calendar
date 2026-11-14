@@ -75,7 +75,7 @@ https://www.youtube.com/@direwolf8958
 
 使用BGM：茶葉のぎか様</media:description>
    <media:community>
-    <media:starRating count="2" average="5.00" min="1" max="5"/>
+    <media:starRating count="10" average="5.00" min="1" max="5"/>
     <media:statistics views="0"/>
    </media:community>
   </media:group>
@@ -146,7 +146,7 @@ https://www.youtube.com/@direwolf8958
 使用BGM：茶葉のぎか様</media:description>
    <media:community>
     <media:starRating count="88" average="5.00" min="1" max="5"/>
-    <media:statistics views="958"/>
+    <media:statistics views="998"/>
    </media:community>
   </media:group>
  </entry>
@@ -216,7 +216,7 @@ https://www.youtube.com/@direwolf8958
 使用BGM：茶葉のぎか様</media:description>
    <media:community>
     <media:starRating count="101" average="5.00" min="1" max="5"/>
-    <media:statistics views="1159"/>
+    <media:statistics views="1162"/>
    </media:community>
   </media:group>
  </entry>
@@ -825,7 +825,7 @@ https://www.youtube.com/@direwolf8958
 使用BGM：茶葉のぎか様</media:description>
    <media:community>
     <media:starRating count="108" average="5.00" min="1" max="5"/>
-    <media:statistics views="1253"/>
+    <media:statistics views="1255"/>
    </media:community>
   </media:group>
  </entry>
