@@ -97,6 +97,46 @@ export default [
 		},
 	},
 	{
+		id: "yt:channel:UCcqA3M93w2Xyy0wlsjPs_CQ",
+		title: "シマリス(EX) / Siberian Chipmunk",
+		lang: "ja",
+		icon: {
+			url: "https://yt3.googleusercontent.com/4fnAOyChNN-Ki7ko6VIurkoPdSCP9KzACsmf-j-UNiiSzW2s-UVWjo7wG6e-nR5ZhonNd8bT=s60",
+			width: 60,
+			height: 60,
+		},
+	},
+	{
+		id: "yt:channel:UCD-xnMdwk1KguIEu9B22JXQ",
+		title: "ジャングルキャット(EX) / Jungle Cat",
+		lang: "ja",
+		icon: {
+			url: "https://yt3.googleusercontent.com/516HfAHEjIv8JNv-blYxVGBefvmgf06m2Llh9ZvUWMFmXL4ot-Z-Gmq6bMEWaFzkOs1IBrZGsw=s60",
+			width: 60,
+			height: 60,
+		},
+	},
+	{
+		id: "yt:channel:UCnOSIKJA8Ql8OqS8sTx5O-g",
+		title: "ツチノコ(けものフレンズ) / Tsuchinoko",
+		lang: "ja",
+		icon: {
+			url: "https://yt3.googleusercontent.com/_0wLzV9jyiJQd1FXY1ert1d66i8l9EgaHEue9W73EIQO416S7Yers7iQGr3hujLV8Mc82Zqa2A=s60",
+			width: 60,
+			height: 60,
+		},
+	},
+	{
+		id: "yt:channel:UC6ddYbKrxpcOpXuZ2F5yu_w",
+		title: "人面魚 / Jinmengyo",
+		lang: "ja",
+		icon: {
+			url: "https://yt3.googleusercontent.com/Waaue4gN1YqZvT5tZn13KzS2yFZzo8onGBdPUQyReT00BlmIYplv4Bx-CVgctLFfS19bjZtfkw=s60",
+			width: 60,
+			height: 60,
+		},
+	},
+	{
 		id: "yt:channel:UCabMjG8p6G5xLkPJgEoTnDg",
 		title: "コヨーテ / Coyote",
 		lang: "en",
