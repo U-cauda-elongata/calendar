@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns:yt="http://www.youtube.com/xml/schemas/2015" xmlns:media="http://search.yahoo.com/mrss/" xmlns="http://www.w3.org/2005/Atom">
+ <link rel="self" href="http://www.youtube.com/feeds/videos.xml?channel_id=UC6ddYbKrxpcOpXuZ2F5yu_w"/>
+ <id>yt:channel:6ddYbKrxpcOpXuZ2F5yu_w</id>
+ <yt:channelId>6ddYbKrxpcOpXuZ2F5yu_w</yt:channelId>
+ <title>人面魚 / Jinmengyo</title>
+ <link rel="alternate" href="https://www.youtube.com/channel/UC6ddYbKrxpcOpXuZ2F5yu_w"/>
+ <author>
+  <name>人面魚 / Jinmengyo</name>
+  <uri>https://www.youtube.com/channel/UC6ddYbKrxpcOpXuZ2F5yu_w</uri>
+ </author>
+ <published>2026-11-17T02:00:01+00:00</published>
+</feed>

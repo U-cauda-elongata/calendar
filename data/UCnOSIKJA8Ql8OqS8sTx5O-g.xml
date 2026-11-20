@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns:yt="http://www.youtube.com/xml/schemas/2015" xmlns:media="http://search.yahoo.com/mrss/" xmlns="http://www.w3.org/2005/Atom">
+ <link rel="self" href="http://www.youtube.com/feeds/videos.xml?channel_id=UCnOSIKJA8Ql8OqS8sTx5O-g"/>
+ <id>yt:channel:nOSIKJA8Ql8OqS8sTx5O-g</id>
+ <yt:channelId>nOSIKJA8Ql8OqS8sTx5O-g</yt:channelId>
+ <title>ツチノコ(けものフレンズ) / Tsuchinoko</title>
+ <link rel="alternate" href="https://www.youtube.com/channel/UCnOSIKJA8Ql8OqS8sTx5O-g"/>
+ <author>
+  <name>ツチノコ(けものフレンズ) / Tsuchinoko</name>
+  <uri>https://www.youtube.com/channel/UCnOSIKJA8Ql8OqS8sTx5O-g</uri>
+ </author>
+ <published>2026-11-20T07:45:52+00:00</published>
+</feed>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns:yt="http://www.youtube.com/xml/schemas/2015" xmlns:media="http://search.yahoo.com/mrss/" xmlns="http://www.w3.org/2005/Atom">
+ <link rel="self" href="http://www.youtube.com/feeds/videos.xml?channel_id=UCcqA3M93w2Xyy0wlsjPs_CQ"/>
+ <id>yt:channel:cqA3M93w2Xyy0wlsjPs_CQ</id>
+ <yt:channelId>cqA3M93w2Xyy0wlsjPs_CQ</yt:channelId>
+ <title>シマリス(EX) / Siberian Chipmunk</title>
+ <link rel="alternate" href="https://www.youtube.com/channel/UCcqA3M93w2Xyy0wlsjPs_CQ"/>
+ <author>
+  <name>シマリス(EX) / Siberian Chipmunk</name>
+  <uri>https://www.youtube.com/channel/UCcqA3M93w2Xyy0wlsjPs_CQ</uri>
+ </author>
+ <published>2026-11-17T03:46:20+00:00</published>
+</feed>
